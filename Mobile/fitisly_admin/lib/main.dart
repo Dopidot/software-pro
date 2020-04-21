@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-//import 'package:flu
-//import 'dashboard_screen.dart';
+import 'package:flutter/services.dart';
 
-void main() => runApp(MyApp());
+
+void main() => runApp(
+   //SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    MyApp());
+
+
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -31,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  TextStyle style = TextStyle(fontFamily: 'OpenSans' , fontSize: 20.0);
+  TextStyle styleOS = TextStyle(fontFamily: 'OpenSans' , fontSize: 20.0);
   static const color = const Color(0xFF45E15F);
 
   @override
@@ -40,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final emailField = TextField(
       obscureText: false,
-      style: style,
+      style: styleOS,
       decoration: InputDecoration(
         hintText: "Email",
           border:
@@ -50,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final passwordField = TextField(
       obscureText: true,
-      style: style,
+      style: styleOS,
       decoration: InputDecoration(
         hintText: "Mot de passe",
           border:
@@ -68,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
         onPressed: () {},
         child: Text("Login",
             textAlign: TextAlign.center,
-            style: style.copyWith(
+            style: styleOS.copyWith(
                 color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
@@ -76,38 +81,33 @@ class _MyHomePageState extends State<MyHomePage> {
 
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Fitisly Admin'),
+        appBar: AppBar(
+        title:  Text('Fistily Admin', style: styleOS),
         centerTitle: true,
-      ),
-
+        ),
       body: Center(
         child: Container(
           color: Colors.white,
           child: Padding(
-            padding: const EdgeInsets.all(36.0),
+            padding: const EdgeInsets.all(1.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 100.0,
+                  height: width*0.2,
                   child: Image.asset(
                     "assets/logo.png",
-
+                   // fit: BoxFit.contain,
                   ),
                 ),
-                SizedBox(height: width *0.1),
+                SizedBox(height: 35.0),
                 emailField,
-                SizedBox(height: width* 0.05),
+                SizedBox(height: 15.0),
                 passwordField,
-                SizedBox(
-                  height: width*0.1,
-                ),
+                SizedBox(height: 25.0),
                 loginButon,
-                SizedBox(
-                  height: width*0.15,
-                ),
+                SizedBox(height: 15.0),
               ],
             ),
           ),
