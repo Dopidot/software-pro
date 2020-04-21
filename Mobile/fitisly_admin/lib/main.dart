@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'Body/HomePageBody.dart';
 
 
 void main() => runApp(
-   //SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  //SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
     MyApp());
 
 
@@ -47,44 +48,45 @@ class _MyHomePageState extends State<MyHomePage> {
       obscureText: false,
       style: styleOS,
       decoration: InputDecoration(
-        hintText: "Email",
+          hintText: "Email",
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
       ),
     );
 
     final passwordField = TextField(
-      obscureText: true,
-      style: styleOS,
-      decoration: InputDecoration(
-        hintText: "Mot de passe",
-          border:
-          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
-      )
+        obscureText: true,
+        style: styleOS,
+        decoration: InputDecoration(
+            hintText: "Mot de passe",
+            border:
+            OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+        )
     );
 
     final loginButon = Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(30.0),
-     color: color,
+      color: color,
+
       child: MaterialButton(
-       // minWidth: MediaQuery.of(context).size.width,
+        // minWidth: MediaQuery.of(context).size.width,
         //padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () {},
+        onPressed: goToHomePage,
         child: Text("Login",
             textAlign: TextAlign.center,
             style: styleOS.copyWith(
                 color: Colors.white, fontWeight: FontWeight.bold)),
+        minWidth: width,
       ),
     );
 
 
-
     return Scaffold(
-        appBar: AppBar(
+      appBar: AppBar(
         title:  Text('Fistily Admin', style: styleOS),
         centerTitle: true,
-        ),
+      ),
       body: Center(
         child: Container(
           color: Colors.white,
@@ -98,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   height: width*0.2,
                   child: Image.asset(
                     "assets/logo.png",
-                   // fit: BoxFit.contain,
+                    // fit: BoxFit.contain,
                   ),
                 ),
                 SizedBox(height: 35.0),
@@ -107,7 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 passwordField,
                 SizedBox(height: 25.0),
                 loginButon,
-                SizedBox(height: 15.0),
+                SizedBox(height: 15.0,width: width,),
               ],
             ),
           ),
@@ -115,4 +117,14 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
+
+  void goToHomePage(){
+    Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) {
+      return new HomePage('Accueil');
+    }));
+
+  }
+
+
 }
