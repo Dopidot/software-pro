@@ -36,21 +36,31 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = MediaQuery.of(context).size.width;
 
     final emailField = TextField(
       obscureText: false,
       style: style,
-
+      decoration: InputDecoration(
+        hintText: "Email",
+          border:
+          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+      ),
     );
 
     final passwordField = TextField(
       obscureText: true,
       style: style,
+      decoration: InputDecoration(
+        hintText: "Mot de passe",
+          border:
+          OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
+      )
     );
 
     final loginButon = Material(
       elevation: 5.0,
-    //  borderRadius: BorderRadius.circular(30.0),
+      borderRadius: BorderRadius.circular(30.0),
      color: color,
       child: MaterialButton(
        // minWidth: MediaQuery.of(context).size.width,
@@ -62,7 +72,15 @@ class _MyHomePageState extends State<MyHomePage> {
                 color: Colors.white, fontWeight: FontWeight.bold)),
       ),
     );
+
+
+
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Fitisly Admin'),
+        centerTitle: true,
+      ),
+
       body: Center(
         child: Container(
           color: Colors.white,
@@ -73,21 +91,22 @@ class _MyHomePageState extends State<MyHomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 SizedBox(
-                  height: 155.0,
+                  height: 100.0,
                   child: Image.asset(
                     "assets/logo.png",
+
                   ),
                 ),
-                SizedBox(height: 45.0),
+                SizedBox(height: width *0.1),
                 emailField,
-                SizedBox(height: 25.0),
+                SizedBox(height: width* 0.05),
                 passwordField,
                 SizedBox(
-                  height: 35.0,
+                  height: width*0.1,
                 ),
                 loginButon,
                 SizedBox(
-                  height: 15.0,
+                  height: width*0.15,
                 ),
               ],
             ),
