@@ -39,10 +39,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   TextStyle styleOS = TextStyle(fontFamily: 'OpenSans' , fontSize: 20.0);
   static const color = const Color(0xFF45E15F);
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController pwController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
+    String email;
+    String pw;
 
     final emailField = TextField(
       obscureText: false,
@@ -52,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
       ),
+        controller: emailController
     );
 
     final passwordField = TextField(
@@ -61,7 +66,12 @@ class _MyHomePageState extends State<MyHomePage> {
             hintText: "Mot de passe",
             border:
             OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))
-        )
+        ),
+      onSubmitted: (String pwValue) {
+        setState(() {
+          pw = pwValue;
+        });
+      },
     );
 
     final loginButon = Material(
@@ -72,7 +82,10 @@ class _MyHomePageState extends State<MyHomePage> {
       child: MaterialButton(
         // minWidth: MediaQuery.of(context).size.width,
         //padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: goToHomePage,
+        onPressed: () {
+          printInConsole(emailController.text);
+          goToHomePage();
+        },
         child: Text("Login",
             textAlign: TextAlign.center,
             style: styleOS.copyWith(
@@ -124,6 +137,10 @@ class _MyHomePageState extends State<MyHomePage> {
       return new HomePage('Accueil');
     }));
 
+  }
+
+  void printInConsole(String email){
+    print(email);
   }
 
 
