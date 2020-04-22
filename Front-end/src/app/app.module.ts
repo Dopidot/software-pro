@@ -20,9 +20,25 @@ import {
   NbToastrModule,
   NbWindowModule,
 } from '@nebular/theme';
+import {
+    NbAccordionModule,
+    NbButtonModule,
+    NbCardModule,
+    NbListModule,
+    NbRouteTabsetModule,
+    NbStepperModule,
+    NbTabsetModule, NbUserModule,
+  } from '@nebular/theme';
+
+import {
+    NbCalendarModule
+  } from '@nebular/theme';
+  
+
+import { HomeComponent } from './home/home.component';
 
 @NgModule({
-  declarations: [AppComponent],
+  declarations: [AppComponent, HomeComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -39,6 +55,16 @@ import {
     }),
     CoreModule.forRoot(),
     ThemeModule.forRoot(),
+    ThemeModule,
+    NbTabsetModule,
+    NbRouteTabsetModule,
+    NbStepperModule,
+    NbCardModule,
+    NbButtonModule,
+    NbListModule,
+    NbAccordionModule,
+    NbUserModule,
+    NbCalendarModule
   ],
   bootstrap: [AppComponent],
 })
