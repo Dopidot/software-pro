@@ -1,0 +1,28 @@
+{
+  "name": "Admin-API",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --verbose",
+    "test-watch": "jest --verbose --watchAll",
+    "dev": "concurrently -k -n \"Typescript,Node\" -p  \"[{name}]\" -c \"blue,green\" \"tsc --watch\" \"nodemon dist/index.js\"",
+    "start": "tsc && node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/node": "^12.12.31",
+    "concurrently": "^5.1.0",
+    "jest": "^25.4.0",
+    "nodemon": "^2.0.3",
+    "ts-jest": "^25.4.0",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@types/express": "^4.17.6",
+    "express": "^4.17.1"
+  }
+}
