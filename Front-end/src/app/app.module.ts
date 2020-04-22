@@ -33,12 +33,18 @@ import {
 import {
     NbCalendarModule
   } from '@nebular/theme';
+
+  import {
+    NbCalendarKitModule
+  } from '@nebular/theme';
+  
   
 
 import { HomeComponent } from './home/home.component';
+import { EventsComponent } from './events/events.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent],
+  declarations: [AppComponent, HomeComponent, EventsComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -64,7 +70,8 @@ import { HomeComponent } from './home/home.component';
     NbListModule,
     NbAccordionModule,
     NbUserModule,
-    NbCalendarModule
+    NbCalendarModule,
+    NbCalendarKitModule
   ],
   bootstrap: [AppComponent],
 })
