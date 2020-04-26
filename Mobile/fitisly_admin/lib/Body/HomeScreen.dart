@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class HomeScreen extends StatelessWidget {
 
   String title;
-
-  HomePage(String title){
+  
+  HomeScreen(String title){
     this.title = title;
   }
 
