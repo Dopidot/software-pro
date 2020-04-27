@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class HomeScreen extends StatelessWidget {
 
   String title;
-  
+
   HomeScreen(String title){
     this.title = title;
   }
