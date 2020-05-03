@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'HomeScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -127,7 +126,7 @@ class LoginScreenForm extends State<LoginScreen> {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
       Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) {
-        return new HomeScreen("Accueil");}));
+        return new HomeScreen();}));
     } else {
       setState (() {
         _autoValidate = true ;
