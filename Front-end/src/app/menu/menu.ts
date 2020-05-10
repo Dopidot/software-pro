@@ -4,7 +4,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
     {
         title: 'Accueil',
         icon: 'home-outline',
-        link: '/',
+        link: '/home',
         home: true,
     },
     {
@@ -39,7 +39,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
                 link: '/news'
             },
             {
-                title: 'Saisons de discussion',
+                title: 'Salons de discussion',
                 link: '/discussions'
             },
             {

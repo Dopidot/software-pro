@@ -9,7 +9,7 @@
                         <nb-card-header>Nouveaux utilisateurs</nb-card-header>
                         <nb-list>
                         <nb-list-item *ngFor="let user of users">
-                            <nb-user [name]="user.name" [title]="user.title">
+                            <nb-user [name]="user.name" [title]="user.title" size="large">
                             </nb-user>
                         </nb-list-item>
                         </nb-list>
@@ -24,6 +24,15 @@
                       </nb-card-body>
                     </nb-card>
                 </div> -->
+
+                <!-- <div class="col-lg-6">
+                    <nb-card>
+                      <nb-card-header>Pie</nb-card-header>
+                      <nb-card-body>
+                        <ngx-echarts-pie></ngx-echarts-pie>
+                      </nb-card-body>
+                    </nb-card>
+                  </div> -->
         
                 <div class="col-md-6 col-lg-3 col-xxxl-3">
                     <div class="calendar-container">

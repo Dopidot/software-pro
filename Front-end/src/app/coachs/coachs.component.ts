@@ -3,11 +3,11 @@ import { MENU_ITEMS } from '../menu/menu';
 import { NbThemeService, NbColorHelper } from '@nebular/theme';
 
 @Component({
-  selector: 'ngx-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  selector: 'ngx-coachs',
+  templateUrl: './coachs.component.html',
+  styleUrls: ['./coachs.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class CoachsComponent implements OnInit {
 
     data: any;
     options: any;
