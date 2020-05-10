@@ -10,6 +10,9 @@ import {
 } from '@nebular/auth';
 import { HomeComponent } from './home/home.component';
 import { EventsComponent } from './events/events.component';
+import { ExercisesComponent } from './exercises/exercises.component';
+import { ProgramsComponent } from './programs/programs.component';
+import { CoachsComponent } from './coachs/coachs.component';
 
 export const routes: Routes = [
   {
@@ -49,6 +52,9 @@ export const routes: Routes = [
   },
   { path: 'home', component: HomeComponent },
   { path: 'events', component: EventsComponent },
+  { path: 'exercises', component: ExercisesComponent },
+  { path: 'programs', component: ProgramsComponent },
+  { path: 'coachs', component: CoachsComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'pages' },
 ];
