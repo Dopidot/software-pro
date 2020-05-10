@@ -101,11 +101,11 @@ class LoginScreenForm extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               SizedBox( //height: width*0.2,
-              child: Image.asset(
-                "assets/logo.png",
-                // fit: BoxFit.contain,
+                child: Image.asset(
+                  "assets/logo.png",
+                  // fit: BoxFit.contain,
+                ),
               ),
-            ),
               SizedBox(height: 35.0),
               emailField,
               SizedBox(height: 15.0),
@@ -125,8 +125,11 @@ class LoginScreenForm extends State<LoginScreen> {
   void _validateInput() {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
-      Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) {
-        return new HomeScreen();}));
+      Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
+            return HomeScreenPage();
+          })
+      );
+
     } else {
       setState (() {
         _autoValidate = true ;
@@ -146,10 +149,10 @@ String validateEmail(String value) {
     return null;
   }
 }
-  String validatePw(String value){
-    if(value.isEmpty){
-      return "Attention votre champs mot de passe est vide";
-    }
-    return null;
+String validatePw(String value){
+  if(value.isEmpty){
+    return "Attention votre champs mot de passe est vide";
   }
+  return null;
+}
 
