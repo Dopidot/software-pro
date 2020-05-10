@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "commonjs", // utiliser les require au lieu des import dans le js généré
+        "esModuleInterop": true, // import express
+        "outDir": "dist",
+        "target": "ES6",
+        "strict": true, // forcer a typer et a avoi un code un petit peu plus propre
+        "experimentalDecorators": true
+    },
+    "include" : [
+        "src/**/*"
+    ]
+}
