@@ -1,16 +1,8 @@
-import {Column, DataType, Model, Table} from "sequelize-typescript";
+export default class VideoModel {
+    name: string;
+    path: string;
 
-@Table
-export default class VideoModel extends Model<VideoModel> {
-
-    @Column(DataType.STRING)
-    name: String;
-
-    @Column(DataType.STRING)
-    path: String;
-
-    constructor(name: String, path: String) {
-        super();
+    constructor(name: string, path: string) {
         this.name = name;
         this.path = path;
     }

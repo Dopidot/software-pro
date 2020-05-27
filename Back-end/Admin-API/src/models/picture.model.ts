@@ -1,16 +1,8 @@
-import {Column, DataType, Model, Table} from "sequelize-typescript";
+export default class PictureModel {
+    name: string;
+    path: string;
 
-@Table
-export default class PictureModel extends Model<PictureModel> {
-
-    @Column(DataType.STRING)
-    name: String;
-
-    @Column(DataType.STRING)
-    path: String;
-
-    constructor(name: String, path: String) {
-        super();
+    constructor(name: string, path: string) {
         this.name = name;
         this.path = path;
     }

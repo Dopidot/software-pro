@@ -1,6 +1,5 @@
 import express from 'express';
-import { Request, Response } from "express";
-import { sequelize } from "./sequilize";
+import indexRouter from './routes/index';
 
 export default class Server {
 
@@ -12,23 +11,14 @@ export default class Server {
 
     start() {
         const app = express();
-        app.get('/', function (req: Request, res: Response) {
-            res.send('The Admin-API is currently running.');
+
+        //middlewares
+        app.use(express.json());
+        app.use(express.urlencoded({extended: false}));
+        app.use(indexRouter);
+
+        app.listen(this.port, () => {
+            console.log('The Admin-API is currently running at http://localhost:' ,this.port); //https://api.fitisly.com
         });
-
-        sequelize.authenticate()
-            .then( async() => {
-                console.log("database connected");
-
-                try {
-                    await sequelize.sync({force : true});
-                } catch (error) {
-                    console.log(error.message);
-                }
-            }).catch( (e: any) => {
-                console.log(e.message);
-            })
-
-        app.listen(this.port);
     }
 }

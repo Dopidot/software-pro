@@ -1,25 +1,16 @@
-import {Table, Model, Column, DataType} from "sequelize-typescript";
-import PictureModel from "./picture.model";
 import ExerciseModel from "./exercise.model";
 
-@Table
-export default class ProgramModel extends Model<ProgramModel> {
-
-    @Column(DataType.STRING)
-    name: String;
-
-    @Column(DataType.STRING)
-    description: String;
-
-    picture: PictureModel;
-
+export default class ProgramModel {
+    public id!: number;
+    public name!: string;
+    public description: string;
+    public pictureId: number;
     exercises: ExerciseModel[];
 
-    constructor(name: String, description: String, picture: PictureModel, exercises: ExerciseModel[]) {
-        super();
+    constructor(name: string, description: string, pictureId: number, exercises: ExerciseModel[]) {
         this.name = name;
         this.description = description;
-        this.picture = picture;
+        this.pictureId = pictureId;
         this.exercises = exercises;
     }
 }
