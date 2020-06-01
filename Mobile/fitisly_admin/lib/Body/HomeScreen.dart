@@ -83,8 +83,8 @@ class _HomeScreen extends State<HomeScreenPage> {
                           )
                       ),
                       Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                      Text("Contenue de l'application", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                      Text("Programmes, Excercicess", style: TextStyle(color: Colors.black45)),
+                      Text("Application", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                      Text("Programmes, Exercices", style: TextStyle(color: Colors.black45)),
                     ]
                 ),
               ),
@@ -126,7 +126,7 @@ class _HomeScreen extends State<HomeScreenPage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text('Les statistiques', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 34.0)),
+                                Text('Statistiques', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 24.0)),
                               ],
                             ),
                             DropdownButton(
@@ -196,11 +196,11 @@ class _HomeScreen extends State<HomeScreenPage> {
             )
           ],
           staggeredTiles: [
-            StaggeredTile.extent(2, 110.0),
-            StaggeredTile.extent(1, 180.0),
-            StaggeredTile.extent(1, 180.0),
-            StaggeredTile.extent(2, 220.0),
-            StaggeredTile.extent(1, 110.0),
+            StaggeredTile.fit(2),
+            StaggeredTile.fit(1),
+            StaggeredTile.fit(1),
+            StaggeredTile.fit(2),
+            StaggeredTile.fit(2),
           ],
         )
     );
