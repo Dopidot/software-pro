@@ -2,6 +2,7 @@ import 'package:fitislyadmin/Body/LoginScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
+import 'ExcerciseScreen/HomePageExcerciseList.dart';
 
 class HomeScreenPage extends StatefulWidget
 {
@@ -29,7 +30,6 @@ class _HomeScreen extends State<HomeScreenPage> {
         appBar: AppBar(
           title: Text("Accueil", style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
           centerTitle: true,
-          backgroundColor: Color(0xFF45E15F),
         ),
         body: StaggeredGridView.count(
           crossAxisCount: 2,
@@ -88,6 +88,13 @@ class _HomeScreen extends State<HomeScreenPage> {
                     ]
                 ),
               ),
+                onTap: () {
+                  Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
+                    return HomePageExcerciseList();
+                  })
+                  );
+
+                }
             ),
             _buildTile(
               Padding(
@@ -173,7 +180,7 @@ class _HomeScreen extends State<HomeScreenPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('Mes Évènement', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                          Text('Mes Évènements', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
                           Text('Gestion des évènements', style: TextStyle(color: Colors.redAccent))
                         ],
                       ),

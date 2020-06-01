@@ -36,7 +36,6 @@ class LoginScreenForm extends State<LoginScreen> {
       appBar: new AppBar(
         title: new Text("Fitisly Admin",style: styleOS),
         centerTitle: true,
-        backgroundColor: color,
       ),
       body: new Container(
         padding: new EdgeInsets.all(20.0),
