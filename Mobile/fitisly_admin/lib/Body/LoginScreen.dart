@@ -100,19 +100,31 @@ class LoginScreenForm extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              SizedBox( //height: width*0.2,
-              child: Image.asset(
-                "assets/logo.png",
-                // fit: BoxFit.contain,
+              Flexible(
+                  child: Padding(child: Image.asset("assets/logo.png"),padding: EdgeInsets.only(top: 5,bottom: 20),),
+              flex:1,
+                fit: FlexFit.loose,
               ),
-            ),
-              SizedBox(height: 35.0),
-              emailField,
-              SizedBox(height: 15.0),
-              passwordField,
-              SizedBox(height: 25.0),
-              loginButon,
-              SizedBox(height: 15.0)
+
+              Flexible(
+                child: Padding(
+                  child: emailField,
+                  padding: EdgeInsets.only(bottom: 5),
+                ),
+                flex: 1,
+                //fit: FlexFit.loose,
+              ),
+              Flexible(child: Padding(
+                padding: EdgeInsets.only(top:10, bottom: 5),
+                child: passwordField,
+              ),
+                flex:1,
+              fit: FlexFit.loose),
+              Flexible(
+                child: Padding(child: loginButon,
+                padding: EdgeInsets.only(top:5,bottom: 10)),
+
+              flex: 1)
             ],
           ),
         ),
@@ -126,7 +138,8 @@ class LoginScreenForm extends State<LoginScreen> {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
       Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) {
-        return new HomeScreen();}));
+        return HomeScreenPage();
+      }));
     } else {
       setState (() {
         _autoValidate = true ;
