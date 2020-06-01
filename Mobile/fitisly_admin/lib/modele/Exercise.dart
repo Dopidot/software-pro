@@ -2,15 +2,15 @@ import 'package:fitislyadmin/modele/Photo.dart';
 
 import 'Video.dart';
 
-class Exercice {
+class Exercise {
   String id;
   String name;
   String description;
   int repetitionNumber;
-  DateTime restTime;
+  int restTime;
   List<Video> videos;
   List<Photo> photos;
-  Exercice(String id,  String name,String description,int repetitionNumber,DateTime restTime, List<Video> vidoes, List<Photo> photos){
+  Exercise(String id,String name,String description,int repetitionNumber,int restTime, List<Video> vidoes, List<Photo> photos){
     this.id = id;
     this.name = name;
     this.description = description;

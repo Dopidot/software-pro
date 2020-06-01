@@ -5,14 +5,14 @@ class Program {
   String id;
   String name;
   String description;
-  List<Exercice> exercices;
+  List<Exercise> exercises;
   UserAPI userApi;
 
-  Program(String id,String name,String description,List<Exercice> exercices, UserAPI userApi){
+  Program(String id,String name,String description,List<Exercise> exercises, UserAPI userApi){
     this.id = id;
     this.name = name;
     this.description = description;
-    this.exercices = exercices;
+    this.exercises = exercises;
     this.userApi = userApi;
   }
 
