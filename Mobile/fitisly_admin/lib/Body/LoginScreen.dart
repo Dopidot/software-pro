@@ -158,10 +158,9 @@ String validateEmail(String value) {
     return null;
   }
 }
-  String validatePw(String value){
-    if(value.isEmpty){
-      return "Attention votre champs mot de passe est vide";
-    }
-    return null;
+String validatePw(String value){
+  if(value.isEmpty){
+    return "Attention votre champs mot de passe est vide";
   }
-
+  return null;
+}
