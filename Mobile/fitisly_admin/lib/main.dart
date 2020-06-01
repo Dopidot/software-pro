@@ -19,9 +19,9 @@ class MyApp extends StatelessWidget {
       title: 'fitisly Admin',
       debugShowCheckedModeBanner: false,
 
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
+     /* theme: ThemeData(
+        primarySwatch: Colors.white,
+      ),*/
       home: LoginScreen(),
     );
   }
