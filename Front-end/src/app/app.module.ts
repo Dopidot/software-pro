@@ -78,6 +78,7 @@ import { EventsComponent } from './events/events.component';
 import { ExercisesComponent } from './exercises/exercises.component';
 import { ProgramsComponent } from './programs/programs.component';
 import { CoachsComponent } from './coachs/coachs.component';
+import { MembersComponent } from './members/members.component';
 
 const components = [
     ChartjsBarComponent,
@@ -105,7 +106,7 @@ const components = [
   ];
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, EventsComponent, ExercisesComponent, ProgramsComponent, CoachsComponent/*, ...routedComponents, ...components*/],
+  declarations: [AppComponent, HomeComponent, EventsComponent, ExercisesComponent, ProgramsComponent, CoachsComponent, MembersComponent/*, ...routedComponents, ...components*/],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,

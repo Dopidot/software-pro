@@ -13,6 +13,7 @@ import { EventsComponent } from './events/events.component';
 import { ExercisesComponent } from './exercises/exercises.component';
 import { ProgramsComponent } from './programs/programs.component';
 import { CoachsComponent } from './coachs/coachs.component';
+import { MembersComponent } from './members/members.component';
 
 export const routes: Routes = [
   {
@@ -55,6 +56,7 @@ export const routes: Routes = [
   { path: 'exercises', component: ExercisesComponent },
   { path: 'programs', component: ProgramsComponent },
   { path: 'coachs', component: CoachsComponent },
+  { path: 'members', component: MembersComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'pages' },
 ];

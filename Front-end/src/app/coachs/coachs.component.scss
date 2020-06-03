@@ -1,0 +1,19 @@
+.default-background {
+    color: #222b45;
+    background-color: #f7f9fc;
+    padding: 20px;
+}
+
+.select-coach {
+    width: -webkit-fill-available;
+}
+
+.select-coach:hover {
+    background-color: #f7f9fc;
+    border-radius: 0;
+}
+
+.small-button {
+    font-size: 10px !important;
+    padding: 9px !important;
+}
