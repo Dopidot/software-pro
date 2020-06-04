@@ -175,7 +175,7 @@ export class CoachsComponent implements OnInit {
         this.source.load(this.data);
     } 
 
-    openPopup(event, dialog: TemplateRef<any>): void {
+    openUnfollow(event, dialog: TemplateRef<any>): void {
         this.currentUser = event.data;
 
         this.dialogService.open(
@@ -184,8 +184,7 @@ export class CoachsComponent implements OnInit {
     }
 
     openEditCoach(coach, dialog: TemplateRef<any>): void {
-        this.currentCoach = coach;
-        console.log(coach);
+        this.loadUsers(coach);
 
         this.dialogService.open(
             dialog

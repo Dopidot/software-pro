@@ -12,7 +12,7 @@
                                 <nb-user nbButton [picture]="coach.picture" [name]="coach.name" [title]="coach.title"
                                     size="large" class="select-coach" (click)="loadUsers(coach)">
                                 </nb-user>
-                                <button nbButton style="margin-left: 10px;" (click)="openEditCoach(coach, editCoach)">
+                                <button nbButton style="margin-left: 10px;" (click)="openEditCoach(coach, dialog2)">
                                     <nb-icon icon="edit-2-outline" pack="eva"></nb-icon>
                                 </button>
                             </nb-list-item>
@@ -23,12 +23,12 @@
                 <div class="col-8">
                     <nb-card *ngIf="currentCoach">
                         <nb-card-header>
-                            Les utilisateurs suivent {{currentCoach.name}}
+                            Les utilisateurs qui suivent {{currentCoach.name}}
                         </nb-card-header>
 
                         <nb-card-body>
                             <ng2-smart-table [settings]="settings" [source]="source"
-                                (deleteConfirm)="openPopup($event, dialog)">
+                                (deleteConfirm)="openUnfollow($event, dialog)">
                             </ng2-smart-table>
                         </nb-card-body>
                     </nb-card>
@@ -54,7 +54,7 @@
     </router-outlet>
 </ngx-one-column-layout>
 
-<ng-template #editCoach let-data let-ref="editCoachRef">
+<ng-template #dialog2 let-data let-ref="dialogRef">
     <nb-card>
         <nb-card-header>Informations sur {{currentCoach.name}}</nb-card-header>
         <nb-card-body style="max-width: 400px;">
