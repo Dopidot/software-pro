@@ -10,13 +10,17 @@ class Exercise {
   int restTime;
   List<Video> videos;
   List<Photo> photos;
-  Exercise(String id,String name,String description,int repetitionNumber,int restTime, List<Video> vidoes, List<Photo> photos){
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.repetitionNumber = repetitionNumber;
-    this.restTime = restTime;
-    this.videos = vidoes;
-    this.photos = photos;
+
+  Exercise({this.id,this.name,this.description, this.repetitionNumber, this.restTime, this.videos,this.photos});
+
+  factory Exercise.fromJson(Map<String,dynamic> json){
+    return Exercise(
+      id:json['id'],
+      name:json['name'],
+      description:json['description'],
+      repetitionNumber:json['reapeat_number'],
+      restTime:json['rest_time'],
+      videos:json['video_id'],
+      photos:json['picture_id']);
   }
 }
