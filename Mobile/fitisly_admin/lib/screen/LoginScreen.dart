@@ -122,12 +122,10 @@ class LoginScreenForm extends State<LoginScreen> {
               Flexible(
                 child: Padding(child: loginButon,
                 padding: EdgeInsets.only(top:5,bottom: 10)),
-
               flex: 1)
             ],
           ),
         ),
-
       ),
     );
 
