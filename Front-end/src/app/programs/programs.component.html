@@ -3,21 +3,72 @@
     <router-outlet>
         <div class="container">
             <div class="row">
-        
+
                 <div class="col-md-12 col-lg-12 col-xxxl-12">
                     <nb-card>
                         <nb-card-header>
-                          Programs
+                            Programmes
                         </nb-card-header>
-                      
+
                         <nb-card-body>
-                          <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
-                          </ng2-smart-table>
+                            <ng2-smart-table [settings]="settings" [source]="source"
+                                (custom)="selectAction($event, dialog2, dialog)">
+                            </ng2-smart-table>
+
+                            <div style="text-align: center; margin-top: 10px;">
+                                <button nbButton [status]="success" (click)="openPopup(dialog2)">Ajouter un
+                                    programme</button>
+                            </div>
                         </nb-card-body>
-                      </nb-card>
+                    </nb-card>
                 </div>
 
             </div>
         </div>
     </router-outlet>
 </ngx-one-column-layout>
+
+<ng-template #dialog2 let-data let-ref="dialogRef">
+    <nb-card>
+        <nb-card-header>Ajouter un programme</nb-card-header>
+        <nb-card-body style="max-width: 400px;">
+
+            <!-- <div style="line-height: 1.5;">
+                Si vous confirmez, le programme {{currentProgram.name}} sera définitivement supprimé.
+            </div> -->
+            <form>
+                <div class="form-group">
+                    <label for="name" class="label">Nom</label>
+                    <input type="text" nbInput fullWidth id="name" placeholder="Nom">
+                </div>
+                <div class="form-group">
+                    <label for="description" class="label">Description</label>
+                    <input type="text" nbInput fullWidth id="description" placeholder="Description">
+                </div>
+                <button type="submit" nbButton status="danger">Upload</button>
+            </form>
+
+        </nb-card-body>
+        <nb-card-footer style="text-align: center;">
+            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">Annuler</button>
+            <button nbButton [status]="success" (click)=" ref.close()">Ajouter</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card>
+        <nb-card-header>Confirmation de suppression</nb-card-header>
+        <nb-card-body style="max-width: 400px;">
+
+            <div style="line-height: 1.5;">
+                Si vous confirmez, le programme {{currentProgram.name}} sera définitivement supprimé.
+            </div>
+
+        </nb-card-body>
+        <nb-card-footer style="text-align: center;">
+            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">Annuler</button>
+            <button nbButton [status]="success" (click)="confirmDelete(); ref.close()">Confirmer</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
