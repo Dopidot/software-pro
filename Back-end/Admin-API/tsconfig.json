@@ -1,6 +1,7 @@
 {
     "compilerOptions": {
         "module": "commonjs", // utiliser les require au lieu des import dans le js généré
+        "resolveJsonModule": true,
         "esModuleInterop": true, // import express
         "rootDir": "src",
         "outDir": "dist",

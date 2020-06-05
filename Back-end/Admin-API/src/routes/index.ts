@@ -1,5 +1,10 @@
-import { Router } from 'express'
+import { Router } from 'express';
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from '../swagger.json';
+
 const router = Router();
+//const swaggerUi = require('swagger-ui-express');
+//const swaggerDocument = require('./swagger.json');
 
 import UserController  from '../controllers/user.controller'
 import ExerciseController from "../controllers/exercise.controller";
@@ -18,6 +23,10 @@ const programController = new ProgramController();
 const pictureController = new PictureController();
 const videoController = new VideoController();
 
+
+//swagger
+router.use('/swagger', swaggerUi.serve);
+router.get('/swagger', swaggerUi.setup(swaggerDocument));
 
 // USERS
 router.get('/users', userController.getUsers); //200
