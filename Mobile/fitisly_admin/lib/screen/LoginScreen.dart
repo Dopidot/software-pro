@@ -2,15 +2,6 @@ import 'package:flutter/material.dart';
 import 'HomeScreen.dart';
 
 class LoginScreen extends StatefulWidget {
-  TextStyle styleOS = TextStyle(fontFamily: 'OpenSans', fontSize: 20.0);
-  Color color = new Color(0xFF45E15F);
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController pwController = new TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  bool _autoValidate = false;
-  String _pw;
-  String _email;
-
 
   @override
   State<StatefulWidget> createState() {
@@ -23,12 +14,19 @@ class LoginScreenForm extends State<LoginScreen> {
 
   TextStyle styleOS = TextStyle(fontFamily: 'OpenSans', fontSize: 20.0);
   Color color = new Color(0xFF45E15F);
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController pwController = new TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
   String _pw;
   String _email;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _pw = "";
+    _email = "";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +87,8 @@ class LoginScreenForm extends State<LoginScreen> {
 
 
             )
-        ));
+        )
+    );
     return Center(
       child: Container(
         color: Colors.white,
@@ -134,7 +133,7 @@ class LoginScreenForm extends State<LoginScreen> {
   void _validateInput() {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
-      Navigator.push(context, new MaterialPageRoute(builder: (BuildContext context) {
+      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
         return HomeScreenPage();
       }));
     } else {

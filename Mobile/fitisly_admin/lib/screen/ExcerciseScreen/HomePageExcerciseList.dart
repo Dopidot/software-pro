@@ -1,4 +1,5 @@
 import 'package:fitislyadmin/modele/Exercise.dart';
+import 'package:fitislyadmin/screen/ExcerciseScreen/FormCreateExercise.dart';
 import 'package:fitislyadmin/services/exerciseService.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -64,7 +65,13 @@ class ListViewExercise extends StatelessWidget
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {print("Ok");},
+        onPressed: () {
+          Navigator.push(context,MaterialPageRoute(
+            builder: (context) {
+              return FormCreateExercise();
+            },
+          ));
+        },
       ),
     );
   }
