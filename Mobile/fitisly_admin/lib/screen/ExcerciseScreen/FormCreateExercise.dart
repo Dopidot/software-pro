@@ -2,15 +2,45 @@ import 'dart:core';
 import 'dart:core';
 import 'dart:ui';
 
+import 'package:fitislyadmin/modele/Exercise.dart';
 import 'package:fitislyadmin/modele/Photo.dart';
 import 'package:fitislyadmin/modele/Video.dart';
+import 'package:fitislyadmin/services/httpServices.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'HomePageExcerciseList.dart';
+
+
+class createExerciseStateless extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Mes excercices", style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
+        centerTitle: true,
+      ),
+      body: FutureBuilder<Exercise>(
+        future: create(Exercise()),
+        builder: (context, snapshot) {
+          if (snapshot.hasError){
+            return Center(
+                child: Text("Probème de serveur, la page n'a pas pu être chargé")
+            );
+          }
+
+          return snapshot.hasData ? HomePageExercice() : Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+}
 
 class FormCreateExercise extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
    return CreateExercise();
   }
 }
@@ -51,7 +81,7 @@ class CreateExercise extends State<FormCreateExercise>{
 
     final nameField = TextFormField(
         onSaved: (String val){
-          _name = val ;
+          this._name = val ;
         },
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
@@ -126,23 +156,37 @@ class CreateExercise extends State<FormCreateExercise>{
 
         child: MaterialButton(
             onPressed: _validateInput,
-            child: Text("Créer",
-              textAlign: TextAlign.center,
-            )
+          child: Text("Créer l'exercice"),
         )
     );
 
-    return(Column(
-        children: <Widget>[
-          nameField,
-          descField,
-          reapeteNumberField,
-          restTimeField,
-          photoField,
-          videoField,
-          creationButton
-        ])
+    return Column(
+          children: <Widget>[
+            Flexible(child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: nameField,
+            )),
+            Flexible(child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: descField,
+            )),
+            Flexible(child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: reapeteNumberField,
+            )),
+            Flexible(child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: restTimeField,
+            )),
+            //Flexible(child: photoField),
+           // Flexible(child: videoField),
+            Flexible(child: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: creationButton,
+            ))
+          ]
     );
+
   }
 
 
@@ -150,9 +194,13 @@ class CreateExercise extends State<FormCreateExercise>{
   void _validateInput() {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
-     /* Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-        return HomeScreenPage();
-      }));*/
+      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+        return createExerciseStateless();
+      }
+    )
+      );
+
+
 
      print("Créé");
     } else {

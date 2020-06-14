@@ -1,6 +1,6 @@
 import 'package:fitislyadmin/modele/Exercise.dart';
 import 'package:fitislyadmin/screen/LoginScreen.dart';
-import 'package:fitislyadmin/services/exerciseService.dart';
+import 'package:fitislyadmin/services/httpServices.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
