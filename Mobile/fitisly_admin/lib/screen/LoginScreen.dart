@@ -30,14 +30,14 @@ class LoginScreenForm extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text("Fitisly Admin",style: styleOS),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Fitisly Admin",style: styleOS),
         centerTitle: true,
       ),
-      body: new Container(
-        padding: new EdgeInsets.all(20.0),
-        child: new Form(
+      body: Container(
+        padding: EdgeInsets.all(20.0),
+        child: Form(
             key: _formKey,
             autovalidate: _autoValidate,
             child: buildForm()
