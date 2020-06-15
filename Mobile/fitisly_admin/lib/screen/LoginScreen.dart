@@ -23,7 +23,6 @@ class LoginScreenForm extends State<LoginScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
     _pw = "";
     _email = "";
   }
@@ -40,14 +39,21 @@ class LoginScreenForm extends State<LoginScreen> {
         child: Form(
             key: _formKey,
             autovalidate: _autoValidate,
-            child: buildForm()
-
-        ),
+            child: buildForm()),
       ),
     );
   }
 
   Widget buildForm(){
+
+
+    final titleField = TextField(
+
+    );
+
+
+
+
     final emailField = TextFormField(
         onSaved: (String val){
           _email = val ;
@@ -82,11 +88,9 @@ class LoginScreenForm extends State<LoginScreen> {
           //padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
 
             onPressed: _validateInput,
-            child: Text("Login",
-              textAlign: TextAlign.center,
-
-
-            )
+            child:
+            Text("Login",
+              textAlign: TextAlign.center)
         )
     );
     return Center(
@@ -155,6 +159,7 @@ String validateEmail(String value) {
     return null;
   }
 }
+
 String validatePw(String value){
   if(value.isEmpty){
     return "Attention votre champs mot de passe est vide";

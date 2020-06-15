@@ -62,7 +62,7 @@ class CreateExercise extends State<FormCreateExercise>{
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Création d'un exercice"),
+        title: Text("Nouveau exercice"),
         centerTitle: true,
       ),
       body: Container(
@@ -156,7 +156,7 @@ class CreateExercise extends State<FormCreateExercise>{
 
         child: MaterialButton(
             onPressed: _validateInput,
-          child: Text("Créer l'exercice"),
+          child: Text("Suivant"),
         )
     );
 
@@ -190,17 +190,13 @@ class CreateExercise extends State<FormCreateExercise>{
   }
 
 
-
   void _validateInput() {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
         return createExerciseStateless();
-      }
-    )
+      })
       );
-
-
 
      print("Créé");
     } else {
