@@ -57,6 +57,10 @@
           "type": "string",
           "format": "email"
         },
+        "password": {
+          "type": "string",
+          "format": "password"
+        },
         "pictureId": {
           "type": "number"
         },

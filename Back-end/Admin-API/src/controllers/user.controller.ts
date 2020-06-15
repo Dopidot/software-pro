@@ -1,6 +1,9 @@
 import { Request, Response} from 'express';
-import { QueryResult} from 'pg';
+import {Query, QueryResult} from 'pg';
 import { pool } from '../database';
+import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
+require('dotenv').config()
 
 export default class UserController {
 
@@ -8,10 +11,11 @@ export default class UserController {
 
     getUsers = async function(req: Request, res: Response): Promise<Response> {
         try {
+            console.log(" it works : " + req.user);
             const response: QueryResult = await pool.query('SELECT * FROM users');
             return res.status(200).json(response.rows);
         } catch (e) {
-            console.log(e);
+            console.error(e);
             return res.status(500).json('Internal Server Error');
         }
     }
@@ -22,7 +26,7 @@ export default class UserController {
             const response: QueryResult = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
             return res.status(200).json(response.rows);
         } catch (e) {
-            console.log(e);
+            console.error(e);
             return res.status(400).json('Bad Parameter');
         }
     }
@@ -30,8 +34,9 @@ export default class UserController {
     createUser = async function(req: Request, res: Response): Promise<Response> {
         try {
             const { firstname, lastname, email } = req.body;
-            const response: QueryResult = await pool.query('INSERT INTO users (firstname, lastname, email) VALUES ($1, $2, $3)', [firstname, lastname, email]);
-            return res.json({
+            const hashedPassword =  await bcrypt.hash(req.body.password, 10);
+            const response: QueryResult = await pool.query('INSERT INTO users (firstname, lastname, email, password) VALUES ($1, $2, $3, $4)', [firstname, lastname, email, hashedPassword]);
+            return res.status(201).json({
                 message: 'User created successfully',
                 body: {
                     user: {
@@ -42,8 +47,13 @@ export default class UserController {
                 }
             });
         } catch (e) {
-            console.log(e);
-            return res.status(500).json('Internal Server error');
+            console.error(e);
+            if (e.code = 23505) {
+                console.log("AH BAH LOL T NUL");
+                return res.status(400).json('Cet email existe déjà');
+            } else {
+                return res.status(500).json('Internal Server error');
+            }
         }
     }
 
@@ -63,7 +73,7 @@ export default class UserController {
                 }
             });
         } catch (e) {
-            console.log(e);
+            console.error(e);
             return res.status(500).json('Internal Server error');
         }
     }
@@ -74,8 +84,32 @@ export default class UserController {
             const response: QueryResult = await pool.query('DELETE FROM users WHERE id = $1', [id]);
             return res.json(`User ${id} deleted successfully`);
         } catch (e) {
-            console.log(e);
+            console.error(e);
             return res.status(400).json('Bad Parameter');
+        }
+    }
+
+    logUserIn = async (req: Request, res: Response): Promise<Response> => {
+
+        try {
+            const email = req.body.email;
+            const response: QueryResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
+            if ( response.rowCount == 0) {
+                return res.status(400).json('User not found.')
+            }
+            const user = response.rows[0];
+            if (await bcrypt.compare(req.body.password, user.password) ) {
+                // creating webtoken
+                const acessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string);
+
+
+                return res.status(200).json({acessToken: acessToken});
+            } else {
+                return res.status(200).json('Not Allowed')
+            }
+        } catch (e) {
+            console.error(e);
+            return res.status(400).json('Bad Credentials : your email or your password is not correct');
         }
     }
 }

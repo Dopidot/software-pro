@@ -1,16 +1,15 @@
-import { Router } from 'express';
+import {Request, Response, Router} from 'express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from '../swagger.json';
 
 const router = Router();
-//const swaggerUi = require('swagger-ui-express');
-//const swaggerDocument = require('./swagger.json');
 
 import UserController  from '../controllers/user.controller'
 import ExerciseController from "../controllers/exercise.controller";
 import ProgramController from "../controllers/programs.controller";
 import PictureController from "../controllers/picture.controller";
 import VideoController from "../controllers/video.controller";
+import * as jwt from "jsonwebtoken";
 
 
 // TODO nom de l'api dans le futur 'admin_api/exercises/'
@@ -29,11 +28,12 @@ router.use('/swagger', swaggerUi.serve);
 router.get('/swagger', swaggerUi.setup(swaggerDocument));
 
 // USERS
-router.get('/users', userController.getUsers); //200
+router.get('/users', authenticateToken,  userController.getUsers); //200
 router.get('/users/:id', userController.getUserById); // 200
 router.post('/users', userController.createUser); // 201
 router.put('/users/:id', userController.updateUser); //200 ou 201
 router.delete('/users/:id', userController.deleteUser); // 200
+router.post('/users/login', userController.logUserIn); //200
 
 //EXERCISES
 router.get('/exercises', exerciseController.getExercises );
@@ -62,5 +62,21 @@ router.get('/videos/:id', videoController.getVideoById);
 router.post('/videos', videoController.createVideo);
 router.put('/videos/:id', videoController.updateVideo);
 router.delete('/videos/:id', videoController.deleteVideo);
+
+function authenticateToken(req: Request, res:Response, next) {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+    console.log('token : ' + token);
+    if (token == null) {
+        return res.status(401);
+    }
+
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET as string, (err, user) => {
+        if (err) return res.status(403);
+        req.user = user;
+        console.log('token validated ; user : ' + user);
+        next();
+    });
+}
 
 export default router;

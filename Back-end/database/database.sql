@@ -7,17 +7,13 @@ CREATE SEQUENCE id_sequence;
 
 CREATE TABLE users(
     id BIGINT PRIMARY KEY DEFAULT nextval('id_sequence'),
-    firstname VARCHAR(25) NOT NULL,
-    lastname VARCHAR(25) NOT NULL,
-    email TEXT,
+    firstname VARCHAR(50) NOT NULL,
+    lastname VARCHAR(50) NOT NULL,
+    email VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
     picture_id BIGINT,
     lastConnection TIMESTAMP
 );
-
-INSERT INTO users (firstname, lastname, email)
-VALUES  ('Mickael', 'Moreira', 'dopidot@dev.fr'),
-        ('Jean', 'Deyehe', 'jdeyehe@dev.fr'),
-        ('Guillaume', 'Tako', 'gtako@dev.fr');
 
 /*******************
     TABLE PROGRAMS
