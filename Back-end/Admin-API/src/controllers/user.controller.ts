@@ -101,9 +101,10 @@ export default class UserController {
             if (await bcrypt.compare(req.body.password, user.password) ) {
                 // creating webtoken
                 const acessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string);
+                const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN as string);
 
 
-                return res.status(200).json({acessToken: acessToken});
+                return res.status(200).json({acessToken: acessToken, refreshToken: refreshToken});
             } else {
                 return res.status(200).json('Not Allowed')
             }

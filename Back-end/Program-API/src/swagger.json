@@ -1,0 +1,279 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Program-Api",
+    "description": "API for the fitlisly app",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:4000",
+  "basePath": "",
+  "tags": [
+    {
+      "name": "user",
+      "description": "CRUD operation for user"
+    },
+    {
+      "name": "exercise",
+      "description": "CRUD operation for exercise"
+    },
+    {
+      "name": "program",
+      "description": "CRUD operation for program"
+    },
+    {
+      "name": "picture",
+      "description": "CRUD operation for picture"
+    },
+    {
+      "name": "video",
+      "description": "CRUD operation for video"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "definitions": {
+    "user": {
+      "type": "object",
+      "properties": {
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
+        },
+        "pictureId": {
+          "type": "number"
+        },
+        "lastConnection": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "exercises": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/exercise"
+          }
+        }
+      }
+    },
+    "exercise": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "repeatNumber": {
+          "type": "number"
+        },
+        "restTime": {
+          "type": "string",
+          "format": "minute:second"
+        },
+        "pictureId": {
+          "type": "number"
+        },
+        "videoId": {
+          "type": "number"
+        },
+        "programs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/program"
+          }
+        },
+        "user": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/user"
+          }
+        }
+      }
+    },
+    "program": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "pictureId": {
+          "type": "number"
+        },
+        "exercises": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/exercise"
+          }
+        }
+      }
+    },
+    "picture": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    },
+    "video": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/users": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get all the users of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create a new user in the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "user that we want to create",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "400": {
+            "description": "Failed. Bad post Data"
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the user that we want to retrieve",
+          "type": "integer"
+        }
+      ],
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "404": {
+            "description": "Failed. User not found. "
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "user with a new values of properties",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "summary": "Update user with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "404": {
+            "description": "Failed. User not found. "
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Delete user with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "404": {
+            "description": "Failed. User not found. "
+          }
+        }
+      }
+    }
+  }
+}
