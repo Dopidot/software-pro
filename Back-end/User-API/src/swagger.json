@@ -2,20 +2,19 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "Exercise-Api",
-    "description": "Exercise API for the fitlisly app",
+    "title": "User-Api",
+    "description": "API for the fitlisly app",
     "license": {
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
     }
   },
   "host": "localhost:4000",
-  "basePath": "/api/exercises",
-
+  "basePath": "/api/users",
   "tags": [
     {
-      "name": "exercise",
-      "description": "CRUD operation for exercise"
+      "name": "user",
+      "description": "CRUD operation for user"
     },
     {
       "name": "picture",
@@ -37,32 +36,31 @@
     "application/json"
   ],
   "definitions": {
-    "exercise": {
+    "user": {
       "type": "object",
       "properties": {
-        "name": {
+        "firstname": {
           "type": "string"
         },
-        "description": {
+        "lastname": {
           "type": "string"
         },
-        "repeatNumber": {
-          "type": "number"
-        },
-        "restTime": {
+        "email": {
           "type": "string",
-          "format": "minute:second"
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
         },
         "pictureId": {
           "type": "number"
         },
-        "videoId": {
-          "type": "number"
+        "lastConnection": {
+          "type": "string",
+          "format": "date-time"
         },
-        "programs": {
-          "type": "array"
-        },
-        "user": {
+        "exercises": {
           "type": "array"
         }
       }
@@ -91,33 +89,33 @@
     }
   },
   "paths": {
-    "/api/exercises": {
+    "/api/users": {
       "get": {
         "tags": [
-          "exercises"
+          "user"
         ],
-        "summary": "Get all the exercises in the database",
+        "summary": "Get all the users of the database",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/exercise"
+              "$ref": "#/definitions/user"
             }
           }
         }
       },
       "post": {
         "tags": [
-          "exercises"
+          "users"
         ],
-        "summary": "Create a new exercise in the database",
+        "summary": "Create a new user in the database",
         "parameters": [
           {
             "in": "body",
             "name": "body",
-            "description": "program that we want to create",
+            "description": "user that we want to create",
             "schema": {
-              "$ref": "#/definitions/exercise"
+              "$ref": "#/definitions/user"
             }
           }
         ],
@@ -125,7 +123,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/exercise"
+              "$ref": "#/definitions/user"
             }
           },
           "400": {
@@ -134,75 +132,124 @@
         }
       }
     },
-    "/api/exercises/{id}": {
+    "/api/users/{id}": {
       "parameters": [
         {
           "name": "id",
           "in": "path",
           "required": true,
-          "description": "ID of the exercise that we want to retrieve",
+          "description": "ID of the user that we want to retrieve",
           "type": "integer"
         }
       ],
       "get": {
         "tags": [
-          "exercises"
+          "user"
         ],
-        "summary": "Get exercise with given ID",
+        "summary": "Get user with given ID",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/exercise"
+              "$ref": "#/definitions/user"
             }
           },
           "404": {
-            "description": "Failed. Exercise not found. "
+            "description": "Failed. User not found. "
           }
         }
       },
       "put": {
         "tags": [
-          "exercises"
+          "user"
         ],
         "parameters": [
           {
             "in": "body",
             "name": "body",
             "required": true,
-            "description": "exercise with a new values of properties",
+            "description": "user with a new values of properties",
             "schema": {
-              "$ref": "#/definitions/exercise"
+              "$ref": "#/definitions/user"
             }
           }
         ],
-        "summary": "Update exercises with given ID",
+        "summary": "Update user with given ID",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/exercise"
+              "$ref": "#/definitions/user"
             }
           },
           "404": {
-            "description": "Failed. Exercise not found. "
+            "description": "Failed. User not found. "
           }
         }
       },
       "delete": {
         "tags": [
-          "exercises"
+          "user"
         ],
-        "summary": "Delete exercise with given ID",
+        "summary": "Delete user with given ID",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/exercise"
+              "$ref": "#/definitions/user"
             }
           },
           "404": {
-            "description": "Failed. Exercise not found. "
+            "description": "Failed. User not found. "
+          }
+        }
+      }
+    },
+    "/api/users/login" : {
+      "post": {
+        "tags": [
+          "users"
+        ],
+        "summary": "Log the user in and returns a token",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "login and passworod",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "acessToken": {
+                  "type": "string"
+                },
+                "refreshToken": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Credentials : your email or your password is not correct"
           }
         }
       }

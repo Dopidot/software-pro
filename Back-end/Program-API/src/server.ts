@@ -17,7 +17,7 @@ export default class Server {
         //middlewares
         app.use(express.json());
         app.use(express.urlencoded({extended: false}));
-        app.use('/api/swagger', swaggerRouter);
+        app.use('/api/programs', swaggerRouter);
         app.use('/api/programs', programRouter);
         app.use('/api/pictures', pictureRouter);
         app.use('/api/videos', videoRouter);

@@ -3,23 +3,15 @@
   "info": {
     "version": "1.0.0",
     "title": "Program-Api",
-    "description": "API for the fitlisly app",
+    "description": "Program API for the fitlisly app",
     "license": {
       "name": "MIT",
       "url": "https://opensource.org/licenses/MIT"
     }
   },
   "host": "localhost:4000",
-  "basePath": "",
+  "basePath": "/api/programs",
   "tags": [
-    {
-      "name": "user",
-      "description": "CRUD operation for user"
-    },
-    {
-      "name": "exercise",
-      "description": "CRUD operation for exercise"
-    },
     {
       "name": "program",
       "description": "CRUD operation for program"
@@ -44,74 +36,6 @@
     "application/json"
   ],
   "definitions": {
-    "user": {
-      "type": "object",
-      "properties": {
-        "firstname": {
-          "type": "string"
-        },
-        "lastname": {
-          "type": "string"
-        },
-        "email": {
-          "type": "string",
-          "format": "email"
-        },
-        "password": {
-          "type": "string",
-          "format": "password"
-        },
-        "pictureId": {
-          "type": "number"
-        },
-        "lastConnection": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "exercises": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/exercise"
-          }
-        }
-      }
-    },
-    "exercise": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "repeatNumber": {
-          "type": "number"
-        },
-        "restTime": {
-          "type": "string",
-          "format": "minute:second"
-        },
-        "pictureId": {
-          "type": "number"
-        },
-        "videoId": {
-          "type": "number"
-        },
-        "programs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/program"
-          }
-        },
-        "user": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/user"
-          }
-        }
-      }
-    },
     "program": {
       "type": "object",
       "properties": {
@@ -128,10 +52,7 @@
           "type": "number"
         },
         "exercises": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/exercise"
-          }
+          "type": "array"
         }
       }
     },
@@ -159,33 +80,33 @@
     }
   },
   "paths": {
-    "/users": {
+    "/api/programs": {
       "get": {
         "tags": [
-          "user"
+          "programs"
         ],
-        "summary": "Get all the users of the database",
+        "summary": "Get all the programs in the database",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/program"
             }
           }
         }
       },
       "post": {
         "tags": [
-          "user"
+          "programs"
         ],
-        "summary": "Create a new user in the database",
+        "summary": "Create a new program in the database",
         "parameters": [
           {
             "in": "body",
             "name": "body",
-            "description": "user that we want to create",
+            "description": "program that we want to create",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/program"
             }
           }
         ],
@@ -193,7 +114,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/program"
             }
           },
           "400": {
@@ -202,75 +123,75 @@
         }
       }
     },
-    "/users/{id}": {
+    "/api/programs/{id}": {
       "parameters": [
         {
           "name": "id",
           "in": "path",
           "required": true,
-          "description": "ID of the user that we want to retrieve",
+          "description": "ID of the program that we want to retrieve",
           "type": "integer"
         }
       ],
       "get": {
         "tags": [
-          "user"
+          "programs"
         ],
-        "summary": "Get user with given ID",
+        "summary": "Get program with given ID",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/program"
             }
           },
           "404": {
-            "description": "Failed. User not found. "
+            "description": "Failed. Program not found. "
           }
         }
       },
       "put": {
         "tags": [
-          "user"
+          "programs"
         ],
         "parameters": [
           {
             "in": "body",
             "name": "body",
             "required": true,
-            "description": "user with a new values of properties",
+            "description": "Programs with a new values of properties",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/program"
             }
           }
         ],
-        "summary": "Update user with given ID",
+        "summary": "Update programs with given ID",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/program"
             }
           },
           "404": {
-            "description": "Failed. User not found. "
+            "description": "Failed. Program not found. "
           }
         }
       },
       "delete": {
         "tags": [
-          "user"
+          "programs"
         ],
-        "summary": "Delete user with given ID",
+        "summary": "Delete program with given ID",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/user"
+              "$ref": "#/definitions/program"
             }
           },
           "404": {
-            "description": "Failed. User not found. "
+            "description": "Failed. Program not found. "
           }
         }
       }
