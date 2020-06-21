@@ -13,7 +13,6 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenForm extends State<LoginScreen> {
 
   TextStyle styleOS = TextStyle(fontFamily: 'OpenSans', fontSize: 20.0);
-  Color color = new Color(0xFF45E15F);
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
   String _pw;
@@ -47,13 +46,6 @@ class LoginScreenForm extends State<LoginScreen> {
   Widget buildForm(){
 
 
-    final titleField = TextField(
-
-    );
-
-
-
-
     final emailField = TextFormField(
         onSaved: (String val){
           _email = val ;
@@ -62,7 +54,17 @@ class LoginScreenForm extends State<LoginScreen> {
         decoration: InputDecoration(
             hintText: "Email",
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-        validator: validateEmail
+        validator: (value){
+          String pattern = r'^(([^&lt;&gt;()[\]\\.,;:\s@\"]+(\.[^&lt;&gt;()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+          RegExp regExp = new RegExp(pattern);
+          if (value.isEmpty) {
+            return "Attention votre champs email est vide";
+          } else if (!regExp.hasMatch(value)) {
+            return "Email invalide";
+          } else {
+            return null;
+          }
+        }
     );
 
 
@@ -70,7 +72,12 @@ class LoginScreenForm extends State<LoginScreen> {
       onSaved: (String val){
         _pw = val;
       },
-      validator: validatePw,
+      validator: (value){
+        if(value.isEmpty){
+          return "Attention votre champs mot de passe est vide";
+        }
+        return null;
+      },
       obscureText: true,
       decoration: InputDecoration(
           hintText: "Mot de passe",
@@ -87,7 +94,18 @@ class LoginScreenForm extends State<LoginScreen> {
           // minWidth: MediaQuery.of(context).size.width,
           //padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
 
-            onPressed: _validateInput,
+            onPressed: () {
+              if ( _formKey.currentState.validate()) {
+                _formKey.currentState.save();
+                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+                  return HomeScreenPage();
+                }));
+              } else {
+                setState (() {
+                  _autoValidate = true ;
+                });
+              }
+            },
             child:
             Text("Login",
               textAlign: TextAlign.center)
@@ -135,34 +153,10 @@ class LoginScreenForm extends State<LoginScreen> {
   }
 
   void _validateInput() {
-    if ( _formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-        return HomeScreenPage();
-      }));
-    } else {
-      setState (() {
-        _autoValidate = true ;
-      });
-    }
+
   }
 }
 
-String validateEmail(String value) {
-  String pattern = r'^(([^&lt;&gt;()[\]\\.,;:\s@\"]+(\.[^&lt;&gt;()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-  RegExp regExp = new RegExp(pattern);
-  if (value.isEmpty) {
-    return "Attention votre champs email est vide";
-  } else if (!regExp.hasMatch(value)) {
-    return "Email invalide";
-  } else {
-    return null;
-  }
-}
 
-String validatePw(String value){
-  if(value.isEmpty){
-    return "Attention votre champs mot de passe est vide";
-  }
-  return null;
-}
+
+

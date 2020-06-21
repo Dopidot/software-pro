@@ -5,7 +5,7 @@ import 'dart:ui';
 import 'package:fitislyadmin/modele/Exercise.dart';
 import 'package:fitislyadmin/modele/Photo.dart';
 import 'package:fitislyadmin/modele/Video.dart';
-import 'package:fitislyadmin/services/httpServices.dart';
+import 'package:fitislyadmin/services/HttpServices.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
