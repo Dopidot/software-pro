@@ -1,8 +1,9 @@
 import 'package:fitislyadmin/modele/Exercise.dart';
-import 'package:fitislyadmin/screen/ExcerciseScreen/FormCreateExercise.dart';
-import 'package:fitislyadmin/services/httpServices.dart';
+import 'package:fitislyadmin/services/HttpServices.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+
+import 'FormCreateExercise.dart';
 
 class HomePageExercice extends StatelessWidget {
 

@@ -1,4 +1,4 @@
-import 'package:fitislyadmin/screen/LoginScreen.dart';
+import 'package:fitislyadmin/screen/Home/LoginScreen.dart';
 import 'package:flutter/material.dart';
 
 

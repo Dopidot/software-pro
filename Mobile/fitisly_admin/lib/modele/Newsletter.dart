@@ -1,17 +1,19 @@
 class Newsletter {
   String id;
-  String name;
   String title;
   String body;
   DateTime creationDate;
   bool isSent;
 
-  Newsletter(String id,String name,String title,String body,DateTime creationDate,bool isSent){
-    this.id = id;
-    this.name = name;
-    this.title = title;
-    this.body = body;
-    this.creationDate = creationDate;
-    this.isSent = isSent;
+  Newsletter({this.id,this.title,this.body,this.creationDate,this.isSent});
+
+  factory Newsletter.fromJson(Map<String,dynamic> json){
+    return Newsletter(
+        id:json['id'],
+        title:json['title'],
+        body:json['body'],
+        creationDate:json['creation_date'],
+        isSent:json['is_sent']);
   }
+
 }

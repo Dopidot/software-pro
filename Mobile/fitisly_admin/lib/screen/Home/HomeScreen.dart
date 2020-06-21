@@ -1,10 +1,9 @@
-import 'package:fitislyadmin/modele/Exercise.dart';
-import 'package:fitislyadmin/screen/LoginScreen.dart';
-import 'package:fitislyadmin/services/httpServices.dart';
+import 'package:fitislyadmin/screen/Excercises/HomePageExcerciseList.dart';
+import 'package:fitislyadmin/screen/Home/LoginScreen.dart';
+import 'package:fitislyadmin/screen/Newsletter/NewsLetterList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
-import 'ExcerciseScreen/HomePageExcerciseList.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -121,6 +120,14 @@ class _HomeScreen extends State<HomeScreenPage> {
                     ]
                 ),
               ),
+              onTap: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (BuildContext context) {
+                  return NewsletterList();
+                })
+                );
+              }
             ),
             _buildTile(
                 Padding(
