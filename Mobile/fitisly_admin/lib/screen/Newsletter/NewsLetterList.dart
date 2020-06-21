@@ -2,6 +2,7 @@ import 'package:fitislyadmin/modele/Newsletter.dart';
 import 'package:flutter/material.dart';
 
 import 'CreateNewletter.dart';
+import 'ModifyNewsLetter.dart';
 
 
 
@@ -39,9 +40,20 @@ class _NewsletterListState extends State<NewsletterList> {
                 child: ListTile(
 
                   onTap: () {
-                    /*showDialog(context: context, builder: (context)
-                  => _dialogBuilder(context, contacts[index]))*/
-                    print("tap");
+                    Navigator.push(context,MaterialPageRoute(
+                        builder: (context) {
+                      return ModifyNewsletter(newsletter: newsletters[index]);
+                    })
+                    )
+                        .then((value) {
+
+                      if(value != null){
+                        setState(() {
+                          newsletters[index] = value;
+                        });
+                        _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Newsletter modifiée ! ")));
+                      }
+                    });
                   },
 
                   title: Text(newsletters[index].title),
@@ -60,11 +72,13 @@ class _NewsletterListState extends State<NewsletterList> {
 
             )
             .then((value) {
-              setState(() {
-                newsletters = value;
-              });
-              _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Newsletter créée ! ")));
 
+              if(value != null){
+                setState(() {
+                  newsletters = value;
+                });
+                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Newsletter créée ! ")));
+              }
             });
           }
       ),

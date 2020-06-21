@@ -39,8 +39,6 @@ class _CreateNewsletter extends State<CreateNewsletter>{
     );
   }
 
-
-
   List<Widget> _buildField(List<Newsletter> listNewsletter){
     Text titleScreen = Text("Les informations de la newsletter", style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),textAlign: TextAlign.center,);
 
@@ -80,7 +78,6 @@ class _CreateNewsletter extends State<CreateNewsletter>{
           _formKey.currentState.save();
           Newsletter l = Newsletter(title:_title,body:_desc);
 
-
           setState(() {
             listNewsletter.add(l);
           });
@@ -98,6 +95,16 @@ class _CreateNewsletter extends State<CreateNewsletter>{
      shape: RoundedRectangleBorder(
          borderRadius: BorderRadius.circular(18.0),
      ),
+    );
+
+    RaisedButton cancelBtn = RaisedButton(
+      child: Text('Annuler'),
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18.0),
+      ),
     );
 
 
@@ -119,9 +126,19 @@ class _CreateNewsletter extends State<CreateNewsletter>{
              padding: const EdgeInsets.all(8.0),
              child: descField,
            ),
-           Padding(
-             padding: const EdgeInsets.all(8.0),
-             child: createBtn,
+           Center(
+             child: Row(
+               children: <Widget>[
+                 Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: createBtn,
+                 ),
+                 Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: cancelBtn,
+                 ),
+               ],
+             ),
            )
          ],
        ),
