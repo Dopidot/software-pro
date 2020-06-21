@@ -1,11 +1,11 @@
-class Salle {
+class FitnessRoom {
   String id;
   String name;
   String address;
   int zipCode;
   String localisation;
 
-  Salle(String id,String name,String address,int zipCode,String localisation){
+  FitnessRoom(String id,String name,String address,int zipCode,String localisation){
     this.id = id;
     this.name = name;
     this.address = address;

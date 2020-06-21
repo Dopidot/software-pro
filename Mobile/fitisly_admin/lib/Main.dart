@@ -1,4 +1,4 @@
-import 'package:fitislyadmin/Body/LoginScreen.dart';
+import 'package:fitislyadmin/screen/Home/LoginScreen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -17,9 +17,9 @@ class MyApp extends StatelessWidget {
       title: 'fitisly Admin',
       debugShowCheckedModeBanner: false,
 
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
+     /* theme: ThemeData(
+        primarySwatch: Colors.white,
+      ),*/
       home: LoginScreen(),
     );
   }

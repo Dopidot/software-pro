@@ -1,7 +1,11 @@
-import 'package:fitislyadmin/Body/LoginScreen.dart';
+import 'package:fitislyadmin/screen/Excercises/HomePageExcerciseList.dart';
+import 'package:fitislyadmin/screen/Home/LoginScreen.dart';
+import 'package:fitislyadmin/screen/Newsletter/NewsLetterList.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
+import 'package:http/http.dart' as http;
+
 
 class HomeScreenPage extends StatefulWidget
 {
@@ -9,13 +13,9 @@ class HomeScreenPage extends StatefulWidget
   State<StatefulWidget> createState() {
     return _HomeScreen();
   }
-
 }
 
 class _HomeScreen extends State<HomeScreenPage> {
-
-
-
 
   final List<List<double>> data  =
   [
@@ -33,7 +33,6 @@ class _HomeScreen extends State<HomeScreenPage> {
         appBar: AppBar(
           title: Text("Accueil", style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
           centerTitle: true,
-          backgroundColor: Color(0xFF45E15F),
         ),
         body: StaggeredGridView.count(
           crossAxisCount: 2,
@@ -87,11 +86,18 @@ class _HomeScreen extends State<HomeScreenPage> {
                           )
                       ),
                       Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                      Text("Contenue de l'application", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                      Text("Programmes, Excercicess", style: TextStyle(color: Colors.black45)),
+                      Text("Application", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                      Text("Programmes, Exercices", style: TextStyle(color: Colors.black45)),
                     ]
                 ),
               ),
+                onTap: () {
+                  Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
+                    return HomePageExercice();
+                  })
+                  );
+
+                }
             ),
             _buildTile(
               Padding(
@@ -114,6 +120,14 @@ class _HomeScreen extends State<HomeScreenPage> {
                     ]
                 ),
               ),
+              onTap: (){
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (BuildContext context) {
+                  return NewsletterList();
+                })
+                );
+              }
             ),
             _buildTile(
                 Padding(
@@ -130,7 +144,7 @@ class _HomeScreen extends State<HomeScreenPage> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text('Les statistiques', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 34.0)),
+                                Text('Statistiques', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 24.0)),
                               ],
                             ),
                             DropdownButton(
@@ -177,7 +191,7 @@ class _HomeScreen extends State<HomeScreenPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('Mes Évènement', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                          Text('Mes Évènements', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
                           Text('Gestion des évènements', style: TextStyle(color: Colors.redAccent))
                         ],
                       ),
@@ -200,11 +214,11 @@ class _HomeScreen extends State<HomeScreenPage> {
             )
           ],
           staggeredTiles: [
-            StaggeredTile.extent(2, 110.0),
-            StaggeredTile.extent(1, 180.0),
-            StaggeredTile.extent(1, 180.0),
-            StaggeredTile.extent(2, 220.0),
-            StaggeredTile.extent(1, 110.0),
+            StaggeredTile.fit(2),
+            StaggeredTile.fit(1),
+            StaggeredTile.fit(1),
+            StaggeredTile.fit(2),
+            StaggeredTile.fit(2),
           ],
         )
     );
@@ -230,8 +244,3 @@ class _HomeScreen extends State<HomeScreenPage> {
 
 
 }
-
-
-
-
-
