@@ -1,0 +1,211 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Exercise-Api",
+    "description": "Exercise API for the fitlisly app",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:4000",
+  "basePath": "/api/exercises",
+
+  "tags": [
+    {
+      "name": "exercise",
+      "description": "CRUD operation for exercise"
+    },
+    {
+      "name": "picture",
+      "description": "CRUD operation for picture"
+    },
+    {
+      "name": "video",
+      "description": "CRUD operation for video"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "definitions": {
+    "exercise": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "repeatNumber": {
+          "type": "number"
+        },
+        "restTime": {
+          "type": "string",
+          "format": "minute:second"
+        },
+        "pictureId": {
+          "type": "number"
+        },
+        "videoId": {
+          "type": "number"
+        },
+        "programs": {
+          "type": "array"
+        },
+        "user": {
+          "type": "array"
+        }
+      }
+    },
+    "picture": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    },
+    "video": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/exercises": {
+      "get": {
+        "tags": [
+          "exercises"
+        ],
+        "summary": "Get all the exercises in the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "exercises"
+        ],
+        "summary": "Create a new exercise in the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "program that we want to create",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "400": {
+            "description": "Failed. Bad post Data"
+          }
+        }
+      }
+    },
+    "/api/exercises/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the exercise that we want to retrieve",
+          "type": "integer"
+        }
+      ],
+      "get": {
+        "tags": [
+          "exercises"
+        ],
+        "summary": "Get exercise with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "404": {
+            "description": "Failed. Exercise not found. "
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "exercises"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "exercise with a new values of properties",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          }
+        ],
+        "summary": "Update exercises with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "404": {
+            "description": "Failed. Exercise not found. "
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "exercises"
+        ],
+        "summary": "Delete exercise with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "404": {
+            "description": "Failed. Exercise not found. "
+          }
+        }
+      }
+    }
+  }
+}

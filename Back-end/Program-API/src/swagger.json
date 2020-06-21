@@ -1,0 +1,200 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Program-Api",
+    "description": "Program API for the fitlisly app",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:4000",
+  "basePath": "/api/programs",
+  "tags": [
+    {
+      "name": "program",
+      "description": "CRUD operation for program"
+    },
+    {
+      "name": "picture",
+      "description": "CRUD operation for picture"
+    },
+    {
+      "name": "video",
+      "description": "CRUD operation for video"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "definitions": {
+    "program": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "pictureId": {
+          "type": "number"
+        },
+        "exercises": {
+          "type": "array"
+        }
+      }
+    },
+    "picture": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    },
+    "video": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/programs": {
+      "get": {
+        "tags": [
+          "programs"
+        ],
+        "summary": "Get all the programs in the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "programs"
+        ],
+        "summary": "Create a new program in the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "program that we want to create",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "400": {
+            "description": "Failed. Bad post Data"
+          }
+        }
+      }
+    },
+    "/api/programs/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the program that we want to retrieve",
+          "type": "integer"
+        }
+      ],
+      "get": {
+        "tags": [
+          "programs"
+        ],
+        "summary": "Get program with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "404": {
+            "description": "Failed. Program not found. "
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "programs"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Programs with a new values of properties",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          }
+        ],
+        "summary": "Update programs with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "404": {
+            "description": "Failed. Program not found. "
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "programs"
+        ],
+        "summary": "Delete program with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "404": {
+            "description": "Failed. Program not found. "
+          }
+        }
+      }
+    }
+  }
+}
