@@ -1,3 +1,4 @@
+import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:flutter/material.dart';
 import 'HomeScreen.dart';
 
@@ -12,11 +13,16 @@ class LoginScreen extends StatefulWidget {
 
 class LoginScreenForm extends State<LoginScreen> {
 
+
   TextStyle styleOS = TextStyle(fontFamily: 'OpenSans', fontSize: 20.0);
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
   String _pw;
   String _email;
+  Future<String> _futureLogin;
+  HttpServices services = HttpServices();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   @override
   void initState() {
@@ -94,12 +100,23 @@ class LoginScreenForm extends State<LoginScreen> {
           // minWidth: MediaQuery.of(context).size.width,
           //padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
 
-            onPressed: () {
+            onPressed: () async {
               if ( _formKey.currentState.validate()) {
                 _formKey.currentState.save();
-                Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+                _futureLogin = services.login(_email, _pw);
+
+                _futureLogin
+                    .then((value) {
+                  print("valeur : " + value);
+                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
                   return HomeScreenPage();
-                }));
+                }))
+                  .catchError((onError){
+                    print(_scaffoldKey);
+                    displayDialog("Accès refusé", "Aucun compte ne correspond à l'email ou au mot de passe");
+                  });
+                });
+
               } else {
                 setState (() {
                   _autoValidate = true ;
@@ -152,9 +169,15 @@ class LoginScreenForm extends State<LoginScreen> {
 
   }
 
-  void _validateInput() {
-
-  }
+  void displayDialog(String title, String text) =>
+      showDialog(
+        context: _scaffoldKey.currentState.context,
+        builder: (context) =>
+            AlertDialog(
+                title: Text(title),
+                content: Text(text)
+            ),
+      );
 }
 
 

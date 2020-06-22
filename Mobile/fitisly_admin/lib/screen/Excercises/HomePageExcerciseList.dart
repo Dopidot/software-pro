@@ -1,5 +1,5 @@
+import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/modele/Exercise.dart';
-import 'package:fitislyadmin/services/HttpServices.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -7,15 +7,17 @@ import 'FormCreateExercise.dart';
 
 class HomePageExercice extends StatelessWidget {
 
+  HttpServices services = HttpServices();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Mes excercices", style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
+        title: Text("Mes exercices", style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
         centerTitle: true,
       ),
       body: FutureBuilder<List<Exercise>>(
-        future: fetchExercises(http.Client()),
+        future: services.fetchExercises(),
         builder: (context, snapshot) {
           if (snapshot.hasError){
             return Center(

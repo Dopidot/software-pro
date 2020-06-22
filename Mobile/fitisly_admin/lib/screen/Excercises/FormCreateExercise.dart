@@ -13,6 +13,8 @@ import 'HomePageExcerciseList.dart';
 
 
 class createExerciseStateless extends StatelessWidget {
+  HttpServices services = HttpServices();
+
 
   @override
   Widget build(BuildContext context) {
@@ -21,18 +23,7 @@ class createExerciseStateless extends StatelessWidget {
         title: Text("Mes excercices", style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
         centerTitle: true,
       ),
-      body: FutureBuilder<Exercise>(
-        future: create(Exercise()),
-        builder: (context, snapshot) {
-          if (snapshot.hasError){
-            return Center(
-                child: Text("Probème de serveur, la page n'a pas pu être chargé")
-            );
-          }
-
-          return snapshot.hasData ? HomePageExercice() : Center(child: CircularProgressIndicator());
-        },
-      ),
+      //body:
     );
   }
 }
