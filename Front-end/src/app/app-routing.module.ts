@@ -15,6 +15,8 @@ import { ProgramsComponent } from './programs/programs.component';
 import { CoachsComponent } from './coachs/coachs.component';
 import { MembersComponent } from './members/members.component';
 import { InfosComponent } from './infos/infos.component';
+import { NotificationsComponent } from './notifications/notifications.component';
+import { LoginComponent } from './login/login.component';
 
 export const routes: Routes = [
   {
@@ -59,6 +61,8 @@ export const routes: Routes = [
   { path: 'coachs', component: CoachsComponent },
   { path: 'members', component: MembersComponent },
   { path: 'infos', component: InfosComponent },
+  { path: 'notifications', component: NotificationsComponent },
+  { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'pages' },
 ];

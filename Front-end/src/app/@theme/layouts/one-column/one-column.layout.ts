@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-one-column-layout',
@@ -23,4 +24,17 @@ import { Component } from '@angular/core';
     </nb-layout>
   `,
 })
-export class OneColumnLayoutComponent {}
+export class OneColumnLayoutComponent {
+
+    constructor(
+        private router: Router,
+        ) {
+}
+
+    ngOnInit() {
+        if (localStorage.getItem('token') == null)
+        {
+            this.router.navigate(['/login']);
+        }
+    }
+}
