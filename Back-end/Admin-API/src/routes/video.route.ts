@@ -5,10 +5,10 @@ const router = Router();
 const videoController = new VideoController();
 
 //VIDEOS
-router.get('/videos', videoController.getVideos);
-router.get('/videos/:id', videoController.getVideoById);
-router.post('/videos', videoController.createVideo);
-router.put('/videos/:id', videoController.updateVideo);
-router.delete('/videos/:id', videoController.deleteVideo);
+router.get('', videoController.getVideos);
+router.get('/:id', videoController.getVideoById);
+router.post('', videoController.createVideo);
+router.put('/:id', videoController.updateVideo);
+router.delete('/:id', videoController.deleteVideo);
 
 export default router;

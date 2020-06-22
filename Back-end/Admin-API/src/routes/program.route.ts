@@ -5,10 +5,10 @@ const router = Router();
 const programController = new ProgramController();
 
 //PROGRAMS
-router.get('/programs', programController.getPrograms);
-router.get('/programs/:id', programController.getProgramById);
-router.post('/programs', programController.createProgram);
-router.put('/programs/:id', programController.updateProgram);
-router.delete('/programs/:id', programController.deleteProgram);
+router.get('', programController.getPrograms);
+router.get('/:id', programController.getProgramById);
+router.post('', programController.createProgram);
+router.put('/:id', programController.updateProgram);
+router.delete('/:id', programController.deleteProgram);
 
 export default router;
