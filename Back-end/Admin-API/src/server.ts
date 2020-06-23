@@ -1,4 +1,6 @@
 import express from 'express';
+import cors from 'cors';
+
 import swaggerRouter from './routes/swagger.route';
 import userRouter from './routes/user.route';
 import exerciseRouter from './routes/exercise.route';
@@ -8,6 +10,13 @@ import videoRouter from './routes/video.route';
 
 export default class Server {
     readonly port: number;
+    options: cors.CorsOptions = {
+        allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept", "X-Access-Token"],
+        credentials: true,
+        methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+        origin: process.env.API_URL,
+        preflightContinue: false
+    };
 
     constructor(port: number) {
         this.port = port;
@@ -19,6 +28,7 @@ export default class Server {
         //middlewares
         app.use(express.json());
         app.use(express.urlencoded({extended: false}));
+        app.use(cors(this.options));
         app.use('/api', swaggerRouter);
         app.use('/api/users', userRouter);
         app.use('/api/exercises', exerciseRouter);

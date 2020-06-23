@@ -5,10 +5,10 @@ const router = Router();
 const pictureController = new PictureController();
 
 //PICTURES
-router.get('/pictures', pictureController.getPictures);
-router.get('/pictures/:id', pictureController.getPictureById);
-router.post('/pictures', pictureController.createPicture);
-router.put('/pictures/:id', pictureController.updatePicture);
-router.delete('/pictures/:id', pictureController.deletePicture);
+router.get('', pictureController.getPictures);
+router.get('/:id', pictureController.getPictureById);
+router.post('', pictureController.createPicture);
+router.put('/:id', pictureController.updatePicture);
+router.delete('/:id', pictureController.deletePicture);
 
 export default router;

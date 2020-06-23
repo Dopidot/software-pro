@@ -49,7 +49,6 @@ export default class UserController {
         } catch (e) {
             console.error(e);
             if (e.code = 23505) {
-                console.log("AH BAH LOL T NUL");
                 return res.status(400).json('Cet email existe déjà');
             } else {
                 return res.status(500).json('Internal Server error');
