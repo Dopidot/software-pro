@@ -22,6 +22,7 @@ class Exercise {
         restTime:json['rest_time'],
         videos:json['video_id'],
         photos:json['picture_id']);
+
   }
 
   Map<String, dynamic> toJson() => {

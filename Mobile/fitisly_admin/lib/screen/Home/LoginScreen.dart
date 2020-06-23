@@ -1,4 +1,5 @@
 import 'package:fitislyadmin/Services/HttpServices.dart';
+
 import 'package:flutter/material.dart';
 import 'HomeScreen.dart';
 
@@ -99,7 +100,6 @@ class LoginScreenForm extends State<LoginScreen> {
         child: MaterialButton(
           // minWidth: MediaQuery.of(context).size.width,
           //padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-
             onPressed: () async {
               if ( _formKey.currentState.validate()) {
                 _formKey.currentState.save();
@@ -116,7 +116,6 @@ class LoginScreenForm extends State<LoginScreen> {
                     displayDialog("Accès refusé", "Aucun compte ne correspond à l'email ou au mot de passe");
                   });
                 });
-
               } else {
                 setState (() {
                   _autoValidate = true ;
@@ -168,7 +167,6 @@ class LoginScreenForm extends State<LoginScreen> {
     );
 
   }
-
   void displayDialog(String title, String text) =>
       showDialog(
         context: _scaffoldKey.currentState.context,
@@ -178,6 +176,7 @@ class LoginScreenForm extends State<LoginScreen> {
                 content: Text(text)
             ),
       );
+
 }
 
 

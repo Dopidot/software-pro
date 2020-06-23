@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:fitislyadmin/modele/Exercise.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-
 class HttpServices {
 
   final baseUrl = "http://localhost:4000/api";
@@ -61,6 +60,7 @@ class HttpServices {
 
 
 /* ------------------------ Début Exercice ------------------------------- */
+
 
 Future<Exercise> create(Exercise e) async {
   final http.Response response = await http.post('https://jsonplaceholder.typicode.com/albums',
@@ -126,3 +126,4 @@ Future<Exercise> create(Exercise e) async {
   /* -------------------- Fin service Exercice ----------------------*/
 
 }
+
