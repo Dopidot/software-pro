@@ -26,11 +26,11 @@ class HttpServices {
       })
     );
 
-
     if(response.statusCode == 200){
       print("Vous êtes connecté !");
-      print("Token: " + response.body);
-      return response.body;
+      String token = getTokenFromJson(response.body);
+      writeTokenInSecureStorage(token);
+      return response.statusCode.toString();
     }
     throw Exception('Failed to login');
   }
@@ -44,16 +44,17 @@ class HttpServices {
   }
 
 
-  String getToken(){
-    storage.read(key: "token")
-        .then((value){
-          return value;
-    })
-        .catchError((onError){
-      throw Exception('Failed to save token');
-    });
+  Future<String> getToken() async {
+   var token = await storage.read(key: "token");
+  return token;
   }
 
+  String getTokenFromJson(String val){
+
+    Map<String, dynamic> token = jsonDecode(val);
+    print("Token whs : "+token["acessToken"]);
+    return token["acessToken"];
+  }
 
   /* ------------------------Fin Login ------------------------------*/
 
@@ -97,12 +98,28 @@ Future<Exercise> create(Exercise e) async {
   }
 
   Future<List<Exercise>> fetchExercises() async {
-    final response = await http.get('http://localhost:4000/exercises');
+  
 
-    if (response.statusCode == 200) {
-      return compute(getAllExercises,response.body);
-    }
-    throw Exception('Failed to load exercise');
+  String token = await getToken();
+  print("Tokeeenn : $token");
+
+
+  Map<String, String> headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Authorization": "Bearer $token",
+  };
+
+  final response = await http
+      .get('http://localhost:4000/exercises',headers: headers);
+
+  if (response.statusCode == 200) {
+    return compute(getAllExercises,response.body);
+  }
+  throw Exception('Failed to load exercise');
+
+
+
   }
 
 

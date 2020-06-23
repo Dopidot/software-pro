@@ -15,12 +15,21 @@ class Exercise {
 
   factory Exercise.fromJson(Map<String,dynamic> json){
     return Exercise(
-      id:json['id'],
-      name:json['name'],
-      description:json['description'],
-      repetitionNumber:json['reapeat_number'],
-      restTime:json['rest_time'],
-      videos:json['video_id'],
-      photos:json['picture_id']);
+        id:json['id'],
+        name:json['name'],
+        description:json['description'],
+        repetitionNumber:json['reapeat_number'],
+        restTime:json['rest_time'],
+        videos:json['video_id'],
+        photos:json['picture_id']);
   }
+
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'description': description,
+    'reapeat_number':repetitionNumber,
+    'rest_time':restTime,
+    'video_id':videos,
+    'photos':photos
+  };
 }

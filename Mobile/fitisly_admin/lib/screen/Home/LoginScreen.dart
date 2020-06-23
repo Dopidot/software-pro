@@ -107,7 +107,7 @@ class LoginScreenForm extends State<LoginScreen> {
 
                 _futureLogin
                     .then((value) {
-                  print("valeur : " + value);
+
                   Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
                   return HomeScreenPage();
                 }))
