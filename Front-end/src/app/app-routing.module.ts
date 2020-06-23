@@ -17,6 +17,9 @@ import { MembersComponent } from './members/members.component';
 import { InfosComponent } from './infos/infos.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { LoginComponent } from './login/login.component';
+import { UserService } from './services/user.service';
+import { HttpClientModule } from "@angular/common/http";
+
 
 export const routes: Routes = [
   {
@@ -72,8 +75,9 @@ const config: ExtraOptions = {
 };
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, config)],
+  imports: [RouterModule.forRoot(routes, config), HttpClientModule],
   exports: [RouterModule],
+  providers: [UserService],
 })
 export class AppRoutingModule {
 }
