@@ -9,7 +9,6 @@ class HttpServices {
   final baseUrl = "http://localhost:4000/api";
   final storage = FlutterSecureStorage();
 
-
   /* ------------------------ Début Login -----------------------------*/
 
   Future<String> login(String email,String password) async {
@@ -23,7 +22,10 @@ class HttpServices {
         "email":email,
         "password":password
       })
-    );
+    )
+    .catchError((onError){
+      print("error !!!!!!!!!!");
+    });
 
     if(response.statusCode == 200){
       print("Vous êtes connecté !");

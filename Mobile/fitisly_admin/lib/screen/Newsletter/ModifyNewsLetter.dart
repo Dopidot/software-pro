@@ -31,8 +31,8 @@ class _ModifyNewsletter extends State<ModifyNewsletter>{
         key: _formKey,
         child: SingleChildScrollView(
           child: _buildField(widget.newsletter),
-          ),
         ),
+      ),
     );
   }
 
@@ -73,6 +73,7 @@ class _ModifyNewsletter extends State<ModifyNewsletter>{
 
     RaisedButton createBtn = RaisedButton(
       child: Text('Modifier'),
+      color: Colors.green,
       onPressed: () {
         if (_formKey.currentState.validate()) {
           // If the form is valid, display a Snackbar.
@@ -100,6 +101,7 @@ class _ModifyNewsletter extends State<ModifyNewsletter>{
 
     RaisedButton cancelBtn = RaisedButton(
       child: Text('Annuler'),
+      color: Colors.red,
       onPressed: () {
         Navigator.pop(context);
       },
@@ -127,20 +129,21 @@ class _ModifyNewsletter extends State<ModifyNewsletter>{
             padding: const EdgeInsets.all(8.0),
             child: descField,
           ),
-          Center(
-            child: Row(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: createBtn,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: cancelBtn,
-                ),
-              ],
-            ),
-          )
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: createBtn,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: cancelBtn,
+              ),
+            ],
+          ),
+
         ],
       );
   }
