@@ -1,9 +1,9 @@
-import { Request, Response} from 'express';
-import {Query, QueryResult} from 'pg';
+import { Request, Response } from 'express';
+import { QueryResult } from 'pg';
 import { pool } from '../database';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
-require('dotenv').config()
+require('dotenv').config();
 
 export default class UserController {
 
@@ -11,7 +11,6 @@ export default class UserController {
 
     getUsers = async function(req: Request, res: Response): Promise<Response> {
         try {
-            console.log(" it works : " + req.user);
             const response: QueryResult = await pool.query('SELECT * FROM users');
             return res.status(200).json(response.rows);
         } catch (e) {
@@ -24,10 +23,14 @@ export default class UserController {
         try {
             const id = parseInt(req.params.id);
             const response: QueryResult = await pool.query('SELECT * FROM users WHERE id = $1', [id]);
-            return res.status(200).json(response.rows);
+            if (response.rowCount !== 0) {
+                return res.status(200).json(response.rows);
+            } else {
+                return res.status(404).json("User not found");
+            }
         } catch (e) {
             console.error(e);
-            return res.status(400).json('Bad Parameter');
+            return res.status(500).json('Internal Server Error');
         }
     }
 
@@ -48,10 +51,10 @@ export default class UserController {
             });
         } catch (e) {
             console.error(e);
-            if (e.code = 23505) {
-                return res.status(400).json('Cet email existe déjà');
+            if (e.code == 23505) {
+                return res.status(400).json('This email already exists');
             } else {
-                return res.status(500).json('Internal Server error');
+                return res.status(500).json('Internal Server Error');
             }
         }
     }
@@ -61,55 +64,39 @@ export default class UserController {
             const id = parseInt(req.params.id);
             const { firstname, lastname, email } = req.body;
             const response: QueryResult = await pool.query('UPDATE users SET firstname = $1, lastname = $2, email = $3 WHERE id = $4', [firstname, lastname, email, id]);
-            return res.json({
-                message: `User ${id} updated sucessfully`,
-                body: {
-                    user: {
-                        firstname,
-                        lastname,
-                        email
+            if ( response.rowCount !== 0) {
+                return res.json({
+                    message: `User ${id} updated sucessfully`,
+                    body: {
+                        user: {
+                            firstname,
+                            lastname,
+                            email
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                return res.status(400).json('User not found');
+            }
+
         } catch (e) {
             console.error(e);
-            return res.status(500).json('Internal Server error');
+            return res.status(500).json('Internal Server Error');
         }
     }
 
-    deleteUser = async (req: Request, res: Response): Promise<Response> => {
+    deleteUser = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
             const response: QueryResult = await pool.query('DELETE FROM users WHERE id = $1', [id]);
-            return res.json(`User ${id} deleted successfully`);
-        } catch (e) {
-            console.error(e);
-            return res.status(400).json('Bad Parameter');
-        }
-    }
-
-    logUserIn = async (req: Request, res: Response): Promise<Response> => {
-
-        try {
-            const email = req.body.email;
-            const response: QueryResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
-            if ( response.rowCount == 0) {
-                return res.status(400).json('User not found.')
-            }
-            const user = response.rows[0];
-            if (await bcrypt.compare(req.body.password, user.password) ) {
-                // creating webtoken
-                const acessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string);
-                const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN as string);
-
-
-                return res.status(200).json({acessToken: acessToken, refreshToken: refreshToken});
+            if (response.rowCount !== 0) {
+                return res.json(`User ${id} deleted successfully`);
             } else {
-                return res.status(200).json('Unauthorized')
+                return res.status(404).json('User not found');
             }
         } catch (e) {
             console.error(e);
-            return res.status(400).json('Bad Credentials : your email or your password is not correct');
+            return res.status(500).json('Internal Server Error');
         }
     }
 }

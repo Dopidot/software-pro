@@ -9,8 +9,7 @@ export default class AuthenticationController {
 
     constructor() {  }
 
-    logUserIn = async (req: Request, res: Response): Promise<Response> => {
-
+    logUserIn = async function(req: Request, res: Response): Promise<Response> {
         try {
             const email = req.body.email;
             const response: QueryResult = await pool.query('SELECT * FROM users WHERE email = $1', [email]);
@@ -21,17 +20,13 @@ export default class AuthenticationController {
             if (await bcrypt.compare(req.body.password, user.password) ) {
                 // creating webtoken
                 const acessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string);
-                const refreshToken = jwt.sign(user, process.env.REFRESH_TOKEN as string);
-
-
-                return res.status(200).json({acessToken: acessToken, refreshToken: refreshToken});
+                return res.status(200).json({accessToken: acessToken});
             } else {
-                return res.status(200).json('Not Allowed')
+                return res.status(200).json('Unauthorized')
             }
         } catch (e) {
             console.error(e);
             return res.status(400).json('Bad Credentials : your email or your password is not correct');
         }
     }
-
 }

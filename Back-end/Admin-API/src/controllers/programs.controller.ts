@@ -20,10 +20,14 @@ export default class ProgramController {
         try {
             const id = parseInt(req.params.id);
             const response: QueryResult = await pool.query('SELECT * FROM programs WHERE id = $1', [id]);
-            return res.status(200).json(response.rows);
+            if (response.rowCount !== 0){
+                return res.status(200).json(response.rows);
+            } else {
+                return res.status(404).json('Program not found');
+            }
         } catch (e) {
             console.log(e);
-            return res.status(400).json('Bad Parameter');
+            return res.status(500).json('Internal Server Error');
         }
     }
 
@@ -62,7 +66,7 @@ export default class ProgramController {
             });
         } catch (e)  {
             console.log(e);
-            return res.status(500).json('Internal Server error');
+            return res.status(500).json('Internal Server Error');
         }
     }
 
@@ -70,10 +74,14 @@ export default class ProgramController {
         try {
             const id = parseInt(req.params.id);
             const response: QueryResult = await pool.query('DELETE FROM programs WHERE id = $1', [id]);
-            return res.status(200).json(`Programs ${id} deleted successfully`);
+            if ( response.rowCount !== 0) {
+                return res.status(200).json(`Programs ${id} deleted successfully`);
+            } else {
+                return res.status(404).json('Program not found');
+            }
         } catch (e) {
             console.log(e);
-            return res.status(400).json('Bad Parameter');
+            return res.status(500).json('Internal Server Error');
         }
     }
 }

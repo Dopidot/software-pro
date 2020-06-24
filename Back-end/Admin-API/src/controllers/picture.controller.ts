@@ -20,10 +20,14 @@ export default class PictureController {
         try {
             const id = parseInt(req.params.id);
             const response: QueryResult = await pool.query('SELECT * FROM pictures WHERE id = $1', [id]);
-            return res.status(200).json(response.rows);
+            if (response.rowCount !== 0 ) {
+                return res.status(200).json(response.rows);
+            } else {
+                return res.status(404).json('Picture not found')
+            }
         } catch (e) {
             console.log(e);
-            return res.status(400).json('Bad Parameter');
+            return res.status(500).json('Internal Server Error');
         }
     }
 
@@ -70,10 +74,15 @@ export default class PictureController {
         try {
             const id = parseInt(req.params.id);
             const response: QueryResult = await pool.query('DELETE FROM pictures WHERE id = $1', [id]);
-            return res.status(200).json(`Pictures ${id} deleted successfully`);
+            if ( response.rowCount !== 0) {
+                return res.status(200).json(`Pictures ${id} deleted successfully`);
+            } else {
+                return res.status(404).json('Picture not found');
+            }
+
         } catch (e) {
             console.log(e);
-            return res.status(400).json('Bad Parameter');
+            return res.status(500).json('Internal Server Error');
         }
     }
 }

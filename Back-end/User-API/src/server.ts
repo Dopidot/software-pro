@@ -17,7 +17,12 @@ export default class Server {
         //middlewares
         app.use(express.json());
         app.use(express.urlencoded({extended: false}));
-        app.use('/api/users', swaggerRouter);
+        app.use(function (request: Request, res: Response, next: any) {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
+        });
+        app.use('/api', swaggerRouter);
         app.use('/api/users', userRouter);
         app.use('/api/pictures', pictureRouter);
         app.use('/api/videos', videoRouter);

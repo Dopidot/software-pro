@@ -1,5 +1,4 @@
-import express from 'express';
-
+import express, {Request, Response} from 'express';
 import swaggerRouter from './routes/swagger.route';
 import userRouter from './routes/user.route';
 import exerciseRouter from './routes/exercise.route';
@@ -20,13 +19,11 @@ export default class Server {
         //middlewares
         app.use(express.json());
         app.use(express.urlencoded({extended: false}));
-		
-        app.use(function(req, res, next) {
-          res.header("Access-Control-Allow-Origin", "*");
-          res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-          next();
+        app.use(function (request: Request, res: Response, next: any) {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            next();
         });
-		
         app.use('/api', swaggerRouter);
         app.use('/api/users', userRouter);
         app.use('/api/exercises', exerciseRouter);
