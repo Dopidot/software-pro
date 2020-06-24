@@ -20,7 +20,15 @@ export default class AuthenticationController {
             if (await bcrypt.compare(req.body.password, user.password) ) {
                 // creating webtoken
                 const acessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string);
-                return res.status(200).json({accessToken: acessToken});
+                return res.status(200).json({
+                    accessToken: acessToken,
+                    user : {
+                        id: user.id,
+                        firstname : user.firstname,
+                        lastname : user.lastname,
+                        email: user.email
+                    }
+                });
             } else {
                 return res.status(400).json('Bad Credentials : your email or your password is not correct')
             }
