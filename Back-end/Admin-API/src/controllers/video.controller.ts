@@ -20,10 +20,14 @@ export default class VideoController {
         try {
             const id = parseInt(req.params.id);
             const response: QueryResult = await pool.query('SELECT * FROM videos WHERE id = $1', [id]);
-            return res.status(200).json(response.rows);
+            if( response.rowCount !== 0 ) {
+                return res.status(200).json(response.rows);
+            }  else {
+                return res.status(404).json('Video not found');
+            }
         } catch (e) {
             console.log(e);
-            return res.status(400).json('Bad Parameter');
+            return res.status(500).json('Internal Server Error');
         }
     }
 
@@ -70,10 +74,14 @@ export default class VideoController {
         try {
             const id = parseInt(req.params.id);
             const response: QueryResult = await pool.query('DELETE FROM videos WHERE id = $1', [id]);
-            return res.status(200).json(`Videos ${id} deleted successfully`);
+            if ( response.rowCount !== 0 ) {
+                return res.status(200).json(`Videos ${id} deleted successfully`);
+            } else {
+                return res.status(404).json('Video not found');
+            }
         } catch (e) {
             console.log(e);
-            return res.status(400).json('Bad Parameter');
+            return res.status(500).json('Internal Server Error');
         }
     }
 

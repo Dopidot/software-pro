@@ -10,29 +10,32 @@
     }
   },
   "host": "localhost:4000",
-  "basePath": "",
+  "basePath": "/",
   "tags": [
     {
-      "name": "user",
+      "name": "Users",
       "description": "CRUD operation for user"
     },
     {
-      "name": "exercise",
+      "name": "Exercises",
       "description": "CRUD operation for exercise"
     },
     {
-      "name": "program",
+      "name": "Programs",
       "description": "CRUD operation for program"
     },
     {
-      "name": "picture",
+      "name": "Pictures",
       "description": "CRUD operation for picture"
     },
     {
-      "name": "video",
+      "name": "Videos",
       "description": "CRUD operation for video"
     }
   ],
+  "securityDefinitions": {
+    
+  },
   "schemes": [
     "http",
     "https"
@@ -60,19 +63,6 @@
         "password": {
           "type": "string",
           "format": "password"
-        },
-        "pictureId": {
-          "type": "number"
-        },
-        "lastConnection": {
-          "type": "string",
-          "format": "date-time"
-        },
-        "exercises": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/exercise"
-          }
         }
       }
     },
@@ -97,18 +87,6 @@
         },
         "videoId": {
           "type": "number"
-        },
-        "programs": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/program"
-          }
-        },
-        "user": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/user"
-          }
         }
       }
     },
@@ -126,12 +104,6 @@
         },
         "pictureId": {
           "type": "number"
-        },
-        "exercises": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/exercise"
-          }
         }
       }
     },
@@ -159,10 +131,10 @@
     }
   },
   "paths": {
-    "/users": {
+    "/api/users": {
       "get": {
         "tags": [
-          "user"
+          "Users"
         ],
         "summary": "Get all the users of the database",
         "responses": {
@@ -171,38 +143,44 @@
             "schema": {
               "$ref": "#/definitions/user"
             }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "post": {
         "tags": [
-          "user"
+          "Users"
         ],
         "summary": "Create a new user in the database",
         "parameters": [
           {
             "in": "body",
             "name": "body",
-            "description": "user that we want to create",
+            "description": "User that we want to create",
             "schema": {
               "$ref": "#/definitions/user"
             }
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK",
+          "201": {
+            "description": "Created",
             "schema": {
               "$ref": "#/definitions/user"
             }
           },
           "400": {
-            "description": "Failed. Bad post Data"
+            "description": "This email already exists"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/users/{id}": {
+    "/api/users/{id}": {
       "parameters": [
         {
           "name": "id",
@@ -214,7 +192,7 @@
       ],
       "get": {
         "tags": [
-          "user"
+          "Users"
         ],
         "summary": "Get user with given ID",
         "responses": {
@@ -225,20 +203,23 @@
             }
           },
           "404": {
-            "description": "Failed. User not found. "
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "put": {
         "tags": [
-          "user"
+          "Users"
         ],
         "parameters": [
           {
             "in": "body",
             "name": "body",
             "required": true,
-            "description": "user with a new values of properties",
+            "description": "User with a new values of properties",
             "schema": {
               "$ref": "#/definitions/user"
             }
@@ -253,13 +234,16 @@
             }
           },
           "404": {
-            "description": "Failed. User not found. "
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "delete": {
         "tags": [
-          "user"
+          "Users"
         ],
         "summary": "Delete user with given ID",
         "responses": {
@@ -270,7 +254,528 @@
             }
           },
           "404": {
-            "description": "Failed. User not found. "
+            "description": "User not found. "
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/users/login" : {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Log the user in and returns a token",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "login and passworod",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accessToken": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "400": {
+            "description": "Bad Credentials : your email or your password is not correct"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/pictures": {
+      "get": {
+        "tags": ["Pictures"],
+        "summary": "Get all the pictures of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Pictures"],
+        "summary": "Create a new picture in the database",
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "Picture that we want to create",
+          "schema": {
+            "$ref": "#/definitions/picture"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Picture created sucessfully",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/pictures/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the picture that we want to retrieve",
+          "type": "integer"
+        }
+      ],
+      "get": {
+        "tags": ["Pictures"],
+        "summary": "Get picture with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          },
+          "404": {
+            "description": "Picture not found."
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Pictures"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "description": "Picture objects with new values",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          }
+        ],
+        "summary": "Update the picture with the given ID",
+        "responses": {
+          "200": {
+            "description": "Picture updated sucessfully",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          },
+          "404": {
+            "description": "Picture not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Pictures"],
+        "summary": "Delete picture with the given ID",
+        "responses": {
+          "200": {
+            "description": "Picture {id} was deleted sucessfully."
+          },
+          "404": {
+            "description": "Picture not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/videos": {
+      "get": {
+        "tags": ["Videos"],
+        "summary": "Get all the videos of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/video"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Videos"],
+        "summary": "Create a new video in the database",
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "Video that we want to create",
+          "schema": {
+            "$ref": "#/definitions/video"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Video created sucessfully",
+            "schema": {
+              "$ref": "#/definitions/video"
+            }
+          },
+          "404": {
+            "description": "Video not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/videos/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the video that we want to retrieve",
+          "type": "integer"
+        }
+      ],
+      "get": {
+        "tags": ["Videos"],
+        "summary": "Get video with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/video"
+            }
+          },
+          "404": {
+            "description": "Video not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Videos"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "description": "Video objects with new values",
+            "schema": {
+              "$ref": "#/definitions/video"
+            }
+          }
+        ],
+        "summary": "Update the video with the given ID",
+        "responses": {
+          "200": {
+            "description": "Video updated sucessfully",
+            "schema": {
+              "$ref": "#/definitions/video"
+            }
+          },
+          "404": {
+            "description": "Video not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Videos"],
+        "summary": "Delete video with the given ID",
+        "responses": {
+          "200": {
+            "description": "Video {id} was deleted sucessfully."
+          },
+          "404": {
+            "description": "Video not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/programs": {
+      "get": {
+        "tags": [
+          "Programs"
+        ],
+        "summary": "Get all the programs of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Programs"
+        ],
+        "summary": "Create a new program in the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "program that we want to create",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/programs/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the programs that we want to retrieve",
+          "type": "integer"
+        }
+      ],
+      "get": {
+        "tags": ["Programs"],
+        "summary": "Get the program with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "404": {
+            "description": "Program not found"
+          },
+          "500":  {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Programs"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Program objects with new values",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          }
+        ],
+        "summary": "Update the program with the given ID",
+        "responses": {
+          "200": {
+            "description": "Program updated sucessfully",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "404": {
+            "description": "Program not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Programs"],
+        "summary": "Delete programs with the given ID",
+        "responses": {
+          "200": {
+            "description": "Program {id} was deleted sucessfully."
+          },
+          "404": {
+            "description": "Program not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/exercises": {
+      "get": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Get all the exercises of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Create a new exercise in the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Exercise that we want to create",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/exercises/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the exercise that we want to retrieve",
+          "type": "integer"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Get exercise with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "404": {
+            "description": "Exercise not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Exercises"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Exercise objects with new values",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          }
+        ],
+        "summary": "Update the exercise with the given ID",
+        "responses": {
+          "200": {
+            "description": "Exercise updated sucessfully",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "404": {
+            "description": "Exercise not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Exercises"],
+        "summary": "Delete exercise with the given ID",
+        "responses": {
+          "200": {
+            "description": "Exercise {id} was deleted sucessfully."
+          },
+          "404": {
+            "description": "Exercise not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }

@@ -1,5 +1,5 @@
-import { Request, Response} from 'express';
-import {Query, QueryResult} from 'pg';
+import { Request, Response } from 'express';
+import {QueryResult } from 'pg';
 import { pool } from '../database';
 
 export default class ExerciseController {
@@ -20,10 +20,14 @@ export default class ExerciseController {
         try {
             const id = parseInt(req.params.id);
             const response: QueryResult = await pool.query('SELECT * FROM exercises WHERE id = $1', [id]);
-            return res.status(200).json(response.rows);
+            if (response.rowCount !== 0) {
+                return res.status(200).json(response.rows);
+            } else {
+                return res.status(404).json("User not found.");
+            }
         } catch (e) {
             console.log(e);
-            return res.status(400).json('Bad Parameter');
+            return res.status(500).json('Internal Server Error');
         }
     }
 
@@ -56,7 +60,7 @@ export default class ExerciseController {
             return res.status(200).json({
                 message: 'Exercise created sucessfully',
                 body: {
-                    user: {
+                    exercise: {
                         name,
                         description,
                         reapeat_number,
@@ -66,7 +70,7 @@ export default class ExerciseController {
             });
         } catch (e)  {
             console.log(e);
-            return res.status(500).json('Internal Server error');
+            return res.status(500).json('Internal Server Error');
         }
     }
 
@@ -74,10 +78,15 @@ export default class ExerciseController {
         try {
             const id = parseInt(req.params.id);
             const response: QueryResult = await pool.query('DELETE FROM exercises WHERE id = $1', [id]);
-            return res.status(200).json(`Exercise ${id} deleted successfully`);
+            if (response.rowCount !== 0) {
+                return res.status(200).json(`Exercise ${id} deleted successfully`);
+            } else {
+                return res.status(404).json('Exercise not found')
+            }
+
         } catch (e) {
             console.log(e);
-            return res.status(400).json('Bad Parameter');
+            return res.status(500).json('Internal Server Error');
         }
     }
 }
