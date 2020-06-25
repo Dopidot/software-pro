@@ -108,6 +108,14 @@ export class ProgramsComponent implements OnInit {
         });
     }
 
+    editProgram(): void {
+        this.programService.updateProgram(this.currentProgram['id'], this.currentProgram).subscribe(data => {
+            this.loadPrograms();
+        }, error => {
+            this.errorMessage = 'Une erreur est survenue, veuillez vérifier les informations saisies.';
+        });
+    }
+
     confirmDelete(): void {
         console.log(this.currentProgram);
 

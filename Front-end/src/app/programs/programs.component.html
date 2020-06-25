@@ -57,7 +57,7 @@
                 <input type="text" nbInput fullWidth id="description" [(ngModel)]="currentProgram.description"
                     [readonly]="popupType === 0" placeholder="Description">
             </div>
-            <button type="submit" nbButton status="danger">Upload</button>
+            <button type="submit" nbButton status="danger" *ngIf="popupType !== 0">Upload</button>
 
         </nb-card-body>
         <nb-card-footer style="text-align: center;">
@@ -65,7 +65,7 @@
 
             <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;"
                 *ngIf="popupType !== 0">Annuler</button>
-            <button nbButton [status]="success" (click)="ref.close(); updateProgram();"
+            <button nbButton [status]="success" (click)="ref.close(); editProgram();"
                 *ngIf="popupType === 1">Sauvegarder</button>
             <button nbButton [status]="success" (click)="ref.close(); addProgram();"
                 *ngIf="popupType === 2">Ajouter</button>

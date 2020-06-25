@@ -18,6 +18,10 @@ export class ProgramService {
         return this.http.post<any>(this.baseUrl, program);
     }
 
+    updateProgram(id: number, program: Program): Observable<any> {
+        return this.http.put<any>(this.baseUrl + '/' + id, program);
+    }
+
     deleteProgram(id: number): Observable<any> {
         return this.http.delete<any>(this.baseUrl + '/' + id);
     }
