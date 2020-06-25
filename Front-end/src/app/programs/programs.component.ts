@@ -2,8 +2,10 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MENU_ITEMS } from '../menu/menu';
 import { LocalDataSource } from 'ng2-smart-table';
 
-import { SmartTableData } from '../@core/data/smart-table';
 import { NbDialogService } from '@nebular/theme';
+
+import { ProgramService } from '../services/program.service';
+import { Program } from '../models/program.model';
 
 @Component({
     selector: 'ngx-programs',
@@ -13,25 +15,27 @@ import { NbDialogService } from '@nebular/theme';
 export class ProgramsComponent implements OnInit {
 
     menu = MENU_ITEMS;
-    currentProgram: any;
+    currentProgram: Program;
     danger = 'danger';
     success = 'success';
     source: LocalDataSource = new LocalDataSource();
+    errorMessage: string;
+    popupType: number = 0;
 
     settings = {
         actions: {
             custom: [
                 {
                     name: 'show',
-                    title: '<i class="far fa-eye fa-xs" title="Show more details"></i>',
+                    title: '<i class="far fa-eye fa-xs"></i>',
                 },
                 {
                     name: 'edit',
-                    title: '<i class="far fa-edit fa-xs" title="Edit informations"></i>',
+                    title: '<i class="far fa-edit fa-xs"></i>',
                 },
                 {
                     name: 'delete',
-                    title: '<i class="far fa-trash-alt fa-xs" title="Remove item"></i>',
+                    title: '<i class="far fa-trash-alt fa-xs"></i>',
                 },
             ],
             add: false,
@@ -51,10 +55,9 @@ export class ProgramsComponent implements OnInit {
     };
 
     constructor(
-        private service: SmartTableData,
         private dialogService: NbDialogService,
+        private programService: ProgramService,
     ) {
-
         this.loadPrograms();
     }
 
@@ -62,32 +65,26 @@ export class ProgramsComponent implements OnInit {
     }
 
     loadPrograms(): void {
-        const data = [
-        {
-            id: 1,
-            name: 'Remise en forme',
-            description: 'Besoin de se remettre au sport ?'
-        },
-        {
-            id: 2,
-            name: 'Amélioration du haut du corps',
-            description: 'Renforcement musculaire'
-        },
-        ];
+        this.programService.getPrograms().subscribe(data => {
 
-        this.source.load(data);
+            this.source.load(data);
+        }, error => {
+            this.errorMessage = 'Une erreur est survenue lors du chargement des données.';
+        });        
     }
 
-    selectAction(event, dialogAdd: TemplateRef<any>, dialogDelete: TemplateRef<any>): void {
+    selectAction(event, dialog: TemplateRef<any>, dialogDelete: TemplateRef<any>): void {
         this.currentProgram = event.data;
 
         switch (event.action) {
             case 'show': {
-
+                this.popupType = 0;
+                this.openPopup(dialog);
                 break;
             }
             case 'edit': {
-                this.openPopup(dialogAdd);
+                this.popupType = 1;
+                this.openPopup(dialog);
                 break;
             }
             case 'delete': {
@@ -103,8 +100,22 @@ export class ProgramsComponent implements OnInit {
         );
     }
 
+    addProgram(): void {
+        this.programService.createProgram(this.currentProgram).subscribe(data => {
+            this.loadPrograms();
+        }, error => {
+            this.errorMessage = 'Une erreur est survenue, veuillez vérifier les informations saisies.';
+        });
+    }
+
     confirmDelete(): void {
-        console.log('Program sucessfully deleted !');
+        console.log(this.currentProgram);
+
+        this.programService.deleteProgram(this.currentProgram['id']).subscribe(data => {
+            this.loadPrograms();
+        }, error => {
+            this.errorMessage = 'Une erreur est survenue, veuillez réessayer ultérieurement.';
+        });
     }
 
 }

@@ -4,6 +4,17 @@
         <div class="container">
             <div class="row">
 
+                <div class="col-12" style="text-align: center;" *ngIf="errorMessage">
+                    <nb-card style="margin-bottom: 20px;">
+                        <nb-card-body>
+                            <button nbButton [size]="medium" class="close-button" (click)="errorMessage = null;">
+                                <i class="fas fa-times" style="margin-top: 2px;"></i>
+                            </button>
+                            <span>{{errorMessage}}</span>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+
                 <div class="col-md-12 col-lg-12 col-xxxl-12">
                     <nb-card>
                         <nb-card-header>
@@ -16,8 +27,9 @@
                             </ng2-smart-table>
 
                             <div style="text-align: center; margin-top: 10px;">
-                                <button nbButton [status]="success" (click)="openPopup(dialog2)">Ajouter un
-                                    programme</button>
+                                <button nbButton [status]="success"
+                                    (click)="openPopup(dialog2); popupType = 2; currentProgram = {};">Ajouter
+                                    un programme</button>
                             </div>
                         </nb-card-body>
                     </nb-card>
@@ -30,28 +42,33 @@
 
 <ng-template #dialog2 let-data let-ref="dialogRef">
     <nb-card>
-        <nb-card-header>Ajouter un programme</nb-card-header>
+        <nb-card-header *ngIf="popupType === 0">Afficher un programme</nb-card-header>
+        <nb-card-header *ngIf="popupType === 1">Modifier un programme</nb-card-header>
+        <nb-card-header *ngIf="popupType === 2">Ajouter un programme</nb-card-header>
         <nb-card-body style="max-width: 400px;">
 
-            <!-- <div style="line-height: 1.5;">
-                Si vous confirmez, le programme {{currentProgram.name}} sera définitivement supprimé.
-            </div> -->
-            <form>
-                <div class="form-group">
-                    <label for="name" class="label">Nom</label>
-                    <input type="text" nbInput fullWidth id="name" placeholder="Nom">
-                </div>
-                <div class="form-group">
-                    <label for="description" class="label">Description</label>
-                    <input type="text" nbInput fullWidth id="description" placeholder="Description">
-                </div>
-                <button type="submit" nbButton status="danger">Upload</button>
-            </form>
+            <div class="form-group">
+                <label for="name" class="label">Nom</label>
+                <input type="text" nbInput fullWidth id="name" [(ngModel)]="currentProgram.name" [readonly]="popupType === 0"
+                    placeholder="Nom">
+            </div>
+            <div class="form-group">
+                <label for="description" class="label">Description</label>
+                <input type="text" nbInput fullWidth id="description" [(ngModel)]="currentProgram.description"
+                    [readonly]="popupType === 0" placeholder="Description">
+            </div>
+            <button type="submit" nbButton status="danger">Upload</button>
 
         </nb-card-body>
         <nb-card-footer style="text-align: center;">
-            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">Annuler</button>
-            <button nbButton [status]="success" (click)=" ref.close()">Ajouter</button>
+            <button nbButton [status]="success" (click)="ref.close();" *ngIf="popupType === 0">Fermer</button>
+
+            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;"
+                *ngIf="popupType !== 0">Annuler</button>
+            <button nbButton [status]="success" (click)="ref.close(); updateProgram();"
+                *ngIf="popupType === 1">Sauvegarder</button>
+            <button nbButton [status]="success" (click)="ref.close(); addProgram();"
+                *ngIf="popupType === 2">Ajouter</button>
         </nb-card-footer>
     </nb-card>
 </ng-template>

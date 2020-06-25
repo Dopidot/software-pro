@@ -18,6 +18,8 @@ import { InfosComponent } from './infos/infos.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { LoginComponent } from './login/login.component';
 import { UserService } from './services/user.service';
+import { ProgramService } from './services/program.service';
+import { StatusService } from './services/status.service';
 import { HttpClientModule } from "@angular/common/http";
 
 
@@ -77,7 +79,7 @@ const config: ExtraOptions = {
 @NgModule({
   imports: [RouterModule.forRoot(routes, config), HttpClientModule],
   exports: [RouterModule],
-  providers: [UserService],
+  providers: [UserService, ProgramService, StatusService],
 })
 export class AppRoutingModule {
 }

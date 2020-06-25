@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
+import { User } from '../models/user.model';
 
 @Component({
     selector: 'ngx-login',
@@ -8,6 +9,9 @@ import { UserService } from '../services/user.service';
     styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit {
+
+    user: User = new User();
+    errorMessage: string;
 
     constructor(
         private router: Router,
@@ -18,12 +22,15 @@ export class LoginComponent implements OnInit {
     }
 
     login(): void {
-        console.log('Here in login function');
-        let test = this.userService.login({'email':'christophil@gmail.com', 'password':'azerty123'}).subscribe(data => {
-             console.log(data);
-          });
-        //console.log(test);
-        localStorage.setItem('token', '1');
-        this.router.navigate(['/home']);
+        this.errorMessage = null;
+
+        this.userService.connectUser(this.user).subscribe(data => {
+            localStorage.setItem('token', data['acessToken']);
+            //localStorage.setItem('userInfo', data['user']);
+
+            this.router.navigate(['/home']);
+        }, error => {
+            this.errorMessage = 'Adresse email ou mot de passe incorrect.';
+        });
     }
 }

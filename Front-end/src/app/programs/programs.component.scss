@@ -4,11 +4,7 @@
   }
   
   :host /deep/ ng2-st-tbody-custom {
-    width: 100%;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    padding: 10px 0px;
+    display: flex;
   }
 
   :host /deep/ a.ng2-smart-action.ng2-smart-action-custom-custom {
@@ -21,3 +17,9 @@
     color: #5dcfe3;
   }
 
+.close-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 3px 6px;
+}

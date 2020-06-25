@@ -58,4 +58,14 @@ export class NotificationsComponent implements OnInit {
         ];
     }
 
+    removeNotification(notification: any): void {
+
+        let index = this.notifications.findIndex(x => x.id === notification.id);
+
+        if (index !== -1)
+        {
+            this.notifications.splice(index, 1);
+        }
+    }
+
 }

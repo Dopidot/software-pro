@@ -83,6 +83,8 @@ import { InfosComponent } from './infos/infos.component';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { LoginComponent } from './login/login.component';
 
+import { FormsModule } from '@angular/forms';
+
 const components = [
     ChartjsBarComponent,
     ChartjsLineComponent,
@@ -148,6 +150,7 @@ const components = [
     NbInputModule,
     TablesRoutingModule,
     Ng2SmartTableModule,
+    FormsModule,
   ],
 bootstrap: [AppComponent/*, ...routedComponents, ...components*/],
 })

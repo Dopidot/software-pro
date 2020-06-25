@@ -18,7 +18,7 @@
                             <nb-list-item *ngFor="let notif of notifications" style="padding: 0px;">
                                 <div [className]="'default-background ' + (currentNotif && notif.id === currentNotif.id ? 'default-background-select' : '')" style="position: relative;" (click)="selectNotif(notif)">
                                     <i [className]="'fas ' + notif.icon + ' fa-2x'" style="margin-right: 20px;"></i>
-                                    <button nbButton [size]="tiny" class="close-button">
+                                    <button nbButton [size]="tiny" class="close-button" (click)="removeNotification(notif)">
                                         <i class="fas fa-times" style="margin-top: 2px;"></i>
                                     </button>
                                     <div style="display: inline-block; padding-bottom: 10px;">
