@@ -23,7 +23,7 @@ export default class PictureController {
             return res.status(200).json(response.rows);
         } catch (e) {
             console.log(e);
-            return res.status(400).json('Bad Parameter');
+            return res.status(400).json('Bad Parameter. Picture not found.');
         }
     }
 
@@ -52,7 +52,7 @@ export default class PictureController {
             const { name, path } = req.body;
             const response: QueryResult = await pool.query('UPDATE pictures SET name = $1, path = $2 WHERE id = $3', [name, path, id]);
             return res.status(200).json({
-                message: 'Picture created sucessfully',
+                message: 'Picture updated sucessfully',
                 body: {
                     user: {
                         name,

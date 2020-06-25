@@ -6,5 +6,3 @@ if ( process.env.SERVER_PORT !== undefined) {
 } else {
     console.error("Please define the server port in the environment variable");
 }
-
-
