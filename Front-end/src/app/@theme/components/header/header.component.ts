@@ -54,9 +54,24 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.currentTheme = this.themeService.currentTheme;
 
-    this.userService.getUsers()
+    let userInfo = localStorage.getItem('userInfo');
+
+    if (userInfo == null)
+    {
+        this.logout();
+        return;
+    }
+
+    userInfo = JSON.parse(userInfo);
+
+    this.user = {
+        'name' : userInfo['firstname'] + ' ' + userInfo['lastname'],
+        'picture' : 'assets/images/nick.png'
+    };
+
+    /*this.userService.getUsers()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => this.user = users.nick);
+      .subscribe((users: any) => this.user = users.nick);*/
 
     const { xl } = this.breakpointService.getBreakpointsMap();
     this.themeService.onMediaQueryChange()
@@ -103,6 +118,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   logout(): void {
       localStorage.removeItem('token');
+      localStorage.removeItem('userInfo');
+      
       this.router.navigate(['/login']);
   }
 }
