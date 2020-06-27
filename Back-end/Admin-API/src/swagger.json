@@ -14,28 +14,29 @@
   "tags": [
     {
       "name": "Users",
-      "description": "CRUD operation for user"
+      "description": "CRUD operation for Users"
     },
     {
       "name": "Exercises",
-      "description": "CRUD operation for exercise"
+      "description": "CRUD operation for Exercises"
     },
     {
       "name": "Programs",
-      "description": "CRUD operation for program"
+      "description": "CRUD operation for Programs"
     },
     {
       "name": "Pictures",
-      "description": "CRUD operation for picture"
+      "description": "CRUD operation for Pictures"
     },
     {
       "name": "Videos",
-      "description": "CRUD operation for video"
+      "description": "CRUD operation for Videos"
+    },
+    {
+      "name": "Newsletters",
+      "description": "CRUD operation for Newsletters"
     }
   ],
-  "securityDefinitions": {
-    
-  },
   "schemes": [
     "http",
     "https"
@@ -75,11 +76,11 @@
         "description": {
           "type": "string"
         },
-        "repeatNumber": {
+        "repeat_number": {
           "type": "number"
         },
-        "restTime": {
-          "type": "string",
+        "rest_time": {
+          "type": "number",
           "format": "minute:second"
         },
         "pictureId": {
@@ -128,10 +129,40 @@
           "type": "string"
         }
       }
+    },
+    "newsletter": {
+      "type": "object",
+      "properties": {
+        "name" : {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "isSent": {
+          "type": "boolean"
+        }
+      }
     }
   },
   "paths": {
     "/api/users": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": [
           "Users"
@@ -188,6 +219,13 @@
           "required": true,
           "description": "ID of the user that we want to retrieve",
           "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
         }
       ],
       "get": {
@@ -312,6 +350,15 @@
       }
     },
     "/api/pictures": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["Pictures"],
         "summary": "Get all the pictures of the database",
@@ -359,6 +406,13 @@
           "required": true,
           "description": "ID of the picture that we want to retrieve",
           "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
         }
       ],
       "get": {
@@ -425,6 +479,15 @@
       }
     },
     "/api/videos": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": ["Videos"],
         "summary": "Get all the videos of the database",
@@ -475,6 +538,13 @@
           "required": true,
           "description": "ID of the video that we want to retrieve",
           "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
         }
       ],
       "get": {
@@ -541,6 +611,15 @@
       }
     },
     "/api/programs": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": [
           "Programs"
@@ -594,6 +673,13 @@
           "required": true,
           "description": "ID of the programs that we want to retrieve",
           "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
         }
       ],
       "get": {
@@ -660,6 +746,15 @@
       }
     },
     "/api/exercises": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": [
           "Exercises"
@@ -713,6 +808,13 @@
           "required": true,
           "description": "ID of the exercise that we want to retrieve",
           "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
         }
       ],
       "get": {
@@ -742,7 +844,7 @@
             "in": "body",
             "name": "body",
             "required": true,
-            "description": "Exercise objects with new values",
+            "description": "Exercise object with new values",
             "schema": {
               "$ref": "#/definitions/exercise"
             }
@@ -773,6 +875,136 @@
           },
           "404": {
             "description": "Exercise not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/newsletters": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Newsletters"
+        ],
+        "summary": "Get all of the newsletters of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Newsletters"],
+        "summary": "Create a newsletter in the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Newsletter that we want to create",
+            "schema": {
+              "$ref": "#/definitions/newsletter"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/newsletter"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/newsletters/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the exercise that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Newsletters"],
+        "summary": "Get the newsletter with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/newsletter"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Newsletters"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Newsletter object with new values",
+            "schema": {
+              "$ref": "#/definitions/newsletter"
+            }
+          }
+        ],
+        "summary": "Update the newsletter with the given ID",
+        "responses": {
+          "200":{
+            "description": "Newsletter updated successfully",
+            "schema": {
+              "$ref": "#/definitions/newsletter"
+            }
+          },
+          "404": {
+            "description": "Newsletter not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Newsletters"],
+        "summary": "Delete newsletter with the given ID",
+        "responses": {
+          "200": {
+            "description": "Newsletter {id} was deleted successfully"
+          },
+          "404": {
+            "description": "Newsletter not found"
           },
           "500": {
             "description": "Internal Server Error"

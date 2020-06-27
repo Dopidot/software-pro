@@ -33,15 +33,15 @@ export default class ExerciseController {
 
     createExercise = async function(req: Request, res: Response): Promise<Response> {
         try {
-            const { name, description, reapeat_number, rest_time } = req.body;
-            const response: QueryResult = await pool.query('INSERT INTO exercises (name, description, reapeat_number, rest_time) VALUES ($1, $2, $3, $4)', [name, description, reapeat_number, rest_time]);
+            const { name, description, repeat_number, rest_time } = req.body;
+            const response: QueryResult = await pool.query('INSERT INTO exercises (name, description, repeat_number, rest_time) VALUES ($1, $2, $3, $4)', [name, description, repeat_number, rest_time]);
             return res.status(201).json({
                 message: 'Exercise created sucessfully',
                 body: {
                     user: {
                         name,
                         description,
-                        reapeat_number,
+                        repeat_number,
                         rest_time
                     }
                 }
@@ -55,19 +55,23 @@ export default class ExerciseController {
     updateExercise = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
-            const { name, description, reapeat_number, rest_time } = req.body;
-            const response: QueryResult = await pool.query('UPDATE exercises SET name = $1, description = $2, reapeat_number = $3, rest_time = $4 WHERE id = $5', [name, description, reapeat_number, rest_time, id]);
-            return res.status(200).json({
-                message: 'Exercise created sucessfully',
-                body: {
-                    exercise: {
-                        name,
-                        description,
-                        reapeat_number,
-                        rest_time
+            const { name, description, repeat_number, rest_time } = req.body;
+            const response: QueryResult = await pool.query('UPDATE exercises SET name = $1, description = $2, repeat_number = $3, rest_time = $4 WHERE id = $5', [name, description, repeat_number, rest_time, id]);
+            if (response.rowCount !== 0 ) {
+                return res.status(200).json({
+                    message: 'Exercise created sucessfully',
+                    body: {
+                        exercise: {
+                            name,
+                            description,
+                            repeat_number,
+                            rest_time
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                return res.status(404).json('Exercise not found');
+            }
         } catch (e)  {
             console.log(e);
             return res.status(500).json('Internal Server Error');
