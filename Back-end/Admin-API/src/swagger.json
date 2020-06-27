@@ -1,0 +1,1016 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Admin-Api",
+    "description": "API for the fitlisly app",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:4000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Users",
+      "description": "CRUD operation for Users"
+    },
+    {
+      "name": "Exercises",
+      "description": "CRUD operation for Exercises"
+    },
+    {
+      "name": "Programs",
+      "description": "CRUD operation for Programs"
+    },
+    {
+      "name": "Pictures",
+      "description": "CRUD operation for Pictures"
+    },
+    {
+      "name": "Videos",
+      "description": "CRUD operation for Videos"
+    },
+    {
+      "name": "Newsletters",
+      "description": "CRUD operation for Newsletters"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "definitions": {
+    "user": {
+      "type": "object",
+      "properties": {
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
+        }
+      }
+    },
+    "exercise": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "repeat_number": {
+          "type": "number"
+        },
+        "rest_time": {
+          "type": "number",
+          "format": "minute:second"
+        },
+        "pictureId": {
+          "type": "number"
+        },
+        "videoId": {
+          "type": "number"
+        }
+      }
+    },
+    "program": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "pictureId": {
+          "type": "number"
+        }
+      }
+    },
+    "picture": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    },
+    "video": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    },
+    "newsletter": {
+      "type": "object",
+      "properties": {
+        "name" : {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "isSent": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/users": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all the users of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create a new user in the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User that we want to create",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "400": {
+            "description": "This email already exists"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the user that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get user with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "User with a new values of properties",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "summary": "Update user with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete user with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "404": {
+            "description": "User not found. "
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/users/login" : {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Log the user in and returns a token",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "login and passworod",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "accessToken": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found"
+          },
+          "400": {
+            "description": "Bad Credentials : your email or your password is not correct"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/pictures": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Pictures"],
+        "summary": "Get all the pictures of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Pictures"],
+        "summary": "Create a new picture in the database",
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "Picture that we want to create",
+          "schema": {
+            "$ref": "#/definitions/picture"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Picture created sucessfully",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/pictures/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the picture that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Pictures"],
+        "summary": "Get picture with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          },
+          "404": {
+            "description": "Picture not found."
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Pictures"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "description": "Picture objects with new values",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          }
+        ],
+        "summary": "Update the picture with the given ID",
+        "responses": {
+          "200": {
+            "description": "Picture updated sucessfully",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          },
+          "404": {
+            "description": "Picture not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Pictures"],
+        "summary": "Delete picture with the given ID",
+        "responses": {
+          "200": {
+            "description": "Picture {id} was deleted sucessfully."
+          },
+          "404": {
+            "description": "Picture not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/videos": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Videos"],
+        "summary": "Get all the videos of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/video"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Videos"],
+        "summary": "Create a new video in the database",
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "Video that we want to create",
+          "schema": {
+            "$ref": "#/definitions/video"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Video created sucessfully",
+            "schema": {
+              "$ref": "#/definitions/video"
+            }
+          },
+          "404": {
+            "description": "Video not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/videos/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the video that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Videos"],
+        "summary": "Get video with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/video"
+            }
+          },
+          "404": {
+            "description": "Video not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Videos"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "description": "Video objects with new values",
+            "schema": {
+              "$ref": "#/definitions/video"
+            }
+          }
+        ],
+        "summary": "Update the video with the given ID",
+        "responses": {
+          "200": {
+            "description": "Video updated sucessfully",
+            "schema": {
+              "$ref": "#/definitions/video"
+            }
+          },
+          "404": {
+            "description": "Video not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Videos"],
+        "summary": "Delete video with the given ID",
+        "responses": {
+          "200": {
+            "description": "Video {id} was deleted sucessfully."
+          },
+          "404": {
+            "description": "Video not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/programs": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Programs"
+        ],
+        "summary": "Get all the programs of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Programs"
+        ],
+        "summary": "Create a new program in the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "program that we want to create",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/programs/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the programs that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Programs"],
+        "summary": "Get the program with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "404": {
+            "description": "Program not found"
+          },
+          "500":  {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Programs"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Program objects with new values",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          }
+        ],
+        "summary": "Update the program with the given ID",
+        "responses": {
+          "200": {
+            "description": "Program updated sucessfully",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "404": {
+            "description": "Program not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Programs"],
+        "summary": "Delete programs with the given ID",
+        "responses": {
+          "200": {
+            "description": "Program {id} was deleted sucessfully."
+          },
+          "404": {
+            "description": "Program not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/exercises": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Get all the exercises of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Create a new exercise in the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Exercise that we want to create",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/exercises/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the exercise that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Get exercise with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "404": {
+            "description": "Exercise not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Exercises"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Exercise object with new values",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          }
+        ],
+        "summary": "Update the exercise with the given ID",
+        "responses": {
+          "200": {
+            "description": "Exercise updated sucessfully",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "404": {
+            "description": "Exercise not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Exercises"],
+        "summary": "Delete exercise with the given ID",
+        "responses": {
+          "200": {
+            "description": "Exercise {id} was deleted sucessfully."
+          },
+          "404": {
+            "description": "Exercise not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/newsletters": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Newsletters"
+        ],
+        "summary": "Get all of the newsletters of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Newsletters"],
+        "summary": "Create a newsletter in the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Newsletter that we want to create",
+            "schema": {
+              "$ref": "#/definitions/newsletter"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/newsletter"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/newsletters/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the exercise that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Newsletters"],
+        "summary": "Get the newsletter with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/newsletter"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Newsletters"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Newsletter object with new values",
+            "schema": {
+              "$ref": "#/definitions/newsletter"
+            }
+          }
+        ],
+        "summary": "Update the newsletter with the given ID",
+        "responses": {
+          "200":{
+            "description": "Newsletter updated successfully",
+            "schema": {
+              "$ref": "#/definitions/newsletter"
+            }
+          },
+          "404": {
+            "description": "Newsletter not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Newsletters"],
+        "summary": "Delete newsletter with the given ID",
+        "responses": {
+          "200": {
+            "description": "Newsletter {id} was deleted successfully"
+          },
+          "404": {
+            "description": "Newsletter not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  }
+}

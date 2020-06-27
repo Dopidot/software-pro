@@ -1,0 +1,352 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "User-Api",
+    "description": "API for the fitlisly app",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:4002",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Users",
+      "description": "CRUD operation for user"
+    },
+    {
+      "name": "Pictures",
+      "description": "CRUD operation for picture"
+    },
+    {
+      "name": "Videos",
+      "description": "CRUD operation for video"
+    }
+  ],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "definitions": {
+    "user": {
+      "type": "object",
+      "properties": {
+        "firstname": {
+          "type": "string"
+        },
+        "lastname": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "password": {
+          "type": "string",
+          "format": "password"
+        }
+      }
+    },
+    "picture": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    },
+    "video": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "paths": {
+    "/api/users": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get all the users of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Create a new user in the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "User that we want to create",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "400": {
+            "description": "Failed. Bad post data"
+          }
+        }
+      }
+    },
+    "/api/users/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the user that we want to retrieve",
+          "type": "integer"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Get user with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "404": {
+            "description": "Failed. User not found. "
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Users"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "User with a new values of properties",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          }
+        ],
+        "summary": "Update user with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "404": {
+            "description": "Failed. User not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Delete user with given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/user"
+            }
+          },
+          "404": {
+            "description": "Failed. User not found. "
+          }
+        }
+      }
+    },
+    "/api/users/login" : {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "summary": "Log the user in and returns a token",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "login and passworod",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "password": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "acessToken": {
+                  "type": "string"
+                },
+                "refreshToken": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "400": {
+            "description": "Bad Credentials : your email or your password is not correct"
+          }
+        }
+      }
+    },
+    "/api/pictures": {
+      "get": {
+        "tags": ["Pictures"],
+        "summary": "Get all the pictures of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Pictures"],
+        "summary": "Create a new picture in the database",
+        "parameters": [{
+          "in": "body",
+          "name": "body",
+          "description": "Picture that we want to create",
+          "schema": {
+            "$ref": "#/definitions/picture"
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Picture created sucessfully",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          },
+          "400": {
+            "description": "Failed. Bad post data"
+          }
+        }
+      }
+    },
+    "/api/pictures/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the picture that we want to retrieve",
+          "type": "integer"
+        }
+      ],
+      "get": {
+        "tags": ["Pictures"],
+        "summary": "Get picture with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          },
+          "400": {
+            "description": "Bad Parameter. Picture not found."
+          }
+        }
+      },
+      "put": {
+        "tags": ["Pictures"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": false,
+            "description": "Picture objects with new values",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          }
+        ],
+        "summary": "Update the picture with the given ID",
+        "responses": {
+          "200": {
+            "description": "Picture updated sucessfully",
+            "schema": {
+              "$ref": "#/definitions/picture"
+            }
+          },
+          "400": {
+            "description": "Failed. Picture not found"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Pictures"],
+        "summary": "Delete picture with the given ID",
+        "responses": {
+          "200": {
+            "description": "Picture {id} was deleted sucessfully."
+          },
+          "400": {
+            "description": "Bad parameter"
+          }
+        }
+      }
+    }
+  }
+}
