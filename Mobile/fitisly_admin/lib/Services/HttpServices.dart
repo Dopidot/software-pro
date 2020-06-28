@@ -73,7 +73,7 @@ Future<String> create(Exercise e) async {
   };
 
 
-  final http.Response response = await http.post(baseUrl+"/exercises",
+  final http.Response response = await http.post(baseUrl+"exercises",
     headers: headers,
     body: jsonEncode(<String, String>{
       'name': e.name,
@@ -84,7 +84,6 @@ Future<String> create(Exercise e) async {
       'video_id': 'null', //e.videos[0].id,
     }),
   );
-
   if (response.statusCode == 201) {
 
     return response.statusCode.toString();

@@ -1,46 +1,10 @@
-import 'dart:core';
-import 'dart:core';
-import 'dart:ui';
-
+import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/modele/Exercise.dart';
 import 'package:fitislyadmin/modele/Photo.dart';
 import 'package:fitislyadmin/modele/Video.dart';
-import 'package:fitislyadmin/services/HttpServices.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-
 import 'HomePageExcerciseList.dart';
-
-
-class createExerciseStateless extends StatelessWidget {
-
-  HttpServices services = HttpServices();
-
-
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Mes excercices", style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
-        centerTitle: true,
-      ),
-
-      body: FutureBuilder<Exercise>(
-        future: services.create(Exercise()),
-        builder: (context, snapshot) {
-          if (snapshot.hasError){
-            return Center(
-                child: Text("Probème de serveur, la page n'a pas pu être chargé")
-            );
-          }
-
-          return snapshot.hasData ? HomePageExercice() : Center(child: CircularProgressIndicator());
-        },
-      ),
-    );
-  }
-}
+import 'PhotoExerciseScreen.dart';
 
 class FormCreateExercise extends StatefulWidget {
 
@@ -60,8 +24,9 @@ class CreateExercise extends State<FormCreateExercise>{
   Photo _picture;
   Video _video;
   bool _autoValidate = false;
-
+  Future<String> _futureCreateExo;
   final _formKey = GlobalKey<FormState>();
+  HttpServices services = HttpServices();
 
   @override
   Widget build(BuildContext context) {
@@ -72,10 +37,11 @@ class CreateExercise extends State<FormCreateExercise>{
       ),
       body: Container(
         padding: EdgeInsets.all(20.0),
-    child: new Form(
+    child: SingleChildScrollView(
+        child:Form(
       autovalidate: _autoValidate,
     key: _formKey,
-    child: buildForm())
+    child: buildForm()))
     )
     );
   }
@@ -86,7 +52,7 @@ class CreateExercise extends State<FormCreateExercise>{
 
     final nameField = TextFormField(
         onSaved: (String val){
-          this._name = val ;
+          _name = val ;
         },
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
@@ -167,28 +133,28 @@ class CreateExercise extends State<FormCreateExercise>{
 
     return Column(
           children: <Widget>[
-            Flexible(child: Padding(
+            Padding(
               padding: const EdgeInsets.all(5.0),
               child: nameField,
-            )),
-            Flexible(child: Padding(
+            ),
+            Padding(
               padding: const EdgeInsets.all(5.0),
               child: descField,
-            )),
-            Flexible(child: Padding(
+            ),
+            Padding(
               padding: const EdgeInsets.all(5.0),
               child: reapeteNumberField,
-            )),
-            Flexible(child: Padding(
+            ),
+            Padding(
               padding: const EdgeInsets.all(5.0),
               child: restTimeField,
-            )),
+            ),
             //Flexible(child: photoField),
            // Flexible(child: videoField),
-            Flexible(child: Padding(
+             Padding(
               padding: const EdgeInsets.all(5.0),
               child: creationButton,
-            ))
+            )
           ]
     );
 
@@ -198,10 +164,27 @@ class CreateExercise extends State<FormCreateExercise>{
   void _validateInput() {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
-      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-        return createExerciseStateless();
+
+      print("name : $_name" );
+      print("desc : $_description" );
+      print("repe : $_reapeat_number" );
+      print("rest : $_rest_time" );
+      Exercise e = Exercise(name:_name,description: _description,repetitionNumber: _reapeat_number,restTime: _rest_time);
+
+      _futureCreateExo = services.create(e);
+
+      _futureCreateExo
+          .then((value) {
+           // Navigator.pop(context);
+        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+          return PhotoExerciseScreen(exercise: e);
+        })
+        );
+      });
+      /*Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+        return PhotoExerciseScreen();
       })
-      );
+      );*/
 
      print("Créé");
     } else {
