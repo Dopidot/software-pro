@@ -38,7 +38,7 @@ export default class VideoController {
             return res.status(201).json({
                 message: 'Video created sucessfully',
                 body: {
-                    user: {
+                    video: {
                         name,
                         path
                     }
@@ -59,7 +59,7 @@ export default class VideoController {
                 return res.status(200).json({
                     message: 'Video updated sucessfully',
                     body: {
-                        user: {
+                        video: {
                             name,
                             path
                         }

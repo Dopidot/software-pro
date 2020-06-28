@@ -1,4 +1,5 @@
-import { Pool, Client } from 'pg';
+import { Pool } from 'pg';
+require('dotenv').config();
 
 export const pool = new Pool({
     user: process.env.DATABASE_USER,
@@ -15,7 +16,6 @@ pool.on('error', (err, client) => {
 
 pool.query('SELECT NOW()', (err, res) => {
     console.log(err, res);
-    //pool.end();
 });
 
 

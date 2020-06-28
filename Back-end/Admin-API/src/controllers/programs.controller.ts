@@ -38,7 +38,7 @@ export default class ProgramController {
             return res.status(201).json({
                 message: 'Program created sucessfully',
                 body: {
-                    user: {
+                    program: {
                         name,
                         description
                     }
@@ -59,7 +59,7 @@ export default class ProgramController {
                 return res.status(200).json({
                     message: 'Program updated sucessfully',
                     body: {
-                        user: {
+                        program: {
                             name,
                             description
                         }

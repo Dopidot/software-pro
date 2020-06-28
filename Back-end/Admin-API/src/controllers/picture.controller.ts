@@ -38,7 +38,7 @@ export default class PictureController {
             return res.status(201).json({
                 message: 'Picture created sucessfully',
                 body: {
-                    user: {
+                    picture: {
                         name,
                         path
                     }
@@ -59,7 +59,7 @@ export default class PictureController {
                 return res.status(200).json({
                     message: 'Picture updated sucessfully',
                     body: {
-                        user: {
+                        picture: {
                             name,
                             path
                         }

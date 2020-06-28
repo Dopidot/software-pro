@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
 import { pool } from '../database';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
 require('dotenv').config();
 
 export default class UserController {
@@ -26,7 +25,7 @@ export default class UserController {
             if (response.rowCount !== 0) {
                 return res.status(200).json(response.rows);
             } else {
-                return res.status(404).json(`No user found with id = ${id}`);
+                return res.status(404).json("User not found");
             }
         } catch (e) {
             console.error(e);
@@ -52,9 +51,9 @@ export default class UserController {
         } catch (e) {
             console.error(e);
             if (e.code == 23505) {
-                return res.status(400).json('Cet email existe déjà');
+                return res.status(400).json('This email already exists');
             } else {
-                return res.status(500).json('Internal Server error');
+                return res.status(500).json('Internal Server Error');
             }
         }
     }
@@ -64,19 +63,24 @@ export default class UserController {
             const id = parseInt(req.params.id);
             const { firstname, lastname, email } = req.body;
             const response: QueryResult = await pool.query('UPDATE users SET firstname = $1, lastname = $2, email = $3 WHERE id = $4', [firstname, lastname, email, id]);
-            return res.json({
-                message: `User ${id} updated sucessfully`,
-                body: {
-                    user: {
-                        firstname,
-                        lastname,
-                        email
+            if ( response.rowCount !== 0) {
+                return res.json({
+                    message: `User ${id} updated sucessfully`,
+                    body: {
+                        user: {
+                            firstname,
+                            lastname,
+                            email
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                return res.status(400).json('User not found');
+            }
+
         } catch (e) {
             console.error(e);
-            return res.status(500).json('Internal Server error');
+            return res.status(500).json('Internal Server Error');
         }
     }
 
@@ -87,11 +91,11 @@ export default class UserController {
             if (response.rowCount !== 0) {
                 return res.json(`User ${id} deleted successfully`);
             } else {
-                return res.status(404).json(`No user found with id = ${id}`);
+                return res.status(404).json('User not found');
             }
         } catch (e) {
             console.error(e);
-            return res.status(500).json('Internal Server error');
+            return res.status(500).json('Internal Server Error');
         }
     }
 }

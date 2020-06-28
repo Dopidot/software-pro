@@ -9,20 +9,12 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "localhost:4000",
-  "basePath": "/api/programs",
+  "host": "localhost:4001",
+  "basePath": "",
   "tags": [
     {
-      "name": "program",
+      "name": "Programs",
       "description": "CRUD operation for program"
-    },
-    {
-      "name": "picture",
-      "description": "CRUD operation for picture"
-    },
-    {
-      "name": "video",
-      "description": "CRUD operation for video"
     }
   ],
   "schemes": [
@@ -81,23 +73,35 @@
   },
   "paths": {
     "/api/programs": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": [
-          "programs"
+          "Programs"
         ],
-        "summary": "Get all the programs in the database",
+        "summary": "Get all the programs of the database",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/program"
             }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "post": {
         "tags": [
-          "programs"
+          "Programs"
         ],
         "summary": "Create a new program in the database",
         "parameters": [
@@ -111,14 +115,14 @@
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "OK",
             "schema": {
               "$ref": "#/definitions/program"
             }
           },
-          "400": {
-            "description": "Failed. Bad post Data"
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -129,15 +133,20 @@
           "name": "id",
           "in": "path",
           "required": true,
-          "description": "ID of the program that we want to retrieve",
+          "description": "ID of the programs that we want to retrieve",
           "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
         }
       ],
       "get": {
-        "tags": [
-          "programs"
-        ],
-        "summary": "Get program with given ID",
+        "tags": ["Programs"],
+        "summary": "Get the program with the given ID",
         "responses": {
           "200": {
             "description": "OK",
@@ -146,52 +155,54 @@
             }
           },
           "404": {
-            "description": "Failed. Program not found. "
+            "description": "Program not found"
+          },
+          "500":  {
+            "description": "Internal Server Error"
           }
         }
       },
       "put": {
-        "tags": [
-          "programs"
-        ],
+        "tags": ["Programs"],
         "parameters": [
           {
             "in": "body",
             "name": "body",
             "required": true,
-            "description": "Programs with a new values of properties",
+            "description": "Program objects with new values",
             "schema": {
               "$ref": "#/definitions/program"
             }
           }
         ],
-        "summary": "Update programs with given ID",
+        "summary": "Update the program with the given ID",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Program updated sucessfully",
             "schema": {
               "$ref": "#/definitions/program"
             }
           },
           "404": {
-            "description": "Failed. Program not found. "
+            "description": "Program not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "delete": {
-        "tags": [
-          "programs"
-        ],
-        "summary": "Delete program with given ID",
+        "tags": ["Programs"],
+        "summary": "Delete programs with the given ID",
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/program"
-            }
+            "description": "Program {id} was deleted sucessfully."
           },
           "404": {
-            "description": "Failed. Program not found. "
+            "description": "Program not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }

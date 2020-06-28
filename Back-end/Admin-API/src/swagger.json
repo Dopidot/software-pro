@@ -901,7 +901,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/exercise"
+              "$ref": "#/definitions/newsletter"
             }
           },
           "500": {
