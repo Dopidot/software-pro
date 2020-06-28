@@ -1,6 +1,5 @@
 import 'package:fitislyadmin/modele/Newsletter.dart';
 import 'package:flutter/material.dart';
-
 import 'CreateNewletter.dart';
 import 'ModifyNewsLetter.dart';
 
@@ -65,7 +64,7 @@ class _NewsletterListState extends State<NewsletterList> {
           child:Icon(Icons.add),
           onPressed: () {
 
-            Navigator.push(context,MaterialPageRoute(
+           Navigator.push(context,MaterialPageRoute(
                 builder: (context) {
               return CreateNewsletter(newsletters: newsletters);
             })

@@ -7,18 +7,16 @@ class User {
   String lastName;
   String email;
   Photo photo;
-  DateTime lastConnection;
-  List<Program> programs;
 
+  User({this.id,this.firstName,this.lastName,this.email,this.photo});
 
-  User(String id,String firstName,String lastName,String email,Photo photo,DateTime lastConnection,List<Program> programs){
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.photo = photo;
-    this.lastConnection = lastConnection;
-    this.programs = programs;
+  factory User.fromJson(Map<String,dynamic> json){
+    return User(
+        id:json['id'],
+        firstName:json['name'],
+        lastName:json['description'],
+        email:json['reapeat_number'],
+        photo:json['picture_id']);
   }
 
 }

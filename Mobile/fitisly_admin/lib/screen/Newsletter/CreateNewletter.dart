@@ -72,6 +72,7 @@ class _CreateNewsletter extends State<CreateNewsletter>{
 
    RaisedButton createBtn = RaisedButton(
      child: Text('Créer'),
+     color: Colors.green,
      onPressed: () {
         if (_formKey.currentState.validate()) {
           // If the form is valid, display a Snackbar.
@@ -102,6 +103,7 @@ class _CreateNewsletter extends State<CreateNewsletter>{
       onPressed: () {
         Navigator.pop(context);
       },
+      color: Colors.red,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18.0),
       ),
@@ -125,9 +127,9 @@ class _CreateNewsletter extends State<CreateNewsletter>{
            Padding(
              padding: const EdgeInsets.all(8.0),
              child: descField,
-           ),
-           Center(
-             child: Row(
+           ),Row(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 crossAxisAlignment: CrossAxisAlignment.center,
                children: <Widget>[
                  Padding(
                    padding: const EdgeInsets.all(8.0),
@@ -139,7 +141,7 @@ class _CreateNewsletter extends State<CreateNewsletter>{
                  ),
                ],
              ),
-           )
+
          ],
        ),
     ];
