@@ -1,2 +1,3 @@
-<div>{{ day }}</div>
-<span class="caption">{{ (day + 100) * day }}$</span>
+<div *ngIf="compareDate(date) === true" id="flagEvent" [ngClass]="{'selected-day': selected}" class="day-cell">{{ day }}</div>
+<div *ngIf="compareDate(date) !== true" [ngClass]="{'selected-day': selected}">{{ day }}</div>
+<!-- <span class="caption">{{ (day + 100) * day }}$</span> -->

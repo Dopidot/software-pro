@@ -13,8 +13,10 @@ export class InfosComponent implements OnInit {
     menu = MENU_ITEMS;
     data: any;
 
-    private fitislyAdminAPI = 'http://localhost:4000';
-    private fitislyAdminDB = 'http://localhost:4000/api/users/7';
+    private userInfo = localStorage.getItem('userInfo') != null ? JSON.parse(localStorage.getItem('userInfo')) : '';
+
+    private fitislyAdminAPI = 'http://localhost:4000/api/users/' + this.userInfo['id'];
+    private fitislyAdminDB = 'http://localhost:4000/api/users/' + this.userInfo['id'];
 
     constructor(
         private statusService: StatusService,

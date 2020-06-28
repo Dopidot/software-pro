@@ -7,6 +7,8 @@ import { NbDialogService } from '@nebular/theme';
 import { ProgramService } from '../services/program.service';
 import { Program } from '../models/program.model';
 
+import * as _ from 'lodash';
+
 @Component({
     selector: 'ngx-programs',
     templateUrl: './programs.component.html',
@@ -21,6 +23,7 @@ export class ProgramsComponent implements OnInit {
     source: LocalDataSource = new LocalDataSource();
     errorMessage: string;
     popupType: number = 0;
+    imageBase64: string;
 
     settings = {
         actions: {
@@ -75,6 +78,7 @@ export class ProgramsComponent implements OnInit {
 
     selectAction(event, dialog: TemplateRef<any>, dialogDelete: TemplateRef<any>): void {
         this.currentProgram = event.data;
+        this.imageBase64 = null;
 
         switch (event.action) {
             case 'show': {
@@ -117,13 +121,23 @@ export class ProgramsComponent implements OnInit {
     }
 
     confirmDelete(): void {
-        console.log(this.currentProgram);
-
         this.programService.deleteProgram(this.currentProgram['id']).subscribe(data => {
             this.loadPrograms();
         }, error => {
             this.errorMessage = 'Une erreur est survenue, veuillez réessayer ultérieurement.';
         });
+    }
+
+    fileChangeEvent(fileInput: any) {
+        if (fileInput.target.files && fileInput.target.files[0]) {
+            const reader = new FileReader();
+            
+            reader.onload = (e: any) => {
+                this.imageBase64 = e.target.result;
+            };
+
+            reader.readAsDataURL(fileInput.target.files[0]);
+        }
     }
 
 }

@@ -84,6 +84,8 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { LoginComponent } from './login/login.component';
 
 import { FormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpHeadersInterceptor } from './services/httpHeadersInterceptor';
 
 const components = [
     ChartjsBarComponent,
@@ -152,7 +154,12 @@ const components = [
     Ng2SmartTableModule,
     FormsModule,
   ],
-bootstrap: [AppComponent/*, ...routedComponents, ...components*/],
+  bootstrap: [AppComponent/*, ...routedComponents, ...components*/],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: HttpHeadersInterceptor,
+    multi: true,
+  }],
 })
 export class AppModule {
 }

@@ -28,8 +28,8 @@
 
                             <div style="text-align: center; margin-top: 10px;">
                                 <button nbButton [status]="success"
-                                    (click)="openPopup(dialog2); popupType = 2; currentProgram = {};">Ajouter
-                                    un programme</button>
+                                    (click)="openPopup(dialog2); popupType = 2; currentProgram = {}; imageBase64 = null;">
+                                    Ajouter un programme</button>
                             </div>
                         </nb-card-body>
                     </nb-card>
@@ -57,7 +57,22 @@
                 <input type="text" nbInput fullWidth id="description" [(ngModel)]="currentProgram.description"
                     [readonly]="popupType === 0" placeholder="Description">
             </div>
-            <button type="submit" nbButton status="danger" *ngIf="popupType !== 0">Upload</button>
+
+            <div style="position: relative;" *ngIf="imageBase64 || popupType !== 0">
+                <label for="image" class="label" style="display: block;">Image</label>
+                <label nbButton for="image" *ngIf="!imageBase64 && popupType !== 0" class="input-file">
+                    <i class="fas fa-plus"></i>
+                </label>
+                <input type="file" id="image" style="display: none;" (change)="fileChangeEvent($event)" accept=".png, .jpeg, .jpg">
+
+                <button nbButton [size]="medium" class="close-button" (click)="imageBase64 = null;" *ngIf="imageBase64">
+                    <i class="fas fa-times" style="margin-top: 2px;"></i>
+                </button>
+                
+                <div style="text-align: center;" *ngIf="imageBase64">
+                    <img [src]="imageBase64" style="max-width: 280px; max-height: 220px;" />
+                </div>
+            </div>
 
         </nb-card-body>
         <nb-card-footer style="text-align: center;">
