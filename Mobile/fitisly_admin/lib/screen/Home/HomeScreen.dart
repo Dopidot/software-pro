@@ -1,3 +1,4 @@
+import 'package:fitislyadmin/screen/Events/HomeEventScreen.dart';
 import 'package:fitislyadmin/screen/Excercises/HomePageExcerciseList.dart';
 import 'package:fitislyadmin/screen/Home/LoginScreen.dart';
 import 'package:fitislyadmin/screen/Newsletter/NewsLetterList.dart';
@@ -209,7 +210,11 @@ class _HomeScreen extends State<HomeScreenPage> {
                 ),
               ),
               onTap: () {
-                print("Jean!");
+
+                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
+                  return HomeEventScreen();
+                })
+                );
               },
             )
           ],

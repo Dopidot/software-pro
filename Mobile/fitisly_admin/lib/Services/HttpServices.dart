@@ -53,7 +53,7 @@ class HttpServices {
   String getTokenFromJson(String val){
 
     Map<String, dynamic> token = jsonDecode(val);
-    print("Token whs : "+token["acessToken"]);
+    print("Token whs : "+token["accessToken"]);
     return token["acessToken"];
   }
 
