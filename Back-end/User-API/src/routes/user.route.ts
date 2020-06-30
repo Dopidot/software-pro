@@ -32,7 +32,6 @@ function verifyToken(req: Request, res:Response, next: any) {
             console.error(err);
             return res.status(401).json('Unauthorized. Please check the logs');
         }
-        req.user = user; // récupère le payload qu'on a mis a la création du token
         next();
     });
 }

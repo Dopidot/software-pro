@@ -6,6 +6,7 @@ import programRouter from './routes/program.route';
 import pictureRouter from './routes/picture.route';
 import videoRouter from './routes/video.route';
 import newsletterRouter from './routes/newsletter.route';
+import eventRouter from './routes/event.route';
 
 export default class Server {
     readonly port: number;
@@ -33,6 +34,7 @@ export default class Server {
         app.use('/api/pictures', pictureRouter);
         app.use('/api/videos', videoRouter);
         app.use('/api/newsletters', newsletterRouter);
+        app.use('/api/events', eventRouter);
 
         app.listen(this.port, () => {
             console.log('The Admin-API is currently running at http://localhost:' ,this.port); //https://api.fitisly.com

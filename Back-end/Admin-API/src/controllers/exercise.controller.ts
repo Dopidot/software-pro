@@ -23,7 +23,7 @@ export default class ExerciseController {
             if (response.rowCount !== 0) {
                 return res.status(200).json(response.rows);
             } else {
-                return res.status(404).json("User not found.");
+                return res.status(404).json("Exercise not found.");
             }
         } catch (e) {
             console.log(e);
@@ -59,7 +59,7 @@ export default class ExerciseController {
             const response: QueryResult = await pool.query('UPDATE exercises SET name = $1, description = $2, repeat_number = $3, rest_time = $4 WHERE id = $5', [name, description, repeat_number, rest_time, id]);
             if (response.rowCount !== 0 ) {
                 return res.status(200).json({
-                    message: 'Exercise created sucessfully',
+                    message: 'Exercise updated sucessfully',
                     body: {
                         exercise: {
                             name,

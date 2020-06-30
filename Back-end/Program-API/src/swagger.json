@@ -10,7 +10,7 @@
     }
   },
   "host": "localhost:4001",
-  "basePath": "",
+  "basePath": "/",
   "tags": [
     {
       "name": "Programs",
@@ -32,7 +32,7 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "number"
+          "type": "integer"
         },
         "name": {
           "type": "string"
@@ -41,10 +41,7 @@
           "type": "string"
         },
         "pictureId": {
-          "type": "number"
-        },
-        "exercises": {
-          "type": "array"
+          "type": "integer"
         }
       }
     },
@@ -87,11 +84,17 @@
           "Programs"
         ],
         "summary": "Get all the programs of the database",
+        "produces": [
+          "application/json"
+        ],
         "responses": {
-          "200": {
+          "200" : {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/program"
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/program"
+              }
             }
           },
           "500": {

@@ -5,10 +5,10 @@ const router = Router()
 const exerciseController = new ExerciseController();
 
 //EXERCISES
-router.get('/exercises', exerciseController.getExercises );
-router.get('/exercises/:id', exerciseController.getExerciseById);
-router.post('/exercises', exerciseController.createExercise);
-router.put('/exercises/:id', exerciseController.updateExercise);
-router.delete('/exercises/:id', exerciseController.deleteExercise);
+router.get('', exerciseController.getExercises );
+router.get('/:id', exerciseController.getExerciseById);
+router.post('', exerciseController.createExercise);
+router.put('/:id', exerciseController.updateExercise);
+router.delete('/:id', exerciseController.deleteExercise);
 
 export default router;

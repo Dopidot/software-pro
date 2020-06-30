@@ -3,7 +3,7 @@ import {Request, Response} from "express";
 import {QueryResult} from "pg";
 import {pool} from "../database";
 import * as bcrypt from "bcrypt";
-require('dotenv').config()
+require('dotenv').config();
 
 export default class AuthenticationController {
 

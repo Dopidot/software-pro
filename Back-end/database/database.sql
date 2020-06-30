@@ -36,7 +36,7 @@ CREATE TABLE exercises(
     id BIGINT PRIMARY KEY DEFAULT nextval('id_sequence'),
     name VARCHAR(25) NOT NULL,
     description TEXT,
-    reapeat_number SMALLINT DEFAULT 1,
+    repeat_number SMALLINT DEFAULT 1,
     rest_time INTEGER,
     picture_id BIGINT,
     video_id BIGINT
