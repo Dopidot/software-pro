@@ -38,7 +38,7 @@ export default class VideoController {
             return res.status(201).json({
                 message: 'Video created sucessfully',
                 body: {
-                    user: {
+                    video: {
                         name,
                         path
                     }
@@ -55,15 +55,19 @@ export default class VideoController {
             const id = parseInt(req.params.id);
             const { name, path } = req.body;
             const response: QueryResult = await pool.query('UPDATE videos SET name = $1, path = $2 WHERE id = $3', [name, path, id]);
-            return res.status(200).json({
-                message: 'Video created sucessfully',
-                body: {
-                    user: {
-                        name,
-                        path
+            if ( response.rowCount !== 0 ) {
+                return res.status(200).json({
+                    message: 'Video updated sucessfully',
+                    body: {
+                        video: {
+                            name,
+                            path
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                return res.status(200).json('Video not found');
+            }
         } catch (e)  {
             console.log(e);
             return res.status(500).json('Internal Server error');

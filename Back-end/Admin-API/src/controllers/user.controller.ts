@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
 import { pool } from '../database';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
 require('dotenv').config();
 
 export default class UserController {

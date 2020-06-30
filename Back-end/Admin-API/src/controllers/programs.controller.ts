@@ -38,7 +38,7 @@ export default class ProgramController {
             return res.status(201).json({
                 message: 'Program created sucessfully',
                 body: {
-                    user: {
+                    program: {
                         name,
                         description
                     }
@@ -55,15 +55,19 @@ export default class ProgramController {
             const id = parseInt(req.params.id);
             const { name, description } = req.body;
             const response: QueryResult = await pool.query('UPDATE programs SET name = $1, description = $2 WHERE id = $3', [name, description, id]);
-            return res.status(200).json({
-                message: 'Program created sucessfully',
-                body: {
-                    user: {
-                        name,
-                        description
+            if (response.rowCount !== 0) {
+                return res.status(200).json({
+                    message: 'Program updated sucessfully',
+                    body: {
+                        program: {
+                            name,
+                            description
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                return res.status(404).json('Program not found');
+            }
         } catch (e)  {
             console.log(e);
             return res.status(500).json('Internal Server Error');
