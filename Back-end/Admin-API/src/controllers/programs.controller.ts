@@ -34,13 +34,22 @@ export default class ProgramController {
     createProgram = async function(req: Request, res: Response): Promise<Response> {
         try {
             const { name, description } = req.body;
-            const response: QueryResult = await pool.query('INSERT INTO programs (name, description) VALUES ($1, $2)', [name, description]);
+            const programImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
+            let response: QueryResult;
+
+            if ( programImage === undefined) {
+                response = await pool.query('INSERT INTO programs (name, description) VALUES ($1, $2)', [name, description]);
+            } else {
+                response = await pool.query('INSERT INTO programs (name, description, programImage) VALUES ($1, $2, $3)', [name, description, programImage]);
+            }
+
             return res.status(201).json({
                 message: 'Program created sucessfully',
                 body: {
                     program: {
                         name,
-                        description
+                        description,
+                        programImage
                     }
                 }
             });
@@ -54,7 +63,15 @@ export default class ProgramController {
         try {
             const id = parseInt(req.params.id);
             const { name, description } = req.body;
-            const response: QueryResult = await pool.query('UPDATE programs SET name = $1, description = $2 WHERE id = $3', [name, description, id]);
+            const programImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
+
+            let response: QueryResult;
+            if (programImage === undefined) {
+                response = await pool.query('UPDATE programs SET name = $1, description = $2 WHERE id = $3', [name, description, id]);
+            } else {
+                response = await pool.query('UPDATE programs SET name = $1, description = $2, programImage = $3 WHERE id = $4', [name, description, programImage, id]);
+            }
+
             if (response.rowCount !== 0) {
                 return res.status(200).json({
                     message: 'Program updated sucessfully',

@@ -19,5 +19,5 @@ CREATE TABLE events(
     startDate TIMESTAMP NOT NULL,
     creationDate TIMESTAMP NOT NULL,
     localisation VARCHAR(50),
-    picture BYTEA
-)
+    eventImage VARCHAR(255)
+);
