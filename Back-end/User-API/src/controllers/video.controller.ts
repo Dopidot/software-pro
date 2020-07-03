@@ -88,4 +88,5 @@ export default class VideoController {
             return res.status(500).json('Internal Server Error');
         }
     }
+
 }

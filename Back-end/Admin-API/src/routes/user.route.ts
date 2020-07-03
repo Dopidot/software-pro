@@ -9,7 +9,6 @@ const router = Router();
 const userController = new UserController();
 const authenticationController =  new AuthenticationController();
 
-
 // User CRUD
 router.get('', verifyToken,  userController.getUsers); //200
 router.get('/:id', verifyToken, userController.getUserById); // 200

@@ -37,18 +37,18 @@
         "description": {
           "type": "string"
         },
-        "repeatNumber": {
-          "type": "integer"
+        "repeat_number": {
+          "type": "number"
         },
-        "restTime": {
-          "type": "string",
+        "rest_time": {
+          "type": "number",
           "format": "minute:second"
         },
-        "pictureId": {
-          "type": "integer"
+        "exerciseImage": {
+          "type": "number"
         },
         "videoId": {
-          "type": "integer"
+          "type": "number"
         }
       }
     }
@@ -69,17 +69,11 @@
           "Exercises"
         ],
         "summary": "Get all the exercises of the database",
-        "produces": [
-          "application/json"
-        ],
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/exercise"
-              }
+              "$ref": "#/definitions/exercise"
             }
           },
           "500": {
@@ -92,14 +86,39 @@
           "Exercises"
         ],
         "summary": "Create a new exercise in the database",
+        "produces": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "description": "Exercise that we want to create",
-            "schema": {
-              "$ref": "#/definitions/exercise"
-            }
+            "in": "formData",
+            "name": "exerciseImage",
+            "type": "file",
+            "description": "image of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "description of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "repeat_number",
+            "type": "number",
+            "description": "number of repetition of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "rest_time",
+            "type": "number",
+            "description": "the rest time required after the exercise"
           }
         ],
         "responses": {
@@ -154,15 +173,39 @@
       },
       "put": {
         "tags": ["Exercises"],
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "description": "Exercise object with new values",
-            "schema": {
-              "$ref": "#/definitions/exercise"
-            }
+            "in": "formData",
+            "name": "exerciseImage",
+            "type": "file",
+            "description": "image of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "description of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "repeat_number",
+            "type": "number",
+            "description": "number of repetition of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "rest_time",
+            "type": "number",
+            "description": "the rest time required after the exercise"
           }
         ],
         "summary": "Update the exercise with the given ID",

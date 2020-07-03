@@ -17,10 +17,6 @@
       "description": "CRUD operation for user"
     },
     {
-      "name": "Pictures",
-      "description": "CRUD operation for picture"
-    },
-    {
       "name": "Videos",
       "description": "CRUD operation for video"
     },
@@ -57,19 +53,7 @@
           "type": "string",
           "format": "email"
         },
-        "password": {
-          "type": "string",
-          "format": "password"
-        }
-      }
-    },
-    "picture": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "path": {
+        "userImage": {
           "type": "string"
         }
       }
@@ -103,6 +87,9 @@
         },
         "isSent": {
           "type": "boolean"
+        },
+        "newsletterImage": {
+          "type": "string"
         }
       }
     },
@@ -126,7 +113,7 @@
         "localisation": {
           "type": "string"
         },
-        "picture": {
+        "eventImage": {
           "type": "object"
         }
       }
@@ -165,14 +152,39 @@
           "Users"
         ],
         "summary": "Create a new user in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "description": "User that we want to create",
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
+            "in": "formData",
+            "name": "userImage",
+            "type": "file",
+            "description": "The image to upload."
+          },
+          {
+            "in": "formData",
+            "name": "firstname",
+            "type": "string",
+            "description": "firstname of the user"
+          },
+          {
+            "in": "formData",
+            "name": "lastname",
+            "type": "string",
+            "description": "lastname of the user"
+          },
+          {
+            "in": "formData",
+            "name": "email",
+            "type": "string",
+            "description": "email of the user"
+          },
+          {
+            "in": "formData",
+            "name": "password",
+            "type": "string",
+            "description": "password of the user"
           }
         ],
         "responses": {
@@ -232,15 +244,33 @@
         "tags": [
           "Users"
         ],
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "description": "User with a new values of properties",
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
+            "in": "formData",
+            "name": "userImage",
+            "type": "file",
+            "description": "The image to upload."
+          },
+          {
+            "in": "formData",
+            "name": "firstname",
+            "type": "string",
+            "description": "firstname of the user"
+          },
+          {
+            "in": "formData",
+            "name": "lastname",
+            "type": "string",
+            "description": "lastname of the user"
+          },
+          {
+            "in": "formData",
+            "name": "email",
+            "type": "string",
+            "description": "email of the user"
           }
         ],
         "summary": "Update user with given ID",
@@ -322,135 +352,6 @@
           },
           "400": {
             "description": "Bad Credentials : your email or your password is not correct"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/pictures": {
-      "parameters": [
-        {
-          "name": "Authorization",
-          "in": "header",
-          "description": "Authorization header",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["Pictures"],
-        "summary": "Get all the pictures of the database",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/picture"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "post": {
-        "tags": ["Pictures"],
-        "summary": "Create a new picture in the database",
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "description": "Picture that we want to create",
-          "schema": {
-            "$ref": "#/definitions/picture"
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "Picture created sucessfully",
-            "schema": {
-              "$ref": "#/definitions/picture"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/pictures/{id}": {
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the picture that we want to retrieve",
-          "type": "integer"
-        },
-        {
-          "name": "Authorization",
-          "in": "header",
-          "description": "Authorization header",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["Pictures"],
-        "summary": "Get picture with the given ID",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/picture"
-            }
-          },
-          "404": {
-            "description": "Picture not found."
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "put": {
-        "tags": ["Pictures"],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "description": "Picture objects with new values",
-            "schema": {
-              "$ref": "#/definitions/picture"
-            }
-          }
-        ],
-        "summary": "Update the picture with the given ID",
-        "responses": {
-          "200": {
-            "description": "Picture updated sucessfully",
-            "schema": {
-              "$ref": "#/definitions/picture"
-            }
-          },
-          "404": {
-            "description": "Picture not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["Pictures"],
-        "summary": "Delete picture with the given ID",
-        "responses": {
-          "200": {
-            "description": "Picture {id} was deleted sucessfully."
-          },
-          "404": {
-            "description": "Picture not found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -620,14 +521,33 @@
       "post": {
         "tags": ["Newsletters"],
         "summary": "Create a newsletter in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
+            "in": "formData",
+            "name": "newsletterImage",
+            "type": "file",
+            "description": "image of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "title",
+            "type": "string",
+            "description": "the title of the newsletter"
+          },
+          {
+            "in": "formData",
             "name": "body",
-            "description": "Newsletter that we want to create",
-            "schema": {
-              "$ref": "#/definitions/newsletter"
-            }
+            "type": "string",
+            "description": "The body text of the newsletter"
           }
         ],
         "responses": {
@@ -677,15 +597,39 @@
       },
       "put": {
         "tags": ["Newsletters"],
+        "produces": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
+            "in": "formData",
+            "name": "newsletterImage",
+            "type": "file",
+            "description": "image of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "title",
+            "type": "string",
+            "description": "the title of the newsletter"
+          },
+          {
+            "in": "formData",
             "name": "body",
-            "required": true,
-            "description": "Newsletter object with new values",
-            "schema": {
-              "$ref": "#/definitions/newsletter"
-            }
+            "type": "string",
+            "description": "The body text of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "isSent",
+            "type": "boolean",
+            "description": "boolean that states id the newsletter has been sent or not"
           }
         ],
         "summary": "Update the newsletter with the given ID",
@@ -750,14 +694,39 @@
       "post": {
         "tags": ["Events"],
         "summary": "Create an event in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
+            "in": "formData",
+            "name": "eventImage",
+            "type": "file",
+            "description": "image of the event"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the event"
+          },
+          {
+            "in": "formData",
             "name": "body",
-            "description": "Event that we want to create",
-            "schema": {
-              "$ref": "#/definitions/event"
-            }
+            "type": "string",
+            "description": "the description of the event"
+          },
+          {
+            "in": "formData",
+            "name": "startDate",
+            "type": "string",
+            "description": "the start date of the event"
+          },
+          {
+            "in": "formData",
+            "name": "localisation",
+            "type": "string",
+            "description": "the localisation of the event"
           }
         ],
         "responses": {
@@ -807,15 +776,39 @@
       },
       "put": {
         "tags": ["Events"],
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
+            "in": "formData",
+            "name": "eventImage",
+            "type": "file",
+            "description": "image of the event"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the event"
+          },
+          {
+            "in": "formData",
             "name": "body",
-            "required": true,
-            "description": "Event object with new values",
-            "schema": {
-              "$ref": "#/definitions/event"
-            }
+            "type": "string",
+            "description": "the description of the event",
+          },
+          {
+            "in": "formData",
+            "name": "startDate",
+            "type": "string",
+            "description": "the start date of the event"
+          },
+          {
+            "in": "formData",
+            "name": "localisation",
+            "type": "string",
+            "description": "the localisation of the event"
           }
         ],
         "summary": "Update the event with the given ID",

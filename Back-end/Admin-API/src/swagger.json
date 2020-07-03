@@ -111,17 +111,6 @@
         }
       }
     },
-    "picture": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
-        }
-      }
-    },
     "video": {
       "type": "object",
       "properties": {
@@ -1206,7 +1195,7 @@
             "in": "formData",
             "name": "body",
             "type": "string",
-            "description": "the description of the event",
+            "description": "the description of the event"
           },
           {
             "in": "formData",
