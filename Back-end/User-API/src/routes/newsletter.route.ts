@@ -1,14 +1,16 @@
 import {Router} from "express";
 import NewsletterController from "../controllers/newsletter.controller";
+import { verifyToken } from "../utils/jwt.utils"
+import { upload } from "../utils/multer.utils";
 
 const router = Router();
 const newsletterController = new NewsletterController();
 
 // NEWSLETTER
-router.get('', newsletterController.getNewsletters);
-router.get('/:id', newsletterController.getNewslettersById);
-router.post('', newsletterController.createNewsletter);
-router.put('/:id', newsletterController.updateNewsletter);
-router.delete('/:id', newsletterController.deleteNewsletter);
+router.get('', verifyToken, newsletterController.getNewsletters);
+router.get('/:id',verifyToken, newsletterController.getNewslettersById);
+router.post('', verifyToken, upload.single('newsletterImage'), newsletterController.createNewsletter);
+router.put('/:id', verifyToken, upload.single('newsletterImage'), newsletterController.updateNewsletter);
+router.delete('/:id', verifyToken, newsletterController.deleteNewsletter);
 
 export default router;

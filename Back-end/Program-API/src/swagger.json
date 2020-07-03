@@ -32,7 +32,7 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "integer"
+          "type": "number"
         },
         "name": {
           "type": "string"
@@ -40,29 +40,7 @@
         "description": {
           "type": "string"
         },
-        "pictureId": {
-          "type": "integer"
-        }
-      }
-    },
-    "picture": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
-        }
-      }
-    },
-    "video": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "path": {
+        "programImage": {
           "type": "string"
         }
       }
@@ -84,17 +62,11 @@
           "Programs"
         ],
         "summary": "Get all the programs of the database",
-        "produces": [
-          "application/json"
-        ],
         "responses": {
-          "200" : {
+          "200": {
             "description": "OK",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/program"
-              }
+              "$ref": "#/definitions/program"
             }
           },
           "500": {
@@ -107,14 +79,27 @@
           "Programs"
         ],
         "summary": "Create a new program in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "description": "program that we want to create",
-            "schema": {
-              "$ref": "#/definitions/program"
-            }
+            "in": "formData",
+            "name": "programImage",
+            "description": "the image of the program",
+            "type": "file"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "the name of the program"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "the description of the program"
           }
         ],
         "responses": {
@@ -167,15 +152,27 @@
       },
       "put": {
         "tags": ["Programs"],
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "description": "Program objects with new values",
-            "schema": {
-              "$ref": "#/definitions/program"
-            }
+            "in": "formData",
+            "name": "programImage",
+            "description": "the image of the program",
+            "type": "file"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "the name of the program"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "the description of the program"
           }
         ],
         "summary": "Update the program with the given ID",

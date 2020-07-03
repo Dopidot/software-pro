@@ -34,7 +34,13 @@ export default class EventController {
     createEvent = async function(req: Request, res: Response): Promise<Response> {
         try {
             const { name, body, startDate, localisation } = req.body;
-            const response: QueryResult = await pool.query('INSERT INTO events (name, body, startDate, creationDate, localisation) VALUES ($1, $2, $3, now(), $4)', [name, body, startDate, localisation]);
+            const eventImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
+            let response: QueryResult;
+            if ( eventImage === undefined) {
+                response = await pool.query('INSERT INTO events (name, body, startDate, creationDate, localisation) VALUES ($1, $2, $3, now(), $4)', [name, body, startDate, localisation]);
+            } else {
+                response = await pool.query('INSERT INTO events (name, body, startDate, creationDate, localisation, eventImage) VALUES ($1, $2, $3, now(), $4, $5)', [name, body, startDate, localisation, eventImage]);
+            }
             return res.status(201).json({
                 message: 'Event created sucessfully',
                 body: {
@@ -56,22 +62,32 @@ export default class EventController {
         try {
             const id = parseInt(req.params.id);
             const { name, body, startDate, localisation } = req.body;
-            const response: QueryResult = await pool.query('UPDATE events SET name = $1, body = $2, startDate = $3, localisation = $4 WHERE id = $5', [ name, body, startDate, localisation, id]);
+            const eventImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
+
+            let response: QueryResult;
+            if (eventImage === undefined) {
+                response = await pool.query('UPDATE events SET name = $1, body = $2, startDate = $3, localisation = $4 WHERE id = $5', [ name, body, startDate, localisation, id]);
+            } else {
+                response = await pool.query('UPDATE events SET name = $1, body = $2, startDate = $3, localisation = $4, eventImage = $5 WHERE id = $6', [ name, body, startDate, localisation, eventImage, id]);
+            }
+
             if (response.rowCount !== 0 ) {
                 return res.status(200).json({
                     message: 'Event updated sucessfully',
                     body: {
-                        newsletter: {
+                        event: {
                             name,
                             body,
                             startDate,
-                            localisation
+                            localisation,
+                            eventImage
                         }
                     }
                 });
             } else {
                 return res.status(404).json('Event not found');
             }
+
         } catch (e)  {
             console.log(e);
             return res.status(500).json('Internal Server Error');
