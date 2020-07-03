@@ -28,6 +28,9 @@ dependencies:
   google_maps_flutter: ^0.5.28+1
   location: ^3.0.0
   geocoder: ^0.2.1
+  intl: ^0.15.8
+  datetime_picker_formfield: ^1.0.0
+
 
 
 

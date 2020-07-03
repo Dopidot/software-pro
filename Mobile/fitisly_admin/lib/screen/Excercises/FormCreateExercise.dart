@@ -58,7 +58,7 @@ class CreateExercise extends State<FormCreateExercise>{
         decoration: InputDecoration(
             hintText: "Nom",
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-      validator: validateField,
+      validator: _validateField,
     );
 
 
@@ -66,7 +66,7 @@ class CreateExercise extends State<FormCreateExercise>{
       onSaved: (String val){
         _description = val;
       },
-      validator: validateField,
+      validator: _validateField,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
           hintText: "Description",
@@ -78,7 +78,7 @@ class CreateExercise extends State<FormCreateExercise>{
       onSaved: (String val){
         _reapeat_number = int.parse(val);
       },
-      validator: validateField,
+      validator: _validateField,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
           hintText: "Nombre de répétition",
@@ -90,7 +90,7 @@ class CreateExercise extends State<FormCreateExercise>{
       onSaved: (String val){
         _rest_time = int.parse(val);
       },
-      validator: validateField,
+      validator: _validateField,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
           hintText: "Temps de récupération",
@@ -102,7 +102,7 @@ class CreateExercise extends State<FormCreateExercise>{
       onSaved: (String val){
         _picture = null;
       },
-      validator: validateField,
+      validator: _validateField,
       decoration: InputDecoration(
           hintText: "Description",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
@@ -113,7 +113,7 @@ class CreateExercise extends State<FormCreateExercise>{
       onSaved: (String val){
         _video = null;
       },
-      validator: validateField,
+      validator: _validateField,
       decoration: InputDecoration(
           hintText: "Description",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
@@ -165,10 +165,6 @@ class CreateExercise extends State<FormCreateExercise>{
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-      print("name : $_name" );
-      print("desc : $_description" );
-      print("repe : $_reapeat_number" );
-      print("rest : $_rest_time" );
       Exercise e = Exercise(name:_name,description: _description,repetitionNumber: _reapeat_number,restTime: _rest_time);
 
       _futureCreateExo = services.create(e);
@@ -195,7 +191,7 @@ class CreateExercise extends State<FormCreateExercise>{
   }
 
 
-  String validateField(String value){
+  String _validateField(String value){
     if(value.isEmpty){
       return "Attention votre champs est vide";
     }

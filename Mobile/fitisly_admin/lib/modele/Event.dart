@@ -2,18 +2,18 @@ class Event {
 
   String id;
   String name;
-  String description;
+  String body;
   DateTime startDate;
   DateTime creationDate;
   String localisation;
 
-  Event({this.id, this.name, this.description,this.startDate,this.creationDate,this.localisation});
+  Event({this.id, this.name, this.body,this.startDate,this.creationDate,this.localisation});
 
   factory Event.fromJson(Map<String,dynamic> json){
     return Event(
         id:json['id'],
         name:json['name'],
-        description:json['description'],
+        body:json['body'],
         startDate: json['start_date'],
         creationDate:json['creation_date'],
         localisation:json['localisation']);

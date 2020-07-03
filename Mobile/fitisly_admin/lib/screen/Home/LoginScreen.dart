@@ -20,7 +20,7 @@ class LoginScreenForm extends State<LoginScreen> {
   bool _autoValidate = false;
   String _pw;
   String _email;
-  Future<String> _futureLogin;
+  Future<int> _futureLogin;
   HttpServices services = HttpServices();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -36,6 +36,7 @@ class LoginScreenForm extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         title: Text("Fitisly Admin",style: styleOS),
         centerTitle: true,
@@ -103,20 +104,24 @@ class LoginScreenForm extends State<LoginScreen> {
             onPressed: () async {
               if ( _formKey.currentState.validate()) {
                 _formKey.currentState.save();
-                _futureLogin = services.login(_email, _pw);
+                _futureLogin = services.login(_email, _pw,_scaffoldKey);
 
                 _futureLogin
                     .then((value) {
 
-                  Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-                  return HomeScreenPage();
-                }))
-                  .catchError((onError){
-                    print(_scaffoldKey);
+                  if(value == 200){
+
+                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+                      return HomeScreenPage();
+                    }));
+
+                  }else{
                     displayDialog("Accès refusé", "Aucun compte ne correspond à l'email ou au mot de passe");
-                  });
+
+                  }
                 });
-              } else {
+              }
+              else {
                 setState (() {
                   _autoValidate = true ;
                 });
@@ -124,7 +129,7 @@ class LoginScreenForm extends State<LoginScreen> {
             },
             child:
             Text("Login",
-              textAlign: TextAlign.center)
+                textAlign: TextAlign.center)
         )
     );
     return Center(
@@ -137,8 +142,8 @@ class LoginScreenForm extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Flexible(
-                  child: Padding(child: Image.asset("assets/logo.png"),padding: EdgeInsets.only(top: 5,bottom: 20),),
-              flex:1,
+                child: Padding(child: Image.asset("assets/logo.png"),padding: EdgeInsets.only(top: 5,bottom: 20),),
+                flex:1,
                 fit: FlexFit.loose,
               ),
 
@@ -154,12 +159,12 @@ class LoginScreenForm extends State<LoginScreen> {
                 padding: EdgeInsets.only(top:10, bottom: 5),
                 child: passwordField,
               ),
-                flex:1,
-              fit: FlexFit.loose),
+                  flex:1,
+                  fit: FlexFit.loose),
               Flexible(
-                child: Padding(child: loginButon,
-                padding: EdgeInsets.only(top:5,bottom: 10)),
-              flex: 1)
+                  child: Padding(child: loginButon,
+                      padding: EdgeInsets.only(top:5,bottom: 10)),
+                  flex: 1)
             ],
           ),
         ),
