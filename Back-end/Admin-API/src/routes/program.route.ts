@@ -1,15 +1,16 @@
 import {Router} from "express";
 import ProgramController from "../controllers/programs.controller";
-import { upload } from "../utils/multer.utils";
+import { verifyToken } from "../core/JWT";
+import { upload } from "../core/Multer";
 
 const router = Router();
 const programController = new ProgramController();
 
 //PROGRAMS
-router.get('', programController.getPrograms);
-router.get('/:id', programController.getProgramById);
-router.post('', upload.single('programImage'), programController.createProgram);
-router.put('/:id', upload.single('programImage'), programController.updateProgram);
-router.delete('/:id', programController.deleteProgram);
+router.get('', verifyToken, programController.getPrograms);
+router.get('/:id', verifyToken, programController.getProgramById);
+router.post('', verifyToken, upload.single('programImage'), programController.createProgram);
+router.put('/:id', verifyToken, upload.single('programImage'), programController.updateProgram);
+router.delete('/:id', verifyToken, programController.deleteProgram);
 
 export default router;

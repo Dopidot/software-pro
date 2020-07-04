@@ -1,5 +1,5 @@
-import ProgramModel from "./program.model";
-import UserModel from "./user.model";
+//import ProgramModel from "./program.model";
+//import UserModel from "./user.model";
 
 export default class ExerciseModel{
     name: string;
