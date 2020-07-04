@@ -1,6 +1,7 @@
 import {Request, Response} from "express";
 import {QueryResult} from "pg";
 import {pool} from "../database";
+import EventModel from "../models/event.model";
 
 export default class EventController {
 
@@ -33,23 +34,22 @@ export default class EventController {
 
     createEvent = async function(req: Request, res: Response): Promise<Response> {
         try {
-            const { name, body, startDate, localisation } = req.body;
+            const { name, body, startDate, address, zipCode, city, country } = req.body;
             const eventImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
             let response: QueryResult;
             if ( eventImage === undefined) {
-                response = await pool.query('INSERT INTO events (name, body, startDate, creationDate, localisation) VALUES ($1, $2, $3, now(), $4)', [name, body, startDate, localisation]);
+                response = await pool.query('INSERT INTO events (name, body, startDate, creationDate, address, zipCode, city, country) VALUES ($1, $2, $3, now(), $4, $5, $6, $7)', [name, body, startDate, address, zipCode, city, country]);
             } else {
-                response = await pool.query('INSERT INTO events (name, body, startDate, creationDate, localisation, eventImage) VALUES ($1, $2, $3, now(), $4, $5)', [name, body, startDate, localisation, eventImage]);
+                response = await pool.query('INSERT INTO events (name, body, startDate, creationDate, address, zipCode, city, country, eventImage) VALUES ($1, $2, $3, now(), $4, $5, $6, $7, $8)', [name, body, startDate, address, zipCode, city, country, eventImage]);
             }
+
+            response = await pool.query('SELECT * from events order by id desc limit 1');
+            let event: EventModel = response.rows[0];
             return res.status(201).json({
+
                 message: 'Event created sucessfully',
                 body: {
-                    newsletter: {
-                        name,
-                        body,
-                        startDate,
-                        localisation
-                    }
+                    event: event
                 }
             });
         } catch (e) {
@@ -61,27 +61,23 @@ export default class EventController {
     updateEvent = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
-            const { name, body, startDate, localisation } = req.body;
+            const { name, body, startDate, address, zipCode, city, country } = req.body;
             const eventImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
 
             let response: QueryResult;
             if (eventImage === undefined) {
-                response = await pool.query('UPDATE events SET name = $1, body = $2, startDate = $3, localisation = $4 WHERE id = $5', [ name, body, startDate, localisation, id]);
+                response = await pool.query('UPDATE events SET name = $1, body = $2, startDate = $3, address = $4, zipCode = $5, city = $6, country = $7 WHERE id = $8', [ name, body, startDate, address, zipCode, city, country, id]);
             } else {
-                response = await pool.query('UPDATE events SET name = $1, body = $2, startDate = $3, localisation = $4, eventImage = $5 WHERE id = $6', [ name, body, startDate, localisation, eventImage, id]);
+                response = await pool.query('UPDATE events SET name = $1, body = $2, startDate = $3, address = $4, zipCode = $5, city = $6, country = $7, eventImage = $8 WHERE id = $9', [ name, body, startDate, address, zipCode, city, country, eventImage, id]);
             }
 
             if (response.rowCount !== 0 ) {
+                response = await pool.query('SELECT * FROM events WHERE id = $1', [id]);
+                let event: EventModel = response.rows[0];
                 return res.status(200).json({
                     message: 'Event updated sucessfully',
                     body: {
-                        event: {
-                            name,
-                            body,
-                            startDate,
-                            localisation,
-                            eventImage
-                        }
+                        event: event
                     }
                 });
             } else {
