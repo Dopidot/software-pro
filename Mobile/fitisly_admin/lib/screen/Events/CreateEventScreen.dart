@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/modele/Event.dart';
 import 'package:fitislyadmin/modele/Photo.dart';
 import 'package:fitislyadmin/screen/Events/CreateEventSecondScreen.dart';
@@ -11,21 +10,13 @@ import 'package:intl/intl.dart';
 
 class CreateEventScreen extends StatefulWidget {
 
-
   @override
   State<StatefulWidget> createState() {
-
-
-    // TODO: implement createState
     return _CreateEventScreen();
   }
-
 }
 
 class _CreateEventScreen extends State<CreateEventScreen> {
-
-
-
 
   String _name;
   String _body;
@@ -37,8 +28,6 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   File _image;
   final _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
-
-
 
 
 
@@ -174,7 +163,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
             child: photoField
 
           ),
-          
+
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: creationButton,
@@ -190,7 +179,6 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       _formKey.currentState.save();
 
       Event event = Event(body: _body,creationDate: DateTime.now(),name: _name,startDate: _startDate);
-
       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
         return CreateEventSecondScreen(event: event);
       })
@@ -210,6 +198,5 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     }
     return null;
   }
-
 }
 

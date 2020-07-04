@@ -9,7 +9,6 @@ class CreateNewsletter extends StatefulWidget{
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
    return _CreateNewsletter();
   }
 }
@@ -84,8 +83,6 @@ class _CreateNewsletter extends State<CreateNewsletter>{
           });
 
           Navigator.pop(context,listNewsletter);
-
-
         }else{
           setState (() {
             _autoValidate = true;

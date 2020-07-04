@@ -167,8 +167,7 @@ class HttpServices {
       body: jsonEncode(<String, String>{
         "name": event.name,
         "body": event.body,
-        "startDate": DateFormat("yyyy-MM-dd").format(event.startDate),
-        "creationDate": DateFormat("yyyy-MM-dd").format(DateTime.now()),
+        "startDate": event.startDate.toString(),
         "localisation": event.localisation,
         "picture": "null"
       }),

@@ -149,6 +149,7 @@ return Scaffold(
 
      // Event event = Event(body: _body,creationDate: DateTime.now(),name: _name);
 
+
      Event e = widget.event;
       e.localisation = await tansformAddressToLocalistion();
 
@@ -178,10 +179,16 @@ return Scaffold(
 
   Future<String> tansformAddressToLocalistion() async {
 
-    var completeAddress = _address + _zipCode + _city + _country;
+    var completeAddress = "$_address ,$_zipCode $_city ,$_country";
+
     //Address address = Address(addressLine: _address,postalCode: _zipCode,countryName: _country, locality: _city);
     var address = await Geocoder.local.findAddressesFromQuery(completeAddress);
-    var localisation = address.first.coordinates.latitude.toString() + " - " + address.first.coordinates.longitude.toString();
+    var localisation = address.first.coordinates.latitude.toString() + " : " + address.first.coordinates.longitude.toString();
+    var a = Coordinates(address.first.coordinates.latitude, address.first.coordinates.longitude);
+    await Geocoder.local.findAddressesFromCoordinates(a).then(
+            (value) => {
+    print(value.first.addressLine)
+    });
 
     return localisation;
   }

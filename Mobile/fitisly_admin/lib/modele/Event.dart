@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Event {
 
   String id;
@@ -14,8 +16,8 @@ class Event {
         id:json['id'],
         name:json['name'],
         body:json['body'],
-        startDate: json['start_date'],
-        creationDate:json['creation_date'],
+        startDate: DateTime.parse(json['startdate']),
+        creationDate:DateTime.parse(json['creationdate']),
         localisation:json['localisation']);
   }
 }

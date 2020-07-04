@@ -3,6 +3,7 @@ import 'package:fitislyadmin/modele/Event.dart';
 import 'package:fitislyadmin/screen/Events/CreateEventScreen.dart';
 import 'package:fitislyadmin/screen/Events/DetailEventScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class HomeEventScreen extends StatefulWidget {
 
@@ -16,16 +17,16 @@ class HomeEventScreen extends StatefulWidget {
 }
 
 class _HomeEventScreen extends State<HomeEventScreen> {
+
+  @override
+  void initState(){
+    print("jean");
+
+  }
+
   HttpServices services = HttpServices();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   List<Event> events;
-
-
-  @override
-  void initState() {
-
-    test();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +78,17 @@ class _HomeEventScreen extends State<HomeEventScreen> {
                   builder: (context) {
                     return DetailEventScreen(event: events[index]);
                   })
-              );
+              )
+                  .then((value) {
+                setState(() {
+                   services.fetchEvents().then((value) => events = value);
+
+                });
+               // _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Évènement modifié ! ")));
+
+              }).catchError((error) {
+                print(error);
+              });
 
             },
 
@@ -86,8 +97,7 @@ class _HomeEventScreen extends State<HomeEventScreen> {
               children: <Widget>[
                 Text(events[index].body),
                 Text(events[index].localisation),
-                Text(events[index].creationDate.toString()),
-
+                Text(DateFormat("yyyy-MM-dd").format(events[index].startDate))
               ],
             ),
 
@@ -95,11 +105,6 @@ class _HomeEventScreen extends State<HomeEventScreen> {
         ),
       );
     });
-  }
-
-  test () async {
-    events = await services.fetchEvents();
-
   }
 }
 
