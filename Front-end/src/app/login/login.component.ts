@@ -33,4 +33,9 @@ export class LoginComponent implements OnInit {
             this.errorMessage = 'Adresse email ou mot de passe incorrect.';
         });
     }
+
+    setLanguage(num: number): void {
+        let language = num === 1 ? 'fr' : 'en';
+        localStorage.setItem('language', language);
+    }
 }
