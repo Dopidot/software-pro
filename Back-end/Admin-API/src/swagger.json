@@ -25,10 +25,6 @@
       "description": "CRUD operation for Programs"
     },
     {
-      "name": "Pictures",
-      "description": "CRUD operation for Pictures"
-    },
-    {
       "name": "Videos",
       "description": "CRUD operation for Videos"
     },
@@ -163,11 +159,20 @@
           "type": "string",
           "format": "date"
         },
-        "localisation": {
-          "type": "string"
-        },
         "eventImage": {
           "type": "object"
+        },
+        "address": {
+          "type": "string"
+        },
+        "zipCode":  {
+          "type": "integer"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
         }
       }
     }
@@ -1123,9 +1128,27 @@
           },
           {
             "in": "formData",
-            "name": "localisation",
+            "name": "address",
             "type": "string",
-            "description": "the localisation of the event"
+            "description": "the address of the event"
+          },
+          {
+            "in": "formData",
+            "name": "zipCode",
+            "type": "integer",
+            "description": "the zipcode"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "string",
+            "description": "the city of the event"
+          },
+          {
+            "in": "formData",
+            "name": "country",
+            "type": "string",
+            "description": "the country  of the event"
           }
         ],
         "responses": {
@@ -1205,9 +1228,27 @@
           },
           {
             "in": "formData",
-            "name": "localisation",
+            "name": "address",
             "type": "string",
-            "description": "the localisation of the event"
+            "description": "the address of the event"
+          },
+          {
+            "in": "formData",
+            "name": "zipCode",
+            "type": "integer",
+            "description": "the zipcode of the event"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "string",
+            "description": "the city of the event"
+          },
+          {
+            "in": "formData",
+            "name": "country",
+            "type": "string",
+            "description": "the country of the event"
           }
         ],
         "summary": "Update the event with the given ID",
