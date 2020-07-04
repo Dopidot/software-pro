@@ -6,120 +6,149 @@ import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'ngx-header',
-  styleUrls: ['./header.component.scss'],
-  templateUrl: './header.component.html',
+    selector: 'ngx-header',
+    styleUrls: ['./header.component.scss'],
+    templateUrl: './header.component.html',
 })
 export class HeaderComponent implements OnInit, OnDestroy {
 
-  private destroy$: Subject<void> = new Subject<void>();
-  userPictureOnly: boolean = false;
-  user: any;
+    private destroy$: Subject<void> = new Subject<void>();
+    userPictureOnly: boolean = false;
+    user: any;
 
-  themes = [
-    {
-      value: 'default',
-      name: 'Light',
-    },
-    {
-      value: 'dark',
-      name: 'Dark',
-    },
-    {
-      value: 'cosmic',
-      name: 'Cosmic',
-    },
-    {
-      value: 'corporate',
-      name: 'Corporate',
-    },
-  ];
+    themes = [
+        {
+            value: 'default',
+            name: 'Light',
+        },
+        {
+            value: 'dark',
+            name: 'Dark',
+        },
+        {
+            value: 'cosmic',
+            name: 'Cosmic',
+        },
+        {
+            value: 'corporate',
+            name: 'Corporate',
+        },
+    ];
 
-  currentTheme = 'default';
+    currentTheme = 'default';
 
-  userMenu = [ /*{ title: 'Profile' },*/ { title: 'Log out' } ];
+    userMenu = [ /*{ title: 'Profile' },*/ { title: 'Log out', action: 1 }];
 
-  constructor(private sidebarService: NbSidebarService,
-              private menuService: NbMenuService,
-              private themeService: NbThemeService,
-              private userService: UserData,
-              private layoutService: LayoutService,
-              private breakpointService: NbMediaBreakpointsService,
-              private router: Router,
-              ) {
-  }
-
-  ngOnInit() {
-    this.currentTheme = this.themeService.currentTheme;
-
-    let userInfo = localStorage.getItem('userInfo');
-
-    if (userInfo == null)
-    {
-        this.logout();
-        return;
+    constructor(private sidebarService: NbSidebarService,
+        private menuService: NbMenuService,
+        private themeService: NbThemeService,
+        private userService: UserData,
+        private layoutService: LayoutService,
+        private breakpointService: NbMediaBreakpointsService,
+        private router: Router,
+        public translate: TranslateService,
+    ) {
+        translate.addLangs(['en', 'fr']);
+        this.loadLanguage();
     }
 
-    userInfo = JSON.parse(userInfo);
+    ngOnInit() {
+        this.currentTheme = this.themeService.currentTheme;
 
-    this.user = {
-        'name' : userInfo['firstname'] + ' ' + userInfo['lastname'],
-        'picture' : 'assets/images/nick.png'
-    };
+        let userInfo = localStorage.getItem('userInfo');
 
-    /*this.userService.getUsers()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((users: any) => this.user = users.nick);*/
-
-    const { xl } = this.breakpointService.getBreakpointsMap();
-    this.themeService.onMediaQueryChange()
-      .pipe(
-        map(([, currentBreakpoint]) => currentBreakpoint.width < xl),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
-
-    this.themeService.onThemeChange()
-      .pipe(
-        map(({ name }) => name),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(themeName => this.currentTheme = themeName);
-
-      this.menuService.onItemClick().subscribe((event) => {
-        if (event.item.title === 'Log out') {
-          this.logout();
+        if (userInfo == null) {
+            this.logout();
+            return;
         }
-      });
-  }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+        userInfo = JSON.parse(userInfo);
 
-  changeTheme(themeName: string) {
-    this.themeService.changeTheme(themeName);
-  }
+        this.user = {
+            'name': userInfo['firstname'] + ' ' + userInfo['lastname'],
+            'picture': 'assets/images/nick.png'
+        };
 
-  toggleSidebar(): boolean {
-    this.sidebarService.toggle(true, 'menu-sidebar');
-    this.layoutService.changeLayoutSize();
+        /*this.userService.getUsers()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((users: any) => this.user = users.nick);*/
 
-    return false;
-  }
+        const { xl } = this.breakpointService.getBreakpointsMap();
+        this.themeService.onMediaQueryChange()
+            .pipe(
+                map(([, currentBreakpoint]) => currentBreakpoint.width < xl),
+                takeUntil(this.destroy$),
+            )
+            .subscribe((isLessThanXl: boolean) => this.userPictureOnly = isLessThanXl);
 
-  navigateHome() {
-    this.menuService.navigateHome();
-    return false;
-  }
+        this.themeService.onThemeChange()
+            .pipe(
+                map(({ name }) => name),
+                takeUntil(this.destroy$),
+            )
+            .subscribe(themeName => this.currentTheme = themeName);
 
-  logout(): void {
-      localStorage.removeItem('token');
-      localStorage.removeItem('userInfo');
-      
-      this.router.navigate(['/login']);
-  }
+        this.menuService.onItemClick().subscribe((event) => {
+            if (event.item['action'] === 1) {
+                this.logout();
+            }
+        });
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
+    changeTheme(themeName: string) {
+        this.themeService.changeTheme(themeName);
+    }
+
+    toggleSidebar(): boolean {
+        this.sidebarService.toggle(true, 'menu-sidebar');
+        this.layoutService.changeLayoutSize();
+
+        return false;
+    }
+
+    navigateHome() {
+        this.menuService.navigateHome();
+        return false;
+    }
+
+    logout(): void {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userInfo');
+
+        this.router.navigate(['/login']);
+    }
+
+    loadLanguage(): void {
+        let lang = localStorage.getItem('language');
+
+        if (lang != null) {
+            this.translate.use(lang);
+        }
+        else {
+            localStorage.setItem('language', 'fr');
+            this.translate.use('fr');
+        }
+
+        this.translate.get('NAVBAR_LOGOUT').subscribe((res: string) => {
+            this.userMenu[0] = {
+                title: res,
+                action: 1
+            };
+        });
+    }
+
+    setLanguage(num: number): void {
+        let language = num === 1 ? 'fr' : 'en';
+
+        localStorage.setItem('language', language);
+        window.location.reload();
+    }
 }

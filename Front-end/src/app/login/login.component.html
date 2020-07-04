@@ -13,21 +13,21 @@
 
                 <nb-card style="margin: auto; padding: 20px 50px; text-align: center;">
                     <nb-card-header>
-                        <h5>CONNEXION</h5>
+                        <h5>{{ 'LOGIN_CONNEXION' | translate }}</h5>
                         <span class="language" (click)="setLanguage(1)">FR</span>|<span class="language" (click)="setLanguage(2)">EN</span>
                     </nb-card-header>
                     <nb-card-body style="text-align: left;">
                         <div class="form-group">
-                            <label for="email" class="label">Email</label>
-                            <input type="text" nbInput fullWidth id="email" [(ngModel)]="user.email" placeholder="Email">
+                            <label for="email" class="label">{{ 'LOGIN_MAIL' | translate }}</label>
+                            <input type="text" nbInput fullWidth id="email" [(ngModel)]="user.email" placeholder="{{ 'LOGIN_MAIL' | translate }}">
                         </div>
                         <div class="form-group">
-                            <label for="password" class="label">Mot de passe</label>
-                            <input type="password" nbInput fullWidth id="password" [(ngModel)]="user.password" placeholder="Mot de passe">
+                            <label for="password" class="label">{{ 'LOGIN_PASSWORD' | translate }}</label>
+                            <input type="password" nbInput fullWidth id="password" [(ngModel)]="user.password" placeholder="{{ 'LOGIN_PASSWORD' | translate }}">
                         </div>
                     </nb-card-body>
                     <nb-card-footer>
-                        <button type="submit" nbButton status="success" (click)="login()">Se Connecter</button>
+                        <button type="submit" nbButton status="success" (click)="login()">{{ 'LOGIN_SUBMIT' | translate }}</button>
                     </nb-card-footer>
                 </nb-card>
                 

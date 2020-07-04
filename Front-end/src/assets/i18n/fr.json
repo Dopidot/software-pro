@@ -1,0 +1,12 @@
+{
+    "LOGIN_CONNEXION": "CONNEXION",
+    "LOGIN_MAIL": "Email",
+    "LOGIN_PASSWORD": "Mot de passe",
+    "LOGIN_SUBMIT": "Se Connecter",
+    "LOGIN_INVALID": "Adresse email ou mot de passe incorrect.",
+
+    "NAVBAR_LOGOUT": "Se déconnecter",
+    "FOOTER_RIGHTS": "Tous droits réservés.",
+
+    "HOME_NEXT_EVENTS": "Evènements à venir"
+}

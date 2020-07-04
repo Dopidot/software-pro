@@ -87,6 +87,14 @@ import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpHeadersInterceptor } from './services/httpHeadersInterceptor';
 
+import { registerLocaleData } from '@angular/common'; 
+import localeFr from '@angular/common/locales/fr';  
+import { DynamicLocaleId } from './services/dynamicLocaleId';
+
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient } from '@angular/common/http';
+
 const components = [
     ChartjsBarComponent,
     ChartjsLineComponent,
@@ -111,6 +119,15 @@ const components = [
     ChartjsBarComponent,
     ChartsComponent*/
   ];
+
+  
+registerLocaleData(localeFr, 'fr');
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+    return new TranslateHttpLoader(http);
+ }
+
 
 @NgModule({
   declarations: [AppComponent, HomeComponent, EventsComponent, ExercisesComponent, ProgramsComponent, CoachsComponent, MembersComponent, InfosComponent, NotificationsComponent, LoginComponent/*, ...routedComponents, ...components*/],
@@ -153,13 +170,24 @@ const components = [
     TablesRoutingModule,
     Ng2SmartTableModule,
     FormsModule,
+    TranslateModule.forRoot({
+        loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
+        }
+    })
   ],
   bootstrap: [AppComponent/*, ...routedComponents, ...components*/],
   providers: [{
     provide: HTTP_INTERCEPTORS,
     useClass: HttpHeadersInterceptor,
     multi: true,
-  }],
+  },
+  {provide: localeFr, useClass: DynamicLocaleId }],
 })
+
+
+ 
 export class AppModule {
 }
