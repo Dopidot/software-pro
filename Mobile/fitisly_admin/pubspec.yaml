@@ -30,6 +30,9 @@ dependencies:
   geocoder: ^0.2.1
   intl: ^0.15.8
   datetime_picker_formfield: ^1.0.0
+  dio: ^3.0.9
+  mime: ^0.9.6+3
+
 
 
 

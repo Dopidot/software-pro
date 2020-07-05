@@ -32,23 +32,23 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
   Widget build(BuildContext context) {
 
 
-return Scaffold(
-  appBar: AppBar(title: Text("Nouvel évènement"),
-  centerTitle: true),
-      body: Container(
-          padding: EdgeInsets.all(20.0),
-          child: SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  Text("Le lieu de l'évènement"),
-                  Form(
-                      autovalidate: _autoValidate,
-                      key: _formKey,
-                      child: buildForm()),
-                ],
-              ))
-      )
-);
+    return Scaffold(
+        appBar: AppBar(title: Text("Nouvel évènement"),
+            centerTitle: true),
+        body: Container(
+            padding: EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Text("Le lieu de l'évènement"),
+                    Form(
+                        autovalidate: _autoValidate,
+                        key: _formKey,
+                        child: buildForm()),
+                  ],
+                ))
+        )
+    );
   }
 
 
@@ -143,17 +143,18 @@ return Scaffold(
 
   }
 
-   _validateInput() async {
+  _validateInput() async {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-     // Event event = Event(body: _body,creationDate: DateTime.now(),name: _name);
+      Event e = widget.event;
+      e.address = _address;
+      e.zipCode = _zipCode;
 
+      e.city = _city;
+      e.country = _country;
 
-     Event e = widget.event;
-      e.localisation = await tansformAddressToLocalistion();
-
-       _futureCreateEvent = services.createEvent(e);
+      _futureCreateEvent = services.createEvent(e);
 
       _futureCreateEvent.then((value) {
         // Navigator.pop(context);
@@ -187,8 +188,8 @@ return Scaffold(
     var a = Coordinates(address.first.coordinates.latitude, address.first.coordinates.longitude);
     await Geocoder.local.findAddressesFromCoordinates(a).then(
             (value) => {
-    print(value.first.addressLine)
-    });
+          print(value.first.addressLine)
+        });
 
     return localisation;
   }

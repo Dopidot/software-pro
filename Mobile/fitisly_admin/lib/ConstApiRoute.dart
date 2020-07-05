@@ -61,7 +61,7 @@ class ConstApiRoute{
   static const getAllEvents = baseUrl + "events";
   static const getEventById = baseUrl + "events/";
   static const updateEvent = baseUrl + "events/";
-  static const deleteEventById = baseUrl + "events";
+  static const deleteEventById = baseUrl + "events/";
 
 
 }

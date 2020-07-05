@@ -1,16 +1,20 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:fitislyadmin/ConstApiRoute.dart';
 import 'package:fitislyadmin/modele/Event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fitislyadmin/modele/Exercise.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as Storage;
 import 'package:intl/intl.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
+
 
 class HttpServices {
 
-  final storage = FlutterSecureStorage();
+  final storage = Storage.FlutterSecureStorage();
 
   /* ------------------------ Début Login -----------------------------*/
 
@@ -68,7 +72,6 @@ class HttpServices {
 
 
 /* ------------------------ Début Exercice ------------------------------- */
-
 
   Future<String> create(Exercise e) async {
     String token = await getToken();
@@ -129,6 +132,38 @@ class HttpServices {
 
 
   Future<bool> createEvent(Event event) async {
+
+    Dio dio = Dio();
+
+    String token = await getToken();
+
+    Map<String, String> headers = {
+      "Content-Type": "multipart/form-data",
+      "Authorization": "Baerer " + token,
+    };
+    final mimeTypeData = lookupMimeType(event.eventImage.path, headerBytes: [0xFF, 0xD8]).split('/');
+
+    var formData = FormData.fromMap({
+      'name': event.name,
+      'body': event.body,
+      'startDate': DateFormat("yyyy-MM-dd").format(event.startDate),
+      'creationDate': DateFormat("yyyy-MM-dd").format(DateTime.now()),
+      'address': event.address,
+      'zipCode': event.zipCode,
+      'city': event.city,
+      'country': event.country,
+      "eventImage": await MultipartFile.fromFile(event.eventImage.path,
+          filename: "eventImage-${event.id}.jpg",
+      contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
+    });
+
+    var response = await dio.post(ConstApiRoute.createEvent, data:formData,options: Options(headers: headers));
+
+    return response.statusCode == 201;
+  }
+
+
+  Future<bool> deleteEvent(String id) async {
     String token = await getToken();
 
     Map<String, String> headers = {
@@ -136,54 +171,23 @@ class HttpServices {
       "Authorization": "Baerer " + token,
     };
 
-
-    final http.Response response = await http.post(ConstApiRoute.createEvent,
-      headers: headers,
-      body: jsonEncode(<String, String>{
-        "name": event.name,
-        "body": event.body,
-        "startDate": DateFormat("yyyy-MM-dd").format(event.startDate),
-        "creationDate": DateFormat("yyyy-MM-dd").format(DateTime.now()),
-        "localisation": event.localisation,
-        "picture": "null"
-      }),
-    );
-
-    return response.statusCode == 201;
+    var url = ConstApiRoute.deleteEventById + id;
+    final http.Response response = await http.delete(url, headers: headers);
   }
-
 
   Future<bool> updateEvent(Event event) async {
     String token = await getToken();
 
     Map<String, String> headers = {
-      "Content-Type": "application/json",
+      "Content-Type": "multipart/form-data",
       "Authorization": "Baerer " + token,
     };
 
     var url = ConstApiRoute.updateEvent + event.id;
     final http.Response response = await http.put(url,
       headers: headers,
-      body: jsonEncode(<String, String>{
-        "name": event.name,
-        "body": event.body,
-        "startDate": event.startDate.toString(),
-        "localisation": event.localisation,
-        "picture": "null"
-      }),
+      body: jsonEncode(event.toJson()),
     );
-
-    Future<bool> deleteEvent(String id) async {
-      String token = await getToken();
-
-      Map<String, String> headers = {
-        "Content-Type": "application/json",
-        "Authorization": "Baerer " + token,
-      };
-
-      var url = ConstApiRoute.deleteEventById + id;
-      final http.Response response = await http.delete(url, headers: headers);
-    }
 
     return response.statusCode == 200;
   }
@@ -212,7 +216,7 @@ class HttpServices {
 
   }
 
-  Future<List<Event>> fetchEvents() async{
+  Future<List<Event>> fetchEvents() async {
 
     String token = await getToken();
 
@@ -237,9 +241,7 @@ class HttpServices {
     final parsed = json.decode(responseBody);
     return parsed
         .map<Event>((json) => Event.fromJson(json)).toList();
+
   }
-  
-  
-  
 
 }

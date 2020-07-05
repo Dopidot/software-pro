@@ -90,8 +90,8 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       onShowPicker: (context, currentValue) {
         return showDatePicker(
             context: context,
-            firstDate: DateTime(1900),
-            initialDate: currentValue ?? DateTime.now(),
+            firstDate: DateTime.now(),
+            initialDate: DateTime.now(),
             lastDate: DateTime(2100));
       },
       format: format,
@@ -177,8 +177,8 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   void _validateInput() {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
-
-      Event event = Event(body: _body,creationDate: DateTime.now(),name: _name,startDate: _startDate);
+      print("Path: ${_image.path.split("/").last}");
+      Event event = Event(body: _body,creationDate: DateTime.now(),name: _name,startDate: _startDate,eventImage: _image);
       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
         return CreateEventSecondScreen(event: event);
       })

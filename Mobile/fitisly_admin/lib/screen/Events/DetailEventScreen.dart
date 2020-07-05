@@ -101,17 +101,19 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     );
 
     final startDateField = DateTimeField(
-      controller: TextEditingController(text: DateFormat("yyyy-MM-dd").format(event.startDate)),
 
       onSaved: (DateTime val){
-        _startDate = val;
+
+          _startDate = val;
+
       },
       keyboardType: TextInputType.datetime,
+      initialValue: event.startDate,
       onShowPicker: (context, currentValue) {
         return showDatePicker(
             context: context,
-            firstDate: DateTime(1900),
-            initialDate: currentValue ?? DateTime.now(),
+            initialDate: event.startDate,
+            firstDate: DateTime.now(),
             lastDate: DateTime(2100));
       },
       format: format,
@@ -122,8 +124,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     );
 
     final address = TextFormField(
-      controller: TextEditingController(text: event.localisation),
-
+      initialValue: event.address,
       onSaved: (String val){
         _address = val;
       },
@@ -136,6 +137,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     );
 
     final zipCode = TextFormField(
+      initialValue:  event.zipCode.toString(),
       onSaved: (String val){
         _zipCode = val;
       },
@@ -147,6 +149,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     );
 
     final city = TextFormField(
+      initialValue: event.city,
       onSaved: (String val){
         _city = val;
       },
@@ -158,7 +161,8 @@ class _DetailEventScreen extends State<DetailEventScreen> {
 
     );
 
-    final countrie = TextFormField(
+    final country = TextFormField(
+      initialValue: event.country,
       onSaved: (String val){
         _country = val;
       },
@@ -255,7 +259,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: countrie,
+            child: country,
           ),
           Padding(
               padding: const EdgeInsets.all(8.0),
@@ -288,14 +292,16 @@ class _DetailEventScreen extends State<DetailEventScreen> {
       e.body = _body;
       e.name = _name;
       e.startDate = _startDate;
-
+      e.address = _address;
+      e.zipCode = _zipCode;
+      e.city = _city;
+      e.country = _country;
 
       var futureUpdateEvent = services.updateEvent(e);
       futureUpdateEvent.then((value) {
+        print("zip code: $_zipCode");
         Navigator.pop(context);
-
       });
-
 
     } else {
       setState (() {
@@ -312,21 +318,6 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     return null;
   }
 }
-
-
-
-Future<Address> latToAdress(Event e) async {
-  var lat = e.localisation.split(":")[0];
-  var lng = e.localisation.split(":")[1];
-  Coordinates c = Coordinates(double.parse(lat),double.parse(lng));
-  var address = await Geocoder.local.findAddressesFromCoordinates(c);
-
-
-return address.first;
-
-}
-
-
 
 /*
 void _goToTheLake() async {
