@@ -593,7 +593,7 @@
           {
             "in": "formData",
             "name": "zipCode",
-            "type": "integer",
+            "type": "string",
             "description": "the zipcode"
           },
           {
@@ -693,7 +693,7 @@
           {
             "in": "formData",
             "name": "zipCode",
-            "type": "integer",
+            "type": "string",
             "description": "the zipcode of the event"
           },
           {
