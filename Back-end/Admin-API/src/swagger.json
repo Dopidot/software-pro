@@ -25,10 +25,6 @@
       "description": "CRUD operation for Programs"
     },
     {
-      "name": "Videos",
-      "description": "CRUD operation for Videos"
-    },
-    {
       "name": "Newsletters",
       "description": "CRUD operation for Newsletters"
     },
@@ -84,9 +80,6 @@
         },
         "exerciseImage": {
           "type": "number"
-        },
-        "videoId": {
-          "type": "number"
         }
       }
     },
@@ -103,17 +96,6 @@
           "type": "string"
         },
         "programImage": {
-          "type": "string"
-        }
-      }
-    },
-    "video": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "path": {
           "type": "string"
         }
       }
@@ -166,7 +148,7 @@
           "type": "string"
         },
         "zipCode":  {
-          "type": "integer"
+          "type": "string"
         },
         "city": {
           "type": "string"
@@ -410,138 +392,6 @@
           },
           "400": {
             "description": "Bad Credentials : your email or your password is not correct"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/videos": {
-      "parameters": [
-        {
-          "name": "Authorization",
-          "in": "header",
-          "description": "Authorization header",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["Videos"],
-        "summary": "Get all the videos of the database",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "post": {
-        "tags": ["Videos"],
-        "summary": "Create a new video in the database",
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "description": "Video that we want to create",
-          "schema": {
-            "$ref": "#/definitions/video"
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "Video created sucessfully",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          },
-          "404": {
-            "description": "Video not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/videos/{id}": {
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the video that we want to retrieve",
-          "type": "integer"
-        },
-        {
-          "name": "Authorization",
-          "in": "header",
-          "description": "Authorization header",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["Videos"],
-        "summary": "Get video with the given ID",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          },
-          "404": {
-            "description": "Video not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "put": {
-        "tags": ["Videos"],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "description": "Video objects with new values",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          }
-        ],
-        "summary": "Update the video with the given ID",
-        "responses": {
-          "200": {
-            "description": "Video updated sucessfully",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          },
-          "404": {
-            "description": "Video not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["Videos"],
-        "summary": "Delete video with the given ID",
-        "responses": {
-          "200": {
-            "description": "Video {id} was deleted sucessfully."
-          },
-          "404": {
-            "description": "Video not found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -1135,7 +985,7 @@
           {
             "in": "formData",
             "name": "zipCode",
-            "type": "integer",
+            "type": "string",
             "description": "the zipcode"
           },
           {
@@ -1235,7 +1085,7 @@
           {
             "in": "formData",
             "name": "zipCode",
-            "type": "integer",
+            "type": "string",
             "description": "the zipcode of the event"
           },
           {

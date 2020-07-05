@@ -4,12 +4,12 @@ export default class EventModel {
     startDate: Date;
     creationDate: Date;
     address: string;
-    zipCode: number;
+    zipcode: string;
     city: string;
     country: string;
     eventImage: string;
 
-    constructor(name: string, body: string, startDate: Date, creationDate: Date, address: string, zipCode: number, city: string, country: string, eventImage: string) {
+    constructor(name: string, body: string, startDate: Date, creationDate: Date, address: string, zipCode: string, city: string, country: string, eventImage: string) {
         this.name = name;
         this.body = body;
         this.startDate = startDate;

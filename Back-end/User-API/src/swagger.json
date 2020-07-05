@@ -17,10 +17,6 @@
       "description": "CRUD operation for user"
     },
     {
-      "name": "Videos",
-      "description": "CRUD operation for video"
-    },
-    {
       "name": "Newsletters",
       "description": "CRUD operation for Newsletters"
     },
@@ -54,17 +50,6 @@
           "format": "email"
         },
         "userImage": {
-          "type": "string"
-        }
-      }
-    },
-    "video": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "path": {
           "type": "string"
         }
       }
@@ -110,11 +95,20 @@
           "type": "string",
           "format": "date"
         },
-        "localisation": {
-          "type": "string"
-        },
         "eventImage": {
           "type": "object"
+        },
+        "address": {
+          "type": "string"
+        },
+        "zipCode":  {
+          "type": "integer"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
         }
       }
     }
@@ -359,138 +353,6 @@
         }
       }
     },
-    "/api/videos": {
-      "parameters": [
-        {
-          "name": "Authorization",
-          "in": "header",
-          "description": "Authorization header",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["Videos"],
-        "summary": "Get all the videos of the database",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "post": {
-        "tags": ["Videos"],
-        "summary": "Create a new video in the database",
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "description": "Video that we want to create",
-          "schema": {
-            "$ref": "#/definitions/video"
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "Video created sucessfully",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          },
-          "404": {
-            "description": "Video not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/videos/{id}": {
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the video that we want to retrieve",
-          "type": "integer"
-        },
-        {
-          "name": "Authorization",
-          "in": "header",
-          "description": "Authorization header",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["Videos"],
-        "summary": "Get video with the given ID",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          },
-          "404": {
-            "description": "Video not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "put": {
-        "tags": ["Videos"],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "description": "Video objects with new values",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          }
-        ],
-        "summary": "Update the video with the given ID",
-        "responses": {
-          "200": {
-            "description": "Video updated sucessfully",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          },
-          "404": {
-            "description": "Video not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["Videos"],
-        "summary": "Delete video with the given ID",
-        "responses": {
-          "200": {
-            "description": "Video {id} was deleted sucessfully."
-          },
-          "404": {
-            "description": "Video not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
     "/api/newsletters": {
       "parameters": [
         {
@@ -724,9 +586,27 @@
           },
           {
             "in": "formData",
-            "name": "localisation",
+            "name": "address",
             "type": "string",
-            "description": "the localisation of the event"
+            "description": "the address of the event"
+          },
+          {
+            "in": "formData",
+            "name": "zipCode",
+            "type": "string",
+            "description": "the zipcode"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "string",
+            "description": "the city of the event"
+          },
+          {
+            "in": "formData",
+            "name": "country",
+            "type": "string",
+            "description": "the country  of the event"
           }
         ],
         "responses": {
@@ -796,7 +676,7 @@
             "in": "formData",
             "name": "body",
             "type": "string",
-            "description": "the description of the event",
+            "description": "the description of the event"
           },
           {
             "in": "formData",
@@ -806,9 +686,27 @@
           },
           {
             "in": "formData",
-            "name": "localisation",
+            "name": "address",
             "type": "string",
-            "description": "the localisation of the event"
+            "description": "the address of the event"
+          },
+          {
+            "in": "formData",
+            "name": "zipCode",
+            "type": "string",
+            "description": "the zipcode of the event"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "string",
+            "description": "the city of the event"
+          },
+          {
+            "in": "formData",
+            "name": "country",
+            "type": "string",
+            "description": "the country of the event"
           }
         ],
         "summary": "Update the event with the given ID",
