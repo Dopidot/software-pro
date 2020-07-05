@@ -1,8 +1,8 @@
-import { Router} from "express";
+import { Router } from "express";
 import UserController  from '../controllers/user.controller'
 import AuthenticationController from "../controllers/authentication.controller";
-import { verifyToken } from "../utils/jwt.utils"
-import { upload } from "../utils/multer.utils";
+import { verifyToken } from "../core/JWT";
+import { upload } from "../core/Multer";
 
 const router = Router();
 const userController = new UserController();

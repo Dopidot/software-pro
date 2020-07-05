@@ -1,7 +1,6 @@
 import express, {Request, Response} from 'express';
 import swaggerRouter from './routes/swagger.route';
 import userRouter from './routes/user.route';
-import videoRouter from './routes/video.route';
 import newsletterRouter from './routes/newsletter.route';
 import eventRouter from './routes/event.route';
 
@@ -26,7 +25,6 @@ export default class Server {
         });
         app.use('/api', swaggerRouter);
         app.use('/api/users', userRouter);
-        app.use('/api/videos', videoRouter);
         app.use('/api/newsletters', newsletterRouter);
         app.use('/api/events', eventRouter);
 

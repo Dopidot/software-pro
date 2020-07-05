@@ -3,7 +3,6 @@ import swaggerRouter from './routes/swagger.route';
 import userRouter from './routes/user.route';
 import exerciseRouter from './routes/exercise.route';
 import programRouter from './routes/program.route';
-import videoRouter from './routes/video.route';
 import newsletterRouter from './routes/newsletter.route';
 import eventRouter from './routes/event.route';
 
@@ -31,7 +30,6 @@ export default class Server {
         app.use('/api/users', userRouter);
         app.use('/api/exercises', exerciseRouter);
         app.use('/api/programs', programRouter);
-        app.use('/api/videos', videoRouter);
         app.use('/api/newsletters', newsletterRouter);
         app.use('/api/events', eventRouter);
         app.use('/uploads', express.static('uploads'));

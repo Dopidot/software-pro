@@ -46,9 +46,6 @@
         },
         "exerciseImage": {
           "type": "number"
-        },
-        "videoId": {
-          "type": "number"
         }
       }
     }

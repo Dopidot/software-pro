@@ -39,3 +39,7 @@ ALTER TABLE public.events ADD address varchar(255) NULL;
 ALTER TABLE public.events ADD zipcode int8 NULL;
 ALTER TABLE public.events ADD city varchar(50) NULL;
 ALTER TABLE public.events ADD country varchar(255) NULL;
+
+--- fix event pour JEan 
+ALTER TABLE public.events ALTER COLUMN zipcode TYPE varchar(255) USING zipcode::varchar;
+
