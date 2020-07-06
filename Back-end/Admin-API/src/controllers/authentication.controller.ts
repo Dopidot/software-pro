@@ -25,7 +25,7 @@ export default class AuthenticationController {
 
                 user = response.rows[0];
                 // creating webtoken
-                const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string);
+                const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string, {expiresIn: '2h'});
                 return res.status(200).json({
                     accessToken: accessToken,
                     user : user

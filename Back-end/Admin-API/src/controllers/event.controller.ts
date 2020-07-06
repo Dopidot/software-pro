@@ -10,7 +10,7 @@ export default class EventController {
     getEvents = async function(req: Request, res: Response): Promise<Response> {
         try {
             const response: QueryResult = await pool.query('SELECT * FROM events');
-            return res.status(200).json(response.rows);
+            return res.status(200).json(response.rows[0]);
         } catch (e) {
             console.log(e);
             return res.status(500).json('Internal Server Error');
