@@ -1,22 +1,39 @@
-import ExerciseModel from "./exercise.model";
+export class UserModel {
+    id: bigint;
+    firstname: string;
+    lastname: string;
+    email: string;
+    lastconnection: Date;
+    userimage: string;
 
-export default class UserModel {
+
+    constructor(id: bigint, firstname: string, lastname: string, email: string, lastConnection: Date, userImage: string) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.email = email;
+        this.lastconnection = lastConnection;
+        this.userimage = userImage;
+    }
+}
+
+export class UserLoginModel {
+    id: bigint;
     firstname: string;
     lastname: string;
     email: string;
     password: string;
-    pictureId: number;
-    lastConnection: Date;
-    //exercises: ExerciseModel[];
+    lastconnection: Date;
+    userimage: string;
 
-    constructor(id: number, firstname: string, lastname: string, email: string, password: string, pictureId: number, lastConnection: Date) {//, exercises: ExerciseModel[]) {
+
+    constructor(id: bigint, firstname: string, lastname: string, email: string, password: string, lastConnection: Date, userImage: string) {
+        this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.pictureId = pictureId;
-        this.lastConnection = lastConnection;
-        //this.exercises = exercises;
+        this.lastconnection = lastConnection;
+        this.userimage = userImage;
     }
 }
-

@@ -36,7 +36,7 @@ CREATE TABLE exercises(
     id BIGINT PRIMARY KEY DEFAULT nextval('id_sequence'),
     name VARCHAR(25) NOT NULL,
     description TEXT,
-    reapeat_number SMALLINT DEFAULT 1,
+    repeat_number SMALLINT DEFAULT 1,
     rest_time INTEGER,
     picture_id BIGINT,
     video_id BIGINT
@@ -75,8 +75,15 @@ CREATE TABLE videos(
  *******************/
 --CREATE TABLE gyms;
 
-/*
+/*******************
     TABLE NEWSLETTER
- */
---CREATE TABLE newsletters;
+ *******************/
+CREATE TABLE newsletters(
+    id BIGINT PRIMARY KEY DEFAULT nextval('id_sequence'),
+    name VARCHAR(50) NOT NULL,
+    title VARCHAR(50) NOT NULL,
+    body TEXT NOT NULL,
+    creationDate TIMESTAMP NOT NULL,
+    isSent BOOLEAN default false
+);
 

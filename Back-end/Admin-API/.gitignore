@@ -228,4 +228,8 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+
+# cutsom
+uploads/*
+
 # End of https://www.toptal.com/developers/gitignore/api/node,windows,intellij+all

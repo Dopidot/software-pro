@@ -6,18 +6,16 @@ export default class ExerciseModel{
     description: string;
     repeatNumber: number;
     restTime: string;
-    pictureId: number;
-    videoId: number;
+    exerciseImage: string;
     //programs: ProgramModel[];
     //users: UserModel[];
 
-    constructor(name: string, description: string, repeatNumber: number, restTime: string, pictureId: number, videoId: number) { //, programs: ProgramModel[], users: UserModel[]) {
+    constructor(name: string, description: string, repeatNumber: number, restTime: string, exerciseImage: string) {//, programs: ProgramModel[], users: UserModel[]) {
         this.name = name;
         this.description = description;
         this.repeatNumber = repeatNumber;
         this.restTime = restTime;
-        this.pictureId = pictureId;
-        this.videoId = videoId;
+        this.exerciseImage = exerciseImage;
         //this.programs = programs;
         //this.users = users;
     }

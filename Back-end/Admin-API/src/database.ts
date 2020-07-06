@@ -1,9 +1,9 @@
-import { Pool, Client } from 'pg';
+import { Pool } from 'pg';
 
 export const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
-    password: 'admin',
+    password: 'root',
     database: 'admin_api',
     port: 5432
 });
