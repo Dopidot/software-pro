@@ -21,7 +21,7 @@ export default class ProgramController {
             const id = parseInt(req.params.id);
             const response: QueryResult = await pool.query('SELECT * FROM programs WHERE id = $1', [id]);
             if (response.rowCount !== 0){
-                return res.status(200).json(response.rows);
+                return res.status(200).json(response.rows[0]);
             } else {
                 return res.status(404).json('Program not found');
             }
