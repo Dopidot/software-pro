@@ -1,11 +1,13 @@
+import 'dart:io';
+
+import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/modele/Newsletter.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'NewsLetterList.dart';
 
 class CreateNewsletter extends StatefulWidget{
-  List<Newsletter> newsletters;
-  CreateNewsletter({Key key, @required this.newsletters}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -15,31 +17,50 @@ class CreateNewsletter extends StatefulWidget{
 
 
 class _CreateNewsletter extends State<CreateNewsletter>{
+  HttpServices services = HttpServices();
   final _formKey = GlobalKey<FormState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _autoValidate = false;
-  String _title = "";
-  String _desc = "";
+  String _title;
+  String _body;
+  String _name;
+  File _image;
+  final _picker = ImagePicker();
 
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(centerTitle: true,
-          title: Text("Nouvelle newsletter"),),
+          title: Text("Nouvelle newsletter")),
       body: Form(
         key: _formKey,
+        autovalidate: _autoValidate,
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: _buildField(widget.newsletters),
-          ),
+          child: _buildField()
         ),
       ),
     );
   }
 
-  List<Widget> _buildField(List<Newsletter> listNewsletter){
-    Text titleScreen = Text("Les informations de la newsletter", style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),textAlign: TextAlign.center,);
+  Widget _buildField(){
+
+    Text titleScreen = Text("Les informations de la newsletter",
+      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
+      textAlign: TextAlign.center,);
+
+    final nameField = TextFormField(
+      validator: validateField,
+        onSaved: (String val){
+          _name = val ;
+        },
+        keyboardType: TextInputType.text,
+        decoration: InputDecoration(
+            hintText: "Nom de la newsletter",
+           border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))
+        ),
+    );
 
     final titleField = TextFormField(
       validator: validateField,
@@ -54,10 +75,10 @@ class _CreateNewsletter extends State<CreateNewsletter>{
     );
 
 
-    final descField = TextFormField(
+    final bodyField = TextFormField(
       validator: validateField,
       onSaved: (String val){
-        _desc = val ;
+        _body = val ;
       },
       keyboardType: TextInputType.multiline,
       minLines: 2,
@@ -68,21 +89,46 @@ class _CreateNewsletter extends State<CreateNewsletter>{
          ),
     );
 
+    final photoField = Container (
+        height: 200,
+        width: 175,
+
+        child:Card(
+          semanticContainer: true,
+          clipBehavior: Clip.antiAliasWithSaveLayer,
+          child: Center(
+            child: _image == null ? RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)
+                ),
+
+                onPressed: () async {
+
+                  final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+                  setState(() {
+                    _image = File(pickedFile.path);
+                  });
+                },
+                child: Icon(Icons.add)) : Image.file(_image),
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          elevation: 5,
+          margin: EdgeInsets.all(10),
+        )
+    );
+
 
    RaisedButton createBtn = RaisedButton(
      child: Text('Créer'),
      color: Colors.green,
      onPressed: () {
         if (_formKey.currentState.validate()) {
-          // If the form is valid, display a Snackbar.
           _formKey.currentState.save();
-          Newsletter l = Newsletter(title:_title,body:_desc);
-
-          setState(() {
-            listNewsletter.add(l);
-          });
-
-          Navigator.pop(context,listNewsletter);
+          Newsletter nl = Newsletter(name:_name,title:_title,body: _body,newsletterImage: _image.path );
+          createNlInServer(nl);
+          //Navigator.popUntil(context, (route) => false);
         }else{
           setState (() {
             _autoValidate = true;
@@ -107,8 +153,7 @@ class _CreateNewsletter extends State<CreateNewsletter>{
     );
 
 
-    return[
-        Column(
+    return Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceAround,
          children: <Widget>[
@@ -117,14 +162,23 @@ class _CreateNewsletter extends State<CreateNewsletter>{
              padding: const EdgeInsets.all(8.0),
              child: titleScreen,
            ),
+           Padding(
+             padding: const EdgeInsets.all(8.0),
+             child: nameField,
+           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: titleField,
           ),
            Padding(
              padding: const EdgeInsets.all(8.0),
-             child: descField,
-           ),Row(
+             child: bodyField,
+           ),
+           Padding(
+             padding: const EdgeInsets.all(8.0),
+             child: photoField,
+           ),
+           Row(
                  mainAxisAlignment: MainAxisAlignment.center,
                  crossAxisAlignment: CrossAxisAlignment.center,
                children: <Widget>[
@@ -140,15 +194,40 @@ class _CreateNewsletter extends State<CreateNewsletter>{
              ),
 
          ],
-       ),
-    ];
+       );
   }
+
+  String validateField(String val){
+    if(val.isEmpty){
+      return "Attention votre champs mot de passe est vide";
+    }
+    return null;
+  }
+
+  Future<void> createNlInServer(Newsletter nl) async {
+
+    var isValid = await services.createNewsletter(nl);
+
+    if(isValid){
+      Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => NewsletterList()), (route) => false);
+    }else{
+
+      displayDialog("Erreur d'enregistrement","La newsletter n'a pas pu être enregistrer dans la base, veuillez vérifier les champs svp ");
+    }
+
+  }
+
+  void displayDialog(String title, String text) =>
+      showDialog(
+        context: _scaffoldKey.currentState.context,
+        builder: (context) =>
+            AlertDialog(
+                title: Text(title),
+                content: Text(text)
+            ),
+      );
+
 }
 
 
-String validateField(String val){
-  if(val.isEmpty){
-    return "Attention votre champs mot de passe est vide";
-  }
-  return null;
-}

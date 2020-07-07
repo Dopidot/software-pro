@@ -1,7 +1,4 @@
 import 'dart:io';
-
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Event {
@@ -10,7 +7,7 @@ class Event {
   String body;
   DateTime startDate;
   DateTime creationDate;
-  File eventImage;
+  String eventImage;
   String address;
   String zipCode;
   String city;
@@ -26,9 +23,11 @@ class Event {
       this.zipCode,
       this.city,
       this.country,
-      this.eventImage});
+      this.eventImage
+      });
 
   factory Event.fromJson(Map<String, dynamic> json) {
+
     return Event(
         id: json['id'],
         name: json['name'],
@@ -36,11 +35,12 @@ class Event {
         startDate: DateTime.parse(json['startdate']),
         creationDate: DateTime.parse(json['creationdate']),
         address: json['address'],
-        zipCode: json['zipCode'],
+        zipCode: json['zipcode'],
         city: json['city'],
         country: json['country'],
-        eventImage: json['eventimage']);
-  }
+        eventImage: json['eventimage']
+    );
+   }
 
 
   Map<String, dynamic>toJson() => {

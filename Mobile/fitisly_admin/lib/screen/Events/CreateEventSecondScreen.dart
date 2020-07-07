@@ -110,7 +110,7 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
 
         child: MaterialButton(
           onPressed: _validateInput,
-          child: Text("Créé"),
+          child: Text("Créer"),
         )
     );
 
@@ -157,10 +157,10 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
       _futureCreateEvent = services.createEvent(e);
 
       _futureCreateEvent.then((value) {
-        // Navigator.pop(context);
-        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-          return HomeEventScreen();
-        })
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => HomeEventScreen()),
+              (Route<dynamic> route) => false,
         );
       });
 

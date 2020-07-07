@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/modele/Event.dart';
 import 'package:fitislyadmin/screen/Events/CreateEventScreen.dart';
@@ -6,9 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class HomeEventScreen extends StatefulWidget {
-  final List<Event> events;
-
-  HomeEventScreen({Key key, this.events}) : super(key: key);
 
   @override
   State<HomeEventScreen> createState() {
@@ -23,6 +22,21 @@ class _HomeEventScreen extends State<HomeEventScreen> {
   List<Event> events;
 
   @override
+  void initState() {
+    super.initState();
+    getEventFromServer();
+  }
+
+  Future<List<Event>> getEventFromServer() async {
+    var e = await services.fetchEvents();
+
+    setState(() {
+      events = e;
+    });
+    return events;
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
@@ -31,20 +45,7 @@ class _HomeEventScreen extends State<HomeEventScreen> {
               style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
           centerTitle: true,
         ),
-        body: FutureBuilder<List<Event>>(
-          future: services.fetchEvents(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Center(
-                  child: Text(
-                      "Probème de serveur, la page n'a pas pu être chargé"));
-            }
-
-            return snapshot.hasData
-                ? buildForm(snapshot.data)
-                : Center(child: CircularProgressIndicator());
-          },
-        ),
+        body: events == null || events.length == 0 ?  Center(child: Text("Il n'y a aucun évènement")): buildForm(events),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
@@ -56,8 +57,26 @@ class _HomeEventScreen extends State<HomeEventScreen> {
   }
 
 
+  void delete(var index) async {
+
+    var isDelete = await services.deleteEvent(events[index].id);
+
+    if(isDelete){
+
+      setState(() {
+        events.removeAt(index);
+      });
+      getEventFromServer();
+    }
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("l'évènement a été supprimé")));
+
+
+  }
 
   Widget buildForm(List<Event> events) {
+
+    var urlImage = "http://localhost:4000/";
+
     return ListView.builder(
         itemCount: events.length,
         itemBuilder: (context, index) {
@@ -69,18 +88,9 @@ class _HomeEventScreen extends State<HomeEventScreen> {
                 child: Icon(Icons.cancel),
               ),
               onDismissed: (direction) {
-
-                services.deleteEvent(events[index].id);
-                setState(() {
-                  events.removeAt(index);
-                services.fetchEvents().then((value) => events = value);
-                });
-                print("Event: ${events[index].name}");
-
-
-               // _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("l'évènement ${events[index].name} a été supprimé")));
+                delete(index);
               },
-              child: Padding(
+              child:  Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 0.0, horizontal: 4.0),
                 child: Card(
@@ -91,22 +101,18 @@ class _HomeEventScreen extends State<HomeEventScreen> {
                         return DetailEventScreen(event: events[index]);
                       })).then((value) {
                         setState(() {
-                          services
-                              .fetchEvents()
-                              .then((value) => events = value);
+                          //events[index] = services.getEventById(id);
+                          initState();
                         });
                       }).catchError((error) {
                         print(error);
                       });
                     },
-                    title: Text(events[index].name),
+                    title: Center(child:Text(events[index].name)),
                     subtitle: Column(
                       children: <Widget>[
-                        Text(events[index].body),
-                        Text(
-                            "${events[index].address} , ${events[index].zipCode} , ${events[index].city}"),
-                        Text(DateFormat("yyyy-MM-dd")
-                            .format(events[index].startDate))
+                        Text("A ${events[index].zipCode} ${events[index].city}"),
+                        Text(DateFormat('Le dd MMM yyyy').format(events[index].startDate))
                       ],
                     ),
                   ),

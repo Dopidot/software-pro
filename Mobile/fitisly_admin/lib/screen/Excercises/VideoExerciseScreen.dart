@@ -40,7 +40,8 @@ class _VideoExerciseScreen extends State<VideoExerciseScreen> {
         color: Color(0xFF45E15F),
 
         child: MaterialButton(
-          //onPressed: _validateInput,
+          onPressed: (){
+          },
           child: Text("Créer"),
         )
     );

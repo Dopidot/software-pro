@@ -4,9 +4,7 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/modele/Event.dart';
 import 'package:fitislyadmin/modele/Photo.dart';
-import 'package:fitislyadmin/screen/Events/HomeEventScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -26,7 +24,6 @@ class _DetailEventScreen extends State<DetailEventScreen> {
   String _name;
   String _body;
   DateTime _startDate;
-  Photo _picture;
   bool _autoValidate = false;
 
   String _address;
@@ -39,12 +36,23 @@ class _DetailEventScreen extends State<DetailEventScreen> {
   final _formKey = GlobalKey<FormState>();
 
   HttpServices services = HttpServices();
+  Event eventFromDB;
+
+
+  @override
+  void initState() {
+    initEventFromDB(widget.event.id)
+        .then((value){
+          setState(() {
+            eventFromDB = value.first;
+          });
+    });
+    super.initState();
+  }
 
 
   Completer<GoogleMapController> _controller = Completer();
-
   static final CameraPosition _kGooglePlex = CameraPosition(
-
     target: LatLng(100, -100),
     zoom: 14.4746,
   );
@@ -62,9 +70,10 @@ class _DetailEventScreen extends State<DetailEventScreen> {
                   Form(
                       autovalidate: _autoValidate,
                       key: _formKey,
-                      child: buildForm(widget.event)),
+                      child: buildForm(eventFromDB)),
                 ],
-              ))
+              )
+          )
       )
     );
   }
@@ -73,7 +82,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     final format = DateFormat("yyyy-MM-dd");
 
     final nameField = TextFormField(
-      controller: TextEditingController(text: event.name),
+      initialValue: event.name,
       onSaved: (String val){
         _name = val ;
       },
@@ -85,7 +94,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     );
 
     final descField = TextFormField(
-      controller: TextEditingController(text: event.body),
+      initialValue: event.body,
 
       onSaved: (String val){
         _body = val;
@@ -137,7 +146,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     );
 
     final zipCode = TextFormField(
-      initialValue:  event.zipCode.toString(),
+      initialValue:  event.zipCode,
       onSaved: (String val){
         _zipCode = val;
       },
@@ -174,7 +183,8 @@ class _DetailEventScreen extends State<DetailEventScreen> {
 
     );
 
-
+    var urlImage = "http://localhost:4000/"+event.eventImage;
+   // _image = Image.network(urlImage).
     final photoField = Container (
         height: 200,
         width: 175,
@@ -183,25 +193,30 @@ class _DetailEventScreen extends State<DetailEventScreen> {
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           child: Center(
-            child: _image == null ? RaisedButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0)
-              ),
-
-              onPressed: () async {
-
-                final pickedFile = await _picker.getImage(source: ImageSource.gallery);
-                setState(() {
-                  _image = File(pickedFile.path);
-                });
-              },
-              child: Icon(Icons.add),) : Image.file(_image),
+            child: Image.network(urlImage),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),
           elevation: 5,
           margin: EdgeInsets.all(10),
+        )
+    );
+
+    final changePhotoBtn = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.grey,
+
+        child: MaterialButton(
+          onPressed: () async {
+
+            final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+            setState(() {
+              _image = File(pickedFile.path);
+            });
+          },
+          child: Text("Modifier l'image"),
         )
     );
 
@@ -212,7 +227,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
 
         child: MaterialButton(
           onPressed: () {
-            _updateInput(widget.event);
+            _updateInput(eventFromDB);
           },
           child: Text("Modifier"),
         )
@@ -271,6 +286,10 @@ class _DetailEventScreen extends State<DetailEventScreen> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(8.0),
+                child: changePhotoBtn,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
                 child: updateButton,
               ),
               Padding(
@@ -296,11 +315,12 @@ class _DetailEventScreen extends State<DetailEventScreen> {
       e.zipCode = _zipCode;
       e.city = _city;
       e.country = _country;
+      e.eventImage = _image.path;
 
       var futureUpdateEvent = services.updateEvent(e);
       futureUpdateEvent.then((value) {
-        print("zip code: $_zipCode");
-        Navigator.pop(context);
+
+        Navigator.popUntil(context, (Route<dynamic> route) => false);
       });
 
     } else {
@@ -310,6 +330,10 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     }
   }
 
+  Future<List<Event>> initEventFromDB(String id) async {
+    var events = await services.getEventById(id);
+    return events;
+  }
 
   String validateField(String value){
     if(value.isEmpty){

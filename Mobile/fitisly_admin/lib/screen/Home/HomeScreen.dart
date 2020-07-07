@@ -1,7 +1,9 @@
+import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/screen/Events/HomeEventScreen.dart';
 import 'package:fitislyadmin/screen/Excercises/HomePageExcerciseList.dart';
 import 'package:fitislyadmin/screen/Home/LoginScreen.dart';
 import 'package:fitislyadmin/screen/Newsletter/NewsLetterList.dart';
+import 'package:fitislyadmin/screen/User/UserScreenSetting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
@@ -28,12 +30,37 @@ class _HomeScreen extends State<HomeScreenPage> {
   String actualDropdown = chartDropdownItems[0];
   int actualChart = 0;
 
+  HttpServices services = HttpServices();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: Text("Accueil", style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
           centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.account_circle,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => UserScreenSetting()),
+                      (Route<dynamic> route) => true,
+                );
+              },
+            ),
+            IconButton(
+              icon: Icon(
+                Icons.power_settings_new,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                logOut();
+              },
+            ),
+
+          ],
         ),
         body: StaggeredGridView.count(
           crossAxisCount: 2,
@@ -243,9 +270,18 @@ class _HomeScreen extends State<HomeScreenPage> {
     );
   }
 
+  Future<void> logOut() async {
 
+    var futureLogOut = services.logOut();
 
+    futureLogOut
+        .then((value) => Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+          (Route<dynamic> route) => false,
+    ))
+        .catchError((onError) => print(onError));
 
-
+  }
 
 }

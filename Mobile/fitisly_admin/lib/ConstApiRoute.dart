@@ -48,7 +48,7 @@ class ConstApiRoute{
 
   /*--------------- Newletter --------------- */
 
-  static const createNewsletters = baseUrl + "newsletters";
+  static const createNewsletter = baseUrl + "newsletters";
   static const getAllNewsletters = baseUrl + "newsletters";
   static const getNewslettersById = baseUrl + "newsletters/";
   static const updateNewsletters = baseUrl + "newsletters/";

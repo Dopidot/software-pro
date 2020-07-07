@@ -1,19 +1,31 @@
+import 'dart:io';
+
 class Newsletter {
   String id;
+  String name;
   String title;
   String body;
-  DateTime creationDate;
-  bool isSent;
+  String newsletterImage;
 
-  Newsletter({this.id,this.title,this.body,this.creationDate,this.isSent});
+  Newsletter({this.name,this.id,this.title,this.body,this.newsletterImage});
 
   factory Newsletter.fromJson(Map<String,dynamic> json){
     return Newsletter(
         id:json['id'],
+        name:json['name'],
         title:json['title'],
         body:json['body'],
-        creationDate:json['creation_date'],
-        isSent:json['is_sent']);
+        newsletterImage:json['newsletterImage']);
+  }
+
+  Map<String,dynamic> toJson(){
+    return {
+      'id':id,
+      'name':name,
+      'title':title,
+      'body':body,
+      'newsletterImage': newsletterImage
+    };
   }
 
 }

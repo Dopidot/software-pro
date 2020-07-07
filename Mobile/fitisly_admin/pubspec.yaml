@@ -32,6 +32,9 @@ dependencies:
   datetime_picker_formfield: ^1.0.0
   dio: ^3.0.9
   mime: ^0.9.6+3
+  jwt_decode: ^0.1.0
+  image_downloader: ^0.20.0
+
 
 
 

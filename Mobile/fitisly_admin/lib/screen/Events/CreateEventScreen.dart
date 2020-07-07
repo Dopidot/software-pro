@@ -21,7 +21,6 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   String _name;
   String _body;
   DateTime _startDate;
-  Photo _picture;
   bool _autoValidate = false;
 
 
@@ -123,7 +122,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
                   _image = File(pickedFile.path);
                 });
               },
-              child: Icon(Icons.add),) : Image.file(_image),
+              child: Icon(Icons.add)) : Image.file(_image),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
@@ -177,8 +176,8 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   void _validateInput() {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print("Path: ${_image.path.split("/").last}");
-      Event event = Event(body: _body,creationDate: DateTime.now(),name: _name,startDate: _startDate,eventImage: _image);
+
+      Event event = Event(body: _body,creationDate: DateTime.now(),name: _name,startDate: _startDate,eventImage: _image.path);
       Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
         return CreateEventSecondScreen(event: event);
       })

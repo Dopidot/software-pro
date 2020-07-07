@@ -1,5 +1,4 @@
 import 'package:fitislyadmin/Services/HttpServices.dart';
-
 import 'package:flutter/material.dart';
 import 'HomeScreen.dart';
 
@@ -8,11 +7,11 @@ class LoginScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return LoginScreenForm();
+    return _LoginScreen();
   }
 }
 
-class LoginScreenForm extends State<LoginScreen> {
+class _LoginScreen extends State<LoginScreen> {
 
 
   TextStyle styleOS = TextStyle(fontFamily: 'OpenSans', fontSize: 20.0);
@@ -111,9 +110,10 @@ class LoginScreenForm extends State<LoginScreen> {
 
                   if(value == 200){
 
-                    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+                    Navigator.pushAndRemoveUntil(context,  MaterialPageRoute(builder: (BuildContext context) {
                       return HomeScreenPage();
-                    }));
+                    }), (route) => false);
+
 
                   }else{
                     displayDialog("Accès refusé", "Aucun compte ne correspond à l'email ou au mot de passe");
