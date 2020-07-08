@@ -1,5 +1,5 @@
 import {Request, Response} from "express";
-import {QueryResult} from "pg";
+import {Query, QueryResult} from "pg";
 import {pool} from "../database";
 
 export default class NewsletterController {
@@ -21,7 +21,7 @@ export default class NewsletterController {
             const id = parseInt(req.params.id);
             const response: QueryResult = await pool.query('SELECT * FROM newsletters WHERE id = $1', [id]);
             if (response.rowCount !== 0 ) {
-                return res.status(200).json(response.rows);
+                return res.status(200).json(response.rows[0]);
             } else {
                 return res.status(404).json('Newsletter not found')
             }
@@ -34,23 +34,32 @@ export default class NewsletterController {
     createNewsletter = async function(req: Request, res: Response): Promise<Response> {
         try {
             const { name, title, body } = req.body;
-            const response: QueryResult = await pool.query('INSERT INTO newsletters (name, title, body, creationDate, isSent) VALUES ($1, $2, $3, now(), false)', [name, title, body]);
-            const created_user = response.rows[0];
+            const newsletterImage : string | undefined = req.file !== undefined ? req.file.path : undefined;
+
+            let response: QueryResult;
+            if (newsletterImage === undefined) {
+                response = await pool.query('INSERT INTO newsletters (name, title, body, creationDate, isSent) VALUES ($1, $2, $3, now(), false)', [name, title, body]);
+            } else {
+                response = await pool.query('INSERT INTO newsletters (name, title, body, creationDate, isSent, newsletterImage) VALUES ($1, $2, $3, now(), false, $4)', [name, title, body, newsletterImage]);
+            }
             return res.status(201).json({
                 message: 'Newsletter created sucessfully',
                 body: {
-                    user: {
+                    newsletter: {
                         name,
                         title,
                         body,
-                        creationDate,
-                        isSent
+                        newsletterImage
                     }
                 }
             });
         } catch (e) {
             console.log(e);
-            return res.status(500).json('Internal Server Error');
+            if (e.code == 22001) {
+                return res.status(400).json('The title is too long the maximum is 50 characters');
+            } else {
+                return res.status(500).json('Internal Server Error');
+            }
         }
     }
 
@@ -58,16 +67,25 @@ export default class NewsletterController {
         try {
             const id = parseInt(req.params.id);
             const { name, title, body, isSent } = req.body;
-            const response: QueryResult = await pool.query('UPDATE newsletters SET name = $1, title = $2, body = $3, isSent = $4 WHERE id = $5', [ name, title, body, isSent, id]);
+            const newsletterImage : string | undefined = req.file !== undefined ? req.file.path : undefined;
+
+            let response: QueryResult;
+            if (newsletterImage === undefined) {
+                response = await pool.query('UPDATE newsletters SET name = $1, title = $2, body = $3, isSent = $4 WHERE id = $5', [ name, title, body, isSent, id]);
+            } else {
+                response = await pool.query('UPDATE newsletters SET name = $1, title = $2, body = $3, isSent = $4, newsletterImage = $5 WHERE id = $6', [ name, title, body, isSent, newsletterImage, id]);
+            }
+
             if (response.rowCount !== 0 ) {
                 return res.status(200).json({
                     message: 'Newsletter updated sucessfully',
                     body: {
-                        user: {
+                        newsletter: {
                             name,
                             title,
                             body,
-                            isSent
+                            isSent,
+                            newsletterImage
                         }
                     }
                 });

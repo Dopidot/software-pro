@@ -1,16 +1,16 @@
-// import ExerciseModel from "./exercise.model";
+//import ExerciseModel from "./exercise.model";
 
 export default class ProgramModel {
     public id!: number;
     public name!: string;
     public description: string;
-    public pictureId: number;
-    // exercises: ExerciseModel[];
+    public programImage: string;
+    //exercises: ExerciseModel[];
 
-    constructor(name: string, description: string, pictureId: number) { //, exercises: ExerciseModel[]) {
+    constructor(name: string, description: string, programImage: string) { //, exercises: ExerciseModel[]) {
         this.name = name;
         this.description = description;
-        this.pictureId = pictureId;
-        // this.exercises = exercises;
+        this.programImage = programImage;
+        //this.exercises = exercises;
     }
 }

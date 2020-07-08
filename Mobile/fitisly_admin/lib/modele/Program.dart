@@ -1,19 +1,18 @@
-import 'package:fitislyadmin/modele/Exercise.dart';
-import 'package:fitislyadmin/modele/UserAPI.dart';
-
 class Program {
   String id;
   String name;
   String description;
-  List<Exercise> exercises;
-  UserAPI userApi;
+  String programImage;
+ // List<Exercise> exercises;
 
-  Program(String id,String name,String description,List<Exercise> exercises, UserAPI userApi){
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.exercises = exercises;
-    this.userApi = userApi;
+  Program({this.id, this.name, this.description,this.programImage /*this.exercises*/});
+
+  factory Program.fromJson(Map<String,dynamic> json){
+    return Program(
+        id:json['id'],
+        name:json['name'],
+        description:json['description'],
+        programImage:json['programImage']);
   }
 
 }

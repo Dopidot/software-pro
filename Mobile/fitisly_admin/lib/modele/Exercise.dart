@@ -1,4 +1,5 @@
 import 'package:fitislyadmin/modele/Photo.dart';
+import 'package:flutter/material.dart';
 
 import 'Video.dart';
 
@@ -9,7 +10,7 @@ class Exercise {
   int repetitionNumber;
   int restTime;
   List<Video> videos;
-  List<Photo> photos;
+  List<FileImage> photos;
 
   Exercise({this.id,this.name,this.description, this.repetitionNumber, this.restTime, this.videos,this.photos});
 
@@ -25,12 +26,12 @@ class Exercise {
 
   }
 
-  /*Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
     'name': name,
     'description': description,
     'reapeat_number':repetitionNumber,
     'rest_time':restTime,
     'video_id':videos,
     'photos':photos
-  };*/
+  };
 }

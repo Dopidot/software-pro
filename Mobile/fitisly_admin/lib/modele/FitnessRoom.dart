@@ -3,13 +3,9 @@ class FitnessRoom {
   String name;
   String address;
   int zipCode;
-  String localisation;
+  String city;
+  String country;
 
-  FitnessRoom(String id,String name,String address,int zipCode,String localisation){
-    this.id = id;
-    this.name = name;
-    this.address = address;
-    this.zipCode = zipCode;
-    this.localisation = localisation;
-  }
+  FitnessRoom({this.id,this.name,this.address,this.zipCode,this.city,this.country});
+
 }

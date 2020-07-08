@@ -9,21 +9,12 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "localhost:4000",
-  "basePath": "/api/exercises",
-
+  "host": "localhost:4003",
+  "basePath": "/",
   "tags": [
     {
-      "name": "exercise",
+      "name": "Exercises",
       "description": "CRUD operation for exercise"
-    },
-    {
-      "name": "picture",
-      "description": "CRUD operation for picture"
-    },
-    {
-      "name": "video",
-      "description": "CRUD operation for video"
     }
   ],
   "schemes": [
@@ -46,81 +37,35 @@
         "description": {
           "type": "string"
         },
-        "repeatNumber": {
+        "repeat_number": {
           "type": "number"
         },
-        "restTime": {
-          "type": "string",
+        "rest_time": {
+          "type": "number",
           "format": "minute:second"
         },
-        "pictureId": {
+        "exerciseImage": {
           "type": "number"
-        },
-        "videoId": {
-          "type": "number"
-        },
-        "programs": {
-          "type": "array"
-        },
-        "user": {
-          "type": "array"
-        }
-      }
-    },
-    "picture": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
-        }
-      }
-    },
-    "video": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
         }
       }
     }
   },
   "paths": {
     "/api/exercises": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": [
-          "exercises"
+          "Exercises"
         ],
-        "summary": "Get all the exercises in the database",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/exercise"
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "exercises"
-        ],
-        "summary": "Create a new exercise in the database",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "program that we want to create",
-            "schema": {
-              "$ref": "#/definitions/exercise"
-            }
-          }
-        ],
+        "summary": "Get all the exercises of the database",
         "responses": {
           "200": {
             "description": "OK",
@@ -128,8 +73,60 @@
               "$ref": "#/definitions/exercise"
             }
           },
-          "400": {
-            "description": "Failed. Bad post Data"
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Create a new exercise in the database",
+        "produces": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "exerciseImage",
+            "type": "file",
+            "description": "image of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "description of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "repeat_number",
+            "type": "number",
+            "description": "number of repetition of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "rest_time",
+            "type": "number",
+            "description": "the rest time required after the exercise"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -142,13 +139,20 @@
           "required": true,
           "description": "ID of the exercise that we want to retrieve",
           "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
         }
       ],
       "get": {
         "tags": [
-          "exercises"
+          "Exercises"
         ],
-        "summary": "Get exercise with given ID",
+        "summary": "Get exercise with the given ID",
         "responses": {
           "200": {
             "description": "OK",
@@ -157,52 +161,78 @@
             }
           },
           "404": {
-            "description": "Failed. Exercise not found. "
+            "description": "Exercise not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "put": {
-        "tags": [
-          "exercises"
+        "tags": ["Exercises"],
+        "consumes": [
+          "multipart/form-data"
         ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "description": "exercise with a new values of properties",
-            "schema": {
-              "$ref": "#/definitions/exercise"
-            }
+            "in": "formData",
+            "name": "exerciseImage",
+            "type": "file",
+            "description": "image of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "description of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "repeat_number",
+            "type": "number",
+            "description": "number of repetition of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "rest_time",
+            "type": "number",
+            "description": "the rest time required after the exercise"
           }
         ],
-        "summary": "Update exercises with given ID",
+        "summary": "Update the exercise with the given ID",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Exercise updated sucessfully",
             "schema": {
               "$ref": "#/definitions/exercise"
             }
           },
           "404": {
-            "description": "Failed. Exercise not found. "
+            "description": "Exercise not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "delete": {
-        "tags": [
-          "exercises"
-        ],
-        "summary": "Delete exercise with given ID",
+        "tags": ["Exercises"],
+        "summary": "Delete exercise with the given ID",
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/exercise"
-            }
+            "description": "Exercise {id} was deleted sucessfully."
           },
           "404": {
-            "description": "Failed. Exercise not found. "
+            "description": "Exercise not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }

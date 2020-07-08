@@ -17,12 +17,12 @@
       "description": "CRUD operation for user"
     },
     {
-      "name": "Pictures",
-      "description": "CRUD operation for picture"
+      "name": "Newsletters",
+      "description": "CRUD operation for Newsletters"
     },
     {
-      "name": "Videos",
-      "description": "CRUD operation for video"
+      "name": "Events",
+      "description": "CRUD operation for Events"
     }
   ],
   "schemes": [
@@ -49,30 +49,65 @@
           "type": "string",
           "format": "email"
         },
-        "password": {
+        "userImage": {
+          "type": "string"
+        }
+      }
+    },
+    "newsletter": {
+      "type": "object",
+      "properties": {
+        "name" : {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "creationDate": {
           "type": "string",
-          "format": "password"
+          "format": "date"
+        },
+        "isSent": {
+          "type": "boolean"
+        },
+        "newsletterImage": {
+          "type": "string"
         }
       }
     },
-    "picture": {
+    "event": {
       "type": "object",
       "properties": {
         "name": {
           "type": "string"
         },
-        "path": {
-          "type": "string"
-        }
-      }
-    },
-    "video": {
-      "type": "object",
-      "properties": {
-        "name": {
+        "body": {
           "type": "string"
         },
-        "path": {
+        "startDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "eventImage": {
+          "type": "object"
+        },
+        "address": {
+          "type": "string"
+        },
+        "zipCode":  {
+          "type": "integer"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
           "type": "string"
         }
       }
@@ -80,6 +115,15 @@
   },
   "paths": {
     "/api/users": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": [
           "Users"
@@ -91,6 +135,9 @@
             "schema": {
               "$ref": "#/definitions/user"
             }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -99,25 +146,53 @@
           "Users"
         ],
         "summary": "Create a new user in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "description": "User that we want to create",
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
+            "in": "formData",
+            "name": "userImage",
+            "type": "file",
+            "description": "The image to upload."
+          },
+          {
+            "in": "formData",
+            "name": "firstname",
+            "type": "string",
+            "description": "firstname of the user"
+          },
+          {
+            "in": "formData",
+            "name": "lastname",
+            "type": "string",
+            "description": "lastname of the user"
+          },
+          {
+            "in": "formData",
+            "name": "email",
+            "type": "string",
+            "description": "email of the user"
+          },
+          {
+            "in": "formData",
+            "name": "password",
+            "type": "string",
+            "description": "password of the user"
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK",
+          "201": {
+            "description": "Created",
             "schema": {
               "$ref": "#/definitions/user"
             }
           },
           "400": {
-            "description": "Failed. Bad post data"
+            "description": "This email already exists"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -130,6 +205,13 @@
           "required": true,
           "description": "ID of the user that we want to retrieve",
           "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
         }
       ],
       "get": {
@@ -145,7 +227,10 @@
             }
           },
           "404": {
-            "description": "Failed. User not found. "
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -153,15 +238,33 @@
         "tags": [
           "Users"
         ],
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "description": "User with a new values of properties",
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
+            "in": "formData",
+            "name": "userImage",
+            "type": "file",
+            "description": "The image to upload."
+          },
+          {
+            "in": "formData",
+            "name": "firstname",
+            "type": "string",
+            "description": "firstname of the user"
+          },
+          {
+            "in": "formData",
+            "name": "lastname",
+            "type": "string",
+            "description": "lastname of the user"
+          },
+          {
+            "in": "formData",
+            "name": "email",
+            "type": "string",
+            "description": "email of the user"
           }
         ],
         "summary": "Update user with given ID",
@@ -173,7 +276,10 @@
             }
           },
           "404": {
-            "description": "Failed. User not found"
+            "description": "User not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
@@ -190,7 +296,10 @@
             }
           },
           "404": {
-            "description": "Failed. User not found. "
+            "description": "User not found. "
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -226,33 +335,44 @@
             "schema": {
               "type": "object",
               "properties": {
-                "acessToken": {
-                  "type": "string"
-                },
-                "refreshToken": {
+                "accessToken": {
                   "type": "string"
                 }
               }
             }
           },
-          "401": {
-            "description": "Unauthorized"
+          "404": {
+            "description": "User not found"
           },
           "400": {
             "description": "Bad Credentials : your email or your password is not correct"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/api/pictures": {
+    "/api/newsletters": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
-        "tags": ["Pictures"],
-        "summary": "Get all the pictures of the database",
+        "tags": [
+          "Newsletters"
+        ],
+        "summary": "Get all of the newsletters of the database",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/picture"
+              "$ref": "#/definitions/newsletter"
             }
           },
           "500": {
@@ -261,89 +381,362 @@
         }
       },
       "post": {
-        "tags": ["Pictures"],
-        "summary": "Create a new picture in the database",
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "description": "Picture that we want to create",
-          "schema": {
-            "$ref": "#/definitions/picture"
+        "tags": ["Newsletters"],
+        "summary": "Create a newsletter in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "newsletterImage",
+            "type": "file",
+            "description": "image of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "title",
+            "type": "string",
+            "description": "the title of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "body",
+            "type": "string",
+            "description": "The body text of the newsletter"
           }
-        }],
+        ],
         "responses": {
-          "200": {
-            "description": "Picture created sucessfully",
+          "201": {
+            "description": "Created",
             "schema": {
-              "$ref": "#/definitions/picture"
+              "$ref": "#/definitions/newsletter"
             }
           },
-          "400": {
-            "description": "Failed. Bad post data"
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
     },
-    "/api/pictures/{id}": {
+    "/api/newsletters/{id}": {
       "parameters": [
         {
           "name": "id",
           "in": "path",
           "required": true,
-          "description": "ID of the picture that we want to retrieve",
+          "description": "ID of the newsletter that we want to retrieve",
           "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
         }
       ],
       "get": {
-        "tags": ["Pictures"],
-        "summary": "Get picture with the given ID",
+        "tags": ["Newsletters"],
+        "summary": "Get the newsletter with the given ID",
         "responses": {
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/picture"
+              "$ref": "#/definitions/newsletter"
             }
           },
-          "400": {
-            "description": "Bad Parameter. Picture not found."
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "put": {
-        "tags": ["Pictures"],
+        "tags": ["Newsletters"],
+        "produces": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
+            "in": "formData",
+            "name": "newsletterImage",
+            "type": "file",
+            "description": "image of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "title",
+            "type": "string",
+            "description": "the title of the newsletter"
+          },
+          {
+            "in": "formData",
             "name": "body",
-            "required": false,
-            "description": "Picture objects with new values",
-            "schema": {
-              "$ref": "#/definitions/picture"
-            }
+            "type": "string",
+            "description": "The body text of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "isSent",
+            "type": "boolean",
+            "description": "boolean that states id the newsletter has been sent or not"
           }
         ],
-        "summary": "Update the picture with the given ID",
+        "summary": "Update the newsletter with the given ID",
         "responses": {
-          "200": {
-            "description": "Picture updated sucessfully",
+          "200":{
+            "description": "Newsletter updated successfully",
             "schema": {
-              "$ref": "#/definitions/picture"
+              "$ref": "#/definitions/newsletter"
             }
           },
-          "400": {
-            "description": "Failed. Picture not found"
+          "404": {
+            "description": "Newsletter not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "delete": {
-        "tags": ["Pictures"],
-        "summary": "Delete picture with the given ID",
+        "tags": ["Newsletters"],
+        "summary": "Delete newsletter with the given ID",
         "responses": {
           "200": {
-            "description": "Picture {id} was deleted sucessfully."
+            "description": "Newsletter {id} was deleted successfully"
           },
-          "400": {
-            "description": "Bad parameter"
+          "404": {
+            "description": "Newsletter not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/events": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Get all of the events of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/event"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Events"],
+        "summary": "Create an event in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "eventImage",
+            "type": "file",
+            "description": "image of the event"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the event"
+          },
+          {
+            "in": "formData",
+            "name": "body",
+            "type": "string",
+            "description": "the description of the event"
+          },
+          {
+            "in": "formData",
+            "name": "startDate",
+            "type": "string",
+            "description": "the start date of the event"
+          },
+          {
+            "in": "formData",
+            "name": "address",
+            "type": "string",
+            "description": "the address of the event"
+          },
+          {
+            "in": "formData",
+            "name": "zipCode",
+            "type": "string",
+            "description": "the zipcode"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "string",
+            "description": "the city of the event"
+          },
+          {
+            "in": "formData",
+            "name": "country",
+            "type": "string",
+            "description": "the country  of the event"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/event"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/events/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the event that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Events"],
+        "summary": "Get the event with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/event"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Events"],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "eventImage",
+            "type": "file",
+            "description": "image of the event"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the event"
+          },
+          {
+            "in": "formData",
+            "name": "body",
+            "type": "string",
+            "description": "the description of the event"
+          },
+          {
+            "in": "formData",
+            "name": "startDate",
+            "type": "string",
+            "description": "the start date of the event"
+          },
+          {
+            "in": "formData",
+            "name": "address",
+            "type": "string",
+            "description": "the address of the event"
+          },
+          {
+            "in": "formData",
+            "name": "zipCode",
+            "type": "string",
+            "description": "the zipcode of the event"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "string",
+            "description": "the city of the event"
+          },
+          {
+            "in": "formData",
+            "name": "country",
+            "type": "string",
+            "description": "the country of the event"
+          }
+        ],
+        "summary": "Update the event with the given ID",
+        "responses": {
+          "200":{
+            "description": "Event updated successfully",
+            "schema": {
+              "$ref": "#/definitions/event"
+            }
+          },
+          "404": {
+            "description": "Event not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Events"],
+        "summary": "Delete the event with the given ID",
+        "responses": {
+          "200": {
+            "description": "Event {id} was deleted successfully"
+          },
+          "404": {
+            "description": "Event not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
