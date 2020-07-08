@@ -3,9 +3,8 @@ import swaggerRouter from './routes/swagger.route';
 import userRouter from './routes/user.route';
 import exerciseRouter from './routes/exercise.route';
 import programRouter from './routes/program.route';
-import pictureRouter from './routes/picture.route';
-import videoRouter from './routes/video.route';
 import newsletterRouter from './routes/newsletter.route';
+import eventRouter from './routes/event.route';
 
 export default class Server {
     readonly port: number;
@@ -26,13 +25,14 @@ export default class Server {
             res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             next();
         });
+
         app.use('/api', swaggerRouter);
         app.use('/api/users', userRouter);
         app.use('/api/exercises', exerciseRouter);
         app.use('/api/programs', programRouter);
-        app.use('/api/pictures', pictureRouter);
-        app.use('/api/videos', videoRouter);
         app.use('/api/newsletters', newsletterRouter);
+        app.use('/api/events', eventRouter);
+        app.use('/uploads', express.static('uploads'));
 
         app.listen(this.port, () => {
             console.log('The Admin-API is currently running at http://localhost:' ,this.port); //https://api.fitisly.com

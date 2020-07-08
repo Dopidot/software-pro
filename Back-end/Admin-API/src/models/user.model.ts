@@ -5,16 +5,16 @@ export default class UserModel {
     lastname: string;
     email: string;
     password: string;
-    pictureId: number;
+    userImage: string;
     lastConnection: Date;
     //exercises: ExerciseModel[];
 
-    constructor(id: number, firstname: string, lastname: string, email: string, password: string, pictureId: number, lastConnection: Date) {//, exercises: ExerciseModel[]) {
+    constructor(id: number, firstname: string, lastname: string, email: string, password: string, userImage: string, lastConnection: Date) {//, exercises: ExerciseModel[]) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.pictureId = pictureId;
+        this.userImage = userImage;
         this.lastConnection = lastConnection;
         //this.exercises = exercises;
     }

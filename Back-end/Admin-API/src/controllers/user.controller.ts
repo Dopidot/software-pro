@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
 import { pool } from '../database';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
 require('dotenv').config();
 
 export default class UserController {
@@ -38,14 +37,23 @@ export default class UserController {
         try {
             const { firstname, lastname, email } = req.body;
             const hashedPassword =  await bcrypt.hash(req.body.password, 10);
-            const response: QueryResult = await pool.query('INSERT INTO users (firstname, lastname, email, password) VALUES ($1, $2, $3, $4)', [firstname, lastname, email, hashedPassword]);
+            const userImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
+
+            let response: QueryResult;
+            if (userImage === undefined) {
+                response = await pool.query('INSERT INTO users (firstname, lastname, email, password) VALUES ($1, $2, $3, $4)', [firstname, lastname, email, hashedPassword]);
+            } else {
+                response = await pool.query('INSERT INTO users (firstname, lastname, email, password, userImage) VALUES ($1, $2, $3, $4, $5)', [firstname, lastname, email, hashedPassword, userImage]);
+            }
+
             return res.status(201).json({
                 message: 'User created successfully',
                 body: {
                     user: {
                         firstname,
                         lastname,
-                        email
+                        email,
+                        userImage
                     }
                 }
             });
@@ -63,7 +71,15 @@ export default class UserController {
         try {
             const id = parseInt(req.params.id);
             const { firstname, lastname, email } = req.body;
-            const response: QueryResult = await pool.query('UPDATE users SET firstname = $1, lastname = $2, email = $3 WHERE id = $4', [firstname, lastname, email, id]);
+            const userImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
+
+            let response: QueryResult;
+            if (userImage === undefined) {
+                response = await pool.query('UPDATE users SET firstname = $1, lastname = $2, email = $3 WHERE id = $4', [firstname, lastname, email, id]);
+            } else {
+                response = await pool.query('UPDATE users SET firstname = $1, lastname = $2, email = $3, userImage = $4 WHERE id = $5', [firstname, lastname, email, userImage, id]);
+            }
+
             if ( response.rowCount !== 0) {
                 return res.json({
                     message: `User ${id} updated sucessfully`,
@@ -71,7 +87,8 @@ export default class UserController {
                         user: {
                             firstname,
                             lastname,
-                            email
+                            email,
+                            userImage
                         }
                     }
                 });
