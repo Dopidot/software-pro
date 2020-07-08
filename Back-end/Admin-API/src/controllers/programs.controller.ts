@@ -43,7 +43,7 @@ export default class ProgramController {
                 await pool.query('INSERT INTO programs (name, description, programImage) VALUES ($1, $2, $3)', [name, description, programImage]);
             }
 
-            let response: QueryResult = await pool.query('SELECT * FROM programs ORDER BY id DESC LIMIT 1');
+            const response: QueryResult = await pool.query('SELECT * FROM programs ORDER BY id DESC LIMIT 1');
             return res.status(201).json({
                 message: 'Program created sucessfully',
                 body: {
@@ -104,7 +104,7 @@ export default class ProgramController {
     deleteProgram = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
-            let response: QueryResult = await pool.query('SELECT programimage FROM programs WHERE id = $1', [id]);
+            const response: QueryResult = await pool.query('SELECT programimage FROM programs WHERE id = $1', [id]);
             if (response.rowCount !== 0) {
                 if (response.rows[0].programimage !== undefined && response.rows[0].programimage) {
                     fs.unlink(process.cwd() + '/' + response.rows[0].programimage, err => {

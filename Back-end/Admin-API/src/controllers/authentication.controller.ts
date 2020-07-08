@@ -4,7 +4,9 @@ import {QueryResult} from "pg";
 import {pool} from "../database";
 import * as bcrypt from "bcrypt";
 import { UserLoginModel } from "../models/user.model";
-require('dotenv').config();
+import * as dotenv from "dotenv";
+
+dotenv.config();
 
 export default class AuthenticationController {
 

@@ -42,7 +42,7 @@ export default class ExerciseController {
             } else {
                 await pool.query('INSERT INTO exercises (name, description, repeat_number, rest_time, exerciseImage) VALUES ($1, $2, $3, $4, $5)', [name, description, repeat_number, rest_time, exerciseImage]);
             }
-            let response: QueryResult = await pool.query('SELECT * FROM exercises ORDER BY id DESC LIMIT 1');
+            const response: QueryResult = await pool.query('SELECT * FROM exercises ORDER BY id DESC LIMIT 1');
             return res.status(201).json({
                 message: 'Exercise created sucessfully',
                 body: {
@@ -100,7 +100,7 @@ export default class ExerciseController {
     deleteExercise = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
-            let response: QueryResult = await pool.query('SELECT exerciseimage FROM exercises WHERE id = $1', [id]);
+            const response: QueryResult = await pool.query('SELECT exerciseimage FROM exercises WHERE id = $1', [id]);
             if (response.rowCount !== 0) {
                 if (response.rows[0].exerciseimage !== undefined && response.rows[0].exerciseimage !== null) {
                     fs.unlink(process.cwd() + '/' + response.rows[0].exerciseimage, err => {
