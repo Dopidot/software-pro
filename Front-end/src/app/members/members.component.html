@@ -1,0 +1,52 @@
+<ngx-one-column-layout>
+    <nb-menu [items]="menu"></nb-menu>
+    <router-outlet>
+        <div class="container">
+            <div class="row">
+
+                <nb-card style="width: 100%;">
+                    <nb-card-header>
+                        Liste des utilisateurs
+                    </nb-card-header>
+
+                    <nb-card-body>
+                        <ng2-smart-table [settings]="settings" [source]="source" (custom)="openPopup($event, dialog)">
+                        </ng2-smart-table>
+                    </nb-card-body>
+                </nb-card>
+
+            </div>
+        </div>
+    </router-outlet>
+</ngx-one-column-layout>
+
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card>
+        <nb-card-header>Informations sur {{currentUser.pseudo}}</nb-card-header>
+        <nb-card-body>
+
+            <div class="col-4" style="margin: auto;">
+                <nb-user [picture]="currentUser.picture" [onlyPicture]="true" size="giant"></nb-user>
+            </div>
+
+            <div><strong>Pseudonyme</strong></div>
+            <div>{{currentUser.pseudo}}</div>
+
+            <div style="margin-bottom: 20px;"></div>
+
+            <div><strong>Nom et prénom</strong></div>
+            <div>{{currentUser.lastName}} {{currentUser.firstName}}</div>
+
+            <div style="margin-bottom: 20px;"></div>
+
+            <div><strong>Dernière connexion</strong></div>
+            <div>{{currentUser.connection}}</div>
+
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton [status]="danger" (click)="ref.close()"
+                style="margin-right: 10px;">Fermer</button>
+            <button nbButton [status]="success" (click)="ref.close()">Définir comme coach</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

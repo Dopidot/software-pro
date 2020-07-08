@@ -39,10 +39,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
                 link: '/news'
             },
             {
-                title: 'Salons de discussion',
-                link: '/discussions'
-            },
-            {
                 title: 'Notifications',
                 link: '/notifications'
             }

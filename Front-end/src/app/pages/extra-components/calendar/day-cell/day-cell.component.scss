@@ -16,4 +16,19 @@
   &.bounding-month .caption {
     color: inherit;
   }
+
+  .day-cell {
+    background: #45e15f;
+    color: white;
+    border-radius: 0.25rem;
+  }
+
+  .selected-day {
+    background: #efefef;
+    border-radius: 0.25rem;
+    width: 100%;
+    padding: 10px 0px;
+    color: #222b45;
+  }
+
 }

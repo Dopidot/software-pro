@@ -13,6 +13,15 @@ import { EventsComponent } from './events/events.component';
 import { ExercisesComponent } from './exercises/exercises.component';
 import { ProgramsComponent } from './programs/programs.component';
 import { CoachsComponent } from './coachs/coachs.component';
+import { MembersComponent } from './members/members.component';
+import { InfosComponent } from './infos/infos.component';
+import { NotificationsComponent } from './notifications/notifications.component';
+import { LoginComponent } from './login/login.component';
+import { UserService } from './services/user.service';
+import { ProgramService } from './services/program.service';
+import { StatusService } from './services/status.service';
+import { HttpClientModule } from "@angular/common/http";
+
 
 export const routes: Routes = [
   {
@@ -55,6 +64,10 @@ export const routes: Routes = [
   { path: 'exercises', component: ExercisesComponent },
   { path: 'programs', component: ProgramsComponent },
   { path: 'coachs', component: CoachsComponent },
+  { path: 'members', component: MembersComponent },
+  { path: 'infos', component: InfosComponent },
+  { path: 'notifications', component: NotificationsComponent },
+  { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'pages' },
 ];
@@ -64,8 +77,9 @@ const config: ExtraOptions = {
 };
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, config)],
+  imports: [RouterModule.forRoot(routes, config), HttpClientModule],
   exports: [RouterModule],
+  providers: [UserService, ProgramService, StatusService],
 })
 export class AppRoutingModule {
 }
