@@ -22,7 +22,7 @@ export default class EventController {
             const id = parseInt(req.params.id);
             const response: QueryResult = await pool.query('SELECT * FROM events WHERE id = $1', [id]);
             if (response.rowCount !== 0 ) {
-                return res.status(200).json(response.rows);
+                return res.status(200).json(response.rows[0]);
             } else {
                 return res.status(404).json('Event not found')
             }
