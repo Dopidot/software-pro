@@ -2,8 +2,8 @@
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/modele/Newsletter.dart';
 import 'package:flutter/material.dart';
-import 'CreateNewletter.dart';
-import 'ModifyNewsLetter.dart';
+import 'CreateNewletterUI.dart';
+import 'ModifyNewsLetterUI.dart';
 
 
 

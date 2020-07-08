@@ -1,11 +1,11 @@
 import 'package:fitislyadmin/Services/HttpServices.dart';
-import 'package:fitislyadmin/screen/Events/HomeEventScreen.dart';
-import 'package:fitislyadmin/screen/Excercises/HomePageExcerciseList.dart';
-import 'package:fitislyadmin/screen/Home/LoginScreen.dart';
-import 'package:fitislyadmin/screen/Newsletter/NewsLetterList.dart';
-import 'package:fitislyadmin/screen/Programs/ProgramHomeScreen.dart';
+import 'package:fitislyadmin/screen/Events/HomeEventUI.dart';
+import 'package:fitislyadmin/screen/Excercises/HomePageExcerciseListUI.dart';
+import 'package:fitislyadmin/screen/Home/LoginScreenUI.dart';
+import 'package:fitislyadmin/screen/Newsletter/NewsLetterListUI.dart';
+import 'package:fitislyadmin/screen/Programs/ProgramHomeUI.dart';
 import 'package:fitislyadmin/screen/TabBarScreen.dart';
-import 'package:fitislyadmin/screen/User/UserScreenSetting.dart';
+import 'package:fitislyadmin/screen/User/UserScreenSettingUI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';

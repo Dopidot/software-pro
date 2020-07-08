@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:fitislyadmin/ConstApiRoute.dart';
-import 'package:fitislyadmin/modele/Newsletter.dart';
 import 'package:fitislyadmin/modele/Program.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as Storage;
@@ -20,8 +19,7 @@ class ProgramService{
   }
 
 
-
-  Future<bool> createNewsletter(Program p) async {
+  Future<bool> createProgram(Program p) async {
     String token = await getToken();
 
     Map<String, String> headers = {
@@ -33,7 +31,7 @@ class ProgramService{
     var formData = FormData.fromMap({
       'id':p.id,
       'name':p.name,
-      'desciption':p.description,
+      'description':p.description,
       "programImage": await MultipartFile.fromFile(p.programImage,
           filename:p.programImage.split("/").last ,
           contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
@@ -65,11 +63,11 @@ class ProgramService{
 
   List<Program> fetchAllPrograms(String responseBody) {
     final parsed = json.decode(responseBody);
-    return parsed.map<Newsletter>((json) => Program.fromJson(json)).toList();
+    return parsed.map<Program>((json) => Program.fromJson(json)).toList();
   }
 
 
-  Future<bool> updateNewsletter(Program p) async {
+  Future<bool> updateProgram(Program p) async {
     String token = await getToken();
     var multiPart;
     var mimeTypeData;
@@ -128,7 +126,7 @@ class ProgramService{
   }
 
 
-  Future<bool> deleteNewsletter(String id) async {
+  Future<bool> deleteProgram(String id) async {
 
     String token = await getToken();
     Map<String, String> headers = {

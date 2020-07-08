@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/modele/Event.dart';
-import 'package:fitislyadmin/screen/Events/CreateEventScreen.dart';
-import 'package:fitislyadmin/screen/Events/DetailEventScreen.dart';
+import 'package:fitislyadmin/screen/Events/CreateEventUI.dart';
+import 'package:fitislyadmin/screen/Events/DetailEventScreenUI.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 

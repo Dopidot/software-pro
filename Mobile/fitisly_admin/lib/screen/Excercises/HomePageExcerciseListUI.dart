@@ -2,7 +2,7 @@ import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/modele/Exercise.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'FormCreateExercise.dart';
+import 'CreateExerciseUI.dart';
 
 class HomePageExercice extends StatelessWidget {
 

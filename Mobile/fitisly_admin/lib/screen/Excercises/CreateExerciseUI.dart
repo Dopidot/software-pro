@@ -3,7 +3,7 @@ import 'package:fitislyadmin/modele/Exercise.dart';
 import 'package:fitislyadmin/modele/Photo.dart';
 import 'package:fitislyadmin/modele/Video.dart';
 import 'package:flutter/material.dart';
-import 'HomePageExcerciseList.dart';
+import 'HomePageExcerciseListUI.dart';
 import 'PhotoExerciseScreen.dart';
 
 class FormCreateExercise extends StatefulWidget {

@@ -11,7 +11,7 @@ class Program {
     return Program(
         id:json['id'],
         name:json['name'],
-        description:json['title'],
+        description:json['description'],
         programImage:json['programImage']);
   }
 
