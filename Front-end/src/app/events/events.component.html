@@ -1,0 +1,24 @@
+<ngx-one-column-layout>
+    <nb-menu [items]="menu"></nb-menu>
+    <router-outlet>
+        <div class="container">
+            <div class="row">
+        
+                <div class="col-md-12 col-lg-12 col-xxxl-12">
+                    <nb-card>
+                        <nb-card-header>
+                          <h3>Calendrier des évènements</h3>
+                        </nb-card-header>
+                        <nb-card-body style="zoom: 75%;">
+                          <nb-calendar-month-picker
+                            [(month)]="month"
+                            [cellComponent]="monthCellComponent"
+                          ></nb-calendar-month-picker>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+
+            </div>
+        </div>
+    </router-outlet>
+</ngx-one-column-layout>

@@ -1,0 +1,23 @@
+<ngx-one-column-layout>
+    <nb-menu [items]="menu"></nb-menu>
+    <router-outlet>
+        <div class="container">
+            <div class="row">
+        
+                <div class="col-md-12 col-lg-12 col-xxxl-12">
+                    <nb-card>
+                        <nb-card-header>
+                          Exercises
+                        </nb-card-header>
+                      
+                        <nb-card-body>
+                          <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
+                          </ng2-smart-table>
+                        </nb-card-body>
+                      </nb-card>
+                </div>
+
+            </div>
+        </div>
+    </router-outlet>
+</ngx-one-column-layout>

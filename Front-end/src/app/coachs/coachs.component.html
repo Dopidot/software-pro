@@ -1,0 +1,24 @@
+<ngx-one-column-layout>
+    <nb-menu [items]="menu"></nb-menu>
+    <router-outlet>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-6 col-lg-4 col-xxxl-4">
+                    <nb-card class="list-card" size="small">
+                        <nb-card-header>Coachs</nb-card-header>
+                        <nb-list>
+                        <nb-list-item *ngFor="let user of users">
+                            <nb-user [name]="user.name" [title]="user.title" size="large" style="width: -webkit-fill-available;">
+                            </nb-user>
+                            <nb-icon icon="edit-2-outline" pack="eva"></nb-icon>
+                        </nb-list-item>
+                        </nb-list>
+                    </nb-card>
+                </div>
+
+            </div>
+        </div>
+
+    </router-outlet>
+</ngx-one-column-layout>

@@ -1,0 +1,52 @@
+<ngx-one-column-layout>
+    <nb-menu [items]="menu"></nb-menu>
+    <router-outlet>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-md-6 col-lg-4 col-xxxl-4">
+                    <nb-card class="list-card" size="small">
+                        <nb-card-header>Nouveaux utilisateurs</nb-card-header>
+                        <nb-list>
+                        <nb-list-item *ngFor="let user of users">
+                            <nb-user [name]="user.name" [title]="user.title" size="large">
+                            </nb-user>
+                        </nb-list-item>
+                        </nb-list>
+                    </nb-card>
+                </div>
+        
+                <!-- <div class="col-lg-6">
+                    <nb-card>
+                      <nb-card-header>Bar</nb-card-header>
+                      <nb-card-body>
+                        <ngx-chartjs-bar></ngx-chartjs-bar>
+                      </nb-card-body>
+                    </nb-card>
+                </div> -->
+
+                <!-- <div class="col-lg-6">
+                    <nb-card>
+                      <nb-card-header>Pie</nb-card-header>
+                      <nb-card-body>
+                        <ngx-echarts-pie></ngx-echarts-pie>
+                      </nb-card-body>
+                    </nb-card>
+                  </div> -->
+        
+                <div class="col-md-6 col-lg-3 col-xxxl-3">
+                    <div class="calendar-container">
+                        <div class="subtitle" style="margin-bottom: 10px;">
+                          Evènements à venir
+                        </div>
+                        <nb-calendar [(date)]="date" [boundingMonth]="true" showWeekNumber></nb-calendar>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        
+
+    </router-outlet>
+</ngx-one-column-layout>
