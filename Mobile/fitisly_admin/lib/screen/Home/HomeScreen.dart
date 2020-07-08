@@ -3,6 +3,8 @@ import 'package:fitislyadmin/screen/Events/HomeEventScreen.dart';
 import 'package:fitislyadmin/screen/Excercises/HomePageExcerciseList.dart';
 import 'package:fitislyadmin/screen/Home/LoginScreen.dart';
 import 'package:fitislyadmin/screen/Newsletter/NewsLetterList.dart';
+import 'package:fitislyadmin/screen/Programs/ProgramHomeScreen.dart';
+import 'package:fitislyadmin/screen/TabBarScreen.dart';
 import 'package:fitislyadmin/screen/User/UserScreenSetting.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -115,7 +117,7 @@ class _HomeScreen extends State<HomeScreenPage> {
                       ),
                       Padding(padding: EdgeInsets.only(bottom: 1.0)),
                       Text("Application", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                      Text("Programmes, Exercices", style: TextStyle(color: Colors.black45)),
+                      Text("Exercices", style: TextStyle(color: Colors.black45)),
                     ]
                 ),
               ),
@@ -127,6 +129,38 @@ class _HomeScreen extends State<HomeScreenPage> {
 
                 }
             ),
+
+            _buildTile(
+                Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Material(
+                            color: Colors.teal,
+                            shape: CircleBorder(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Icon(Icons.accessibility, color: Colors.white, size: 30.0),
+                            )
+                        ),
+                        Padding(padding: EdgeInsets.only(bottom: 1.0)),
+                        Text("Application", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                        Text("Programme", style: TextStyle(color: Colors.black45)),
+                      ]
+                  ),
+                ),
+                onTap: () {
+                  Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
+                    return ProgramHomeScreen();
+                  })
+                  );
+
+                }
+            ),
+
+
             _buildTile(
               Padding(
                 padding: const EdgeInsets.all(24.0),
@@ -201,11 +235,31 @@ class _HomeScreen extends State<HomeScreenPage> {
                     )
                 ),
                 onTap: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
-                    return LoginScreen();
-                  })
-                  );
+                }
+            ),
 
+            _buildTile(
+                Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Material(
+                            color: Colors.teal,
+                            shape: CircleBorder(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Icon(Icons.location_on, color: Colors.white, size: 30.0),
+                            )
+                        ),
+                        Padding(padding: EdgeInsets.only(bottom: 1.0)),
+                        Text("Les salles de sport", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                        Text("Référencement", style: TextStyle(color: Colors.black45)),
+                      ]
+                  ),
+                ),
+                onTap: () {
                 }
             ),
             _buildTile(
@@ -243,12 +297,39 @@ class _HomeScreen extends State<HomeScreenPage> {
                 })
                 );
               },
-            )
+            ),
+            _buildTile(
+                Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Material(
+                            color: Colors.teal,
+                            shape: CircleBorder(),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Icon(Icons.account_box, color: Colors.white, size: 30.0),
+                            )
+                        ),
+                        Padding(padding: EdgeInsets.only(bottom: 1.0)),
+                        Text("Les coachs", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                        Text("Information sur les coachs sportifs", style: TextStyle(color: Colors.black45)),
+                      ]
+                  ),
+                ),
+                onTap: () {
+                }
+            ),
           ],
           staggeredTiles: [
             StaggeredTile.fit(2),
             StaggeredTile.fit(1),
             StaggeredTile.fit(1),
+            StaggeredTile.fit(2),
+            StaggeredTile.fit(2),
+            StaggeredTile.fit(2),
             StaggeredTile.fit(2),
             StaggeredTile.fit(2),
           ],
@@ -263,7 +344,6 @@ class _HomeScreen extends State<HomeScreenPage> {
         shadowColor: Color(0x802196F3),
         child: InkWell
           (
-          // Do onTap() if it isn't null, otherwise do print()
             onTap: onTap != null ? () => onTap() : () { print('Not set yet'); },
             child: child
         )

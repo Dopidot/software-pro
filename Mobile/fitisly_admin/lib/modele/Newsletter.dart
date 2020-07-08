@@ -15,17 +15,7 @@ class Newsletter {
         name:json['name'],
         title:json['title'],
         body:json['body'],
-        newsletterImage:json['newsletterImage']);
-  }
-
-  Map<String,dynamic> toJson(){
-    return {
-      'id':id,
-      'name':name,
-      'title':title,
-      'body':body,
-      'newsletterImage': newsletterImage
-    };
+        newsletterImage:json['newsletterimage']);
   }
 
 }

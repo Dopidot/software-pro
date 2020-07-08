@@ -18,7 +18,7 @@ import 'package:mime/mime.dart';
 
 class HttpServices {
 
-  final storage = Storage.FlutterSecureStorage();
+  static final storage = Storage.FlutterSecureStorage();
   final dio = Dio();
 
   /* ------------------------ Début Login -----------------------------*/
@@ -232,7 +232,7 @@ class HttpServices {
     return response.statusCode == 200;
   }
 
-  Future<List<Event>> getEventById(String id) async{
+  Future<Event> getEventById(String id) async{
 
     String token = await getToken();
     Map<String, String> headers = {
@@ -274,14 +274,17 @@ class HttpServices {
 
   List<Event> getAllEvents(String responseBody) {
     final parsed = jsonDecode(responseBody);
-    return parsed
-        .map<Event>((json) => Event.fromJson(json)).toList();
+    print(parsed);
+    List<Event> e;
+    return parsed.map<Event>((json) {
+      Event.fromJson(json);
+    }).toList();
 
   }
 
-  List<Event> getEvent(String responseBody){
+  Event getEvent(String responseBody){
     final parsed = jsonDecode(responseBody);
-    return parsed.map<Event>((json)=> Event.fromJson(json)).toList();
+    return Event.fromJson(parsed);
   }
 
 
@@ -333,7 +336,6 @@ Future<bool> updateUser(User u) async {
     return response.statusCode == 201;
   }
 
-
   Future<List<Newsletter>> fetchNewsletters() async {
 
     String token = await getToken();
@@ -356,25 +358,27 @@ Future<bool> updateUser(User u) async {
 
   List<Newsletter> getAllNewsletters(String responseBody) {
     final parsed = json.decode(responseBody);
-    return parsed
-        .map<Newsletter>((json) => Newsletter.fromJson(json)).toList();
+    return parsed.map<Newsletter>((json) => Newsletter.fromJson(json)).toList();
   }
 
 
   Future<bool> updateNewsletter(Newsletter nl) async {
     String token = await getToken();
+    var multiPart;
     var mimeTypeData;
     Map<String, String> headers = {
       "Content-Type": "multipart/form-data",
       "Authorization": "Baerer " + token,
     };
-    if(nl.newsletterImage.contains("upload")){
+    if(nl.newsletterImage.contains("image_picker")){
       var url = "http://localhost:4000/"+nl.newsletterImage;
-      var imageId = await ImageDownloader.downloadImage("https://raw.githubusercontent.com/wiki/ko2ic/image_downloader/images/flutter.png");
+      var imageId = await ImageDownloader.downloadImage(url);
       mimeTypeData = await ImageDownloader.findMimeType(imageId);
-
+      var path = await ImageDownloader.findPath(imageId);
+      multiPart = await MultipartFile.fromFile(path, filename:path.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
     }else{
       mimeTypeData = lookupMimeType(nl.newsletterImage, headerBytes: [0xFF, 0xD8]).split('/');
+      multiPart = await MultipartFile.fromFile(nl.newsletterImage, filename:nl.newsletterImage.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
     }
 
     var formData = FormData.fromMap({
@@ -382,9 +386,7 @@ Future<bool> updateUser(User u) async {
       'name':nl.name,
       'title':nl.title,
       'body':nl.body,
-      "newsletterImage": await MultipartFile.fromFile(nl.newsletterImage,
-          filename:nl.newsletterImage.split("/").last ,
-          contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
+      "newsletterImage": multiPart
     });
 
     var response = await dio.put(ConstApiRoute.updateNewsletters+nl.id, data:formData,options: Options(headers: headers));
@@ -394,7 +396,7 @@ Future<bool> updateUser(User u) async {
 
 
 
-  Future<List<Newsletter>> getNewsletterById(String id) async {
+  Future<Newsletter> getNewsletterById(String id) async {
 
     String token = await getToken();
     Map<String, String> headers = {
@@ -403,11 +405,11 @@ Future<bool> updateUser(User u) async {
     };
 
     var url = ConstApiRoute.getNewslettersById + id;
-    final http.Response response = await http.get(url,headers: headers);
+    final http.Response response = await http.delete(url,headers: headers);
 
     if(response.statusCode == 200){
       var responseJson = jsonDecode(response.body);
-      return getAllNewsletters(response.body) ;
+      return getNewsletter(response.body) ;
     }
 
     throw Exception("Not find newsletter with id: $id");
@@ -419,6 +421,22 @@ Future<bool> updateUser(User u) async {
     return  Newsletter.fromJson(parsed);
   }
 
+
+  Future<bool> deleteNewsletter(String id) async {
+
+    String token = await getToken();
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Baerer " + token,
+    };
+
+
+    var url = ConstApiRoute.deleteNewslettersById + id;
+    final http.Response response = await http.delete(url,headers: headers);
+
+    return response.statusCode == 200;
+
+  }
 
 
 

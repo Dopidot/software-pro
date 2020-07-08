@@ -39,7 +39,7 @@ class _NewsletterListState extends State<NewsletterList> {
       floatingActionButton: FloatingActionButton(
           child:Icon(Icons.add),
           onPressed: () {
-            Navigator.pop(
+            Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => CreateNewsletter()));
           }
@@ -71,33 +71,57 @@ class _NewsletterListState extends State<NewsletterList> {
     return ListView.builder(
         itemCount: newsletters.length
         , itemBuilder: (context,index) {
-      return Padding(
-        padding:
-        const EdgeInsets.symmetric(vertical: 0.0, horizontal: 4.0),
-        child: Card(
-          child: ListTile(
-            onTap: () {
-              Navigator.push(context,MaterialPageRoute(
-                  builder: (context) {
-                    return ModifyNewsletter(newsletterId: newsletters[index].id);
-                  })
-              )
-                  .then((value) {
+      return Dismissible(
+        key: Key(newsletters[index].id),
+        //confirmDismiss: ,
+        background: Container(
+          color: Colors.red,
+          child: Icon(Icons.cancel),
+        ),
+        onDismissed: (direction) {
+          delete(index,newsletters);
+        },
+        child: Padding(
+          padding:
+          const EdgeInsets.symmetric(vertical: 0.0, horizontal: 4.0),
+          child: Card(
+            child: ListTile(
+              onTap: () {
+                  Navigator.push(context,MaterialPageRoute(
+                    builder: (context) {
+                      return ModifyNewsletter(newsletterId: newsletters[index].id);
+                    })
+                )
+                    .then((value) {
 
-                if(value != null){
-                  setState(() {
-                    newsletters[index] = value;
-                  });
-                  _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Newsletter modifiée ! ")));
-                }
-              });
-            },
+                    setState(() {
+                      newsletters[index] = value;
+                    });
+                    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Newsletter modifiée ! ")));
+                });
+              },
 
-            title: Text(newsletters[index].title),
+              title: Text(newsletters[index].name),
+            ),
           ),
         ),
       );
     });
+  }
+
+
+  void delete(var index,List<Newsletter> nl) async {
+
+    var isDelete = await services.deleteNewsletter(nl[index].id);
+
+    if(isDelete){
+
+      setState(() {
+        nl.removeAt(index);
+      });
+    }
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("La newsletter a été supprimé")));
+
   }
 
 }

@@ -18,7 +18,7 @@ class ModifyNewsletter extends StatefulWidget{
 
 class _ModifyNewsletter extends State<ModifyNewsletter>{
 
-  Future<List<Newsletter>> futureNl;
+  Future<Newsletter> futureNl;
   HttpServices services = HttpServices();
 
   final _formKey = GlobalKey<FormState>();
@@ -54,12 +54,12 @@ class _ModifyNewsletter extends State<ModifyNewsletter>{
 
 
 
-  FutureBuilder<List<Newsletter>> buildFutureNewsletter() {
-    return FutureBuilder<List<Newsletter>>(
+  FutureBuilder<Newsletter> buildFutureNewsletter() {
+    return FutureBuilder<Newsletter>(
       future: futureNl,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return _buildField(snapshot.data[0]);
+          return _buildField(snapshot.data);
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
@@ -119,22 +119,7 @@ initialValue: newsletter.body,
       child: Text('Modifier'),
       color: Colors.green,
       onPressed: () {
-        if (_formKey.currentState.validate()) {
-          // If the form is valid, display a Snackbar.
-          _formKey.currentState.save();
-
-          setState(() {
-            newsletter.title = _title;
-            newsletter.body = _desc;
-          });
-
-          Navigator.pop(context,newsletter);
-
-        }else{
-          setState (() {
-            _autoValidate = true;
-          });
-        }
+        updateNewsletter(newsletter);
       },
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18.0),
@@ -220,8 +205,38 @@ initialValue: newsletter.body,
   }
 
 
+  void updateNewsletter(Newsletter nl){
+    if (_formKey.currentState.validate()) {
+      // If the form is valid, display a Snackbar.
+      _formKey.currentState.save();
+
+        nl.name = _name;
+        nl.title = _title;
+        nl.body = _desc;
+        nl.newsletterImage = _image != null ? _image.path : nl.newsletterImage;
+
+        services.updateNewsletter(nl)
+      .then((value) {
+        print(value);
+        Navigator.pop(context);
+       // Navigator.pop(context);
+        })
+      .catchError((onError) => print(onError));
+
+
+      //Navigator.pop(context);
+
+    }else{
+      setState (() {
+        _autoValidate = true;
+      });
+    }
+
+  }
 
 }
+
+
 
 
 String validateField(String val){

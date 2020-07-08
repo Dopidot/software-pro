@@ -44,7 +44,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     initEventFromDB(widget.event.id)
         .then((value){
           setState(() {
-            eventFromDB = value.first;
+            eventFromDB = value;
           });
     });
     super.initState();
@@ -330,7 +330,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     }
   }
 
-  Future<List<Event>> initEventFromDB(String id) async {
+  Future<Event> initEventFromDB(String id) async {
     var events = await services.getEventById(id);
     return events;
   }

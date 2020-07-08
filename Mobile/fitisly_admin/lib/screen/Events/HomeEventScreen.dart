@@ -16,6 +16,8 @@ class HomeEventScreen extends StatefulWidget {
 }
 
 class _HomeEventScreen extends State<HomeEventScreen> {
+
+  Future<List<Event>> futureEvent;
   HttpServices services = HttpServices();
 
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -24,17 +26,10 @@ class _HomeEventScreen extends State<HomeEventScreen> {
   @override
   void initState() {
     super.initState();
-    getEventFromServer();
+    futureEvent = services.fetchEvents();
   }
 
-  Future<List<Event>> getEventFromServer() async {
-    var e = await services.fetchEvents();
 
-    setState(() {
-      events = e;
-    });
-    return events;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +40,7 @@ class _HomeEventScreen extends State<HomeEventScreen> {
               style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
           centerTitle: true,
         ),
-        body: events == null || events.length == 0 ?  Center(child: Text("Il n'y a aucun évènement")): buildForm(events),
+        body: buildFutureEvent(),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
@@ -66,17 +61,14 @@ class _HomeEventScreen extends State<HomeEventScreen> {
       setState(() {
         events.removeAt(index);
       });
-      getEventFromServer();
     }
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("l'évènement a été supprimé")));
 
 
   }
 
-  Widget buildForm(List<Event> events) {
 
-    var urlImage = "http://localhost:4000/";
-
+Widget buildList(List<Event> events){
     return ListView.builder(
         itemCount: events.length,
         itemBuilder: (context, index) {
@@ -92,14 +84,14 @@ class _HomeEventScreen extends State<HomeEventScreen> {
               },
               child:  Padding(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 0.0, horizontal: 4.0),
+                const EdgeInsets.symmetric(vertical: 0.0, horizontal: 4.0),
                 child: Card(
                   child: ListTile(
                     onTap: () {
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return DetailEventScreen(event: events[index]);
-                      })).then((value) {
+                            return DetailEventScreen(event: events[index]);
+                          })).then((value) {
                         setState(() {
                           //events[index] = services.getEventById(id);
                           initState();
@@ -119,5 +111,23 @@ class _HomeEventScreen extends State<HomeEventScreen> {
                 ),
               ));
         });
+
+}
+
+  FutureBuilder<List<Event>> buildFutureEvent() {
+    return FutureBuilder<List<Event>>(
+      future: futureEvent,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return buildList(snapshot.data);
+
+        } else if (snapshot.hasError) {
+
+          return Text("${snapshot.error}");
+        }
+        return CircularProgressIndicator();
+      },
+    );
+
   }
 }

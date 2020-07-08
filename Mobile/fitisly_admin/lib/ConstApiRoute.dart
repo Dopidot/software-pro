@@ -17,7 +17,7 @@ class ConstApiRoute{
   static const getAllExercises = baseUrl + "exercises";
   static const getExerciseById = baseUrl + "exercises/";
   static const updateExercise = baseUrl + "exercises/";
-  static const deleteExerciseById = baseUrl + "exercises";
+  static const deleteExerciseById = baseUrl + "exercises/";
 
 
   /* ------------- Programs --------------- */
@@ -26,7 +26,7 @@ class ConstApiRoute{
   static const getAllPrograms = baseUrl + "programs";
   static const getProgramById = baseUrl + "programs/";
   static const updateProgram = baseUrl + "programs/";
-  static const deleteProgramById = baseUrl + "programs";
+  static const deleteProgramById = baseUrl + "programs/";
 
 
   /*---------------- Pictures --------------- */
@@ -52,7 +52,7 @@ class ConstApiRoute{
   static const getAllNewsletters = baseUrl + "newsletters";
   static const getNewslettersById = baseUrl + "newsletters/";
   static const updateNewsletters = baseUrl + "newsletters/";
-  static const deleteNewslettersById = baseUrl + "newsletters";
+  static const deleteNewslettersById = baseUrl + "newsletters/";
 
 
   /*---------------- Events --------------- */

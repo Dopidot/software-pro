@@ -13,8 +13,7 @@ class Event {
   String city;
   String country;
 
-  Event(
-      {this.id,
+  Event({this.id,
       this.name,
       this.body,
       this.startDate,
@@ -26,7 +25,7 @@ class Event {
       this.eventImage
       });
 
-  factory Event.fromJson(Map<String, dynamic> json) {
+  factory Event.fromJson(Map<String, String> json) {
 
     return Event(
         id: json['id'],

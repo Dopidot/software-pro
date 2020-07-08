@@ -128,7 +128,6 @@ class _CreateNewsletter extends State<CreateNewsletter>{
           _formKey.currentState.save();
           Newsletter nl = Newsletter(name:_name,title:_title,body: _body,newsletterImage: _image.path );
           createNlInServer(nl);
-          //Navigator.popUntil(context, (route) => false);
         }else{
           setState (() {
             _autoValidate = true;
@@ -209,8 +208,7 @@ class _CreateNewsletter extends State<CreateNewsletter>{
     var isValid = await services.createNewsletter(nl);
 
     if(isValid){
-      Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => NewsletterList()), (route) => false);
+      Navigator.pop(context);
     }else{
 
       displayDialog("Erreur d'enregistrement","La newsletter n'a pas pu être enregistrer dans la base, veuillez vérifier les champs svp ");
