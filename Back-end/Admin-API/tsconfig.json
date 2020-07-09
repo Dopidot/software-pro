@@ -9,7 +9,8 @@
         "strict": true, // forcer a typer et a avoi un code un petit peu plus propre
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
-        "moduleResolution": "node"
+        "moduleResolution": "node",
+        "noImplicitAny": true
     },
     "include" : [
         "src/**/*"

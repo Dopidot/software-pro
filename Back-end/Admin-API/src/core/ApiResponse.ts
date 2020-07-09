@@ -48,7 +48,7 @@ export class AuthFailureResponse extends ApiResponse {
     }
 }
 
-export class NotFoundResponse extends ApiResponse {
+/*export class NotFoundResponse extends ApiResponse {
     private url: string;
 
     constructor(message = 'Not Found') {
