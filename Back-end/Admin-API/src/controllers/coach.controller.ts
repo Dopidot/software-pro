@@ -23,7 +23,7 @@ export default class CoachController {
             if (response.rowCount !== 0 ) {
                 return res.status(200).json(response.rows[0]);
             } else {
-                return res.status(404).json('Co&ch not found')
+                return res.status(404).json('Coach not found')
             }
         } catch (e) {
             console.log(e);

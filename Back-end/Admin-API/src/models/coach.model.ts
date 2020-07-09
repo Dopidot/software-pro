@@ -1,4 +1,4 @@
 export default interface coachModel {
-    coachid: bigint;
+    coachid: string;
     isHighlighted: boolean;
 }

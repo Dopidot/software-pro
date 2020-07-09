@@ -193,7 +193,7 @@
       "type": "object",
       "properties": {
         "coachId": {
-          "type": "integer"
+          "type": "string"
         },
         "isHighlighted": {
           "type": "boolean"
@@ -1456,7 +1456,7 @@
         "parameters": [
           {
             "in": "body",
-            "name": "bodt",
+            "name": "body",
             "description": "id of the referenced coach",
             "schema": {
               "$ref": "#/definitions/coach"

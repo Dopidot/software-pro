@@ -57,6 +57,8 @@ create table gyms(
 
 CREATE TABLE public.coachs (
 	id bigint PRIMARY KEY DEFAULT nextval('id_sequence'),
-	coachid bigint NOT NULL,
-	ishighlighted boolean NOT NULL DEFAULT false
+	coachid varchar(255) NOT NULL,
+	ishighlighted boolean NOT NULL
 );
+
+-- ALTER TABLE public.coachs ALTER COLUMN coachid TYPE varchar(255) USING coachid::varchar;
