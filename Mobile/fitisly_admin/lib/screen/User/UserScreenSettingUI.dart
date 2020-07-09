@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:fitislyadmin/Services/HttpServices.dart';
-import 'package:fitislyadmin/modele/User.dart';
+import 'package:fitislyadmin/Services/UserService.dart';
+import 'package:fitislyadmin/model/User.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -16,7 +17,7 @@ class UserScreenSetting extends StatefulWidget {
 class _UserScreenSetting extends State<UserScreenSetting> {
 
   User currentUser;
-  HttpServices services = HttpServices();
+  UserService services = UserService();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;

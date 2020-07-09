@@ -1,5 +1,6 @@
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/screen/Events/HomeEventUI.dart';
+import 'package:fitislyadmin/screen/Excercises/CreateExerciseUI.dart';
 import 'package:fitislyadmin/screen/Excercises/HomePageExcerciseListUI.dart';
 import 'package:fitislyadmin/screen/Home/LoginScreenUI.dart';
 import 'package:fitislyadmin/screen/Newsletter/NewsLetterListUI.dart';
@@ -123,7 +124,7 @@ class _HomeScreen extends State<HomeScreenPage> {
               ),
                 onTap: () {
                   Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
-                    return HomePageExercice();
+                    return ExerciseListUI();
                   })
                   );
 

@@ -1,9 +1,7 @@
 import 'dart:io';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
-import 'package:fitislyadmin/modele/Event.dart';
-import 'package:fitislyadmin/modele/Photo.dart';
+import 'package:fitislyadmin/model/Event.dart';
 import 'package:fitislyadmin/screen/Events/CreateEventSecondUI.dart';
-import 'package:fitislyadmin/screen/Home/HomeUI.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';

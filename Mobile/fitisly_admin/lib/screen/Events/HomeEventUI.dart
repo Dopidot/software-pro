@@ -1,7 +1,6 @@
 import 'dart:io';
-
 import 'package:fitislyadmin/Services/HttpServices.dart';
-import 'package:fitislyadmin/modele/Event.dart';
+import 'package:fitislyadmin/model/Event.dart';
 import 'package:fitislyadmin/screen/Events/CreateEventUI.dart';
 import 'package:fitislyadmin/screen/Events/DetailEventScreenUI.dart';
 import 'package:flutter/material.dart';
@@ -93,8 +92,8 @@ Widget buildList(List<Event> events){
                             return DetailEventScreen(event: events[index]);
                           })).then((value) {
                         setState(() {
-                          //events[index] = services.getEventById(id);
-                          initState();
+                          events[index] = value;
+                         // initState();
                         });
                       }).catchError((error) {
                         print(error);

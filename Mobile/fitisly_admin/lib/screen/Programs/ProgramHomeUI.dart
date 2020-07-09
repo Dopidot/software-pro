@@ -1,6 +1,6 @@
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/Services/ProgramService.dart';
-import 'package:fitislyadmin/modele/Program.dart';
+import 'package:fitislyadmin/model/Program.dart';
 import 'package:fitislyadmin/screen/Home/LoginScreenUI.dart';
 import 'package:fitislyadmin/screen/Programs/CreateProgramUI.dart';
 import 'package:fitislyadmin/screen/Programs/ModifyProgramUI.dart';
@@ -17,32 +17,30 @@ class ProgramHomeScreen extends StatefulWidget {
 class _ProgramHomeScreen extends State<ProgramHomeScreen> {
   ProgramService services = ProgramService();
   HttpServices serviceHttp = HttpServices();
-  Future<List<Program>> futureProg;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-
-  @override
-  void initState() {
-    futureProg = services.getAllPrograms();
-    super.initState();
-  }
 
 
   @override
   Widget build(BuildContext context) {
-   return Scaffold(
-     key: _scaffoldKey,
-     appBar: buildAppBar(),
-     body:buildFutureProgram(),
-     floatingActionButton: FloatingActionButton(
-         child:Icon(Icons.add),
-         onPressed: () {
-           Navigator.push(
-               context,
-               MaterialPageRoute(builder: (context) => CreateProgramScreen()));
-         }
-     ),
-   );
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: buildAppBar(),
+      body:buildFutureProgram(),
+      floatingActionButton: FloatingActionButton(
+          child:Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CreateProgramScreen()))
+            .then((value) {
+              if(value != null){
+                updateUIAfterCreate();
+              }
+            });
+          }
+      ),
+    );
   }
 
   Widget buildAppBar(){
@@ -78,22 +76,24 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
 
   FutureBuilder<List<Program>> buildFutureProgram() {
     return FutureBuilder<List<Program>>(
-      future: futureProg,
+      future: services.getAllPrograms(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return buildList(snapshot.data);
-
-        } else if (snapshot.hasError) {
+        if (snapshot.hasError) {
 
           return Text("${snapshot.error}");
         }
-        return CircularProgressIndicator();
+        return snapshot.hasData ? buildList(snapshot.data) : Center(child: CircularProgressIndicator());
       },
     );
   }
 
 
   Widget buildList(List<Program> programs ){
+    return programs.isEmpty ? Center(child: Text("Veuillez ajouter des programmes svp")) : buildListView(programs);
+  }
+
+
+  Widget buildListView(List<Program> programs){
     return ListView.builder(
         itemCount: programs.length
         , itemBuilder: (context,index) {
@@ -120,10 +120,14 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
                 )
                     .then((value) {
 
-                  setState(() {
-                    programs[index] = value;
-                  });
-                  _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Newsletter modifiée ! ")));
+                  if(value != null){
+                    setState(() {
+                      programs[index] = value;
+                    });
+                    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Programme modifié ! ")));
+                  }
+
+
                 });
               },
 
@@ -148,6 +152,13 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
         .catchError((onError) => print(onError));
   }
 
+
+  void updateUIAfterCreate(){
+    setState(() {
+      buildFutureProgram();
+    });
+
+  }
 
   void delete(var index,List<Program> prog) async {
 

@@ -26,10 +26,15 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
-		<key>NSPhotoLibraryAddUsageDescription</key>
-    	<string>TODO</string>
-    	<key>NSPhotoLibraryUsageDescription</key>
-    	<string>TODO</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+    <string>TODO</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>TODO</string>
+    <key>NSAppTransportSecurity</key>
+    <dict>
+      <key>NSAllowsArbitraryLoads</key>
+      <true/>
+    </dict>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

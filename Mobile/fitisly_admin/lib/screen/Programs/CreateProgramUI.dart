@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:fitislyadmin/Services/ProgramService.dart';
-import 'package:fitislyadmin/modele/Program.dart';
+import 'package:fitislyadmin/model/Program.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -170,7 +170,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
     var isValid = await services.createProgram(p);
 
     if (isValid) {
-      Navigator.pop(context);
+      Navigator.pop(context,p);
     } else {
       displayDialog("Erreur d'enregistrement",
           "Le programme n'a pas pu être enregistrer dans la base, veuillez vérifier les champs svp ");

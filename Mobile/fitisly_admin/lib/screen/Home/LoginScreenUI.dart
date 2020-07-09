@@ -1,3 +1,4 @@
+import 'package:fitislyadmin/ConstApiRoute.dart';
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:flutter/material.dart';
 import 'HomeUI.dart';
@@ -116,7 +117,7 @@ class _LoginScreen extends State<LoginScreen> {
 
 
                   }else{
-                    displayDialog("Accès refusé", "Aucun compte ne correspond à l'email ou au mot de passe");
+                    ConstApiRoute.displayDialog("Accès refusé", "Aucun compte ne correspond à l'email ou au mot de passe",_scaffoldKey);
 
                   }
                 });
@@ -172,15 +173,6 @@ class _LoginScreen extends State<LoginScreen> {
     );
 
   }
-  void displayDialog(String title, String text) =>
-      showDialog(
-        context: _scaffoldKey.currentState.context,
-        builder: (context) =>
-            AlertDialog(
-                title: Text(title),
-                content: Text(text)
-            ),
-      );
 
 }
 

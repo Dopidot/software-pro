@@ -1,11 +1,9 @@
 import 'dart:io';
-
-import 'package:fitislyadmin/Services/HttpServices.dart';
-import 'package:fitislyadmin/modele/Newsletter.dart';
+import 'package:fitislyadmin/Services/NewsletterService.dart';
+import 'package:fitislyadmin/model/Newsletter.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'NewsLetterListUI.dart';
 
 class CreateNewsletter extends StatefulWidget{
 
@@ -17,7 +15,7 @@ class CreateNewsletter extends StatefulWidget{
 
 
 class _CreateNewsletter extends State<CreateNewsletter>{
-  HttpServices services = HttpServices();
+  NewsletterService services = NewsletterService();
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _autoValidate = false;
@@ -208,7 +206,7 @@ class _CreateNewsletter extends State<CreateNewsletter>{
     var isValid = await services.createNewsletter(nl);
 
     if(isValid){
-      Navigator.pop(context);
+      Navigator.pop(context,nl);
     }else{
 
       displayDialog("Erreur d'enregistrement","La newsletter n'a pas pu être enregistrer dans la base, veuillez vérifier les champs svp ");

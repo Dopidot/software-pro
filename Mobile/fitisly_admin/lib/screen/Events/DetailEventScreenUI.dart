@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:fitislyadmin/Services/HttpServices.dart';
-import 'package:fitislyadmin/modele/Event.dart';
-import 'package:fitislyadmin/modele/Photo.dart';
+import 'package:fitislyadmin/model/Event.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -284,10 +283,10 @@ class _DetailEventScreen extends State<DetailEventScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Padding(
+              /*Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: changePhotoBtn,
-              ),
+              ),*/
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: updateButton,
@@ -320,7 +319,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
       var futureUpdateEvent = services.updateEvent(e);
       futureUpdateEvent.then((value) {
 
-        Navigator.popUntil(context, (Route<dynamic> route) => false);
+        Navigator.pop(context,e);
       });
 
     } else {
