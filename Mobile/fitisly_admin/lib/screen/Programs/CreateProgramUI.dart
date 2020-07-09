@@ -71,19 +71,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           child: Center(
-            child: _image == null
-                ? RaisedButton(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0)),
-                    onPressed: () async {
-                      final pickedFile =
-                          await _picker.getImage(source: ImageSource.gallery);
-                      setState(() {
-                        _image = File(pickedFile.path);
-                      });
-                    },
-                    child: Icon(Icons.add))
-                : Image.file(_image),
+            child: _image == null ? RaisedButton(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)), onPressed: () async {final pickedFile = await _picker.getImage(source: ImageSource.gallery);setState(() {_image = File(pickedFile.path);});}, child: Icon(Icons.add)): Image.file(_image),
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),

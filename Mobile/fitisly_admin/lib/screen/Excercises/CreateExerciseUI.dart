@@ -2,10 +2,7 @@ import 'dart:io';
 
 import 'package:fitislyadmin/ConstApiRoute.dart';
 import 'package:fitislyadmin/Services/ExerciseService.dart';
-import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/model/Exercise.dart';
-import 'package:fitislyadmin/model/Photo.dart';
-import 'package:fitislyadmin/model/Video.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

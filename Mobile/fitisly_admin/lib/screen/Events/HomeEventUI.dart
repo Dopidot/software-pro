@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/model/Event.dart';
 import 'package:fitislyadmin/screen/Events/CreateEventUI.dart';
@@ -15,20 +14,8 @@ class HomeEventScreen extends StatefulWidget {
 }
 
 class _HomeEventScreen extends State<HomeEventScreen> {
-
-  Future<List<Event>> futureEvent;
   HttpServices services = HttpServices();
-
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  List<Event> events;
-
-  @override
-  void initState() {
-    super.initState();
-    futureEvent = services.fetchEvents();
-  }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -45,41 +32,42 @@ class _HomeEventScreen extends State<HomeEventScreen> {
           onPressed: () {
             Navigator.push(context, MaterialPageRoute(builder: (context) {
               return CreateEventScreen();
-            }));
-          },
+            })).then((value) {
+
+              if(value != null){
+                buildFutureEvent();
+              }
+            });
+          }
         ));
   }
 
-
-  void delete(var index) async {
-
+  void delete(List<Event> events,int index) async {
     var isDelete = await services.deleteEvent(events[index].id);
-
     if(isDelete){
-
       setState(() {
         events.removeAt(index);
       });
     }
     _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("l'évènement a été supprimé")));
-
-
   }
 
-
 Widget buildList(List<Event> events){
+    return events.isEmpty ? Center( child:Text("Aucun évènement, veuillez en ajouter svp")) : buildListView(events);
+}
+
+Widget buildListView(List<Event> events){
     return ListView.builder(
         itemCount: events.length,
         itemBuilder: (context, index) {
           return Dismissible(
               key: Key(events[index].id),
-              //confirmDismiss: ,
               background: Container(
                 color: Colors.red,
                 child: Icon(Icons.cancel),
               ),
               onDismissed: (direction) {
-                delete(index);
+                delete(events,index);
               },
               child:  Padding(
                 padding:
@@ -91,10 +79,12 @@ Widget buildList(List<Event> events){
                           MaterialPageRoute(builder: (context) {
                             return DetailEventScreen(event: events[index]);
                           })).then((value) {
-                        setState(() {
-                          events[index] = value;
-                         // initState();
-                        });
+
+                            if(value != null){
+                              setState(() {
+                                events[index] = value;
+                              });
+                            }
                       }).catchError((error) {
                         print(error);
                       });
@@ -103,29 +93,24 @@ Widget buildList(List<Event> events){
                     subtitle: Column(
                       children: <Widget>[
                         Text("A ${events[index].zipCode} ${events[index].city}"),
-                        Text(DateFormat('Le dd MMM yyyy').format(events[index].startDate))
+                        Text(DateFormat('le dd MMM yyyy').format(events[index].startDate))
                       ],
                     ),
                   ),
                 ),
               ));
         });
-
 }
 
   FutureBuilder<List<Event>> buildFutureEvent() {
     return FutureBuilder<List<Event>>(
-      future: futureEvent,
+      future: services.fetchEvents(),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return buildList(snapshot.data);
-
-        } else if (snapshot.hasError) {
-
-          return Text("${snapshot.error}");
+        if (snapshot.hasError) {
+          return Center(child: Text("${snapshot.error}"));
         }
-        return CircularProgressIndicator();
-      },
+        return snapshot.hasData ? buildList(snapshot.data) : Center(child: CircularProgressIndicator());
+      }
     );
 
   }

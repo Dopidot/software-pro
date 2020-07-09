@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'Video.dart';
-
 class Exercise {
   String id;
   String name;

@@ -5,6 +5,8 @@ class User {
   String email;
   String userImage;
 
+
+
   User({this.id,this.firstName,this.lastName,this.email,this.userImage});
 
   factory User.fromJson(Map<String,dynamic> json){
@@ -13,15 +15,15 @@ class User {
         firstName:json['firstname'],
         lastName:json['lastname'],
         email:json['email'],
-    userImage: json['userimage']);
+        userImage: json['userimage']);
   }
 
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson(var image) => {
     'id': id,
     'firstname': firstName,
     'lastname': lastName,
     'email': email,
-    //'userImage': eventImage,
+    'userImage': image,
   };
 }

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/Services/UserService.dart';
 import 'package:fitislyadmin/model/User.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,6 @@ class UserScreenSetting extends StatefulWidget {
 
 class _UserScreenSetting extends State<UserScreenSetting> {
 
-  User currentUser;
   UserService services = UserService();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
@@ -26,20 +24,7 @@ class _UserScreenSetting extends State<UserScreenSetting> {
   String _firstName;
   String _lastName;
   File _image;
-  ImagePicker _imagePicker;
-
-
-  @override
-  void initState() {
-    super.initState();
-    services.getCurrentUser()
-        .then((value) {
-      setState(() {
-        currentUser = value;
-      });
-    });
-  }
-
+  final _picker = ImagePicker();
 
 
   @override
@@ -50,22 +35,39 @@ class _UserScreenSetting extends State<UserScreenSetting> {
           title: Text("Bonjour"),
           centerTitle: true,
         ),
-        body: Container(
-          padding: EdgeInsets.all(20.0),
-          child: Form(
-              key: _formKey,
-              autovalidate: _autoValidate,
-              child: buildForm()),
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.all(20.0),
+            child: Form(
+                key: _formKey,
+                autovalidate: _autoValidate,
+                child: buildFutureUser()),
+          ),
         ),
     );
 
   }
 
-  Widget buildForm(){
+  Widget buildForm(User currentUser){
 
-    if(currentUser == null){
-      return CircularProgressIndicator();
-    }
+    final photoField = GestureDetector(
+      child: CircleAvatar(
+        //child: ,
+        backgroundImage: _image != null ? FileImage(_image) : null,
+        minRadius: 40,
+        maxRadius: 80,
+      ),
+      onTap: () async {
+
+        final pickedFile =
+            await _picker.getImage(source: ImageSource.gallery);
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+        print("Clic !!");
+    },
+    );
+
 
     final emailField = TextFormField(
       initialValue: currentUser.email,
@@ -156,6 +158,10 @@ class _UserScreenSetting extends State<UserScreenSetting> {
     return Column(
         children: <Widget>[
           Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: photoField,
+          ),
+          Padding(
             padding: const EdgeInsets.all(5.0),
             child: emailField,
           ),
@@ -187,6 +193,21 @@ class _UserScreenSetting extends State<UserScreenSetting> {
   }
 
 
+  FutureBuilder<User> buildFutureUser() {
+    return FutureBuilder<User>(
+      future: services.getCurrentUser(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return buildForm(snapshot.data);
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error}");
+        }
+        return CircularProgressIndicator();
+      },
+    );
+
+  }
+
   Future<void> _updateInput(User user) async {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -194,6 +215,7 @@ class _UserScreenSetting extends State<UserScreenSetting> {
       user.email = _email;
       user.lastName = _lastName;
       user.firstName = _firstName;
+      user.userImage = _image.path;
 
       var futureUser = await services.updateUser(user);
 
