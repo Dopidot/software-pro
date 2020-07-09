@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:fitislyadmin/ConstApiRoute.dart';
-import 'package:fitislyadmin/modele/Program.dart';
+import 'package:fitislyadmin/model/Program.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as Storage;
-import 'package:image_downloader/image_downloader.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:image_downloader/image_downloader.dart';
 import 'package:mime/mime.dart';
 
 
@@ -32,9 +32,7 @@ class ProgramService{
       'id':p.id,
       'name':p.name,
       'description':p.description,
-      "programImage": await MultipartFile.fromFile(p.programImage,
-          filename:p.programImage.split("/").last ,
-          contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
+      "programImage": await MultipartFile.fromFile(p.programImage, filename:p.programImage.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
     });
 
     var response = await dio.post(ConstApiRoute.createProgram, data:formData,options: Options(headers: headers));
@@ -71,12 +69,14 @@ class ProgramService{
     String token = await getToken();
     var multiPart;
     var mimeTypeData;
+
     Map<String, String> headers = {
       "Content-Type": "multipart/form-data",
       "Authorization": "Baerer " + token,
     };
-    if(p.programImage.contains("image_picker")){
-      var url = "http://localhost:4000/"+p.programImage;
+
+    if(p.programImage.contains("uploads")){
+      var url = "http://www.localhost:4000/"+p.programImage;
       var imageId = await ImageDownloader.downloadImage(url);
       mimeTypeData = await ImageDownloader.findMimeType(imageId);
       var path = await ImageDownloader.findPath(imageId);
@@ -109,10 +109,10 @@ class ProgramService{
     };
 
     var url = ConstApiRoute.getProgramById + id;
-    final http.Response response = await http.delete(url,headers: headers);
+    final http.Response response = await http.get(url,headers: headers);
 
     if(response.statusCode == 200){
-      var responseJson = jsonDecode(response.body);
+      //var responseJson = jsonDecode(response.body);
       return getProgram(response.body) ;
     }
 
@@ -121,7 +121,7 @@ class ProgramService{
 
 
   Program getProgram (String responseBody){
-    final parsed = jsonDecode(responseBody);
+    final parsed = json.decode(responseBody);
     return  Program.fromJson(parsed);
   }
 

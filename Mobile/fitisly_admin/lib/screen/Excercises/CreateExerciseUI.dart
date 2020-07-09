@@ -1,48 +1,52 @@
-import 'package:fitislyadmin/Services/HttpServices.dart';
-import 'package:fitislyadmin/modele/Exercise.dart';
-import 'package:fitislyadmin/modele/Photo.dart';
-import 'package:fitislyadmin/modele/Video.dart';
-import 'package:flutter/material.dart';
-import 'HomePageExcerciseListUI.dart';
-import 'PhotoExerciseScreen.dart';
+import 'dart:io';
 
-class FormCreateExercise extends StatefulWidget {
+import 'package:fitislyadmin/ConstApiRoute.dart';
+import 'package:fitislyadmin/Services/ExerciseService.dart';
+import 'package:fitislyadmin/Services/HttpServices.dart';
+import 'package:fitislyadmin/model/Exercise.dart';
+import 'package:fitislyadmin/model/Photo.dart';
+import 'package:fitislyadmin/model/Video.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+class CreateExerciseUI extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-   return CreateExercise();
+    return _CreateExerciseUI();
   }
 }
 
 
-class CreateExercise extends State<FormCreateExercise>{
+class _CreateExerciseUI extends State<CreateExerciseUI>{
 
   String _name;
   String _description;
   int _reapeat_number;
   int _rest_time;
-  Photo _picture;
-  Video _video;
   bool _autoValidate = false;
-  Future<String> _futureCreateExo;
   final _formKey = GlobalKey<FormState>();
-  HttpServices services = HttpServices();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  File _image;
+  final picker = ImagePicker();
+  ExerciseService services = ExerciseService();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Nouveau exercice"),
-        centerTitle: true,
-      ),
-      body: Container(
-        padding: EdgeInsets.all(20.0),
-    child: SingleChildScrollView(
-        child:Form(
-      autovalidate: _autoValidate,
-    key: _formKey,
-    child: buildForm()))
-    )
+      key: _scaffoldKey,
+        appBar: AppBar(
+          title: Text("Nouveau exercice"),
+          centerTitle: true,
+        ),
+        body: Container(
+            padding: EdgeInsets.all(20.0),
+            child: SingleChildScrollView(
+                child:Form(
+                    autovalidate: _autoValidate,
+                    key: _formKey,
+                    child: buildForm()))
+        )
     );
   }
 
@@ -50,14 +54,39 @@ class CreateExercise extends State<FormCreateExercise>{
 
   Widget buildForm(){
 
+    final photoField = Card(
+      semanticContainer: true,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      child: Center(
+        child: _image == null ? RaisedButton(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.0)
+          ),
+
+          onPressed: () async {
+
+            final pickedFile = await picker.getImage(source: ImageSource.gallery);
+            setState(() {
+              _image = File(pickedFile.path);
+            });
+          },
+          child: Icon(Icons.add)) : Image.file(_image),
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(30.0),
+      ),
+      elevation: 5,
+      margin: EdgeInsets.all(10),
+    );
+
     final nameField = TextFormField(
-        onSaved: (String val){
-          _name = val ;
-        },
-        keyboardType: TextInputType.text,
-        decoration: InputDecoration(
-            hintText: "Nom",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+      onSaved: (String val){
+        _name = val ;
+      },
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+          hintText: "Nom",
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
       validator: _validateField,
     );
 
@@ -98,26 +127,15 @@ class CreateExercise extends State<FormCreateExercise>{
 
     );
 
-    final photoField = TextFormField(
-      onSaved: (String val){
-        _picture = null;
+    RaisedButton cancelBtn = RaisedButton(
+      child: Text('Annuler'),
+      onPressed: () {
+        Navigator.pop(context);
       },
-      validator: _validateField,
-      decoration: InputDecoration(
-          hintText: "Description",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-
-    );
-
-    final videoField = TextFormField(
-      onSaved: (String val){
-        _video = null;
-      },
-      validator: _validateField,
-      decoration: InputDecoration(
-          hintText: "Description",
-          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-
+      color: Colors.red,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(18.0),
+      ),
     );
 
     final creationButton = Material(
@@ -126,63 +144,69 @@ class CreateExercise extends State<FormCreateExercise>{
         color: new Color(0xFF45E15F),
 
         child: MaterialButton(
-            onPressed: _validateInput,
-          child: Text("Suivant"),
+          onPressed: _validateInput,
+          child: Text("Créer"),
         )
     );
 
     return Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: nameField,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: descField,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: reapeteNumberField,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: restTimeField,
-            ),
-            //Flexible(child: photoField),
-           // Flexible(child: videoField),
-             Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: creationButton,
-            )
-          ]
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: nameField,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: descField,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: reapeteNumberField,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: restTimeField,
+          ),
+           Padding(
+             padding: const EdgeInsets.all(8.0),
+             child: photoField,
+           ),
+          // Flexible(child: videoField),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: creationButton,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: cancelBtn,
+              ),
+            ],
+          )
+        ]
     );
-
   }
 
 
-  void _validateInput() {
+  Future<void> _validateInput() async {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-      Exercise e = Exercise(name:_name,description: _description,repetitionNumber: _reapeat_number,restTime: _rest_time);
+      Exercise e = Exercise(name:_name,description: _description,repetitionNumber: _reapeat_number,restTime: _rest_time,exerciseImage: _image.path);
 
-      _futureCreateExo = services.create(e);
 
-      _futureCreateExo
-          .then((value) {
-           // Navigator.pop(context);
-        Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-          return PhotoExerciseScreen(exercise: e);
-        })
-        );
-      });
-      /*Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-        return PhotoExerciseScreen();
-      })
-      );*/
+       try{
+         var isCreated = await services.create(e);
+         if(isCreated){
+           Navigator.pop(context,e);
+         }
+       }catch(e){
+         ConstApiRoute.displayDialog("Erreur", "Erreur du serveur, veuillez vérifier votre connexion internet svp",_scaffoldKey);
+       }
 
-     print("Créé");
     } else {
       setState (() {
         _autoValidate = true ;

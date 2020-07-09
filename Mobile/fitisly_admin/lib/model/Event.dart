@@ -25,7 +25,7 @@ class Event {
       this.eventImage
       });
 
-  factory Event.fromJson(Map<String, String> json) {
+  factory Event.fromJson(Map<String, dynamic> json) {
 
     return Event(
         id: json['id'],

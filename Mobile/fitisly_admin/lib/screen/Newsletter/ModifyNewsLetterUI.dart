@@ -1,7 +1,6 @@
 import 'dart:io';
-
-import 'package:fitislyadmin/Services/HttpServices.dart';
-import 'package:fitislyadmin/modele/Newsletter.dart';
+import 'package:fitislyadmin/Services/NewsletterService.dart';
+import 'package:fitislyadmin/model/Newsletter.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -19,7 +18,7 @@ class ModifyNewsletter extends StatefulWidget{
 class _ModifyNewsletter extends State<ModifyNewsletter>{
 
   Future<Newsletter> futureNl;
-  HttpServices services = HttpServices();
+  NewsletterService services = NewsletterService();
 
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
@@ -215,16 +214,10 @@ initialValue: newsletter.body,
         nl.body = _desc;
         nl.newsletterImage = _image != null ? _image.path : nl.newsletterImage;
 
-        services.updateNewsletter(nl)
-      .then((value) {
-        print(value);
-        Navigator.pop(context);
-       // Navigator.pop(context);
-        })
-      .catchError((onError) => print(onError));
+        services.updateNewsletter(nl).then((value) {
+          Navigator.pop(context,nl);
+        });
 
-
-      //Navigator.pop(context);
 
     }else{
       setState (() {
@@ -235,8 +228,6 @@ initialValue: newsletter.body,
   }
 
 }
-
-
 
 
 String validateField(String val){

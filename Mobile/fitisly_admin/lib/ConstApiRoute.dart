@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class ConstApiRoute{
 
   static const baseUrl = "http://localhost:4000/api/";
@@ -64,4 +66,15 @@ class ConstApiRoute{
   static const deleteEventById = baseUrl + "events/";
 
 
+  static void displayDialog(String title, String text, var keyScaffold) =>
+      showDialog(
+        context: keyScaffold.currentState.context,
+        builder: (context) =>
+            AlertDialog(
+                title: Text(title),
+                content: Text(text)
+            ),
+      );
+
 }
+

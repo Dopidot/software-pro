@@ -1,7 +1,6 @@
 import 'dart:io';
-
 import 'package:fitislyadmin/Services/ProgramService.dart';
-import 'package:fitislyadmin/modele/Program.dart';
+import 'package:fitislyadmin/model/Program.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -50,10 +49,10 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
     );
   }
 
-  Widget _buildField(Program p) {
+  Widget _buildField(Program prog) {
 
     final nameField = TextFormField(
-      initialValue: p.name,
+      initialValue: prog.name,
       validator: validateField,
       onSaved: (String val) {
         _name = val;
@@ -67,7 +66,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
 
 
     final descField = TextFormField(
-      initialValue: p.description,
+      initialValue: prog.description,
       validator: validateField,
       onSaved: (String val) {
         _desc = val;
@@ -81,7 +80,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
           OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))),
     );
 
-    var urlImage = "http://localhost:4000/"+p.programImage;
+    var urlImage = "http://localhost:4000/"+prog.programImage;
 
     final photoField = Container(
         height: 200,
@@ -99,7 +98,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
           margin: EdgeInsets.all(10),
         ));
 
-    RaisedButton createBtn = RaisedButton(
+    RaisedButton updateBtn = RaisedButton(
       child: Text('Modifier'),
       color: Colors.green,
       onPressed: () {
@@ -108,7 +107,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
           Program p = Program(
               name: _name,
               description: _desc,
-              programImage: _image.path);
+              programImage: _image != null ? _image.path : prog.programImage);
           updateProgram(p);
         } else {
           setState(() {
@@ -154,7 +153,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: createBtn,
+              child: updateBtn,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -176,7 +175,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
   Future<void> updateProgram(Program p) async {
     var isValid = await services.updateProgram(p);
     if (isValid) {
-      Navigator.pop(context);
+      Navigator.pop(context,p);
     } else {
       displayDialog("Erreur d'enregistrement",
           "Le programme n'a pas pu être enregistrer dans la base, veuillez vérifier les champs svp ");
@@ -185,14 +184,14 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
 
   FutureBuilder<Program> buildFutureProgram() {
     return FutureBuilder<Program>(
-      future: null,
+      future: futureProg,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return _buildField(snapshot.data);
         } else if (snapshot.hasError) {
-          return Text("${snapshot.error}");
+          return Center(child: Text("${snapshot.error}"));
         }
-        return CircularProgressIndicator();
+        return Center(child: CircularProgressIndicator());
       },
     );
 

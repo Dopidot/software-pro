@@ -78,6 +78,22 @@ import { EventsComponent } from './events/events.component';
 import { ExercisesComponent } from './exercises/exercises.component';
 import { ProgramsComponent } from './programs/programs.component';
 import { CoachsComponent } from './coachs/coachs.component';
+import { MembersComponent } from './members/members.component';
+import { InfosComponent } from './infos/infos.component';
+import { NotificationsComponent } from './notifications/notifications.component';
+import { LoginComponent } from './login/login.component';
+
+import { FormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpHeadersInterceptor } from './services/httpHeadersInterceptor';
+
+import { registerLocaleData } from '@angular/common'; 
+import localeFr from '@angular/common/locales/fr';  
+import { DynamicLocaleId } from './services/dynamicLocaleId';
+
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClient } from '@angular/common/http';
 
 const components = [
     ChartjsBarComponent,
@@ -104,8 +120,17 @@ const components = [
     ChartsComponent*/
   ];
 
+  
+registerLocaleData(localeFr, 'fr');
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+    return new TranslateHttpLoader(http);
+ }
+
+
 @NgModule({
-  declarations: [AppComponent, HomeComponent, EventsComponent, ExercisesComponent, ProgramsComponent, CoachsComponent/*, ...routedComponents, ...components*/],
+  declarations: [AppComponent, HomeComponent, EventsComponent, ExercisesComponent, ProgramsComponent, CoachsComponent, MembersComponent, InfosComponent, NotificationsComponent, LoginComponent/*, ...routedComponents, ...components*/],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -144,8 +169,25 @@ const components = [
     NbInputModule,
     TablesRoutingModule,
     Ng2SmartTableModule,
+    FormsModule,
+    TranslateModule.forRoot({
+        loader: {
+            provide: TranslateLoader,
+            useFactory: HttpLoaderFactory,
+            deps: [HttpClient]
+        }
+    })
   ],
-bootstrap: [AppComponent/*, ...routedComponents, ...components*/],
+  bootstrap: [AppComponent/*, ...routedComponents, ...components*/],
+  providers: [{
+    provide: HTTP_INTERCEPTORS,
+    useClass: HttpHeadersInterceptor,
+    multi: true,
+  },
+  {provide: localeFr, useClass: DynamicLocaleId }],
 })
+
+
+ 
 export class AppModule {
 }

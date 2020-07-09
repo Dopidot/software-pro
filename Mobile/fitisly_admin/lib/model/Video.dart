@@ -1,4 +1,3 @@
-import 'package:fitislyadmin/modele/Exercise.dart';
 
 class Video {
   String id;
