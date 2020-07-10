@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'CreateNewletterUI.dart';
 import 'ModifyNewsLetterUI.dart';
 
-
-
 class NewsletterList extends StatefulWidget {
   @override
   State<NewsletterList> createState() {
@@ -17,12 +15,10 @@ class _NewsletterListState extends State<NewsletterList> {
 
   NewsletterService services = NewsletterService();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  Future<List<Newsletter>> futureNl;
 
   @override
   void initState() {
     super.initState();
-   //futureNl = services.fetchNewsletters();
   }
 
 

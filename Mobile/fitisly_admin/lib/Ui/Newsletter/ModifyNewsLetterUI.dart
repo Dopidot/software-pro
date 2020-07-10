@@ -17,7 +17,6 @@ class ModifyNewsletter extends StatefulWidget{
 
 class _ModifyNewsletter extends State<ModifyNewsletter>{
 
-  Future<Newsletter> futureNl;
   NewsletterService services = NewsletterService();
 
   final _formKey = GlobalKey<FormState>();
@@ -33,7 +32,6 @@ class _ModifyNewsletter extends State<ModifyNewsletter>{
   void initState() {
     // TODO: implement initState
     super.initState();
-    futureNl = services.getNewsletterById(widget.newsletterId);
   }
 
   @override
@@ -55,14 +53,12 @@ class _ModifyNewsletter extends State<ModifyNewsletter>{
 
   FutureBuilder<Newsletter> buildFutureNewsletter() {
     return FutureBuilder<Newsletter>(
-      future: futureNl,
+      future: services.getNewsletterById(widget.newsletterId),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return _buildField(snapshot.data);
-        } else if (snapshot.hasError) {
-          return Text("${snapshot.error}");
+       if (snapshot.hasError) {
+          return Center(child: Text("${snapshot.error}"));
         }
-        return CircularProgressIndicator();
+        return snapshot.hasData ? _buildField(snapshot.data) : Center(child: CircularProgressIndicator());
       },
     );
 

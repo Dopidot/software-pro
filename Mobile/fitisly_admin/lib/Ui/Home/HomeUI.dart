@@ -6,10 +6,10 @@ import 'package:fitislyadmin/Ui/Gym/GymHomeUI.dart';
 import 'package:fitislyadmin/Ui/Home/LoginScreenUI.dart';
 import 'package:fitislyadmin/Ui/Newsletter/NewsLetterListUI.dart';
 import 'package:fitislyadmin/Ui/Programs/ProgramHomeUI.dart';
+import 'package:fitislyadmin/Ui/StatisticUI.dart';
 import 'package:fitislyadmin/Ui/User/UserScreenSettingUI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_sparkline/flutter_sparkline.dart';
 
 
 class HomeScreenPage extends StatefulWidget
@@ -31,18 +31,6 @@ class _HomeScreen extends State<HomeScreenPage> {
     initNumberUser();
     super.initState();
   }
-
-
-  final List<List<double>> data  =
-  [
-    [0.0, 0.3, 0.7, 0.6, 0.55, 0.8, 1.2, 1.3, 1.35, 0.9, 1.5, 1.7, 1.8, 1.7, 1.2, 0.8, 1.9, 2.0, 2.2, 1.9, 2.2, 2.1, 2.0, 2.3, 2.4, 2.45, 2.6, 3.6, 2.6, 2.7, 2.9, 2.8, 3.4],
-    [0.0, 0.3, 0.7, 0.6, 0.55, 0.8, 1.2, 1.3, 1.35, 0.9, 1.5, 1.7, 1.8, 1.7, 1.2, 0.8, 1.9, 2.0, 2.2, 1.9, 2.2, 2.1, 2.0, 2.3, 2.4, 2.45, 2.6, 3.6, 2.6, 2.7, 2.9, 2.8, 3.4, 0.0, 0.3, 0.7, 0.6, 0.55, 0.8, 1.2, 1.3, 1.35, 0.9, 1.5, 1.7, 1.8, 1.7, 1.2, 0.8, 1.9, 2.0, 2.2, 1.9, 2.2, 2.1, 2.0, 2.3, 2.4, 2.45, 2.6, 3.6, 2.6, 2.7, 2.9, 2.8, 3.4,],
-  ];
-
-  static final List<String> chartDropdownItems = [ 'Les programmes', 'Les utilisateurs'];
-  String actualDropdown = chartDropdownItems[0];
-  int actualChart = 0;
-
 
   @override
   Widget build(BuildContext context) {
@@ -108,6 +96,11 @@ class _HomeScreen extends State<HomeScreenPage> {
                     ]
                 ),
               ),
+              onTap: (){
+                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
+                  return StatisticUI();
+                })
+                );              }
             ),
             _buildTile(
               Padding(

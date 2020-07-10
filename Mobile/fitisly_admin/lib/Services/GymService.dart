@@ -133,12 +133,11 @@ class GymService{
     if (response.statusCode == 200) {
       return getAllGyms(response.body);
     }
-
     throw Exception("Not find gyms");
   }
 
   List<Gym> getAllGyms(String responseBody) {
-    final parsed = jsonDecode(responseBody);
+    final parsed = json.decode(responseBody);
 
     return parsed.map<Gym>((json) => Gym.fromJson(json)).toList();
   }
