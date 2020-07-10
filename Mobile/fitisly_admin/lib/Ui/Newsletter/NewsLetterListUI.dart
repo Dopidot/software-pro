@@ -1,5 +1,5 @@
+import 'package:fitislyadmin/Model/Fitisly_Admin/Newsletter.dart';
 import 'package:fitislyadmin/Services/NewsletterService.dart';
-import 'package:fitislyadmin/model/Newsletter.dart';
 import 'package:flutter/material.dart';
 import 'CreateNewletterUI.dart';
 import 'ModifyNewsLetterUI.dart';

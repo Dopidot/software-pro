@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:fitislyadmin/ConstApiRoute.dart';
-import 'package:fitislyadmin/model/Newsletter.dart';
+import 'package:fitislyadmin/Model/Fitisly_Admin/Newsletter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as Storage;
 import 'package:image_downloader/image_downloader.dart';
 import 'package:mime/mime.dart';
@@ -114,7 +113,6 @@ class NewsletterService {
     final http.Response response = await http.get(url,headers: headers);
 
     if(response.statusCode == 200){
-      var responseJson = jsonDecode(response.body);
       return getNewsletter(response.body) ;
     }
 

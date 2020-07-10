@@ -1,6 +1,6 @@
+import 'package:fitislyadmin/Model/Fitisly_Admin/Program.dart';
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/Services/ProgramService.dart';
-import 'package:fitislyadmin/model/Program.dart';
 import 'package:fitislyadmin/Ui/Home/LoginScreenUI.dart';
 import 'package:fitislyadmin/Ui/Programs/CreateProgramUI.dart';
 import 'package:fitislyadmin/Ui/Programs/ModifyProgramUI.dart';

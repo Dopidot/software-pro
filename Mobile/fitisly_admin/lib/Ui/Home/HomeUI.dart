@@ -1,6 +1,6 @@
+import 'package:fitislyadmin/Services/ApiFitisly/UserSportService.dart';
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/Ui/Events/HomeEventUI.dart';
-import 'package:fitislyadmin/Ui/Excercises/CreateExerciseUI.dart';
 import 'package:fitislyadmin/Ui/Excercises/HomePageExcerciseListUI.dart';
 import 'package:fitislyadmin/Ui/Gym/GymHomeUI.dart';
 import 'package:fitislyadmin/Ui/Home/LoginScreenUI.dart';
@@ -10,7 +10,6 @@ import 'package:fitislyadmin/Ui/User/UserScreenSettingUI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
-import 'package:http/http.dart' as http;
 
 
 class HomeScreenPage extends StatefulWidget
@@ -22,6 +21,17 @@ class HomeScreenPage extends StatefulWidget
 }
 
 class _HomeScreen extends State<HomeScreenPage> {
+  final serviceApi = UserSportService();
+  final services = HttpServices();
+  int nbUser = 0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    initNumberUser();
+    super.initState();
+  }
+
 
   final List<List<double>> data  =
   [
@@ -33,7 +43,6 @@ class _HomeScreen extends State<HomeScreenPage> {
   String actualDropdown = chartDropdownItems[0];
   int actualChart = 0;
 
-  HttpServices services = HttpServices();
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +91,7 @@ class _HomeScreen extends State<HomeScreenPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text('Total des utilisateurs', style: TextStyle(color: Colors.blueAccent)),
-                          Text('1k', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 34.0))
+                          Text(nbUser.toString() , style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 34.0))
                         ],
                       ),
                       Material(
@@ -193,53 +202,6 @@ class _HomeScreen extends State<HomeScreenPage> {
             ),
             _buildTile(
                 Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text('Statistiques', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 24.0)),
-                              ],
-                            ),
-                            DropdownButton(
-                                isDense: true,
-                                value: actualDropdown,
-                                onChanged: (String value) => setState( () {
-                                  actualDropdown = value;
-                                  actualChart = chartDropdownItems.indexOf(value); // Refresh the chart
-                                }),
-                                items: chartDropdownItems.map((String title){
-                                  return DropdownMenuItem(
-                                    value: title,
-                                    child: Text(title, style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w400, fontSize: 14.0)),
-                                  );
-                                }).toList()
-                            )
-                          ],
-                        ),
-                        Padding(padding: EdgeInsets.only(bottom: 4.0)),
-                        Sparkline(
-                          data: data[actualChart],
-                          lineWidth: 5.0,
-                          lineColor: Colors.greenAccent,
-                        )
-                      ],
-                    )
-                ),
-                onTap: () {
-                }
-            ),
-
-            _buildTile(
-                Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -327,9 +289,8 @@ class _HomeScreen extends State<HomeScreenPage> {
             StaggeredTile.fit(2),
             StaggeredTile.fit(1),
             StaggeredTile.fit(1),
-            StaggeredTile.fit(2),
-            StaggeredTile.fit(2),
-            StaggeredTile.fit(2),
+            StaggeredTile.fit(1),
+            StaggeredTile.fit(1),
             StaggeredTile.fit(2),
             StaggeredTile.fit(2),
           ],
@@ -344,7 +305,7 @@ class _HomeScreen extends State<HomeScreenPage> {
         shadowColor: Color(0x802196F3),
         child: InkWell
           (
-            onTap: onTap != null ? () => onTap() : () { print('Not set yet'); },
+            onTap: onTap != null ? () => onTap() : () {},
             child: child
         )
     );
@@ -361,5 +322,13 @@ class _HomeScreen extends State<HomeScreenPage> {
           (Route<dynamic> route) => false,
     ))
         .catchError((onError) => print(onError));
+  }
+
+  Future<void> initNumberUser() async {
+    serviceApi.getNumberUser().then((value) {
+      setState(() {
+        nbUser = value;
+      });
+    });
   }
 }

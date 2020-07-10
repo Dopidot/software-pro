@@ -1,8 +1,7 @@
+import 'package:fitislyadmin/Model/Fitisly_Admin/Exercise.dart';
 import 'package:fitislyadmin/Services/ExerciseService.dart';
-import 'package:fitislyadmin/model/Exercise.dart';
 import 'package:fitislyadmin/Ui/Excercises/ModifyExerciseUI.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'CreateExerciseUI.dart';
 
 class ExerciseListUI extends StatefulWidget{

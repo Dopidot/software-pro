@@ -1,6 +1,5 @@
 import 'dart:io';
-
-import 'package:fitislyadmin/Model/Gym.dart';
+import 'package:fitislyadmin/Model/Fitisly_Admin/Gym.dart';
 import 'package:fitislyadmin/Services/GymService.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';

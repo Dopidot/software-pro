@@ -1,7 +1,6 @@
 import 'dart:io';
-
+import 'package:fitislyadmin/Model/Fitisly_Admin/Exercise.dart';
 import 'package:fitislyadmin/Services/ExerciseService.dart';
-import 'package:fitislyadmin/model/Exercise.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,11 +9,8 @@ class ModifyExerciseUI extends StatefulWidget{
 
   @override
   State<StatefulWidget> createState() {
-
     return _ModifyExerciseUI();
-
   }
-
 }
 
 class _ModifyExerciseUI extends State<ModifyExerciseUI>{

@@ -1,6 +1,6 @@
 import 'dart:io';
+import 'package:fitislyadmin/Model/Fitisly_Admin/Newsletter.dart';
 import 'package:fitislyadmin/Services/NewsletterService.dart';
-import 'package:fitislyadmin/model/Newsletter.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

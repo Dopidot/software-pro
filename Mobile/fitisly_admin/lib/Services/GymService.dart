@@ -1,7 +1,6 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:fitislyadmin/Model/Gym.dart';
+import 'package:fitislyadmin/Model/Fitisly_Admin/Gym.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as Storage;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';

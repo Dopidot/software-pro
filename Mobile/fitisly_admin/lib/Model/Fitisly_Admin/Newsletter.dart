@@ -1,4 +1,3 @@
-import 'dart:io';
 
 class Newsletter {
   String id;

@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 class ConstApiRoute{
@@ -57,7 +58,6 @@ class ConstApiRoute{
   static const updateNewsletters = _baseUrl + "newsletters/";
   static const deleteNewslettersById = _baseUrl + "newsletters/";
 
-
   /*---------------- Events --------------- */
 
   static const createEvent = _baseUrl + "events";
@@ -65,7 +65,6 @@ class ConstApiRoute{
   static const getEventById = _baseUrl + "events/";
   static const updateEvent = _baseUrl + "events/";
   static const deleteEventById = _baseUrl + "events/";
-
 
   /*------------------ Gym ---------------- */
 
@@ -76,13 +75,10 @@ class ConstApiRoute{
   static const deleteGymById = _baseUrl + "gyms/";
 
 
-
   /*------------------ Statistiqques ----------*/
 
-
    static const getAllUsersFitisly = _baseUrlFitisly + "get-users";
-   
-
+   static const getConnectionByGender = _baseUrlFitisly + "get-connections-by-gender";
 
 
   static void displayDialog(String title, String text, var keyScaffold) =>
