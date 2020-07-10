@@ -31,6 +31,14 @@
     {
       "name": "Events",
       "description": "CRUD operation for Events"
+    },
+    {
+      "name": "Gyms",
+      "description": "CRUD operation for Gyms"
+    },
+    {
+      "name": "Coachs",
+      "description": "CRUD operation for Coachs"
     }
   ],
   "schemes": [
@@ -157,22 +165,56 @@
           "type": "string"
         }
       }
+    },
+    "gym": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "gymImage": {
+          "type": "object"
+        },
+        "address": {
+          "type": "string"
+        },
+        "zipCode":  {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "coach": {
+      "type": "object",
+      "properties": {
+        "coachId": {
+          "type": "string"
+        },
+        "isHighlighted": {
+          "type": "boolean"
+        }
+      }
     }
   },
   "paths": {
     "/api/users": {
-      "parameters": [
-        {
-          "name": "Authorization",
-          "in": "header",
-          "description": "Authorization header",
-          "required": true,
-          "type": "string"
-        }
-      ],
       "get": {
         "tags": [
           "Users"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization header",
+            "required": true,
+            "type": "string"
+          }
         ],
         "summary": "Get all the users of the database",
         "responses": {
@@ -1126,6 +1168,326 @@
           },
           "404": {
             "description": "Event not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/gyms": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Gyms"
+        ],
+        "summary": "Get all of the gyms of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/gym"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Gyms"],
+        "summary": "Create an gym in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "gymImage",
+            "type": "file",
+            "description": "image of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "address",
+            "type": "string",
+            "description": "the address of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "zipCode",
+            "type": "string",
+            "description": "the zipcode"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "string",
+            "description": "the city of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "country",
+            "type": "string",
+            "description": "the country  of the gym"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/gym"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/gyms/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the gym that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Gyms"],
+        "summary": "Get the gym with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/gym"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Gyms"],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "gymImage",
+            "type": "file",
+            "description": "image of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "address",
+            "type": "string",
+            "description": "the address of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "zipCode",
+            "type": "string",
+            "description": "the zipcode of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "string",
+            "description": "the city of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "country",
+            "type": "string",
+            "description": "the country of the gym"
+          }
+        ],
+        "summary": "Update the gym with the given ID",
+        "responses": {
+          "200":{
+            "description": "gym updated successfully",
+            "schema": {
+              "$ref": "#/definitions/gym"
+            }
+          },
+          "404": {
+            "description": "Gym not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Gyms"],
+        "summary": "Delete the gym with the given ID",
+        "responses": {
+          "200": {
+            "description": "Gym {id} was deleted successfully"
+          },
+          "404": {
+            "description": "Gym not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/coachs": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Coachs"
+        ],
+        "summary": "Get all of the coach of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/coach"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Coachs"],
+        "summary": "Create an coach in the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "id of the referenced coach",
+            "schema": {
+              "$ref": "#/definitions/coach"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/coach"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/coachs/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the coach that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Coachs"],
+        "summary": "Get the coach with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/coach"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Coachs"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "id of the referenced coach",
+            "schema": {
+              "$ref": "#/definitions/coach"
+            }
+          }
+        ],
+        "summary": "Update the coach with the given ID",
+        "responses": {
+          "200":{
+            "description": "coach updated successfully",
+            "schema": {
+              "$ref": "#/definitions/coach"
+            }
+          },
+          "404": {
+            "description": "Coach not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Coachs"],
+        "summary": "Delete the coach with the given ID",
+        "responses": {
+          "200": {
+            "description": "Coach {id} was deleted successfully"
+          },
+          "404": {
+            "description": "Coach not found"
           },
           "500": {
             "description": "Internal Server Error"

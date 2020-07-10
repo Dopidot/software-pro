@@ -43,3 +43,22 @@ ALTER TABLE public.events ADD country varchar(255) NULL;
 --- fix event pour JEan 
 ALTER TABLE public.events ALTER COLUMN zipcode TYPE varchar(255) USING zipcode::varchar;
 
+------- Creation nouvelles tables
+
+create table gyms(
+	id bigint primary key default nextval('id_sequence'),
+	name varchar(255) not null,
+	address varchar(255),
+	zipcode varchar(255),
+	city varchar(50),
+	country varchar(255),
+    gymimage varchar(255)
+);
+
+CREATE TABLE public.coachs (
+	id bigint PRIMARY KEY DEFAULT nextval('id_sequence'),
+	coachid varchar(255) NOT NULL,
+	ishighlighted boolean NOT NULL
+);
+
+-- ALTER TABLE public.coachs ALTER COLUMN coachid TYPE varchar(255) USING coachid::varchar;
