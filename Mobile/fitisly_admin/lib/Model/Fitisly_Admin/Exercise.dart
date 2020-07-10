@@ -6,7 +6,8 @@ class Exercise {
   String description;
   int repetitionNumber;
   int restTime;
-String exerciseImage;
+  String exerciseImage;
+
   Exercise({this.id,this.name,this.description, this.repetitionNumber, this.restTime, this.exerciseImage});
 
   factory Exercise.fromJson(Map<String,dynamic> json){

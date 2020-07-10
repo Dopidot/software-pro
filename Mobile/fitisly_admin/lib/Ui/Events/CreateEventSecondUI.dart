@@ -1,8 +1,7 @@
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/model/Event.dart';
-import 'package:fitislyadmin/screen/Events/HomeEventUI.dart';
+import 'package:fitislyadmin/Ui/Events/HomeEventUI.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoder/geocoder.dart';
 
 class CreateEventSecondScreen extends StatefulWidget {
 
@@ -27,7 +26,7 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
   String _country;
   String _city;
   HttpServices services = HttpServices();
-  Future<bool> _futureCreateEvent;
+
   @override
   Widget build(BuildContext context) {
 
@@ -91,7 +90,7 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
 
     );
 
-    final countrie = TextFormField(
+    final country = TextFormField(
       onSaved: (String val){
         _country = val;
       },
@@ -130,7 +129,7 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: countrie,
+            child: country,
           ),
 
           Padding(
@@ -154,9 +153,9 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
       e.city = _city;
       e.country = _country;
 
-      _futureCreateEvent = services.createEvent(e);
+      var futureCreateEvent = services.createEvent(e);
 
-      _futureCreateEvent.then((value) {
+      futureCreateEvent.then((value) {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeEventScreen()),
@@ -178,7 +177,7 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
   }
 
 
-  Future<String> tansformAddressToLocalistion() async {
+  /*Future<String> tansformAddressToLocalistion() async {
 
     var completeAddress = "$_address ,$_zipCode $_city ,$_country";
 
@@ -192,6 +191,6 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
         });
 
     return localisation;
-  }
+  }*/
 
 }

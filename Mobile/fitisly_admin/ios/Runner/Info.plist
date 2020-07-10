@@ -61,6 +61,9 @@
     <key>NSLocationAlwaysUsageDescription</key>
     <string>Can I have location always?</string>
 
+    <key>io.flutter.embedded_views_preview</key>
+    <string>YES</string>
+
       <!-- Permission options for the `camera` group -->
         <key>NSCameraUsageDescription</key>
         <string>camera</string>

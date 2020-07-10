@@ -1,12 +1,12 @@
 import 'package:fitislyadmin/Services/HttpServices.dart';
-import 'package:fitislyadmin/screen/Events/HomeEventUI.dart';
-import 'package:fitislyadmin/screen/Excercises/CreateExerciseUI.dart';
-import 'package:fitislyadmin/screen/Excercises/HomePageExcerciseListUI.dart';
-import 'package:fitislyadmin/screen/Home/LoginScreenUI.dart';
-import 'package:fitislyadmin/screen/Newsletter/NewsLetterListUI.dart';
-import 'package:fitislyadmin/screen/Programs/ProgramHomeUI.dart';
-import 'package:fitislyadmin/screen/TabBarScreen.dart';
-import 'package:fitislyadmin/screen/User/UserScreenSettingUI.dart';
+import 'package:fitislyadmin/Ui/Events/HomeEventUI.dart';
+import 'package:fitislyadmin/Ui/Excercises/CreateExerciseUI.dart';
+import 'package:fitislyadmin/Ui/Excercises/HomePageExcerciseListUI.dart';
+import 'package:fitislyadmin/Ui/Gym/GymHomeUI.dart';
+import 'package:fitislyadmin/Ui/Home/LoginScreenUI.dart';
+import 'package:fitislyadmin/Ui/Newsletter/NewsLetterListUI.dart';
+import 'package:fitislyadmin/Ui/Programs/ProgramHomeUI.dart';
+import 'package:fitislyadmin/Ui/User/UserScreenSettingUI.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_sparkline/flutter_sparkline.dart';
@@ -48,8 +48,7 @@ class _HomeScreen extends State<HomeScreenPage> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => UserScreenSetting()),
-                      (Route<dynamic> route) => true,
+                Navigator.push(context, MaterialPageRoute(builder: (context) => UserScreenSetting())
                 );
               },
             ),
@@ -261,6 +260,8 @@ class _HomeScreen extends State<HomeScreenPage> {
                   ),
                 ),
                 onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => GymHomeUI())
+                  );
                 }
             ),
             _buildTile(
@@ -320,8 +321,6 @@ class _HomeScreen extends State<HomeScreenPage> {
                       ]
                   ),
                 ),
-                onTap: () {
-                }
             ),
           ],
           staggeredTiles: [
@@ -362,7 +361,5 @@ class _HomeScreen extends State<HomeScreenPage> {
           (Route<dynamic> route) => false,
     ))
         .catchError((onError) => print(onError));
-
   }
-
 }

@@ -1,10 +1,10 @@
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/Services/ProgramService.dart';
 import 'package:fitislyadmin/model/Program.dart';
-import 'package:fitislyadmin/screen/Home/LoginScreenUI.dart';
-import 'package:fitislyadmin/screen/Programs/CreateProgramUI.dart';
-import 'package:fitislyadmin/screen/Programs/ModifyProgramUI.dart';
-import 'package:fitislyadmin/screen/User/UserScreenSettingUI.dart';
+import 'package:fitislyadmin/Ui/Home/LoginScreenUI.dart';
+import 'package:fitislyadmin/Ui/Programs/CreateProgramUI.dart';
+import 'package:fitislyadmin/Ui/Programs/ModifyProgramUI.dart';
+import 'package:fitislyadmin/Ui/User/UserScreenSettingUI.dart';
 import 'package:flutter/material.dart';
 
 class ProgramHomeScreen extends StatefulWidget {
