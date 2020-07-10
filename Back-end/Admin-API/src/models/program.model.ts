@@ -1,5 +1,3 @@
-import ExerciseModel from "./exercise.model";
-
 export default class ProgramModel {
     public id!: number;
     public name!: string;

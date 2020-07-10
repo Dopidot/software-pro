@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:fitislyadmin/ConstApiRoute.dart';
-import 'package:fitislyadmin/model/Event.dart';
-import 'package:fitislyadmin/model/Exercise.dart';
+import 'package:fitislyadmin/Model/Fitisly_Admin/Event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -78,14 +77,6 @@ class HttpServices {
     return token["accessToken"];
   }
 
-
-  /* ------------------------Fin Login ------------------------------*/
-
-
-/* ------------------------ Début Exercice ------------------------------- */
-
-
-/* -------------------- Fin service Exercice ----------------------*/
 
 
 /*----------------------- Event ------------------------------*/
