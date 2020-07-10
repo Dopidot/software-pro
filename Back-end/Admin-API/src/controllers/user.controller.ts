@@ -3,9 +3,6 @@ import { QueryResult } from 'pg';
 import { pool } from '../database';
 import * as bcrypt from 'bcrypt';
 import * as fs from "fs";
-import * as dotenv from "dotenv";
-
-dotenv.config();
 
 export default class UserController {
 
@@ -55,7 +52,6 @@ export default class UserController {
                     user: response.rows[0]
                 }
             });
-
         } catch (e) {
             console.error(e);
             if (e.code == 23505) {

@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:fitislyadmin/ConstApiRoute.dart';
-import 'package:fitislyadmin/model/Program.dart';
+import 'package:fitislyadmin/Model/Fitisly_Admin/Program.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as Storage;
 import 'package:http_parser/http_parser.dart';

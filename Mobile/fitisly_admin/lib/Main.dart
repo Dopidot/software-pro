@@ -1,4 +1,4 @@
-import 'package:fitislyadmin/screen/Home/LoginScreenUI.dart';
+import 'package:fitislyadmin/Ui/Home/LoginScreenUI.dart';
 import 'package:flutter/material.dart';
 
 void main() {
