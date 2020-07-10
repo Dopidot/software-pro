@@ -42,7 +42,7 @@ CREATE TABLE exercises(
     video_id BIGINT
 );
 
-INSERT INTO exercises (name, description, reapeat_number, rest_time)
+INSERT INTO exercises (name, description, repeat_number, rest_time)
 VALUES ('Levé de jambes', 'Couché par terre vous leverez vos jambes en angle droit et les redescendez sans toucher le sol', 15,  1),
        ('Abdominaux torsions', 'description trop longue', 15, 1),
        ('Ciseaux', 'Autre description', 15, 1);
