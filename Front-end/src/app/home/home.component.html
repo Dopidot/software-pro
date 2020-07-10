@@ -10,7 +10,7 @@
                             <button nbButton [size]="medium" class="close-button" (click)="selectedEvent = null;">
                                 <i class="fas fa-times" style="margin-top: 2px;"></i>
                             </button>
-                            <div><strong>Evènement du {{date | date : "dd/MM/yyyy"}}</strong></div>
+                            <div><strong>{{ 'HOME_EVENT_OF' | translate }} {{date | date : "dd/MM/yyyy"}}</strong></div>
                             <div>{{selectedEvent}}</div>
                         </nb-card-body>
                     </nb-card>
@@ -18,10 +18,10 @@
 
                 <div class="col-md-6 col-lg-4 col-xxxl-4">
                     <nb-card class="list-card" size="small">
-                        <nb-card-header>Nouveaux utilisateurs</nb-card-header>
+                        <nb-card-header>{{ 'HOME_NEW_USERS' | translate }}</nb-card-header>
                         <nb-list>
                         <nb-list-item *ngFor="let user of users">
-                            <nb-user [name]="user.name" [title]="user.title" size="large">
+                            <nb-user [name]="user.name" [title]="user.title" [picture]="user.picture" size="large">
                             </nb-user>
                         </nb-list-item>
                         </nb-list>

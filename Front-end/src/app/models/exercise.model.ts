@@ -5,12 +5,10 @@ export class Exercise {
     public id: number;
     public name: string;
     public description: string;
-    public repeatNumber: number;
-    public restTime: number;
-    public pictureId: number;
-    public videoId: number;
-    public programs: Program[];
-    public users: User[];
+    public repeat_number: number;
+    public rest_time: number;
+    public video_id: string;
+    public exerciseimage: string;
 
     constructor() {}
 }

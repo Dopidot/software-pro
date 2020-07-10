@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MenuService } from '../services/menu.service';
 
 @Component({
-    selector: 'ngx-notifications',
-    templateUrl: './notifications.component.html',
-    styleUrls: ['./notifications.component.scss']
+    selector: 'ngx-news',
+    templateUrl: './news.component.html',
+    styleUrls: ['./news.component.scss']
 })
-export class NotificationsComponent implements OnInit {
+export class NewsComponent implements OnInit {
 
     menu = [];
     notifications: any;

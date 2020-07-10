@@ -12,13 +12,13 @@ import { ThemeModule } from './@theme/theme.module';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import {
-  NbChatModule,
-  NbDatepickerModule,
-  NbDialogModule,
-  NbMenuModule,
-  NbSidebarModule,
-  NbToastrModule,
-  NbWindowModule,
+    NbChatModule,
+    NbDatepickerModule,
+    NbDialogModule,
+    NbMenuModule,
+    NbSidebarModule,
+    NbToastrModule,
+    NbWindowModule,
 } from '@nebular/theme';
 import {
     NbAccordionModule,
@@ -28,20 +28,20 @@ import {
     NbRouteTabsetModule,
     NbStepperModule,
     NbTabsetModule, NbUserModule,
-  } from '@nebular/theme';
+} from '@nebular/theme';
 
 import {
     NbCalendarModule
-  } from '@nebular/theme';
+} from '@nebular/theme';
 
-  import {
+import {
     NbCalendarKitModule
-  } from '@nebular/theme';
+} from '@nebular/theme';
 
 
-  import { NgxEchartsModule } from 'ngx-echarts';
-  import { NgxChartsModule } from '@swimlane/ngx-charts';
-  import { ChartModule } from 'angular2-chartjs';
+import { NgxEchartsModule } from 'ngx-echarts';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { ChartModule } from 'angular2-chartjs';
 
 import { ChartsRoutingModule, routedComponents } from './pages/charts/charts-routing.module';
 import { ChartjsBarComponent } from './pages/charts/chartjs/chartjs-bar.component';
@@ -71,7 +71,7 @@ import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 import { TablesRoutingModule } from './pages/tables/tables-routing.module';
 import { FsIconComponent } from './pages/tables/tree-grid/tree-grid.component';
-  
+
 
 import { HomeComponent } from './home/home.component';
 import { EventsComponent } from './events/events.component';
@@ -87,13 +87,16 @@ import { FormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpHeadersInterceptor } from './services/httpHeadersInterceptor';
 
-import { registerLocaleData } from '@angular/common'; 
-import localeFr from '@angular/common/locales/fr';  
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
 import { DynamicLocaleId } from './services/dynamicLocaleId';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClient } from '@angular/common/http';
+import { NewsComponent } from './news/news.component';
+import { InactivityComponent } from './inactivity/inactivity.component';
+
 
 const components = [
     ChartjsBarComponent,
@@ -118,76 +121,76 @@ const components = [
     /*ChartjsComponent,
     ChartjsBarComponent,
     ChartsComponent*/
-  ];
+];
 
-  
+
 registerLocaleData(localeFr, 'fr');
 
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
     return new TranslateHttpLoader(http);
- }
+}
 
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, EventsComponent, ExercisesComponent, ProgramsComponent, CoachsComponent, MembersComponent, InfosComponent, NotificationsComponent, LoginComponent/*, ...routedComponents, ...components*/],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    HttpClientModule,
-    AppRoutingModule,
-    NbSidebarModule.forRoot(),
-    NbMenuModule.forRoot(),
-    NbDatepickerModule.forRoot(),
-    NbDialogModule.forRoot(),
-    NbWindowModule.forRoot(),
-    NbToastrModule.forRoot(),
-    NbChatModule.forRoot({
-      messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
-    }),
-    CoreModule.forRoot(),
-    ThemeModule.forRoot(),
-    ThemeModule,
-    NbTabsetModule,
-    NbRouteTabsetModule,
-    NbStepperModule,
-    NbCardModule,
-    NbButtonModule,
-    NbListModule,
-    NbAccordionModule,
-    NbUserModule,
-    NbCalendarModule,
-    NbCalendarKitModule,
+    declarations: [AppComponent, HomeComponent, EventsComponent, ExercisesComponent, ProgramsComponent, CoachsComponent, MembersComponent, InfosComponent, NotificationsComponent, LoginComponent, NewsComponent, InactivityComponent/*, ...routedComponents, ...components*/],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        HttpClientModule,
+        AppRoutingModule,
+        NbSidebarModule.forRoot(),
+        NbMenuModule.forRoot(),
+        NbDatepickerModule.forRoot(),
+        NbDialogModule.forRoot(),
+        NbWindowModule.forRoot(),
+        NbToastrModule.forRoot(),
+        NbChatModule.forRoot({
+            messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY',
+        }),
+        CoreModule.forRoot(),
+        ThemeModule.forRoot(),
+        ThemeModule,
+        NbTabsetModule,
+        NbRouteTabsetModule,
+        NbStepperModule,
+        NbCardModule,
+        NbButtonModule,
+        NbListModule,
+        NbAccordionModule,
+        NbUserModule,
+        NbCalendarModule,
+        NbCalendarKitModule,
 
-    ChartsRoutingModule,
-    NgxEchartsModule,
-    NgxChartsModule,
-    ChartModule,
-    
-    NbTreeGridModule,
-    NbIconModule,
-    NbInputModule,
-    TablesRoutingModule,
-    Ng2SmartTableModule,
-    FormsModule,
-    TranslateModule.forRoot({
-        loader: {
-            provide: TranslateLoader,
-            useFactory: HttpLoaderFactory,
-            deps: [HttpClient]
-        }
-    })
-  ],
-  bootstrap: [AppComponent/*, ...routedComponents, ...components*/],
-  providers: [{
-    provide: HTTP_INTERCEPTORS,
-    useClass: HttpHeadersInterceptor,
-    multi: true,
-  },
-  {provide: localeFr, useClass: DynamicLocaleId }],
+        ChartsRoutingModule,
+        NgxEchartsModule,
+        NgxChartsModule,
+        ChartModule,
+
+        NbTreeGridModule,
+        NbIconModule,
+        NbInputModule,
+        TablesRoutingModule,
+        Ng2SmartTableModule,
+        FormsModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: HttpLoaderFactory,
+                deps: [HttpClient]
+            }
+        })
+    ],
+    bootstrap: [AppComponent/*, ...routedComponents, ...components*/],
+    providers: [{
+        provide: HTTP_INTERCEPTORS,
+        useClass: HttpHeadersInterceptor,
+        multi: true,
+    },
+    { provide: localeFr, useClass: DynamicLocaleId }],
 })
 
 
- 
+
 export class AppModule {
 }

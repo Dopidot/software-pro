@@ -1,8 +1,9 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { MENU_ITEMS } from '../menu/menu';
+import { MenuService } from '../services/menu.service';
 import { LocalDataSource } from 'ng2-smart-table';
 import { SmartTableData } from '../@core/data/smart-table';
 import { NbDialogService } from '@nebular/theme';
+import { FitislyService } from '../services/fitisly.service';
 
 @Component({
     selector: 'ngx-members',
@@ -11,10 +12,11 @@ import { NbDialogService } from '@nebular/theme';
 })
 export class MembersComponent implements OnInit {
 
-    menu = MENU_ITEMS;
+    menu = [];
     currentUser = {};
     success = 'success';
     danger = 'danger';
+    users: { pseudo: string, lastName: string, firstName: string, email: string, picture : string }[] = [];
 
     settings = {
         actions: {
@@ -44,11 +46,7 @@ export class MembersComponent implements OnInit {
             email: {
                 title: 'Email',
                 type: 'string',
-            },
-            connection: {
-                title: 'Dernière connexion',
-                type: 'string',
-            },
+            }
         },
     };
 
@@ -57,41 +55,44 @@ export class MembersComponent implements OnInit {
     constructor(
         private service: SmartTableData,
         private dialogService: NbDialogService,
+        private fitisly: FitislyService,
+        private menuService: MenuService,
         ) {
-        /*const data = this.service.getData();
-        console.log(data);
-        this.source.load(data);*/
-        const data = [
-            {
-                pseudo: 'Christophil',
-                lastName: 'Philemon',
-                firstName: 'Christopher',
-                email: 'chris.philemon@gmail.com',
-                connection: '06:50 le 02/06/2020',
-                picture: 'assets/images/alan.png'
-            },
-            {
-                pseudo: 'Juanito',
-                lastName: 'Deyehe',
-                firstName: 'Jean',
-                email: 'jean.deyehe@gmail.com',
-                connection: '18:30 le 28/05/2020',
-                picture: 'assets/images/jack.png'
-            },
-            {
-                pseudo: 'Bigyeezy',
-                lastName: 'Tako',
-                firstName: 'Guillaume',
-                email: 'guillaume.tako@hotmail.fr',
-                connection: '22:51 le 25/05/2020',
-                picture: 'assets/images/nick.png'
-            },
-        ];
 
-        this.source.load(data);
+        this.loadUsers();
     }
 
     ngOnInit(): void {
+        this.menu = this.menuService.getMenu();
+    }
+
+    loadUsers(): void {
+        this.fitisly.getUsers().subscribe(data => {
+            data = data['body']['list'];
+            
+            data.forEach(element => {
+                this.fitisly.getUserInfo(element['account_id']).subscribe(info => {
+                    let myInfo = info['body']['user_profile'];
+
+                    this.users.push({
+                        pseudo: this.capitalize(myInfo['pseudonyme']),
+                        lastName: this.capitalize(myInfo['last_name']),
+                        firstName: this.capitalize(myInfo['first_name']),
+                        email: this.capitalize(myInfo['mail']),
+                        picture: 'http://51.178.16.171:8150/get-user-profile-picture/' + myInfo['profile_picture']
+                    });
+                    //console.log(this.users);
+                    this.source.load(this.users);
+                }, error => {
+                });
+            });
+
+        }, error => {
+        });
+    }
+
+    capitalize(s: string): string {
+        return s.charAt(0).toUpperCase() + s.slice(1);
     }
 
     openPopup(event, dialog: TemplateRef<any>) {

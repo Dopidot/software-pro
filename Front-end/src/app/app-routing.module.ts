@@ -15,13 +15,16 @@ import { ProgramsComponent } from './programs/programs.component';
 import { CoachsComponent } from './coachs/coachs.component';
 import { MembersComponent } from './members/members.component';
 import { InfosComponent } from './infos/infos.component';
-import { NotificationsComponent } from './notifications/notifications.component';
+import { InactivityComponent } from './inactivity/inactivity.component';
+import { NewsComponent } from './news/news.component';
 import { LoginComponent } from './login/login.component';
 import { UserService } from './services/user.service';
 import { ProgramService } from './services/program.service';
 import { StatusService } from './services/status.service';
 import { HttpClientModule } from "@angular/common/http";
-
+import { FitislyService } from './services/fitisly.service';
+import { MenuService } from './services/menu.service';
+import { ExerciseService } from './services/exercise.service';
 
 export const routes: Routes = [
   {
@@ -66,7 +69,8 @@ export const routes: Routes = [
   { path: 'coachs', component: CoachsComponent },
   { path: 'members', component: MembersComponent },
   { path: 'infos', component: InfosComponent },
-  { path: 'notifications', component: NotificationsComponent },
+  { path: 'inactivity', component: InactivityComponent },
+  { path: 'news', component: NewsComponent },
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'pages' },
@@ -79,7 +83,7 @@ const config: ExtraOptions = {
 @NgModule({
   imports: [RouterModule.forRoot(routes, config), HttpClientModule],
   exports: [RouterModule],
-  providers: [UserService, ProgramService, StatusService],
+  providers: [UserService, ProgramService, StatusService, FitislyService, MenuService, ExerciseService],
 })
 export class AppRoutingModule {
 }

@@ -1,8 +1,13 @@
 import { NbMenuItem } from '@nebular/theme';
+import { Component, OnInit } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+
+
+
 
 export const MENU_ITEMS: NbMenuItem[] = [
     {
-        title: 'Accueil',
+        title: "Accueil",
         icon: 'home-outline',
         link: '/home',
         home: true,
@@ -35,12 +40,12 @@ export const MENU_ITEMS: NbMenuItem[] = [
         icon: 'message-square-outline',
         children: [
             {
-                title: 'Actualités de la salle',
+                title: 'Actualités',
                 link: '/news'
             },
             {
-                title: 'Notifications',
-                link: '/notifications'
+                title: 'Utilisateurs inactifs',
+                link: '/inactivity'
             }
         ],
     },

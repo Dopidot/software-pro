@@ -4,20 +4,113 @@
         <div class="container">
             <div class="row">
         
+                <div class="col-12" style="text-align: center;" *ngIf="errorMessage">
+                    <nb-card style="margin-bottom: 20px;">
+                        <nb-card-body>
+                            <button nbButton [size]="medium" class="close-button" (click)="errorMessage = null;">
+                                <i class="fas fa-times" style="margin-top: 2px;"></i>
+                            </button>
+                            <span>{{errorMessage}}</span>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+
                 <div class="col-md-12 col-lg-12 col-xxxl-12">
                     <nb-card>
                         <nb-card-header>
-                          Exercises
+                            Exercices
                         </nb-card-header>
-                      
+
                         <nb-card-body>
-                          <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="onDeleteConfirm($event)">
-                          </ng2-smart-table>
+                            <ng2-smart-table [settings]="settings" [source]="source"
+                                (custom)="selectAction($event, dialog2, dialog)">
+                            </ng2-smart-table>
+
+                            <div style="text-align: center; margin-top: 10px;">
+                                <button nbButton [status]="success"
+                                    (click)="openPopup(dialog2); popupType = 2; currentExercise = {}; imageBase64 = null;">
+                                    Ajouter un exercice</button>
+                            </div>
                         </nb-card-body>
-                      </nb-card>
+                    </nb-card>
                 </div>
 
             </div>
         </div>
     </router-outlet>
 </ngx-one-column-layout>
+
+<ng-template #dialog2 let-data let-ref="dialogRef">
+    <nb-card>
+        <nb-card-header *ngIf="popupType === 0">Afficher un exercice</nb-card-header>
+        <nb-card-header *ngIf="popupType === 1">Modifier un exercice</nb-card-header>
+        <nb-card-header *ngIf="popupType === 2">Ajouter un exercice</nb-card-header>
+        <nb-card-body style="max-width: 400px;">
+
+            <div class="form-group">
+                <label for="name" class="label">Nom</label>
+                <input type="text" nbInput fullWidth id="name" [(ngModel)]="currentExercise.name" [readonly]="popupType === 0"
+                    placeholder="Nom">
+            </div>
+            <div class="form-group">
+                <label for="description" class="label">Description</label>
+                <input type="text" nbInput fullWidth id="description" [(ngModel)]="currentExercise.description"
+                    [readonly]="popupType === 0" placeholder="Description">
+            </div>
+            <div class="form-group">
+                <label for="repetition" class="label">Repetition</label>
+                <input type="number" nbInput fullWidth id="repetition" [(ngModel)]="currentExercise.repeat_number"
+                    [readonly]="popupType === 0" placeholder="Repetition">
+            </div>
+            <div class="form-group">
+                <label for="restTime" class="label">Rest time</label>
+                <input type="number" nbInput fullWidth id="restTime" [(ngModel)]="currentExercise.rest_time"
+                    [readonly]="popupType === 0" placeholder="Rest time">
+            </div>
+
+            <div style="position: relative;" *ngIf="imageBase64 || popupType !== 0">
+                <label for="image" class="label" style="display: block;">Image</label>
+                <label nbButton for="image" *ngIf="!imageBase64 && popupType !== 0" class="input-file">
+                    <i class="fas fa-plus"></i>
+                </label>
+                <input type="file" id="image" style="display: none;" (change)="fileChangeEvent($event)" accept=".png, .jpeg, .jpg">
+
+                <button nbButton [size]="medium" class="close-button" (click)="imageBase64 = null;" *ngIf="imageBase64">
+                    <i class="fas fa-times" style="margin-top: 2px;"></i>
+                </button>
+                
+                <div style="text-align: center;" *ngIf="imageBase64">
+                    <img [src]="imageBase64" style="max-width: 280px; max-height: 220px;" />
+                </div>
+            </div>
+
+        </nb-card-body>
+        <nb-card-footer style="text-align: center;">
+            <button nbButton [status]="success" (click)="ref.close();" *ngIf="popupType === 0">Fermer</button>
+
+            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;"
+                *ngIf="popupType !== 0">Annuler</button>
+            <button nbButton [status]="success" (click)="ref.close(); editExercise();"
+                *ngIf="popupType === 1">Sauvegarder</button>
+            <button nbButton [status]="success" (click)="ref.close(); addExercise();"
+                *ngIf="popupType === 2">Ajouter</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card>
+        <nb-card-header>Confirmation de suppression</nb-card-header>
+        <nb-card-body style="max-width: 400px;">
+
+            <div style="line-height: 1.5;">
+                Si vous confirmez, l'exercice {{currentExercise.name}} sera définitivement supprimé.
+            </div>
+
+        </nb-card-body>
+        <nb-card-footer style="text-align: center;">
+            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">Annuler</button>
+            <button nbButton [status]="success" (click)="confirmDelete(); ref.close()">Confirmer</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

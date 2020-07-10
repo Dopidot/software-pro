@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MENU_ITEMS } from '../menu/menu';
+import { MenuService } from '../services/menu.service';
 import { StatusService } from '../services/status.service';
 import { UserService } from '../services/user.service';
 
@@ -10,7 +10,7 @@ import { UserService } from '../services/user.service';
 })
 export class InfosComponent implements OnInit {
 
-    menu = MENU_ITEMS;
+    menu = [];
     data: any;
 
     private userInfo = localStorage.getItem('userInfo') != null ? JSON.parse(localStorage.getItem('userInfo')) : '';
@@ -21,9 +21,11 @@ export class InfosComponent implements OnInit {
     constructor(
         private statusService: StatusService,
         private userService: UserService,
+        private menuService: MenuService,
     ) { }
 
     ngOnInit(): void {
+        this.menu = this.menuService.getMenu();
         this.loadStatuts();
     }
 

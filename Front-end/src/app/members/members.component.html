@@ -37,11 +37,6 @@
             <div><strong>Nom et prénom</strong></div>
             <div>{{currentUser.lastName}} {{currentUser.firstName}}</div>
 
-            <div style="margin-bottom: 20px;"></div>
-
-            <div><strong>Dernière connexion</strong></div>
-            <div>{{currentUser.connection}}</div>
-
         </nb-card-body>
         <nb-card-footer>
             <button nbButton [status]="danger" (click)="ref.close()"

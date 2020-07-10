@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { MENU_ITEMS } from '../menu/menu';
+import { MenuService } from '../services/menu.service';
 import { LocalDataSource } from 'ng2-smart-table';
 
 import { NbDialogService } from '@nebular/theme';
@@ -16,7 +16,7 @@ import * as _ from 'lodash';
 })
 export class ProgramsComponent implements OnInit {
 
-    menu = MENU_ITEMS;
+    menu = [];
     currentProgram: Program;
     danger = 'danger';
     success = 'success';
@@ -60,11 +60,13 @@ export class ProgramsComponent implements OnInit {
     constructor(
         private dialogService: NbDialogService,
         private programService: ProgramService,
+        private menuSerivce: MenuService,
     ) {
-        this.loadPrograms();
+        //this.loadPrograms();
     }
 
     ngOnInit(): void {
+        this.menu = this.menuSerivce.getMenu();
     }
 
     loadPrograms(): void {

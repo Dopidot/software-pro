@@ -8,5 +8,20 @@
     "NAVBAR_LOGOUT": "Log out",
     "FOOTER_RIGHTS": "All rights reserved.",
 
-    "HOME_NEXT_EVENTS": "Events to come"
+    "MENU_HOME": "Home",
+    "MENU_MEMBERS": "Members",
+    "MENU_COACHING": "Coaching",
+    "MENU_COACH": "Coachs",
+    "MENU_PROGRAMS": "Programs",
+    "MENU_EXERCISES": "Exercises",
+    "MENU_COMMUNITY": "Community",
+    "MENU_NEWS": "News",
+    "MENU_INACTIVE": "Inactive users",
+    "MENU_EVENTS": "Events",
+    "MENU_INFOS": "Informations",
+
+    "HOME_NEXT_EVENTS": "Events to come",
+    "HOME_NEW_USERS": "New users",
+    "HOME_EVENT_OF": "Event of"
+
 }

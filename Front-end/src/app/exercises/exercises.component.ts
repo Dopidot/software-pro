@@ -1,82 +1,152 @@
-import { Component, OnInit } from '@angular/core';
-import { MENU_ITEMS } from '../menu/menu';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+import { MenuService } from '../services/menu.service';
 import { LocalDataSource } from 'ng2-smart-table';
 
-import { SmartTableData } from '../@core/data/smart-table';
+import { NbDialogService } from '@nebular/theme';
+
+import { ExerciseService } from '../services/exercise.service';
+import { Exercise } from '../models/exercise.model';
 
 @Component({
-  selector: 'ngx-exercises',
-  templateUrl: './exercises.component.html',
-  styleUrls: ['./exercises.component.scss']
+    selector: 'ngx-exercises',
+    templateUrl: './exercises.component.html',
+    styleUrls: ['./exercises.component.scss']
 })
 export class ExercisesComponent implements OnInit {
 
-    menu = MENU_ITEMS;
-    
+    menu = [];
+    currentExercise: Exercise = new Exercise();
+    danger = 'danger';
+    success = 'success';
+    source: LocalDataSource = new LocalDataSource();
+    errorMessage: string;
+    popupType: number = 0;
+    imageBase64: string;
+    myImage: string;
+
     settings = {
-        add: {
-          addButtonContent: '<i class="nb-plus"></i>',
-          createButtonContent: '<i class="nb-checkmark"></i>',
-          cancelButtonContent: '<i class="nb-close"></i>',
-        },
-        edit: {
-          editButtonContent: '<i class="nb-edit"></i>',
-          saveButtonContent: '<i class="nb-checkmark"></i>',
-          cancelButtonContent: '<i class="nb-close"></i>',
-        },
-        delete: {
-          deleteButtonContent: '<i class="nb-trash"></i>',
-          confirmDelete: true,
+        actions: {
+            custom: [
+                {
+                    name: 'show',
+                    title: '<i class="far fa-eye fa-xs"></i>',
+                },
+                {
+                    name: 'edit',
+                    title: '<i class="far fa-edit fa-xs"></i>',
+                },
+                {
+                    name: 'delete',
+                    title: '<i class="far fa-trash-alt fa-xs"></i>',
+                },
+            ],
+            add: false,
+            edit: false,
+            delete: false,
         },
         columns: {
-          name: {
-            title: 'Name',
-            type: 'string',
-          },
-          description: {
-            title: 'Description',
-            type: 'string',
-          },
-          repetition: {
-            title: 'Repetition',
-            type: 'number',
-          },
-          rest: {
-            title: 'Rest time',
-            type: 'number',
-          }
+            name: {
+                title: 'Name',
+                type: 'string',
+            },
+            description: {
+                title: 'Description',
+                type: 'string',
+            },
         },
-      };
-    
-      source: LocalDataSource = new LocalDataSource();
-    
-      constructor(private service: SmartTableData) {
-        const data = [{
-            id: 1,
-            name: 'Pectoraux',
-            description: 'On developpe les pecs',
-            repetition: 2,
-            rest: 10,
-          }, {
-            id: 2,
-            name: 'Pompes',
-            description: 'Développement des bras',
-            repetition: 3,
-            rest: 20,
-          }];
-        this.source.load(data);
-      }
+    };
 
-      ngOnInit(): void {
+    constructor(
+        private dialogService: NbDialogService,
+        private exerciseService: ExerciseService,
+        private menuSerivce: MenuService,
+    ) { }
+
+    ngOnInit(): void {
+        this.menu = this.menuSerivce.getMenu();
+        this.loadExercise();
     }
-    
-      onDeleteConfirm(event): void {
-        if (window.confirm('Are you sure you want to delete?')) {
-          event.confirm.resolve();
-        } else {
-          event.confirm.reject();
+
+    loadExercise(): void {
+        this.exerciseService.getExercises().subscribe(data => {
+            this.source.load(data);
+        });
+    }
+
+    selectAction(event, dialog: TemplateRef<any>, dialogDelete: TemplateRef<any>): void {
+        this.getExercise(event.data['id']);
+
+        this.imageBase64 = null;
+
+        switch (event.action) {
+            case 'show': {
+                this.popupType = 0;
+                this.openPopup(dialog);
+                break;
+            }
+            case 'edit': {
+                this.popupType = 1;
+                this.openPopup(dialog);
+                break;
+            }
+            case 'delete': {
+                this.openPopup(dialogDelete);
+                break;
+            }
         }
-      }
-  
+    }
+
+    openPopup(dialog: TemplateRef<any>): void {
+        this.dialogService.open(
+            dialog
+        );
+    }
+
+    getExercise(id: number): void {
+        this.exerciseService.getExerciseById(id).subscribe(data => {
+            this.currentExercise = data;
+        }, error => {
+            this.errorMessage = 'Une erreur est survenue, veuillez vérifier les informations saisies.';
+        });
+    }
+
+    addExercise(): void {
+        console.log(this.currentExercise);
+        this.currentExercise.exerciseimage = this.myImage;
+        this.exerciseService.createExercise(this.currentExercise).subscribe(data => {
+            this.loadExercise();
+        }, error => {
+            this.errorMessage = 'Une erreur est survenue, veuillez vérifier les informations saisies.';
+        });
+    }
+
+    editExercise(): void {
+        /*this.exerciseService.updateProgram(this.currentProgram['id'], this.currentProgram).subscribe(data => {
+            this.loadExercise();
+        }, error => {
+            this.errorMessage = 'Une erreur est survenue, veuillez vérifier les informations saisies.';
+        });*/
+    }
+
+    confirmDelete(): void {
+        this.exerciseService.deleteExercise(this.currentExercise['id']).subscribe(data => {
+            this.loadExercise();
+        }, error => {
+            this.errorMessage = 'Une erreur est survenue, veuillez réessayer ultérieurement.';
+        });
+    }
+
+    fileChangeEvent(fileInput: any) {
+        if (fileInput.target.files && fileInput.target.files[0]) {
+            /*const reader = new FileReader();
+
+            reader.onload = (e: any) => {
+                this.imageBase64 = e.target.result;
+            };
+
+            reader.readAsDataURL(fileInput.target.files[0]);*/
+            this.myImage = fileInput.target.files[0];
+        }
+    }
 
 }
