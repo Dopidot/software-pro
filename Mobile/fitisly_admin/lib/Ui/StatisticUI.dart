@@ -28,10 +28,11 @@ class _StatisticUI extends State<StatisticUI> {
       future: _service.getStatisticByAge(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
-          return Center(child: Text("${snapshot.error}"));
+          print(snapshot.hasError);
+
+          return Center(child: Text("Une erreur est survenue, veuillez contacter le support si le problème persiste"));
         }
-        return snapshot.hasData ? _buildField(snapshot.data) : Center(
-            child: CircularProgressIndicator());
+        return snapshot.hasData ? _buildField(snapshot.data) : Center(child: CircularProgressIndicator());
       },
     );
   }
@@ -49,8 +50,15 @@ class _StatisticUI extends State<StatisticUI> {
 
 
     return Center(
-        child: PieChart(dataMap: dataMap,
-          showChartValuesInPercentage: true,
+        child: Column(
+           mainAxisAlignment:MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Text("Pourcentage des utilisateurs par rapport à la tranche d'âge",style: TextStyle(fontSize: 25),),
+            ),
+            Card(child: PieChart(dataMap: dataMap, showChartValuesInPercentage: true)),
+          ],
         )
     );
   }

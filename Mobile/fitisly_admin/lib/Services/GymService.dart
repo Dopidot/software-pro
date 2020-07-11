@@ -4,7 +4,7 @@ import 'package:fitislyadmin/Model/Fitisly_Admin/Gym.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as Storage;
 import 'package:http_parser/http_parser.dart';
 import 'package:mime/mime.dart';
-import 'package:fitislyadmin/ConstApiRoute.dart';
+import 'package:fitislyadmin/Util/ConstApiRoute.dart';
 import 'package:http/http.dart' as http;
 
 

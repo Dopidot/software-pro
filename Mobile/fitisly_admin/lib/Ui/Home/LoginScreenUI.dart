@@ -1,6 +1,8 @@
-import 'package:fitislyadmin/ConstApiRoute.dart';
+import 'package:fitislyadmin/Util/ConstApiRoute.dart';
 import 'package:fitislyadmin/Services/HttpServices.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
+import 'package:route_transitions/route_transitions.dart';
 import 'HomeUI.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -43,10 +45,12 @@ class _LoginScreen extends State<LoginScreen> {
       ),
       body: Container(
         padding: EdgeInsets.all(20.0),
-        child: Form(
-            key: _formKey,
-            autovalidate: _autoValidate,
-            child: buildForm()),
+        child: SingleChildScrollView(
+          child: Form(
+              key: _formKey,
+              autovalidate: _autoValidate,
+              child: buildForm()),
+        ),
       ),
     );
   }
@@ -60,15 +64,15 @@ class _LoginScreen extends State<LoginScreen> {
         },
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
-            hintText: "Email",
+            hintText: Translations.of(context).text('field_login_email'),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
         validator: (value){
           String pattern = r'^(([^&lt;&gt;()[\]\\.,;:\s@\"]+(\.[^&lt;&gt;()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
           RegExp regExp = new RegExp(pattern);
           if (value.isEmpty) {
-            return "Attention votre champs email est vide";
+            return Translations.of(context).text('field_is_empty');
           } else if (!regExp.hasMatch(value)) {
-            return "Email invalide";
+            return Translations.of(context).text('email_is_valid');
           } else {
             return null;
           }
@@ -82,25 +86,24 @@ class _LoginScreen extends State<LoginScreen> {
       },
       validator: (value){
         if(value.isEmpty){
-          return "Attention votre champs mot de passe est vide";
+          return Translations.of(context).text('field_is_empty');
         }
         return null;
       },
       obscureText: true,
       decoration: InputDecoration(
-          hintText: "Mot de passe",
+          hintText: Translations.of(context).text('field_login_pw'),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
 
-    final loginButon = Material(
+    final loginButton = Material(
         elevation: 5.0,
         borderRadius: BorderRadius.circular(30.0),
         color: new Color(0xFF45E15F),
 
         child: MaterialButton(
-          // minWidth: MediaQuery.of(context).size.width,
-          //padding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+
             onPressed: () async {
               if ( _formKey.currentState.validate()) {
                 _formKey.currentState.save();
@@ -111,14 +114,16 @@ class _LoginScreen extends State<LoginScreen> {
 
                   if(value == 200){
 
-                    Navigator.pushAndRemoveUntil(context,  MaterialPageRoute(builder: (BuildContext context) {
-                      return HomeScreenPage();
-                    }), (route) => false);
+                  Navigator.pushAndRemoveUntil(context,
+                      PageRouteTransition(
+                    animationType: AnimationType.fade,
+                    builder: (context) => HomeScreenPage(),
+                  ), (route) => false);
+
 
 
                   }else{
-                    ConstApiRoute.displayDialog("Accès refusé", "Aucun compte ne correspond à l'email ou au mot de passe",_scaffoldKey);
-
+                    ConstApiRoute.displayDialog(Translations.of(context).text('title_no_access'),Translations.of(context).text('login_descption_no_access'),_scaffoldKey);
                   }
                 });
               }
@@ -129,7 +134,7 @@ class _LoginScreen extends State<LoginScreen> {
               }
             },
             child:
-            Text("Login",
+            Text(Translations.of(context).text("login_btn"),
                 textAlign: TextAlign.center)
         )
     );
@@ -142,30 +147,20 @@ class _LoginScreen extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Flexible(
-                child: Padding(child: Image.asset("assets/logo.png"),padding: EdgeInsets.only(top: 5,bottom: 20),),
-                flex:1,
-                fit: FlexFit.loose,
-              ),
-
-              Flexible(
-                child: Padding(
+              Padding(
+                child: Image.asset("assets/logo.png"),
+                padding: EdgeInsets.only(top: 5,bottom: 20),),
+              Padding(
                   child: emailField,
                   padding: EdgeInsets.only(bottom: 5),
                 ),
-                flex: 1,
-                //fit: FlexFit.loose,
-              ),
-              Flexible(child: Padding(
+             Padding(
                 padding: EdgeInsets.only(top:10, bottom: 5),
                 child: passwordField,
               ),
-                  flex:1,
-                  fit: FlexFit.loose),
-              Flexible(
-                  child: Padding(child: loginButon,
+              Padding(child: loginButton,
                       padding: EdgeInsets.only(top:5,bottom: 10)),
-                  flex: 1)
+             
             ],
           ),
         ),

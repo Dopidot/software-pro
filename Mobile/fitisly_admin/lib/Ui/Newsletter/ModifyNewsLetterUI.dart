@@ -154,49 +154,49 @@ initialValue: newsletter.body,
 
 
     return
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: <Widget>[
+    Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: <Widget>[
 
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: titleScreen,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: nameField,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: titleField,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: bodyField,
-          ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: titleScreen,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: nameField,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: titleField,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: bodyField,
+            ),
 
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: photoField,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: updateBtn,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: cancelBtn,
-              ),
-            ],
-          ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: photoField,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: updateBtn,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: cancelBtn,
+                ),
+              ],
+            ),
 
-        ],
-      );
+          ],
+        );
   }
 
 

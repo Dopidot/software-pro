@@ -80,6 +80,8 @@ class ConstApiRoute{
    static const getAllUsersFitisly = _baseUrlFitisly + "get-users";
    static const getConnectionByGender = _baseUrlFitisly + "get-connections-by-gender";
    static const getStatisticsByAge = _baseUrlFitisly + "get-age-statistics";
+   static const getAllCoaches = _baseUrlFitisly + "get-all-coachs";
+   static const getUserPicture = _baseUrlFitisly + "get-user-profile-picture/";
 
 
   static void displayDialog(String title, String text, var keyScaffold) =>

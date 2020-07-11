@@ -1,5 +1,6 @@
 import 'package:fitislyadmin/Services/ApiFitisly/UserSportService.dart';
 import 'package:fitislyadmin/Services/HttpServices.dart';
+import 'package:fitislyadmin/Ui/Coach/CoachListUI.dart';
 import 'package:fitislyadmin/Ui/Events/HomeEventUI.dart';
 import 'package:fitislyadmin/Ui/Excercises/HomePageExcerciseListUI.dart';
 import 'package:fitislyadmin/Ui/Gym/GymHomeUI.dart';
@@ -8,8 +9,11 @@ import 'package:fitislyadmin/Ui/Newsletter/NewsLetterListUI.dart';
 import 'package:fitislyadmin/Ui/Programs/ProgramHomeUI.dart';
 import 'package:fitislyadmin/Ui/StatisticUI.dart';
 import 'package:fitislyadmin/Ui/User/UserScreenSettingUI.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:route_transitions/route_transitions.dart';
+
 
 
 class HomeScreenPage extends StatefulWidget
@@ -27,16 +31,16 @@ class _HomeScreen extends State<HomeScreenPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     initNumberUser();
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Accueil", style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
+          title: Text(Translations.of(context).text("title_home"), style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
           centerTitle: true,
           actions: <Widget>[
             IconButton(
@@ -45,7 +49,10 @@ class _HomeScreen extends State<HomeScreenPage> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => UserScreenSetting())
+                Navigator.push(context, PageRouteTransition(
+                  animationType: AnimationType.slide_down,
+                  builder: (context) => UserScreenSetting(),
+                )
                 );
               },
             ),
@@ -78,7 +85,7 @@ class _HomeScreen extends State<HomeScreenPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('Total des utilisateurs', style: TextStyle(color: Colors.blueAccent)),
+                          Text(Translations.of(context).text("title_number_user"), style: TextStyle(color: Colors.blueAccent)),
                           Text(nbUser.toString() , style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 34.0))
                         ],
                       ),
@@ -97,10 +104,17 @@ class _HomeScreen extends State<HomeScreenPage> {
                 ),
               ),
               onTap: (){
-                Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
+
+                Navigator.push(context,PageRouteTransition(
+                  animationType: AnimationType.scale,
+                  builder: (context) => StatisticUI(),
+                ));
+
+              /*  Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
                   return StatisticUI();
                 })
-                );              }
+                );    */
+              }
             ),
             _buildTile(
               Padding(
@@ -118,8 +132,8 @@ class _HomeScreen extends State<HomeScreenPage> {
                           )
                       ),
                       Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                      Text("Application", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                      Text("Exercices", style: TextStyle(color: Colors.black45)),
+                      Text(Translations.of(context).text("title_application_home_case"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                      Text(Translations.of(context).text("subtitle_application_case_exercise"), style: TextStyle(color: Colors.black45)),
                     ]
                 ),
               ),
@@ -148,8 +162,8 @@ class _HomeScreen extends State<HomeScreenPage> {
                             )
                         ),
                         Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                        Text("Application", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                        Text("Programme", style: TextStyle(color: Colors.black45)),
+                        Text(Translations.of(context).text("title_application_home_case"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                        Text(Translations.of(context).text("subtitle_application_case_program"), style: TextStyle(color: Colors.black45)),
                       ]
                   ),
                 ),
@@ -179,7 +193,7 @@ class _HomeScreen extends State<HomeScreenPage> {
                           )
                       ),
                       Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                      Text('Mes newletters', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                      Text(Translations.of(context).text('title_application_news'), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
 
                     ]
                 ),
@@ -209,8 +223,8 @@ class _HomeScreen extends State<HomeScreenPage> {
                             )
                         ),
                         Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                        Text("Les salles de sport", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                        Text("Référencement", style: TextStyle(color: Colors.black45)),
+                        Text(Translations.of(context).text('title_application_home_gym'), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                        Text(Translations.of(context).text('subtitle_application_case_gym'), style: TextStyle(color: Colors.black45)),
                       ]
                   ),
                 ),
@@ -230,8 +244,8 @@ class _HomeScreen extends State<HomeScreenPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('Mes Évènements', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                          Text('Gestion des évènements', style: TextStyle(color: Colors.redAccent))
+                          Text(Translations.of(context).text('title_application_home_event'), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                          Text(Translations.of(context).text('subtitle_application_case_event'), style: TextStyle(color: Colors.redAccent))
                         ],
                       ),
                       Material(
@@ -271,11 +285,17 @@ class _HomeScreen extends State<HomeScreenPage> {
                             )
                         ),
                         Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                        Text("Les coachs", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                        Text("Information sur les coachs sportifs", style: TextStyle(color: Colors.black45)),
+                        Text(Translations.of(context).text("title_application_home_coach"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                        Text(Translations.of(context).text("subtitle_application_case_coach"), style: TextStyle(color: Colors.black45)),
                       ]
                   ),
                 ),
+              onTap: (){
+                  Navigator.push(context, PageRouteTransition(
+                    animationType: AnimationType.fade,
+                    builder: (context) => CoachListUI(),
+                  ));
+              }
             ),
           ],
           staggeredTiles: [
@@ -324,4 +344,6 @@ class _HomeScreen extends State<HomeScreenPage> {
       });
     });
   }
+
+
 }

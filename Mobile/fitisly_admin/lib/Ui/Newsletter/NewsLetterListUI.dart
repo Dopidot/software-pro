@@ -17,14 +17,6 @@ class _NewsletterListState extends State<NewsletterList> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-
-
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
@@ -32,7 +24,7 @@ class _NewsletterListState extends State<NewsletterList> {
         title: Text("Mes newsletters", style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
         centerTitle: true,
       ),
-      body: buildFutureNewsletter() ,
+      body: _buildFutureNewsletter() ,
       floatingActionButton: FloatingActionButton(
           child:Icon(Icons.add),
           onPressed: () {
@@ -41,7 +33,7 @@ class _NewsletterListState extends State<NewsletterList> {
               MaterialPageRoute(builder: (context) => CreateNewsletter()))
             .then((value) {
               if(value != null){
-                updateUiAfterCreation();
+                _updateUiAfterCreation();
               }
             });
           }
@@ -51,7 +43,7 @@ class _NewsletterListState extends State<NewsletterList> {
 
 
 
-  FutureBuilder<List<Newsletter>> buildFutureNewsletter() {
+  FutureBuilder<List<Newsletter>> _buildFutureNewsletter() {
     return FutureBuilder<List<Newsletter>>(
       future: services.fetchNewsletters(),
       builder: (context, snapshot) {
@@ -59,19 +51,19 @@ class _NewsletterListState extends State<NewsletterList> {
 
           return Center(child: Text("${snapshot.error}"));
         }
-        return snapshot.hasData ? buildList(snapshot.data) : Center(child: CircularProgressIndicator());
+        return snapshot.hasData ? _buildList(snapshot.data) : Center(child: CircularProgressIndicator());
       },
     );
 
   }
 
 
-  Widget buildList(List<Newsletter> newsletters ){
-    return newsletters.isEmpty ? Center(child: Text("Aucune news, veuillez en ajouter svp")) : initListView(newsletters);
+  Widget _buildList(List<Newsletter> newsletters ){
+    return newsletters.isEmpty ? Center(child: Text("Aucune news, veuillez en ajouter svp")) : _initListView(newsletters);
   }
 
 
-  Widget initListView(List<Newsletter> newsletters){
+  Widget _initListView(List<Newsletter> newsletters){
     return ListView.builder(
         itemCount: newsletters.length
         , itemBuilder: (context,index) {
@@ -83,47 +75,47 @@ class _NewsletterListState extends State<NewsletterList> {
           child: Icon(Icons.cancel),
         ),
         onDismissed: (direction) {
-          delete(index,newsletters);
+          _delete(index,newsletters);
         },
         child: Padding(
           padding:
           const EdgeInsets.symmetric(vertical: 0.0, horizontal: 4.0),
           child: Card(
-            child: ListTile(
-              onTap: () {
-                Navigator.push(context,MaterialPageRoute(
-                    builder: (context) {
-                      return ModifyNewsletter(newsletterId: newsletters[index].id);
-                    })
-                )
-                    .then((value) {
+              child: ListTile(
+                onTap: () {
+                  Navigator.push(context,MaterialPageRoute(
+                      builder: (context) {
+                        return ModifyNewsletter(newsletterId: newsletters[index].id);
+                      })
+                  )
+                      .then((value) {
 
-                  if(value != null){
-                    setState(() {
-                      newsletters[index] = value;
-                    });
-                    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Newsletter modifiée ! ")));
-                  }
-                });
-              },
-              title: Text(newsletters[index].name),
+                    if(value != null){
+                      setState(() {
+                        newsletters[index] = value;
+                      });
+                      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Newsletter modifiée ! ")));
+                    }
+                  });
+                },
+                title: Text(newsletters[index].name),
+              ),
             ),
-          ),
-        ),
+          )
       );
     });
   }
 
 
-  void updateUiAfterCreation() async {
+  void _updateUiAfterCreation() async {
     setState(() {
-      buildFutureNewsletter();
+      _buildFutureNewsletter();
     });
   }
 
 
 
-  void delete(var index,List<Newsletter> nl) async {
+  void _delete(var index,List<Newsletter> nl) async {
 
     var isDelete = await services.deleteNewsletter(nl[index].id);
 

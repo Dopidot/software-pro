@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:fitislyadmin/ConstApiRoute.dart';
+import 'package:fitislyadmin/Util/ConstApiRoute.dart';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Event.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,10 +21,9 @@ class HttpServices {
   Future<int> login(String email, String password,
       GlobalKey<ScaffoldState> context) async {
     try {
-      final http.Response response = await http
-          .post(ConstApiRoute.login,
+      final http.Response response = await http.post(ConstApiRoute.login,
           headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
+            "Content-Type": "application/json",
           },
           body: jsonEncode(<String, String>{
             "email": email,
