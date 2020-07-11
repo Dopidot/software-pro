@@ -1,6 +1,8 @@
 -- Create the table before and then in the table execute the rest of the script
 CREATE DATABASE admin_api;
 
+USE admin_api;
+
 ---
 -- Once the table is created execute the rest of the script in that table
 ---
