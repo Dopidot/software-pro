@@ -2,7 +2,7 @@ import multer from "multer";
 import {Request} from "express";
 import * as path from "path";
 
-let storage = multer.diskStorage({
+const storage = multer.diskStorage({
     destination: function (req: Request, file, cb) {
         cb(null, './uploads/');
     },
@@ -23,7 +23,7 @@ function checkFileType(file: Express.Multer.File, callback: multer.FileFilterCal
     }
 }
 
-export let upload = multer({
+export const upload = multer({
     storage: storage,
     limits: {
         fileSize: 1024 * 1024 * 5, // 5Mbs

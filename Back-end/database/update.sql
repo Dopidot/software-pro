@@ -62,3 +62,12 @@ CREATE TABLE public.coachs (
 );
 
 -- ALTER TABLE public.coachs ALTER COLUMN coachid TYPE varchar(255) USING coachid::varchar;
+
+CREATE TABLE public.junction_program_exercise (
+	idprogram bigint NULL,
+	idexercise bigint NULL
+);
+
+ALTER TABLE public.junction_program_exercise ADD CONSTRAINT junction_program_exercise_fk FOREIGN KEY (idprogram) REFERENCES public.programs(id) ON DELETE RESTRICT;
+ALTER TABLE public.junction_program_exercise ADD CONSTRAINT junction_program_exercise_fk_1 FOREIGN KEY (idexercise) REFERENCES public.exercises(id) ON DELETE RESTRICT DEFERRABLE;
+ALTER TABLE public.junction_program_exercise ADD CONSTRAINT junction_program_exercise_pk PRIMARY KEY (idprogram,idexercise);

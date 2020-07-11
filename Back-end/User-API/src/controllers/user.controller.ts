@@ -3,7 +3,6 @@ import { QueryResult } from 'pg';
 import { pool } from '../database';
 import * as bcrypt from 'bcrypt';
 import * as fs from "fs";
-require('dotenv').config();
 
 export default class UserController {
 
@@ -46,14 +45,13 @@ export default class UserController {
                 await pool.query('INSERT INTO users (firstname, lastname, email, password, userimage) VALUES ($1, $2, $3, $4, $5)', [firstname, lastname, email, hashedPassword, userImage]);
             }
 
-            let response: QueryResult = await pool.query('SELECT id, firstname, lastname, email, lastconnection, userimage FROM users WHERE email = $1', [email]);
+            const response: QueryResult = await pool.query('SELECT id, firstname, lastname, email, lastconnection, userimage FROM users WHERE email = $1', [email]);
             return res.status(201).json({
                 message: 'User created successfully',
                 body: {
                     user: response.rows[0]
                 }
             });
-
         } catch (e) {
             console.error(e);
             if (e.code == 23505) {
@@ -79,8 +77,6 @@ export default class UserController {
                     fs.unlink(process.cwd() + '/' + response.rows[0].userimage, err => {
                         if (err) {
                             console.log('userimage : ', response.rows[0].userimage);
-                            console.error(err);
-                            throw err;
                         }
                     });
                 } else {
@@ -110,14 +106,12 @@ export default class UserController {
     deleteUser = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
-            let response: QueryResult = await pool.query('SELECT userimage FROM users WHERE id = $1', [id]);
+            const response: QueryResult = await pool.query('SELECT userimage FROM users WHERE id = $1', [id]);
             if (response.rowCount !== 0) {
                 if (response.rows[0].userimage !== null && response.rows[0].userimage !== undefined) {
                     fs.unlink(process.cwd() + '/' + response.rows[0].userimage, err => {
                         if (err) {
                             console.log('userimage :',  response.rows[0].userimage);
-                            console.error(err);
-                            throw err;
                         }
                     });
                 }

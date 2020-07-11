@@ -43,7 +43,7 @@ export default class EventController {
                 await pool.query('INSERT INTO events (name, body, startdate, creationdate, address, zipcode, city, country, eventimage) VALUES ($1, $2, $3, now(), $4, $5, $6, $7, $8)', [name, body, startDate, address, zipCode, city, country, eventImage]);
             }
 
-            let response: QueryResult = await pool.query('SELECT * from events order by id desc limit 1');
+            const response: QueryResult = await pool.query('SELECT * from events order by id desc limit 1');
             return res.status(201).json({
                 message: 'Event created sucessfully',
                 body: {
@@ -72,7 +72,6 @@ export default class EventController {
                         if (err) {
                             console.log('eventimage : ', response.rows[0].eventimage);
                             console.error(err);
-                            throw err;
                         }
                     });
                 } else {
@@ -103,13 +102,12 @@ export default class EventController {
     deleteEvent = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
-            let response: QueryResult = await pool.query('SELECT eventimage FROM events WHERE id = $1', [id]);
+            const response: QueryResult = await pool.query('SELECT eventimage FROM events WHERE id = $1', [id]);
             if (response.rowCount !== 0 ) {
                 if (response.rows[0].eventimage !== undefined && response.rows[0].eventimage !== null) {
                     fs.unlink(process.cwd() + '/' + response.rows[0].eventimage, err => {
                         if (err) {
                             console.log('eventimage :', response.rows[0].eventimage);
-                            throw err;
                         }
                     });
                 }

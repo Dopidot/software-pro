@@ -43,7 +43,7 @@ export default class NewsletterController {
                 await pool.query('INSERT INTO newsletters (name, title, body, creationDate, isSent, newsletterImage) VALUES ($1, $2, $3, now(), false, $4)', [name, title, body, newsletterImage]);
             }
 
-            let response: QueryResult = await pool.query('SELECT * FROM newsletters ORDER BY id DESC LIMIT 1');
+            const response: QueryResult = await pool.query('SELECT * FROM newsletters ORDER BY id DESC LIMIT 1');
             return res.status(201).json({
                 message: 'Newsletter created sucessfully',
                 body: {
@@ -77,7 +77,6 @@ export default class NewsletterController {
                             if (err) {
                                 console.log('newsletterimage : ', response.rows[0].newsletterimage);
                                 console.error(err);
-                                throw err;
                             }
                         });
                     }
@@ -108,14 +107,13 @@ export default class NewsletterController {
     deleteNewsletter = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
-            let response: QueryResult = await pool.query('SELECT newsletterimage FROM newsletters WHERE id = $1', [id]);
+            const response: QueryResult = await pool.query('SELECT newsletterimage FROM newsletters WHERE id = $1', [id]);
             if (response.rowCount !== 0) {
                 if (response.rows[0].newsletterimage !== undefined && response.rows[0].newsletterimage !== null) {
                     fs.unlink(process.cwd() + '/' + response.rows[0].newsletterimage, err => {
                         if (err) {
                             console.log('newsletterimage :', response.rows[0].newsletterimage);
                             console.error(err);
-                            throw err;
                         }
                     });
                 }

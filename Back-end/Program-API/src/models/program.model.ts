@@ -1,16 +1,15 @@
-//import ExerciseModel from "./exercise.model";
-
 export default class ProgramModel {
-    public id!: number;
-    public name!: string;
-    public description: string;
-    public programImage: string;
-    //exercises: ExerciseModel[];
+    id!: bigint;
+    name: string;
+    description: string;
+    programImage: string;
+    exercises: bigint[];
 
-    constructor(name: string, description: string, programImage: string) { //, exercises: ExerciseModel[]) {
+    constructor(id: bigint, name: string, description: string, programImage: string, exercises: bigint[]) { //, exercises: ExerciseModel[]) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.programImage = programImage;
-        //this.exercises = exercises;
+        this.exercises = exercises;
     }
 }
