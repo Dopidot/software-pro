@@ -1,19 +1,18 @@
 -- Create the table before and then in the table execute the rest of the script
 CREATE DATABASE admin_api;
 
-USE admin_api;
+\c admin_api;
 
 ---
 -- Once the table is created execute the rest of the script in that table
 ---
-CREATE SEQUENCE id_sequence;
 
 -- Drop table
 
 -- DROP TABLE public.coachs;
 
 CREATE TABLE coachs (
-	id bigserial NOT NULL DEFAULT nextval('id_sequence'),
+	id bigserial NOT NULL,
 	coachid varchar(255) NOT NULL,
 	ishighlighted bool NOT NULL DEFAULT false,
 	CONSTRAINT coach_pk PRIMARY KEY (id)
@@ -27,7 +26,7 @@ CREATE TABLE coachs (
 -- DROP TABLE public.events;
 
 CREATE TABLE events (
-	id bigserial NOT NULL  DEFAULT nextval('id_sequence'),
+	id bigserial NOT NULL DEFAULT,
 	"name" varchar(255) NOT NULL,
 	body varchar(255) NOT NULL,
 	startdate timestamp NOT NULL,
@@ -48,7 +47,7 @@ CREATE TABLE events (
 -- DROP TABLE public.exercises;
 
 CREATE TABLE exercises (
-	id bigserial NOT NULL  DEFAULT nextval('id_sequence'),
+	id bigserial NOT NULL,
 	"name" varchar(255) NOT NULL,
 	description text NULL,
 	repeat_number int2 NULL DEFAULT 1,
@@ -71,7 +70,7 @@ VALUES ('Levé de jambes', 'Couché par terre vous leverez vos jambes en angle d
 -- DROP TABLE public.gyms;
 
 CREATE TABLE gyms (
-	id bigserial NOT NULL  DEFAULT nextval('id_sequence'),
+	id bigserial NOT NULL,
 	"name" varchar(255) NOT NULL,
 	address varchar(255) NULL,
 	zipcode varchar(255) NULL,
@@ -89,7 +88,7 @@ CREATE TABLE gyms (
 -- DROP TABLE public.newsletters;
 
 CREATE TABLE newsletters (
-	id bigserial NOT NULL  DEFAULT nextval('id_sequence'),
+	id bigserial NOT NULL,
 	"name" varchar(255) NOT NULL,
 	title varchar(255) NOT NULL,
 	body text NOT NULL,
@@ -107,7 +106,7 @@ CREATE TABLE newsletters (
 -- DROP TABLE public.programs;
 
 CREATE TABLE programs (
-	id bigserial NOT NULL  DEFAULT nextval('id_sequence'),
+	id bigserial NOT NULL,
 	"name" varchar(255) NOT NULL,
 	description text NULL,
 	programimage varchar(255) NULL,
@@ -124,7 +123,7 @@ VALUES ('Super Program 2020', 'Ce programme est fait pour les pros et sutout pou
 -- DROP TABLE public.users;
 
 CREATE TABLE users (
-	id bigserial NOT NULL  DEFAULT nextval('id_sequence'),
+	id bigserial NOT NULL,
 	firstname varchar(255) NOT NULL,
 	lastname varchar(255) NOT NULL,
 	email varchar(255) NOT NULL,
