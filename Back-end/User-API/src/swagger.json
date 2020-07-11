@@ -9,12 +9,20 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "localhost:4002",
+  "host": "http://ec2-18-225-36-31.us-east-2.compute.amazonaws.com",
   "basePath": "/",
   "tags": [
     {
       "name": "Users",
-      "description": "CRUD operation for user"
+      "description": "CRUD operation for Users"
+    },
+    {
+      "name": "Exercises",
+      "description": "CRUD operation for Exercises"
+    },
+    {
+      "name": "Programs",
+      "description": "CRUD operation for Programs"
     },
     {
       "name": "Newsletters",
@@ -59,6 +67,50 @@
         },
         "userImage": {
           "type": "string"
+        }
+      }
+    },
+    "exercise": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "repeat_number": {
+          "type": "number"
+        },
+        "rest_time": {
+          "type": "number",
+          "format": "minute:second"
+        },
+        "exerciseImage": {
+          "type": "number"
+        }
+      }
+    },
+    "program": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "programImage": {
+          "type": "string"
+        },
+        "exercises": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -388,6 +440,361 @@
           },
           "400": {
             "description": "Bad Credentials : your email or your password is not correct"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/programs": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Programs"
+        ],
+        "summary": "Get all the programs of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Programs"
+        ],
+        "summary": "Create a new program in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "programImage",
+            "description": "the image of the program",
+            "type": "file"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "the name of the program"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "the description of the program"
+          },
+          {
+            "in": "formData",
+            "name": "exercises",
+            "type": "array",
+            "description": "The list of exercises ids of the program",
+            "items": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/programs/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the programs that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Programs"],
+        "summary": "Get the program with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "404": {
+            "description": "Program not found"
+          },
+          "500":  {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Programs"],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "programImage",
+            "description": "the image of the program",
+            "type": "file"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "the name of the program"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "the description of the program"
+          }
+        ],
+        "summary": "Update the program with the given ID",
+        "responses": {
+          "200": {
+            "description": "Program updated sucessfully",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "404": {
+            "description": "Program not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Programs"],
+        "summary": "Delete programs with the given ID",
+        "responses": {
+          "200": {
+            "description": "Program {id} was deleted sucessfully."
+          },
+          "404": {
+            "description": "Program not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/exercises": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Get all the exercises of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Create a new exercise in the database",
+        "produces": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "exerciseImage",
+            "type": "file",
+            "description": "image of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "description of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "repeat_number",
+            "type": "number",
+            "description": "number of repetition of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "rest_time",
+            "type": "number",
+            "description": "the rest time required after the exercise"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/exercises/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the exercise that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Exercises"
+        ],
+        "summary": "Get exercise with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "404": {
+            "description": "Exercise not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Exercises"],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "exerciseImage",
+            "type": "file",
+            "description": "image of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "description of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "repeat_number",
+            "type": "number",
+            "description": "number of repetition of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "rest_time",
+            "type": "number",
+            "description": "the rest time required after the exercise"
+          }
+        ],
+        "summary": "Update the exercise with the given ID",
+        "responses": {
+          "200": {
+            "description": "Exercise updated sucessfully",
+            "schema": {
+              "$ref": "#/definitions/exercise"
+            }
+          },
+          "404": {
+            "description": "Exercise not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Exercises"],
+        "summary": "Delete exercise with the given ID",
+        "responses": {
+          "200": {
+            "description": "Exercise {id} was deleted sucessfully."
+          },
+          "404": {
+            "description": "Exercise not found"
           },
           "500": {
             "description": "Internal Server Error"
