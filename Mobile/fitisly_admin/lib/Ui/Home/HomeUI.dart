@@ -15,7 +15,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:route_transitions/route_transitions.dart';
 
 
-
 class HomeScreenPage extends StatefulWidget
 {
   @override

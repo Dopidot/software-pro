@@ -2,6 +2,7 @@ import 'package:fitislyadmin/Model/Fitisly_Admin/Exercise.dart';
 import 'package:fitislyadmin/Services/ExerciseService.dart';
 import 'package:fitislyadmin/Ui/Excercises/ModifyExerciseUI.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'CreateExerciseUI.dart';
 
 class ExerciseListUI extends StatefulWidget{
@@ -17,10 +18,6 @@ class _ExerciseListUI extends State<ExerciseListUI>{
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
 
   @override
@@ -68,53 +65,6 @@ class _ExerciseListUI extends State<ExerciseListUI>{
     return exercises.isEmpty ? Center(child: Text("Aucun exercice, veuillez en ajouter svp")) : buildListView(exercises);
   }
 
-  Widget buildListView(List<Exercise> exercises){
-    return ListView.builder(
-        itemCount: exercises.length,
-        itemBuilder: (context, index) {
-          return Dismissible(
-            key: Key(exercises[index].id),
-            background: Container(
-              color: Colors.red,
-              child: Icon(Icons.cancel),
-            ),
-            onDismissed: (direction) {
-              delete(index,exercises);
-            },
-            child: Card(
-              elevation: 15,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.accessibility, size: 50),
-                    title: Text(exercises[index].name),
-                    subtitle: Text(exercises[index].description),
-                    onTap: () {
-
-                      Navigator.push(context,MaterialPageRoute(
-                          builder: (context) {
-                            return ModifyExerciseUI();
-                          },
-                          settings: RouteSettings(
-                            arguments: exercises[index].id,
-                          )),
-                      );
-
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-    );
-  }
-
 
   void updateUi() async {
     setState(() {
@@ -135,6 +85,63 @@ class _ExerciseListUI extends State<ExerciseListUI>{
       _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("L'exercice a été supprimé")));
     }
   }
+
+
+  Widget buildListView(List<Exercise> exercises){
+    return AnimationLimiter(
+      child: ListView.builder(
+        itemCount: exercises.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Dismissible(
+            key: Key(exercises[index].id),
+            background: Container(
+              color: Colors.red,
+              child: Icon(Icons.cancel),
+            ),
+            onDismissed: (direction) {
+              delete(index,exercises);
+            },
+            child: AnimationConfiguration.staggeredList(
+              position: index,
+              duration: const Duration(milliseconds: 450),
+              child: SlideAnimation(
+                horizontalOffset: 50.0,
+                child: FadeInAnimation(
+                  child:Card(
+                    elevation: 15,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          leading: Icon(Icons.accessibility, size: 50),
+                          title: Text(exercises[index].name),
+                          subtitle: Text(exercises[index].description),
+                          onTap: () {
+                            Navigator.push(context,MaterialPageRoute(
+                                builder: (context) {
+                                  return ModifyExerciseUI();
+                                },
+                                settings: RouteSettings(
+                                  arguments: exercises[index].id,
+                                )),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
 
 }
 

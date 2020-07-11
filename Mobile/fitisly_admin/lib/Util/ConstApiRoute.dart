@@ -75,7 +75,14 @@ class ConstApiRoute{
   static const deleteGymById = _baseUrl + "gyms/";
 
 
-  /*------------------ Statistiqques ----------*/
+   /*-----------Coach ----------------------------- */
+
+
+   static const getAllCoachsApi = _baseUrl+"coachs";
+   static const creatCoach = _baseUrl+"coachs";
+   static const deleteCoachById = _baseUrl + "coachs/";
+
+   /*------------------ Statistiqques ----------*/
 
    static const getAllUsersFitisly = _baseUrlFitisly + "get-users";
    static const getConnectionByGender = _baseUrlFitisly + "get-connections-by-gender";

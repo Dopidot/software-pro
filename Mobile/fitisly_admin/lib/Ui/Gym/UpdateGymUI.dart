@@ -5,6 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UpdateGymUI extends StatefulWidget{
+
+  String gymId;
+  UpdateGymUI({Key key, @required this.gymId}) : super(key: key);
+
   @override
   State<UpdateGymUI> createState() {
     return _UpdateGymUI();
@@ -29,16 +33,13 @@ class _UpdateGymUI extends State<UpdateGymUI>{
 
   @override
   Widget build(BuildContext context) {
-    final int gymId = ModalRoute.of(context).settings.arguments;
-
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(centerTitle: true,
-          title: Text("Ma newsletter")),
+          title: Text("Ma salle")),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          child: buildFutureNewsletter(gymId.toString()),
+          child: buildFutureNewsletter(widget.gymId),
         ),
       ),
     );
@@ -50,9 +51,7 @@ class _UpdateGymUI extends State<UpdateGymUI>{
     return FutureBuilder<Gym>(
       future: services.getGymById(id),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return _buildField(snapshot.data);
-        } else if (snapshot.hasError) {
+        if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
         return snapshot.hasData ?  _buildField(snapshot.data) : Center(child: CircularProgressIndicator());
@@ -154,7 +153,9 @@ class _UpdateGymUI extends State<UpdateGymUI>{
         color: new Color(0xFF45E15F),
 
         child: MaterialButton(
-          onPressed: _updateGym,
+          onPressed: () {
+            _updateGym(gym);
+          },
           child: Text("Modifier"),
         )
     );
@@ -225,10 +226,20 @@ class _UpdateGymUI extends State<UpdateGymUI>{
   }
 
 
-  void _updateGym() {
+  void _updateGym(Gym gym) {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
-      Gym gym = Gym(name: _name,address: _address,zipCode: _zipCode,city: _city,country: _country,gymImage: _image.path);
+
+      gym.name = _name;
+      gym.address = _address;
+      gym.zipCode = _zipCode;
+      gym.city = _city;
+      gym.country = _country;
+      gym.gymImage = _image != null ? _image.path : gym.gymImage;
+
+
+      //Gym gym = Gym(name: _name,address: _address,zipCode: _zipCode,city: _city,country: _country,gymImage: _image.path);
+      services.updateGym(gym);
       Navigator.pop(context,gym);
 
     } else {

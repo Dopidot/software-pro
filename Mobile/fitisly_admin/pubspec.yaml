@@ -43,8 +43,7 @@ dependencies:
   flutter_staggered_animations: "^0.1.2"
   route_transitions: ^1.0.2
   animations: ^1.1.1
-
-
+  geocoder: ^0.2.1
 
 
   # The following adds the Cupertino Icons font to your application.

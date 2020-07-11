@@ -1,4 +1,5 @@
 import 'package:fitislyadmin/Model/Fitisly_Admin/Event.dart';
+import 'package:fitislyadmin/Services/EventService.dart';
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/Ui/Events/HomeEventUI.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +26,7 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
   String _zipCode;
   String _country;
   String _city;
-  HttpServices services = HttpServices();
+  EventService services = EventService();
 
   @override
   Widget build(BuildContext context) {
