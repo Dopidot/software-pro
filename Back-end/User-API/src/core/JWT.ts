@@ -2,7 +2,7 @@ import {NextFunction, Request, Response} from "express";
 import * as jwt from "jsonwebtoken";
 import * as dotenv from "dotenv";
 import * as path from "path";
-dotenv.config({ path: path.join(__dirname, '.env') });
+dotenv.config({ path: path.join(process.cwd(), '.env') });
 
 export function verifyToken(req: Request, res:Response, next: NextFunction) {
     const authorizationHeader = req.headers['authorization'];

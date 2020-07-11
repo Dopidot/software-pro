@@ -6,7 +6,7 @@ import * as bcrypt from "bcrypt";
 import { UserLoginModel } from "../models/user.model";
 import * as dotenv from "dotenv";
 import * as path from "path";
-dotenv.config({ path: path.join(__dirname, '.env') });
+dotenv.config({ path: path.join(process.cwd(), '.env') });
 
 export default class AuthenticationController {
 
