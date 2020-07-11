@@ -25,11 +25,11 @@
         <nb-card-header>Informations sur {{currentUser.pseudo}}</nb-card-header>
         <nb-card-body>
 
-            <div class="col-4" style="margin: auto;">
+            <div class="col-4" style="margin: auto; padding: 0px 5px;">
                 <nb-user [picture]="currentUser.picture" [onlyPicture]="true" size="giant"></nb-user>
             </div>
 
-            <div><strong>Pseudonyme</strong></div>
+            <div style="margin-top: 20px;"><strong>Pseudonyme</strong></div>
             <div>{{currentUser.pseudo}}</div>
 
             <div style="margin-bottom: 20px;"></div>
@@ -39,9 +39,7 @@
 
         </nb-card-body>
         <nb-card-footer>
-            <button nbButton [status]="danger" (click)="ref.close()"
-                style="margin-right: 10px;">Fermer</button>
-            <button nbButton [status]="success" (click)="ref.close()">Définir comme coach</button>
+            <button nbButton [status]="danger" (click)="ref.close()" style="width: 250px;">Fermer</button>
         </nb-card-footer>
     </nb-card>
 </ng-template>

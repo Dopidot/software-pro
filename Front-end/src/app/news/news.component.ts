@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MenuService } from '../services/menu.service';
+import { CommonService } from '../services/common.service';
+import { DatePipe } from '@angular/common';
+import { NbDialogService } from '@nebular/theme';
+import { News } from '../models/news.model';
 
 @Component({
     selector: 'ngx-news',
@@ -9,66 +13,70 @@ import { MenuService } from '../services/menu.service';
 export class NewsComponent implements OnInit {
 
     menu = [];
-    notifications: any;
-    currentNotif: any;
+    news = [];
     tiny = 'tiny';
+    success = 'success';
+    danger = 'danger';
+    primary = 'primary';
+    errorMessage: string;
+    currentNews: News = new News();
+    popupType: number = 0;
+    imageBase64: string;
+    imagePath: string;
 
     constructor(
         private menuService: MenuService,
+        private commonService: CommonService,
+        private datePipe: DatePipe,
+        private dialogService: NbDialogService,
     ) { }
 
     ngOnInit(): void {
         this.menu = this.menuService.getMenu();
-        this.loadNotifications();
+        this.loadNews();
     }
 
-    selectNotif(notif): void {
-        this.currentNotif = notif;
-    }
+    selectNews(news): void {
+        this.imagePath = null;
+        this.currentNews = news;
 
-    loadNotifications(): void {
-        this.notifications = [
-            {
-                id: 1,
-                message: 'Vous avez reçu un nouvelle message de le part de Christophil.',
-                icon: 'fa-comment',
-            },
-            {
-                id: 2,
-                message: 'Il y a du nouveau dans votre fil d\'actualité !',
-                icon: 'fa-newspaper',
-            },
-            {
-                id: 3,
-                message: 'Vous avez reçu un nouvelle message de le part de Christophil.',
-                icon: 'fa-comment',
-            },
-            {
-                id: 4,
-                message: 'Vous avez reçu un nouvelle message de le part de Christophil.',
-                icon: 'fa-comment',
-            },
-            {
-                id: 5,
-                message: 'Vous avez reçu un nouvelle message de le part de Christophil.',
-                icon: 'fa-comment',
-            },
-            {
-                id: 6,
-                message: 'Vous avez reçu un nouvelle message de le part de Christophil.',
-                icon: 'fa-comment',
-            },
-        ];
-    }
-
-    removeNotification(notification: any): void {
-
-        let index = this.notifications.findIndex(x => x.id === notification.id);
-
-        if (index !== -1)
+        if (news['newsletterimage'])
         {
-            this.notifications.splice(index, 1);
+            this.imagePath = this.commonService.getPicture(news['newsletterimage']);
         }
     }
 
+    loadNews(): void {
+        this.commonService.getNews().subscribe(data => {
+            console.log(data);
+            this.news = data;
+        });
+    }
+
+    addNews(): void {
+        this.currentNews['creationDate'] = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
+
+        this.commonService.createNews(this.currentNews).subscribe(data => {
+            this.loadNews();
+        });
+    }
+
+    updateNews(): void {
+        this.commonService.updateNews(this.currentNews['id'], this.currentNews).subscribe(data => {
+            this.loadNews();
+        });
+    }
+
+    removeNews(): void {
+        this.commonService.deleteNews(this.currentNews['id']).subscribe(data => {
+            this.currentNews = new News();
+            this.loadNews();
+        });
+    }
+
+    openPopup(dialog: TemplateRef<any>): void {
+        this.dialogService.open(
+            dialog
+        );
+    }
 }

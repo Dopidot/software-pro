@@ -23,12 +23,11 @@ export class HomeComponent implements OnInit {
     constructor(
         private fitisly: FitislyService,
         private menuService: MenuService,
-        ) {
-            this.loadUsers();
-    }
+        ) { }
 
     ngOnInit(): void {
         this.menu = this.menuService.getMenu();
+        this.loadUsers();
         this.loadEvents();
     }
 

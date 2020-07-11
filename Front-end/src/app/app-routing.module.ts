@@ -20,11 +20,11 @@ import { NewsComponent } from './news/news.component';
 import { LoginComponent } from './login/login.component';
 import { UserService } from './services/user.service';
 import { ProgramService } from './services/program.service';
-import { StatusService } from './services/status.service';
 import { HttpClientModule } from "@angular/common/http";
 import { FitislyService } from './services/fitisly.service';
 import { MenuService } from './services/menu.service';
 import { ExerciseService } from './services/exercise.service';
+import { CommonService } from './services/common.service';
 
 export const routes: Routes = [
   {
@@ -83,7 +83,7 @@ const config: ExtraOptions = {
 @NgModule({
   imports: [RouterModule.forRoot(routes, config), HttpClientModule],
   exports: [RouterModule],
-  providers: [UserService, ProgramService, StatusService, FitislyService, MenuService, ExerciseService],
+  providers: [UserService, ProgramService, FitislyService, MenuService, ExerciseService, CommonService],
 })
 export class AppRoutingModule {
 }

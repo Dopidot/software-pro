@@ -7,16 +7,29 @@ import { Observable } from "rxjs/index";
 @Injectable()
 export class UserService {
 
-    baseUrl: string = 'http://localhost:4000/api/users';
+    baseUrlUser: string = 'http://localhost:4000/api/users';
+    baseUrlCoach: string = 'http://localhost:4000/api/coachs';
 
     constructor(private http: HttpClient) { }
 
     connectUser(user: User): Observable<any> {
-        return this.http.post<any>(this.baseUrl + '/login', user);
+        return this.http.post<any>(this.baseUrlUser + '/login', user);
     }
 
     getUserById(id: number): Observable<User> {
-        return this.http.get<User>(this.baseUrl + '/' + id);
+        return this.http.get<User>(this.baseUrlUser + '/' + id);
+    }
+
+    getCoachHighlighted(): Observable<any> {
+        return this.http.get<any>(this.baseUrlCoach);
+    }
+
+    createCoachHighlighted(id: number): Observable<any> {
+        return this.http.post<any>(this.baseUrlCoach, { 'coachId': id, 'isHighlighted': true });
+    }
+
+    deleteCoachHighlighted(id: string): Observable<any> {
+        return this.http.delete<any>(this.baseUrlCoach + '/' + id);
     }
 
     /*getUsers(): Observable<ApiResponse> {

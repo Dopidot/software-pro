@@ -1,11 +1,11 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MenuService } from '../services/menu.service';
-import { NbThemeService, NbColorHelper } from '@nebular/theme';
 
 import { LocalDataSource } from 'ng2-smart-table';
-import { SmartTableData } from '../@core/data/smart-table';
 import { NbDialogService } from '@nebular/theme';
 import { FitislyService } from '../services/fitisly.service';
+import { UserService } from '../services/user.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'ngx-coachs',
@@ -16,6 +16,7 @@ export class CoachsComponent implements OnInit {
 
     menu = [];
     data = [];
+    coaches = [];
     options: any;
     themeSubscription: any;
     currentUser: any;
@@ -24,6 +25,8 @@ export class CoachsComponent implements OnInit {
     info = 'info';
     danger = 'danger';
     source: LocalDataSource = new LocalDataSource();
+    coachNameUserList: string;
+    date = new Date();
 
     settings = {
         pager: {
@@ -31,12 +34,15 @@ export class CoachsComponent implements OnInit {
             perPage: 4
         },
         actions: {
+            custom: [
+                {
+                    name: 'show',
+                    title: '<i class="far fa-address-card fa-xs"></i>',
+                },
+            ],
             add: false,
             edit: false,
-        },
-        delete: {
-            deleteButtonContent: '<i class="nb-trash"></i>',
-            confirmDelete: true,
+            delete: false,
         },
         columns: {
             pseudo: {
@@ -45,112 +51,65 @@ export class CoachsComponent implements OnInit {
             },
             connection: {
                 title: 'Dernière connexion',
-                type: 'string',
+                valuePrepareFunction: (date) => {
+                    return this.datePipe.transform(new Date(date), 'yyyy-MM-dd - HH:mm:ss');
+                }
             },
         },
     };
 
-    coaches/*: { name: string, title: string, picture: string, isHighlighted: boolean }[] */= [];/*[
-        { name: 'Carla Espinosa', title: 'Renforcement musculaire', picture: 'assets/images/eva.png', isHighlighted: true },
-        { name: 'Bob Kelso', title: 'Bras', picture: 'assets/images/alan.png', isHighlighted: false },
-        { name: 'Janitor', title: 'Cardio', picture: 'assets/images/nick.png', isHighlighted: true },
-        { name: 'Perry Cox', title: 'Sans équipement', picture: 'assets/images/lee.png', isHighlighted: false },
-        { name: 'Ben Sullivan', title: 'Apprentissage pour débutant', picture: 'assets/images/jack.png', isHighlighted: false },
-    ];*/
-
-    date = new Date();
-
     constructor(
-        private theme: NbThemeService,
-        private service: SmartTableData,
         private dialogService: NbDialogService,
         private fitislyService: FitislyService,
         private menuService: MenuService,
-    ) {
-        this.loadCoachs();
-        this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-
-            const colors: any = config.variables;
-            const chartjs: any = config.variables.chartjs;
-
-            /*this.data = {
-                labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
-                datasets: [{
-                    data: [65, 59, 80, 81, 56, 55, 40],
-                    label: 'Series A',
-                    backgroundColor: NbColorHelper.hexToRgbA(colors.primaryLight, 0.8),
-                }, {
-                    data: [28, 48, 40, 19, 86, 27, 90],
-                    label: 'Series B',
-                    backgroundColor: NbColorHelper.hexToRgbA(colors.infoLight, 0.8),
-                }],
-            };*/
-
-            this.options = {
-                maintainAspectRatio: false,
-                responsive: true,
-                legend: {
-                    labels: {
-                        fontColor: chartjs.textColor,
-                    },
-                },
-                scales: {
-                    xAxes: [
-                        {
-                            gridLines: {
-                                display: false,
-                                color: chartjs.axisLineColor,
-                            },
-                            ticks: {
-                                fontColor: chartjs.textColor,
-                            },
-                        },
-                    ],
-                    yAxes: [
-                        {
-                            gridLines: {
-                                display: true,
-                                color: chartjs.axisLineColor,
-                            },
-                            ticks: {
-                                fontColor: chartjs.textColor,
-                            },
-                        },
-                    ],
-                },
-            };
-        });
-
-    }
+        private userService: UserService,
+        private datePipe: DatePipe
+    ) { }
 
     ngOnInit(): void {
         this.menu = this.menuService.getMenu();
-    }
-
-    ngOnDestroy(): void {
-        this.themeSubscription.unsubscribe();
+        this.loadCoachs();
     }
 
     loadCoachs(): void {
+        this.coaches = [];
+
         this.fitislyService.getCoachs().subscribe(coachs => {
             let coachList = coachs['body']['users'];
 
             coachList.forEach(oneCoach => {
                 this.coaches.push({
+                    id: oneCoach['id'],
                     name: oneCoach['pseudonyme'],
                     title: '',
-                    picture: 'http://51.178.16.171:8150/get-user-profile-picture/' + oneCoach['profile_picture'],
+                    picture: this.fitislyService.getPicture(oneCoach['profile_picture']),
                     isHighlighted: false,
                     followers: oneCoach['followers']
                 });
             });
+
+            this.loadCoachsHiglighted();
             
         }, error => {
         });
     }
 
+    loadCoachsHiglighted(): void {
+        this.userService.getCoachHighlighted().subscribe(data => {
+            data.forEach(element => {
+                let index = this.coaches.findIndex(x => x['id'].toString() === element['coachid']);
+
+                if (index !== -1) {
+                    this.coaches[index]['isHighlighted'] = true;
+                    this.coaches[index]['idHighlight'] = element['id'];
+                }
+            });
+        });
+    }
+
     loadUsers(coach): void {
         this.currentCoach = coach;
+        this.coachNameUserList = coach['name'];
         this.data = [];
         let index = 0;
 
@@ -160,16 +119,16 @@ export class CoachsComponent implements OnInit {
     
                 this.data.push({
                     pseudo: userInfo['pseudonyme'],
-                    lastName: userInfo['last_name'],
-                    firstName: userInfo['first_name'],
+                    lastName: this.capitalize(userInfo['last_name']),
+                    firstName: this.capitalize(userInfo['first_name']),
                     email: userInfo['mail'],
-                    connection: '06:50 le 02/06/2020',
-                    picture: 'http://51.178.16.171:8150/get-user-profile-picture/' + userInfo['profile_picture']
+                    connection: userInfo['last_connection_date'],
+                    picture: this.fitislyService.getPicture(userInfo['profile_picture'])
                 });
 
                 index++;
 
-                if (index % 4 === 0 || this.currentCoach['followers'].length === index)
+                if (index % 8 === 0 || this.currentCoach['followers'].length === index)
                 {
                     this.source.load(this.data);
                 }
@@ -188,15 +147,41 @@ export class CoachsComponent implements OnInit {
     }
 
     openEditCoach(coach, dialog: TemplateRef<any>): void {
-        this.loadUsers(coach);
+        this.currentCoach = coach;
 
         this.dialogService.open(
             dialog
         );
     }
 
-    confirmDelete(): void {
-        console.log('Unfollow success !');
+    updatehighlightCoach(toHighlight: boolean): void {
+        if (toHighlight)
+        {
+            this.userService.createCoachHighlighted(this.currentCoach['id']).subscribe(data => {
+                this.currentCoach.isHighlighted = true;
+                let index = this.coaches.findIndex(x => x['id'] === this.currentCoach['id']);
+
+                if (index !== -1) {
+                    this.coaches[index]['isHighlighted'] = true;
+                    this.coaches[index]['idHighlight'] = data['body']['coach']['id'];
+                }
+            });
+        }
+        else
+        {
+            this.userService.deleteCoachHighlighted(this.currentCoach['idHighlight']).subscribe(data => {
+                this.currentCoach.isHighlighted = false;
+                let index = this.coaches.findIndex(x => x['id'] === this.currentCoach['id']);
+
+                if (index !== -1) {
+                    this.coaches[index]['isHighlighted'] = false;
+                }
+            });
+        }
+    }
+
+    capitalize(s: string): string {
+        return s.charAt(0).toUpperCase() + s.slice(1);
     }
 
 }

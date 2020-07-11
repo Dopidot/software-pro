@@ -23,12 +23,12 @@
                 <div class="col-8">
                     <nb-card *ngIf="currentCoach">
                         <nb-card-header>
-                            Les utilisateurs qui suivent {{currentCoach.name}}
+                            Les utilisateurs qui suivent {{coachNameUserList}}
                         </nb-card-header>
 
                         <nb-card-body>
                             <ng2-smart-table [settings]="settings" [source]="source"
-                                (deleteConfirm)="openUnfollow($event, dialog)">
+                                (custom)="openUnfollow($event, dialog)">
                             </ng2-smart-table>
                         </nb-card-body>
                     </nb-card>
@@ -59,48 +59,48 @@
         <nb-card-header>Informations sur {{currentCoach.name}}</nb-card-header>
         <nb-card-body style="max-width: 400px;">
 
-            <div class="col-4" style="margin: auto;">
+            <div class="col-4" style="margin: auto; padding: 0px 5px;">
                 <nb-user [picture]="currentCoach.picture" [onlyPicture]="true" size="giant"></nb-user>
             </div>
 
             <div style="margin-top: 20px; line-height: 1.5;">
-                {{currentCoach.title}}
+                Followed by {{currentCoach.followers.length}} people.
             </div>
 
             <div style="margin-bottom: 20px;"></div>
 
-            <button nbButton [status]="info" class="small-button" style="margin-right: 10px;"
-                (click)="confirmDelete();">Ne plus définir comme coach</button>
-
             <button nbButton [status]="success" *ngIf="!currentCoach.isHighlighted" class="small-button"
-                (click)="confirmDelete();">Mettre en avant</button>
+                (click)="updatehighlightCoach(true);">Mettre en avant</button>
             <button nbButton [status]="info" *ngIf="currentCoach.isHighlighted" class="small-button"
-                (click)="confirmDelete();">Ne plus mettre en avant</button>
+                (click)="updatehighlightCoach(false);">Ne plus mettre en avant</button>
 
         </nb-card-body>
         <nb-card-footer style="text-align: center;">
-            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">Fermer</button>
+            <button nbButton [status]="danger" (click)="ref.close()">Fermer</button>
         </nb-card-footer>
     </nb-card>
 </ng-template>
 
 <ng-template #dialog let-data let-ref="dialogRef">
     <nb-card>
-        <nb-card-header>Ne plus suivre</nb-card-header>
-        <nb-card-body style="max-width: 400px;">
+        <nb-card-header>Informations sur {{currentUser.pseudo}}</nb-card-header>
+        <nb-card-body>
 
-            <div class="col-4" style="margin: auto;">
+            <div class="col-4" style="margin: auto; padding: 0px 5px;">
                 <nb-user [picture]="currentUser.picture" [onlyPicture]="true" size="giant"></nb-user>
             </div>
 
-            <div style="margin-top: 20px; line-height: 1.5;">
-                Si vous confirmez, l'utilisateur {{currentUser.pseudo}} ne suivra plus le coach {{currentCoach.name}}.
-            </div>
+            <div style="margin-top: 20px;"><strong>Pseudonyme</strong></div>
+            <div>{{currentUser.pseudo}}</div>
+
+            <div style="margin-bottom: 20px;"></div>
+
+            <div><strong>Nom et prénom</strong></div>
+            <div>{{currentUser.lastName}} {{currentUser.firstName}}</div>
 
         </nb-card-body>
-        <nb-card-footer style="text-align: center;">
-            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">Annuler</button>
-            <button nbButton [status]="success" (click)="confirmDelete(); ref.close()">Confirmer</button>
+        <nb-card-footer>
+            <button nbButton [status]="danger" (click)="ref.close()" style="width: 250px;">Fermer</button>
         </nb-card-footer>
     </nb-card>
 </ng-template>

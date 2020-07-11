@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MenuService } from '../services/menu.service';
 import { LocalDataSource } from 'ng2-smart-table';
-import { SmartTableData } from '../@core/data/smart-table';
 import { NbDialogService } from '@nebular/theme';
 import { FitislyService } from '../services/fitisly.service';
 
@@ -17,13 +16,14 @@ export class MembersComponent implements OnInit {
     success = 'success';
     danger = 'danger';
     users: { pseudo: string, lastName: string, firstName: string, email: string, picture : string }[] = [];
+    source: LocalDataSource = new LocalDataSource();
 
     settings = {
         actions: {
             custom: [
                 {
                     name: 'show',
-                    title: '<i class="far fa-address-card fa-xs" title="Show more details"></i>',
+                    title: '<i class="far fa-address-card fa-xs"></i>',
                 },
             ],
             add: false,
@@ -50,25 +50,21 @@ export class MembersComponent implements OnInit {
         },
     };
 
-    source: LocalDataSource = new LocalDataSource();
-
     constructor(
-        private service: SmartTableData,
         private dialogService: NbDialogService,
         private fitisly: FitislyService,
         private menuService: MenuService,
-        ) {
-
-        this.loadUsers();
-    }
+        ) { }
 
     ngOnInit(): void {
         this.menu = this.menuService.getMenu();
+        this.loadUsers();
     }
 
     loadUsers(): void {
         this.fitisly.getUsers().subscribe(data => {
             data = data['body']['list'];
+            let index = 0;
             
             data.forEach(element => {
                 this.fitisly.getUserInfo(element['account_id']).subscribe(info => {
@@ -79,10 +75,16 @@ export class MembersComponent implements OnInit {
                         lastName: this.capitalize(myInfo['last_name']),
                         firstName: this.capitalize(myInfo['first_name']),
                         email: this.capitalize(myInfo['mail']),
-                        picture: 'http://51.178.16.171:8150/get-user-profile-picture/' + myInfo['profile_picture']
+                        picture: this.fitisly.getPicture(myInfo['profile_picture'])
                     });
-                    //console.log(this.users);
-                    this.source.load(this.users);
+                    
+                    index++;
+
+                    if (index % 10 === 0 || data.length === index)
+                    {
+                        this.source.load(this.users);
+                    }
+                    
                 }, error => {
                 });
             });

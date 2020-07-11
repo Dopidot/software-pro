@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuService } from '../services/menu.service';
-import { StatusService } from '../services/status.service';
+import { CommonService } from '../services/common.service';
+import { FitislyService } from '../services/fitisly.service';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -14,14 +15,16 @@ export class InfosComponent implements OnInit {
     data: any;
 
     private userInfo = localStorage.getItem('userInfo') != null ? JSON.parse(localStorage.getItem('userInfo')) : '';
-
-    private fitislyAdminAPI = 'http://localhost:4000/api/users/' + this.userInfo['id'];
-    private fitislyAdminDB = 'http://localhost:4000/api/users/' + this.userInfo['id'];
+    private fitislyAdminAPI;
+    private fitislyAdminDB;
+    private fitislyAPI;
+    private fitislyDB;
 
     constructor(
-        private statusService: StatusService,
         private userService: UserService,
         private menuService: MenuService,
+        private commonService: CommonService,
+        private fitislyService: FitislyService,
     ) { }
 
     ngOnInit(): void {
@@ -29,7 +32,16 @@ export class InfosComponent implements OnInit {
         this.loadStatuts();
     }
 
+    private initUrl(): void {
+        this.fitislyAdminAPI = this.commonService.baseUrl;
+        this.fitislyAdminDB = this.userService.baseUrlUser + '/' + this.userInfo['id'];
+        this.fitislyAPI = this.fitislyService.baseUrl;
+        this.fitislyDB = this.fitislyService.baseUrl + 'get-age-statistics';
+    }
+
     loadStatuts(): void {
+        this.initUrl();
+
         this.data = [
             {
                 name: 'Fitisly Admin : API',
@@ -54,12 +66,14 @@ export class InfosComponent implements OnInit {
         ];
 
         this.getStatus(0, this.fitislyAdminAPI);
+        this.getStatus(1, this.fitislyAPI);
+        this.getStatus(2, this.fitislyDB);
         this.getStatus(3, this.fitislyAdminDB);
     }
 
     getStatus(index, baseUrl: string): void {
 
-        this.statusService.isOnline(baseUrl).subscribe(data => {
+        this.commonService.isServerOnline(baseUrl).subscribe(data => {
             this.data[index].status = true;
         }, error => {
             if (error.status >= 200 && error.status < 500)

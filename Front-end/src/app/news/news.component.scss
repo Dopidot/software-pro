@@ -13,6 +13,12 @@
     background-color: #f7f9fc !important;
 }
 
+.normal-background {
+    color: #222b45;
+    background-color: #f7f9fc;
+    padding: 20px;
+}
+
 .primary-background {
     color: #ffffff;
     background-color: #45e15f;
@@ -26,4 +32,10 @@
     right: 0;
     margin: 4px;
     padding: 2px 5px !important;
+}
+
+.input-file {
+    background: #edf1f7;
+    padding: 10px 15px;
+    border-radius: 0.25rem;
 }
