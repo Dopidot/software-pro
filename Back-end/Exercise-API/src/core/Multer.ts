@@ -4,7 +4,7 @@ import * as path from "path";
 
 const storage = multer.diskStorage({
     destination: function (req: Request, file, cb) {
-        cb(null, './uploads/');
+        cb(null, process.cwd() +'/uploads/');
     },
     filename: function (req: Request, file: Express.Multer.File, callback: (error: (Error | null), filename: string) => void) {
         callback(null, new Date().toISOString() + '-' + file.originalname);
