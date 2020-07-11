@@ -28,7 +28,7 @@
 
                             <div style="text-align: center; margin-top: 10px;">
                                 <button nbButton [status]="success"
-                                    (click)="openPopup(dialog2); popupType = 2; currentExercise = {}; imageBase64 = null;">
+                                    (click)="openPopup(dialog2); popupType = 2; currentExercise = {}; imageBase64 = null; imagePath = null;">
                                     Ajouter un exercice</button>
                             </div>
                         </nb-card-body>
@@ -40,7 +40,7 @@
     </router-outlet>
 </ngx-one-column-layout>
 
-<ng-template #dialog2 let-data let-ref="dialogRef">
+<ng-template #dialog2 let-data let-ref="dialogRef" size="lg">
     <nb-card>
         <nb-card-header *ngIf="popupType === 0">Afficher un exercice</nb-card-header>
         <nb-card-header *ngIf="popupType === 1">Modifier un exercice</nb-card-header>
@@ -68,19 +68,22 @@
                     [readonly]="popupType === 0" placeholder="Rest time">
             </div>
 
-            <div style="position: relative;" *ngIf="imageBase64 || popupType !== 0">
+            <div style="position: relative;" *ngIf="imageBase64 || imagePath || popupType !== 0">
                 <label for="image" class="label" style="display: block;">Image</label>
-                <label nbButton for="image" *ngIf="!imageBase64 && popupType !== 0" class="input-file">
+                <label nbButton for="image" *ngIf="(!imageBase64 && !imagePath) && (popupType !== 0 || popupType === 2)" class="input-file">
                     <i class="fas fa-plus"></i>
                 </label>
                 <input type="file" id="image" style="display: none;" (change)="fileChangeEvent($event)" accept=".png, .jpeg, .jpg">
 
-                <button nbButton [size]="medium" class="close-button" (click)="imageBase64 = null;" *ngIf="imageBase64">
+                <button nbButton [size]="medium" class="close-button" (click)="imageBase64 = null; imagePath = null;" *ngIf="(imageBase64 || imagePath) && popupType !== 0">
                     <i class="fas fa-times" style="margin-top: 2px;"></i>
                 </button>
                 
-                <div style="text-align: center;" *ngIf="imageBase64">
-                    <img [src]="imageBase64" style="max-width: 280px; max-height: 220px;" />
+                <div style="text-align: center;" *ngIf="imageBase64 && (popupType === 2 || popupType === 1)">
+                    <img [src]="imageBase64" style="max-width: 200px; max-height: 160px;" />
+                </div>
+                <div style="text-align: center;" *ngIf="imagePath && !imageBase64 && popupType !== 2">
+                    <img [src]="imagePath" style="max-width: 200px; max-height: 160px;" />
                 </div>
             </div>
 

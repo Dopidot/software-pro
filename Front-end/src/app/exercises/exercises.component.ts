@@ -22,7 +22,7 @@ export class ExercisesComponent implements OnInit {
     errorMessage: string;
     popupType: number = 0;
     imageBase64: string;
-    myImage: string;
+    imagePath: string;
 
     settings = {
         actions: {
@@ -76,8 +76,6 @@ export class ExercisesComponent implements OnInit {
     selectAction(event, dialog: TemplateRef<any>, dialogDelete: TemplateRef<any>): void {
         this.getExercise(event.data['id']);
 
-        this.imageBase64 = null;
-
         switch (event.action) {
             case 'show': {
                 this.popupType = 0;
@@ -105,14 +103,20 @@ export class ExercisesComponent implements OnInit {
     getExercise(id: number): void {
         this.exerciseService.getExerciseById(id).subscribe(data => {
             this.currentExercise = data;
+            this.imageBase64 = null;
+            this.imagePath = null;
+
+            if (data['exerciseimage']) {
+                this.imagePath = this.exerciseService.getPicture(data['exerciseimage']);
+            }
         }, error => {
             this.errorMessage = 'Une erreur est survenue, veuillez vérifier les informations saisies.';
         });
     }
 
     addExercise(): void {
-        console.log(this.currentExercise);
-        this.currentExercise.exerciseimage = this.myImage;
+        this.currentExercise.exerciseimage = this.imagePath;
+
         this.exerciseService.createExercise(this.currentExercise).subscribe(data => {
             this.loadExercise();
         }, error => {
@@ -121,11 +125,13 @@ export class ExercisesComponent implements OnInit {
     }
 
     editExercise(): void {
-        /*this.exerciseService.updateProgram(this.currentProgram['id'], this.currentProgram).subscribe(data => {
+        this.currentExercise.exerciseimage = this.imagePath;
+
+        this.exerciseService.updateExercise(this.currentExercise['id'], this.currentExercise).subscribe(data => {
             this.loadExercise();
         }, error => {
             this.errorMessage = 'Une erreur est survenue, veuillez vérifier les informations saisies.';
-        });*/
+        });
     }
 
     confirmDelete(): void {
@@ -138,14 +144,14 @@ export class ExercisesComponent implements OnInit {
 
     fileChangeEvent(fileInput: any) {
         if (fileInput.target.files && fileInput.target.files[0]) {
-            /*const reader = new FileReader();
+            const reader = new FileReader();
 
             reader.onload = (e: any) => {
                 this.imageBase64 = e.target.result;
             };
 
-            reader.readAsDataURL(fileInput.target.files[0]);*/
-            this.myImage = fileInput.target.files[0];
+            reader.readAsDataURL(fileInput.target.files[0]);
+            this.imagePath = fileInput.target.files[0];
         }
     }
 
