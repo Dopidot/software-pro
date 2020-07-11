@@ -26,7 +26,7 @@ CREATE TABLE coachs (
 -- DROP TABLE public.events;
 
 CREATE TABLE events (
-	id bigserial NOT NULL DEFAULT,
+	id bigserial NOT NULL,
 	"name" varchar(255) NOT NULL,
 	body varchar(255) NOT NULL,
 	startdate timestamp NOT NULL,
