@@ -1,7 +1,7 @@
 import Server from './server';
 import * as dotenv from "dotenv";
-
-dotenv.config();
+import * as path from "path";
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 if (process.env.SERVER_PORT !== undefined ) {
     const server = new Server(parseInt(process.env.SERVER_PORT));
