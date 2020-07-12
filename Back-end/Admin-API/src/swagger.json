@@ -105,6 +105,12 @@
         },
         "programImage": {
           "type": "string"
+        },
+        "exercises": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -193,7 +199,7 @@
       "type": "object",
       "properties": {
         "coachId": {
-          "type": "integer"
+          "type": "string"
         },
         "isHighlighted": {
           "type": "boolean"
@@ -494,6 +500,15 @@
             "name": "description",
             "type": "string",
             "description": "the description of the program"
+          },
+          {
+            "in": "formData",
+            "name": "exercises",
+            "type": "array",
+            "description": "The list of exercises ids of the program",
+            "items": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
@@ -1456,7 +1471,7 @@
         "parameters": [
           {
             "in": "body",
-            "name": "bodt",
+            "name": "body",
             "description": "id of the referenced coach",
             "schema": {
               "$ref": "#/definitions/coach"

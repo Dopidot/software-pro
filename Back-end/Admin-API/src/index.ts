@@ -1,4 +1,11 @@
 import Server from './server';
+import * as dotenv from "dotenv";
+import path from "path";
+dotenv.config({ path: path.join(process.cwd(), '.env') });
 
-const server = new Server(4000);
-server.start();
+if ( process.env.SERVER_PORT !== undefined) {
+    const server = new Server(parseInt(process.env.SERVER_PORT));
+    server.start();
+} else {
+    console.error("Please define the server port in the environment variable");
+}
