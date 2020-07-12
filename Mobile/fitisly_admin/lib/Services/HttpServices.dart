@@ -1,50 +1,86 @@
+// Author : DEYEHE Jean
 import 'dart:convert';
-import 'package:flutter/foundation.dart';
+import 'package:dio/dio.dart';
+import 'package:fitislyadmin/Util/ConstApiRoute.dart';
+import 'package:fitislyadmin/Model/Fitisly_Admin/Event.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:fitislyadmin/modele/Exercise.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart' as Storage;
+import 'package:intl/intl.dart';
+import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
 
 
-Future<Exercise> create(Exercise e) async {
-  final http.Response response = await http.post('https://jsonplaceholder.typicode.com/albums',
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      /*'name': e.name,
-      'description': e.description,
-      'reapeat_number': e.repetitionNumber.toString(),
-      'rest_time': e.restTime.toString(),
-      'picture_id': 'null', //e.photos[0].id,
-      'video_id': 'null', //e.videos[0].id,*/
+class HttpServices {
 
-      'name': "Test",
-      'description': "e.description",
-      'reapeat_number': "e.repetitionNumber.toString()",
-      'rest_time': "e.restTime.toString()",
-      'picture_id': 'null', //e.photos[0].id,
-      'video_id': 'null', //e.videos[0].id,
-    }),
-  );
+  final storage = Storage.FlutterSecureStorage();
+  final dio = Dio();
 
-  if (response.statusCode == 201) {
-    return Exercise.fromJson(json.decode(response.body));
-  }
-    throw Exception('Failed to creation exercise');
-}
+  /* ------------------------ Début Login -----------------------------*/
 
+  Future<int> login(String email, String password,
+      GlobalKey<ScaffoldState> context) async {
+    try {
+      final http.Response response = await http.post(ConstApiRoute.login,
+          headers: <String, String>{
+            "Content-Type": "application/json",
+          },
+          body: jsonEncode(<String, String>{
+            "email": email,
+            "password": password
+          })
+      );
 
-
-  List<Exercise> getAllExercises(String responseBody){
-    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-    return parsed.map<Exercise>((json) => Exercise.fromJson(json)).toList();
-  }
-
-  Future<List<Exercise>> fetchExercises(http.Client client) async {
-    final response = await client.get('http://localhost:4000/exercises');
-
-    if (response.statusCode == 200) {
-      return compute(getAllExercises,response.body);
+      if (response.statusCode == 200) {
+        print("Vous êtes connecté !");
+        var token = getTokenFromJson(response.body);
+        writeTokenInSecureStorage(token);
+      }
+      return response.statusCode;
+    } catch (e) {
+      //throw Exception(e);
+      context.currentState.showSnackBar(SnackBar(content: Text(e)));
     }
-    throw Exception('Failed to load exercise');
+
+    throw Exception('Failed to login');
   }
 
+  void writeTokenInSecureStorage(String jwt) {
+    storage
+        .write(key: "token", value: jwt)
+        .catchError((onError) {
+      throw Exception('Failed to save token');
+    });
+  }
+
+  void writeCurrentUserInSecureStorage(String u) {
+    storage
+        .write(key: "currentUser", value: u)
+        .catchError((onError) {
+      throw Exception('Failed to save user');
+    });
+  }
+
+
+  Future<String> getToken() async {
+    var token = await storage.read(key: "token");
+    return token;
+  }
+
+  Future<void> logOut() async {
+    storage.delete(key: "token");
+  }
+
+  String getTokenFromJson(String val) {
+    var token = jsonDecode(val);
+    return token["accessToken"];
+  }
+
+
+
+/*----------------------- Event ------------------------------*/
+
+
+
+}
