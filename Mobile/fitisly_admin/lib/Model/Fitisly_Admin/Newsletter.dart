@@ -1,3 +1,4 @@
+// Author : DEYEHE Jean
 
 class Newsletter {
   String id;

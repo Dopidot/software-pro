@@ -1,3 +1,4 @@
+// Author : DEYEHE Jean
 class CoachsFitisly {
   int id;
   String pseudonyme;

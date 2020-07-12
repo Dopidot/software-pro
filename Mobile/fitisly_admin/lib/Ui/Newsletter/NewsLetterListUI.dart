@@ -1,3 +1,4 @@
+// Author : DEYEHE Jean
 import 'package:fitislyadmin/Model/Fitisly_Admin/Newsletter.dart';
 import 'package:fitislyadmin/Services/NewsletterService.dart';
 import 'package:fitislyadmin/Util/Translations.dart';

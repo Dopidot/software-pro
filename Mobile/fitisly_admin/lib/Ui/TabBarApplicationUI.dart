@@ -1,3 +1,4 @@
+// Author : DEYEHE Jean
 import 'package:fitislyadmin/Ui/Excercises/HomePageExcerciseListUI.dart';
 import 'package:fitislyadmin/Ui/Programs/ProgramHomeUI.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
@@ -25,8 +26,8 @@ class TabBarApplicationUI extends StatelessWidget {
          ),
          body: TabBarView(
              children: [
-           ExerciseListUI(),
-           ProgramHomeScreen()
+               ProgramHomeScreen(),
+               ExerciseListUI(),
          ])
      )
    );
