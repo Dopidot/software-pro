@@ -1,3 +1,4 @@
+// Author : DEYEHE Jean
 class Statistic {
   int eighteenToTwentyFive;
   int twentySixToThirty;

@@ -1,3 +1,4 @@
+// Author : DEYEHE Jean
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:fitislyadmin/Util/ConstApiRoute.dart';
@@ -33,6 +34,7 @@ class ProgramService{
       'name':p.name,
       'description':p.description,
       "programImage": await MultipartFile.fromFile(p.programImage, filename:p.programImage.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
+      "exercises":p.exercises
     });
 
     var response = await dio.post(ConstApiRoute.createProgram, data:formData,options: Options(headers: headers));
@@ -55,7 +57,7 @@ class ProgramService{
       return fetchAllPrograms(response.body);
     }
 
-    throw Exception('Failed to load exercise');
+    throw Exception('Failed to load program');
   }
 
 

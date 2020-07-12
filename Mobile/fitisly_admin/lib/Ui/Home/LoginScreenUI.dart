@@ -1,3 +1,4 @@
+// Author : DEYEHE Jean
 import 'package:fitislyadmin/Util/ConstApiRoute.dart';
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
@@ -11,7 +12,6 @@ class LoginScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _LoginScreen();
   }
 }

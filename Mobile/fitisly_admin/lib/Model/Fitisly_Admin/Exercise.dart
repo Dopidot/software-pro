@@ -1,4 +1,4 @@
-
+// Author: DEYEHE Jean
 class Exercise {
   String id;
   String name;
@@ -6,8 +6,9 @@ class Exercise {
   int repetitionNumber;
   int restTime;
   String exerciseImage;
+  bool isInAProgram = false;
 
-  Exercise({this.id,this.name,this.description, this.repetitionNumber, this.restTime, this.exerciseImage});
+  Exercise({this.id,this.name,this.description, this.repetitionNumber, this.restTime, this.exerciseImage,this.isInAProgram});
 
   factory Exercise.fromJson(Map<String,dynamic> json){
     return Exercise(
