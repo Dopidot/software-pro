@@ -67,13 +67,15 @@ export default class EventController {
                 response = await pool.query('UPDATE events SET name = $1, body = $2, startdate = $3, address = $4, zipcode = $5, city = $6, country = $7 WHERE id = $8', [ name, body, startDate, address, zipCode, city, country, id]);
             } else {
                 response = await pool.query('SELECT eventimage FROM events WHERE id = $1', [id]);
-                if (response.rowCount !== 0 && response.rows[0].eventimage !== undefined && response.rows[0].eventimage !== null) {
-                    fs.unlink(process.cwd() + '/' + response.rows[0].eventimage, err => {
-                        if (err) {
-                            console.log('eventimage : ', response.rows[0].eventimage);
-                            console.error(err);
-                        }
-                    });
+                if (response.rowCount !== 0 && response.rows[0].eventimage !== undefined ) {
+                        if (response.rows[0].eventimage !== null) {
+                        fs.unlink(process.cwd() + '/' + response.rows[0].eventimage, err => {
+                            if (err) {
+                                console.log('eventimage : ', response.rows[0].eventimage);
+                                console.error(err);
+                            }
+                        });
+                    }
                 } else {
                     return res.status(404).json('Event not found');
                 }

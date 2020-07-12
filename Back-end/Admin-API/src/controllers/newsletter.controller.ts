@@ -72,13 +72,15 @@ export default class NewsletterController {
             } else {
                 response = await pool.query('SELECT newsletterimage FROM newsletters WHERE id = $1', [id]);
                 if (response.rowCount !== 0) {
-                    if ( response.rows[0].newsletterimage !== undefined && response.rows[0].newsletterimage !== null ) {
-                        fs.unlink(process.cwd() + '/' + response.rows[0].newsletterimage, err => {
-                            if (err) {
-                                console.log('newsletterimage : ', response.rows[0].newsletterimage);
-                                console.error(err);
-                            }
-                        });
+                    if ( response.rows[0].newsletterimage !== undefined ) {
+                        if ( response.rows[0].newsletterimage !== null ) {
+                            fs.unlink(process.cwd() + '/' + response.rows[0].newsletterimage, err => {
+                                if (err) {
+                                    console.log('newsletterimage : ', response.rows[0].newsletterimage);
+                                    console.error(err);
+                                }
+                            });
+                        }
                     }
                 } else {
                     return res.status(404).json('Newsletter not found');

@@ -73,13 +73,15 @@ export default class UserController {
                 response = await pool.query('UPDATE users SET firstname = $1, lastname = $2, email = $3 WHERE id = $4', [firstname, lastname, email, id]);
             } else {
                 response =  await pool.query('SELECT userimage FROM users WHERE id = $1', [id]);
-                if (response.rowCount !== 0 && response.rows[0].userimage !== undefined && response.rows[0].userimage !== null) {
-                    fs.unlink(process.cwd() + '/' + response.rows[0].userimage, err => {
-                        if (err) {
-                            console.log('userimage : ', response.rows[0].userimage);
-                            console.error(err);
-                        }
-                    });
+                if (response.rowCount !== 0 && response.rows[0].userimage !== undefined ) {
+                    if ( response.rows[0].userimage !== null ) {
+                        fs.unlink(process.cwd() + '/' + response.rows[0].userimage, err => {
+                            if (err) {
+                                console.log('userimage : ', response.rows[0].userimage);
+                                console.error(err);
+                            }
+                        });
+                    }
                 } else {
                     return res.status(400).json('User not found');
                 }

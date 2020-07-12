@@ -125,13 +125,15 @@ export default class ProgramController {
             } else {
                 response = await pool.query('SELECT programimage FROM programs WHERE id = $1', [id]);
                 if (response.rowCount !== 0) {
-                    if (response.rows[0].programimage !== undefined && response.rows[0].programimage !== null) {
-                        fs.unlink(process.cwd() + '/' + response.rows[0].programimage, err => {
-                            if (err) {
-                                console.log('programimage : ', response.rows[0].programimage);
-                                console.error(err);
-                            }
-                        });
+                    if (response.rows[0].programimage !== undefined ) {
+                        if ( response.rows[0].programimage !== null) {
+                            fs.unlink(process.cwd() + '/' + response.rows[0].programimage, err => {
+                                if (err) {
+                                    console.log('programimage : ', response.rows[0].programimage);
+                                    console.error(err);
+                                }
+                            });
+                        }
                     }
                 } else {
                     return res.status(404).json({

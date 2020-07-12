@@ -67,13 +67,15 @@ export default class GymController {
                 response = await pool.query('UPDATE gyms SET name = $1, address = $2, zipcode = $3, city = $4, country = $5 WHERE id = $6', [ name, address, zipCode, city, country, id]);
             } else {
                 response = await pool.query('SELECT gymimage FROM gyms WHERE id = $1', [id]);
-                if (response.rowCount !== 0 && response.rows[0].gymimage !== undefined && response.rows[0].gymimage !== null) {
-                    fs.unlink(process.cwd() + '/' + response.rows[0].gymimage, err => {
-                        if (err) {
-                            console.log('gymimage : ', response.rows[0].gymimage);
-                            console.error(err);
-                        }
-                    });
+                if (response.rowCount !== 0 && response.rows[0].gymimage !== undefined ) {
+                    if (response.rows[0].gymimage !== null) {
+                        fs.unlink(process.cwd() + '/' + response.rows[0].gymimage, err => {
+                            if (err) {
+                                console.log('gymimage : ', response.rows[0].gymimage);
+                                console.error(err);
+                            }
+                        });
+                    }
                 } else {
                     return res.status(404).json('Gym not found');
                 }

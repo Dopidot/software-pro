@@ -66,13 +66,15 @@ export default class ExerciseController {
                 response = await pool.query('UPDATE exercises SET name = $1, description = $2, repeat_number = $3, rest_time = $4 WHERE id = $5', [name, description, repeat_number, rest_time, id]);
             } else {
                 response = await pool.query('SELECT exerciseimage FROM exercises WHERE id = $1', [id]);
-                if (response.rowCount !== 0 && response.rows[0].exerciseimage !== undefined && response.rows[0].exerciseimage !== null) {
-                    fs.unlink(process.cwd() + '/' + response.rows[0].exerciseimage, err => {
-                        if (err) {
-                            console.log('exerciseimage : ', response.rows[0].exerciseimage);
-                            console.error(err);
-                        }
-                    });
+                if (response.rowCount !== 0 && response.rows[0].exerciseimage !== undefined ) {
+                    if (response.rows[0].exerciseimage !== null) {
+                        fs.unlink(process.cwd() + '/' + response.rows[0].exerciseimage, err => {
+                            if (err) {
+                                console.log('exerciseimage : ', response.rows[0].exerciseimage);
+                                console.error(err);
+                            }
+                        });
+                    }
                 } else {
                     return res.status(404).json('User not found');
                 }
