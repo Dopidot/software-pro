@@ -7,6 +7,8 @@ import { NbDialogService } from '@nebular/theme';
 
 import { ProgramService } from '../services/program.service';
 import { Program } from '../models/program.model';
+import { ExerciseService } from '../services/exercise.service';
+
 
 import * as _ from 'lodash';
 
@@ -19,6 +21,8 @@ export class ProgramsComponent implements OnInit {
 
     menu = [];
     programs = [];
+    data = [];
+    exercisesList = [];
     tiny = 'tiny';
     success = 'success';
     danger = 'danger';
@@ -29,6 +33,31 @@ export class ProgramsComponent implements OnInit {
     imageBase64: string;
     imagePath: string;
     imageFile: string;
+    source: LocalDataSource = new LocalDataSource();
+
+    settings = {
+        pager: {
+            display: true,
+            perPage: 4
+        },
+        actions: {
+            custom: [
+                {
+                    name: 'add',
+                    title: '<i class="fas fa-plus fa-xs"></i>',
+                },
+            ],
+            add: false,
+            edit: false,
+            delete: false,
+        },
+        columns: {
+            name: {
+                title: 'Nom',
+                type: 'string',
+            },
+        },
+    };
 
     constructor(
         private menuService: MenuService,
@@ -36,6 +65,7 @@ export class ProgramsComponent implements OnInit {
         private datePipe: DatePipe,
         private dialogService: NbDialogService,
         private programService: ProgramService,
+        private exerciseService: ExerciseService,
     ) { }
 
     ngOnInit(): void {
@@ -49,10 +79,12 @@ export class ProgramsComponent implements OnInit {
         this.imageFile = null;
         this.currentProgram = program;
 
-        if (program['programimage'])
+        if (program['programImage'])
         {
-            this.imagePath = this.commonService.getPicture(program['programimage']);
+            this.imagePath = this.commonService.getPicture(program['programImage']);
         }
+
+        this.loadAllExercises();
     }
 
     loadPrograms(): void {
@@ -62,7 +94,37 @@ export class ProgramsComponent implements OnInit {
         });
     }
 
+    loadAllExercises(): void {
+        this.data = [];
+        
+        this.exerciseService.getExercises().subscribe(data => {
+            this.data = data;
+            this.source.load(this.data);
+
+            this.loadExercises(this.currentProgram);
+        });
+    }
+
+    loadExercises(program): void {
+        this.exercisesList = [];
+
+        program.exercises.forEach(element => {
+            this.exerciseService.getExerciseById(element['idexercise']).subscribe(data => {
+                this.exercisesList.push(data);
+
+                let index = this.data.findIndex(x => x['id'] === data['id']);
+
+                if (index !== -1)
+                {
+                    this.data.splice(index, 1);
+                    this.source.load(this.data);
+                }
+            });
+        });
+    } 
+
     addProgram(): void {
+        this.currentProgram.exercises = '3,4';
         this.programService.createProgram(this.currentProgram, this.imageFile).subscribe(data => {
             let res = data['body']['program'];
 
@@ -98,6 +160,22 @@ export class ProgramsComponent implements OnInit {
         this.dialogService.open(
             dialog
         );
+    }
+
+    addExercise(event: any): void {
+        this.exercisesList.push(event['data']);
+    }
+
+    removeExercise(exercise: any): void {
+        let index = this.exercisesList.findIndex(x => x['id'] === exercise['id']);
+
+        if (index !== -1)
+        {
+            this.exercisesList.splice(index, 1);
+
+            //this.updateProgram();
+            this.loadAllExercises();
+        }
     }
 
     fileChangeEvent(fileInput: any) {

@@ -7,7 +7,7 @@ export class Program {
     public description: string;
     public programimage: any;
     public programImage: any;
-    public exercises: Exercise[];
+    public exercises: any;
 
     constructor() {}
 }

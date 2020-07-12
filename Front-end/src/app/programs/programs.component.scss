@@ -1,3 +1,20 @@
+:host /deep/ ng2-st-tbody-edit-delete {
+    display: flex !important;
+    height: 0 !important;
+  }
+  
+  :host /deep/ ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.1em;
+    padding-top: 8px;
+  }
+  
+  :host /deep/ ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
+    color: #5dcfe3;
+  }
+
 .default-background {
     color: #222b45;
     padding: 20px;
@@ -38,4 +55,14 @@
     background: #edf1f7;
     padding: 10px 15px;
     border-radius: 0.25rem;
+}
+
+.exercise-button {
+    color: #ffffff;
+    background-color: #8d8d8d;
+    display: inline-block;
+    padding: 2px 10px;
+    cursor: pointer;
+    margin-right: 20px;
+    border-radius: 15px;
 }
