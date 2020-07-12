@@ -1,27 +1,37 @@
-:host /deep/ ng2-st-tbody-edit-delete {
-    display: flex !important;
-    height: 0 !important;
-  }
-  
-  :host /deep/ ng2-st-tbody-custom {
-    display: flex;
-  }
+.default-background {
+    color: #222b45;
+    padding: 20px;
+    position: relative;
+    width: 100%;
+}
 
-  :host /deep/ a.ng2-smart-action.ng2-smart-action-custom-custom {
-    display: inline-block !important;
-    width: 33% !important;
-    text-align: center;
-  }
-  
-  :host /deep/ ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
-    color: #5dcfe3;
-  }
+.default-background:hover {
+    background-color: #f7f9fc;
+}
+
+.default-background-selected {
+    background-color: #f7f9fc !important;
+}
+
+.normal-background {
+    color: #222b45;
+    background-color: #f7f9fc;
+    padding: 20px;
+}
+
+.primary-background {
+    color: #ffffff;
+    background-color: #45e15f;
+    padding: 20px;
+    margin-bottom: 20px;
+}
 
 .close-button {
     position: absolute;
-    right: 0;
     top: 0;
-    margin: 3px 6px;
+    right: 0;
+    margin: 4px;
+    padding: 2px 5px !important;
 }
 
 .input-file {

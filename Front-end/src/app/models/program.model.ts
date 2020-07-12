@@ -5,7 +5,8 @@ export class Program {
     public id: number;
     public name: string;
     public description: string;
-    public pictureId: number;
+    public programimage: any;
+    public programImage: any;
     public exercises: Exercise[];
 
     constructor() {}

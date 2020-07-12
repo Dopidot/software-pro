@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MenuService } from '../services/menu.service';
 import { CommonService } from '../services/common.service';
-import { FitislyService } from '../services/fitisly.service';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -24,7 +23,6 @@ export class InfosComponent implements OnInit {
         private userService: UserService,
         private menuService: MenuService,
         private commonService: CommonService,
-        private fitislyService: FitislyService,
     ) { }
 
     ngOnInit(): void {
@@ -33,10 +31,10 @@ export class InfosComponent implements OnInit {
     }
 
     private initUrl(): void {
-        this.fitislyAdminAPI = this.commonService.baseUrl;
+        this.fitislyAdminAPI = this.commonService.apiConfig.adminApiUrl;
         this.fitislyAdminDB = this.userService.baseUrlUser + '/' + this.userInfo['id'];
-        this.fitislyAPI = this.fitislyService.baseUrl;
-        this.fitislyDB = this.fitislyService.baseUrl + 'get-age-statistics';
+        this.fitislyAPI = this.commonService.apiConfig.fitislyApiUrl;
+        this.fitislyDB = this.commonService.apiConfig.fitislyApiUrl + '/get-age-statistics';
     }
 
     loadStatuts(): void {

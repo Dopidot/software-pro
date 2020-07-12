@@ -23,6 +23,7 @@ export class EventsComponent implements OnInit {
     popupType: number = 0;
     imageBase64: string;
     imagePath: string;
+    imageFile: string;
     date = new Date();
     dayCellComponent = DayCellComponent;
 
@@ -59,7 +60,10 @@ export class EventsComponent implements OnInit {
         this.currentEvent.creationDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
         this.currentEvent['zipCode'] = this.currentEvent.zipcode.toString();
 
-        this.commonService.createEvent(this.currentEvent).subscribe(data => {
+        this.commonService.createEvent(this.currentEvent, this.imageFile).subscribe(data => {
+            let res = data['body']['event'];
+            this.imagePath = this.commonService.getPicture(res['eventimage']);
+
             this.loadEvents();
             this.compareDateAndAssignEvent(this.date.toString());
         });
@@ -70,7 +74,10 @@ export class EventsComponent implements OnInit {
         this.currentEvent.creationDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
         this.currentEvent['zipCode'] = this.currentEvent.zipcode.toString();
 
-        this.commonService.updateEvent(this.currentEvent['id'], this.currentEvent).subscribe(data => {
+        this.commonService.updateEvent(this.currentEvent['id'], this.currentEvent, this.imageFile).subscribe(data => {
+            let res = data['body']['event'];
+            
+            this.imagePath = this.commonService.getPicture(res['eventimage']);
             this.loadEvents();
         });
     }
@@ -82,13 +89,19 @@ export class EventsComponent implements OnInit {
     }
 
     showEvent(event: any): void {
-        this.currentEvent = new Event();
-        this.imagePath = null;
         let html = event['target'];
 
-        if (html['id'])
+        if (typeof(html['className']) === 'string' && html['className'].indexOf('ng-star-inserted') !== -1)
         {
-            this.compareDateAndAssignEvent(html['id']);
+            this.imagePath = null;
+            this.imageBase64 = null;
+            this.imageFile = null;
+            this.currentEvent = new Event();
+
+            if (html['id'])
+            {
+                this.compareDateAndAssignEvent(html['id']);
+            }
         }
     }
 
@@ -119,7 +132,7 @@ export class EventsComponent implements OnInit {
             };
 
             reader.readAsDataURL(fileInput.target.files[0]);
-            this.imagePath = fileInput.target.files[0];
+            this.imageFile = fileInput.target.files[0];
         }
     }
 
@@ -131,6 +144,12 @@ export class EventsComponent implements OnInit {
             return false;
 
         return true;
+    }
+
+    removePicture(): void {
+        this.imageBase64 = null; 
+        this.imagePath = null; 
+        this.imageFile = null;
     }
 
 }

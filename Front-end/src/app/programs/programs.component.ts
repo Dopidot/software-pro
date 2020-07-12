@@ -1,7 +1,8 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MenuService } from '../services/menu.service';
 import { LocalDataSource } from 'ng2-smart-table';
-
+import { CommonService } from '../services/common.service';
+import { DatePipe } from '@angular/common';
 import { NbDialogService } from '@nebular/theme';
 
 import { ProgramService } from '../services/program.service';
@@ -17,87 +18,80 @@ import * as _ from 'lodash';
 export class ProgramsComponent implements OnInit {
 
     menu = [];
-    currentProgram: Program;
-    danger = 'danger';
+    programs = [];
+    tiny = 'tiny';
     success = 'success';
-    source: LocalDataSource = new LocalDataSource();
+    danger = 'danger';
+    primary = 'primary';
     errorMessage: string;
+    currentProgram: Program = new Program();
     popupType: number = 0;
     imageBase64: string;
-
-    settings = {
-        actions: {
-            custom: [
-                {
-                    name: 'show',
-                    title: '<i class="far fa-eye fa-xs"></i>',
-                },
-                {
-                    name: 'edit',
-                    title: '<i class="far fa-edit fa-xs"></i>',
-                },
-                {
-                    name: 'delete',
-                    title: '<i class="far fa-trash-alt fa-xs"></i>',
-                },
-            ],
-            add: false,
-            edit: false,
-            delete: false,
-        },
-        columns: {
-            name: {
-                title: 'Name',
-                type: 'string',
-            },
-            description: {
-                title: 'Description',
-                type: 'string',
-            }
-        },
-    };
+    imagePath: string;
+    imageFile: string;
 
     constructor(
+        private menuService: MenuService,
+        private commonService: CommonService,
+        private datePipe: DatePipe,
         private dialogService: NbDialogService,
         private programService: ProgramService,
-        private menuSerivce: MenuService,
-    ) {
-        //this.loadPrograms();
-    }
+    ) { }
 
     ngOnInit(): void {
-        this.menu = this.menuSerivce.getMenu();
+        this.menu = this.menuService.getMenu();
+        this.loadPrograms();
+    }
+
+    selectProgram(program): void {
+        this.imagePath = null;
+        this.imageBase64 = null;
+        this.imageFile = null;
+        this.currentProgram = program;
+
+        if (program['programimage'])
+        {
+            this.imagePath = this.commonService.getPicture(program['programimage']);
+        }
     }
 
     loadPrograms(): void {
         this.programService.getPrograms().subscribe(data => {
-
-            this.source.load(data);
-        }, error => {
-            this.errorMessage = 'Une erreur est survenue lors du chargement des données.';
-        });        
+            this.programs = data;
+            console.log(data);
+        });
     }
 
-    selectAction(event, dialog: TemplateRef<any>, dialogDelete: TemplateRef<any>): void {
-        this.currentProgram = event.data;
-        this.imageBase64 = null;
+    addProgram(): void {
+        this.programService.createProgram(this.currentProgram, this.imageFile).subscribe(data => {
+            let res = data['body']['program'];
 
-        switch (event.action) {
-            case 'show': {
-                this.popupType = 0;
-                this.openPopup(dialog);
-                break;
+            if (res['programimage'])
+            {
+                this.imagePath = this.commonService.getPicture(res['programimage']);
             }
-            case 'edit': {
-                this.popupType = 1;
-                this.openPopup(dialog);
-                break;
+            this.loadPrograms();
+        });
+    }
+
+    updateProgram(): void {
+        console.log(this.imageFile);
+        this.programService.updateProgram(this.currentProgram['id'], this.currentProgram, this.imageFile).subscribe(data => {
+            let res = data['body']['program'];
+            
+            if (res['programimage'])
+            {
+                this.imagePath = this.commonService.getPicture(res['programimage']);
             }
-            case 'delete': {
-                this.openPopup(dialogDelete);
-                break;
-            }
-        }
+            this.loadPrograms();
+        });
+    }
+
+    removeProgram(): void {
+        this.programService.deleteProgram(this.currentProgram['id']).subscribe(data => {
+            this.currentProgram = new Program();
+            this.loadPrograms();
+        });
     }
 
     openPopup(dialog: TemplateRef<any>): void {
@@ -106,40 +100,22 @@ export class ProgramsComponent implements OnInit {
         );
     }
 
-    addProgram(): void {
-        this.programService.createProgram(this.currentProgram).subscribe(data => {
-            this.loadPrograms();
-        }, error => {
-            this.errorMessage = 'Une erreur est survenue, veuillez vérifier les informations saisies.';
-        });
-    }
-
-    editProgram(): void {
-        this.programService.updateProgram(this.currentProgram['id'], this.currentProgram).subscribe(data => {
-            this.loadPrograms();
-        }, error => {
-            this.errorMessage = 'Une erreur est survenue, veuillez vérifier les informations saisies.';
-        });
-    }
-
-    confirmDelete(): void {
-        this.programService.deleteProgram(this.currentProgram['id']).subscribe(data => {
-            this.loadPrograms();
-        }, error => {
-            this.errorMessage = 'Une erreur est survenue, veuillez réessayer ultérieurement.';
-        });
-    }
-
     fileChangeEvent(fileInput: any) {
         if (fileInput.target.files && fileInput.target.files[0]) {
             const reader = new FileReader();
-            
+
             reader.onload = (e: any) => {
                 this.imageBase64 = e.target.result;
             };
 
             reader.readAsDataURL(fileInput.target.files[0]);
+            this.imageFile = fileInput.target.files[0];
         }
     }
 
+    removePicture(): void {
+        this.imageBase64 = null; 
+        this.imagePath = null; 
+        this.imageFile = null;
+    }
 }

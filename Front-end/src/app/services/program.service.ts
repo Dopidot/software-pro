@@ -14,35 +14,31 @@ export class ProgramService {
         return this.http.get<any>(this.baseUrl);
     }
 
-    createProgram(program: Program): Observable<any> {
-        return this.http.post<any>(this.baseUrl, program);
+    createProgram(program: any, file: any): Observable<any> {
+        let form = this.createFormData(program, 'programImage', file);
+
+        return this.http.post<any>(this.baseUrl, form);
     }
 
-    updateProgram(id: number, program: Program): Observable<any> {
-        return this.http.put<any>(this.baseUrl + '/' + id, program);
+    updateProgram(id: number, program: any, file: any): Observable<any> {
+        let form = this.createFormData(program, 'programImage', file);
+
+        return this.http.put<any>(this.baseUrl + '/' + id, form);
     }
 
     deleteProgram(id: number): Observable<any> {
         return this.http.delete<any>(this.baseUrl + '/' + id);
     }
 
-    /*getUsers(): Observable<ApiResponse> {
-        return this.http.get<ApiResponse>(this.baseUrl);
-    }
+    createFormData(obj: any, imageAttribut: string, file: any): FormData {
+        let formData = new FormData(); 
+        Object.keys(obj).forEach(key => formData.append(key, obj[key]));
 
-    getUserById(id: number): Observable<ApiResponse> {
-        return this.http.get<ApiResponse>(this.baseUrl + id);
-    }
+        if (file)
+        {
+            formData.set(imageAttribut, file, file.name);
+        }
 
-    createUser(user: User): Observable<ApiResponse> {
-        return this.http.post<ApiResponse>(this.baseUrl, user);
+        return formData;
     }
-
-    updateUser(user: User): Observable<ApiResponse> {
-        return this.http.put<ApiResponse>(this.baseUrl + user.id, user);
-    }
-
-    deleteUser(id: number): Observable<ApiResponse> {
-        return this.http.delete<ApiResponse>(this.baseUrl + id);
-    }*/
 }

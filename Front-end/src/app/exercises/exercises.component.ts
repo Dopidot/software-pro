@@ -23,6 +23,7 @@ export class ExercisesComponent implements OnInit {
     popupType: number = 0;
     imageBase64: string;
     imagePath: string;
+    imageFile: string;
 
     settings = {
         actions: {
@@ -103,8 +104,9 @@ export class ExercisesComponent implements OnInit {
     getExercise(id: number): void {
         this.exerciseService.getExerciseById(id).subscribe(data => {
             this.currentExercise = data;
-            this.imageBase64 = null;
             this.imagePath = null;
+            this.imageBase64 = null;
+            this.imageFile = null;
 
             if (data['exerciseimage']) {
                 this.imagePath = this.exerciseService.getPicture(data['exerciseimage']);
@@ -115,9 +117,10 @@ export class ExercisesComponent implements OnInit {
     }
 
     addExercise(): void {
-        this.currentExercise.exerciseimage = this.imagePath;
-
-        this.exerciseService.createExercise(this.currentExercise).subscribe(data => {
+        this.exerciseService.createExercise(this.currentExercise, this.imageFile).subscribe(data => {
+            let res = data['body']['exercise'];
+            
+            this.imagePath = this.exerciseService.getPicture(res['exerciseimage']);
             this.loadExercise();
         }, error => {
             this.errorMessage = 'Une erreur est survenue, veuillez vérifier les informations saisies.';
@@ -125,9 +128,10 @@ export class ExercisesComponent implements OnInit {
     }
 
     editExercise(): void {
-        this.currentExercise.exerciseimage = this.imagePath;
-
-        this.exerciseService.updateExercise(this.currentExercise['id'], this.currentExercise).subscribe(data => {
+        this.exerciseService.updateExercise(this.currentExercise['id'], this.currentExercise, this.imageFile).subscribe(data => {
+            let res = data['body']['exercise'];
+            
+            this.imagePath = this.exerciseService.getPicture(res['exerciseimage']);
             this.loadExercise();
         }, error => {
             this.errorMessage = 'Une erreur est survenue, veuillez vérifier les informations saisies.';
@@ -151,8 +155,13 @@ export class ExercisesComponent implements OnInit {
             };
 
             reader.readAsDataURL(fileInput.target.files[0]);
-            this.imagePath = fileInput.target.files[0];
+            this.imageFile = fileInput.target.files[0];
         }
     }
 
+    removePicture(): void {
+        this.imageBase64 = null; 
+        this.imagePath = null; 
+        this.imageFile = null;
+    }
 }

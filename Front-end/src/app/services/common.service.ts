@@ -1,27 +1,35 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from "rxjs/index";
+import { ApiConfig } from '../../../src/api.config';
 
 @Injectable()
 export class CommonService {
 
-    baseUrl: string = 'http://localhost:4000';
-    baseUrlEvent: string = 'http://localhost:4000/api/events';
-    baseUrlNews: string = 'http://localhost:4000/api/newsletters';
+    apiConfig: ApiConfig = new ApiConfig();
+    baseUrlEvent: string;
+    baseUrlNews: string;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        this.baseUrlEvent = this.apiConfig.adminApiUrl + '/api/events';
+        this.baseUrlNews = this.apiConfig.adminApiUrl + '/api/newsletters';
+     }
 
     /* EVENTS */
     getEvents(): Observable<any> {
         return this.http.get<any>(this.baseUrlEvent);
     }
 
-    createEvent(event: any): Observable<any> {
-        return this.http.post<any>(this.baseUrlEvent, event);
+    createEvent(event: any, file: any): Observable<any> {
+        let form = this.createFormData(event, 'eventImage', file);
+
+        return this.http.post<any>(this.baseUrlEvent, form);
     }
 
-    updateEvent(id: number, event: any): Observable<any> {
-        return this.http.put<any>(this.baseUrlEvent + '/' + id, event);
+    updateEvent(id: number, event: any, file: any): Observable<any> {
+        let form = this.createFormData(event, 'eventImage', file);
+
+        return this.http.put<any>(this.baseUrlEvent + '/' + id, form);
     }
 
     deleteEvent(id: number): Observable<any> {
@@ -34,15 +42,15 @@ export class CommonService {
     }
 
     createNews(news: any, file: any): Observable<any> {
-        let formData = new FormData(); 
-        Object.keys(news).forEach(key => formData.append(key, news[key]));
-        formData.set('newsletterImage', file, file.name);
+        let form = this.createFormData(news, 'newsletterImage', file);
 
-        return this.http.post<any>(this.baseUrlNews, formData);
+        return this.http.post<any>(this.baseUrlNews, form);
     }
 
-    updateNews(id: number, news: any): Observable<any> {
-        return this.http.put<any>(this.baseUrlNews + '/' + id, news);
+    updateNews(id: number, news: any, file: any): Observable<any> {
+        let form = this.createFormData(news, 'newsletterImage', file);
+
+        return this.http.put<any>(this.baseUrlNews + '/' + id, form);
     }
 
     deleteNews(id: number): Observable<any> {
@@ -51,10 +59,22 @@ export class CommonService {
 
     /* COMMON */
     getPicture(name: string): string {
-        return this.baseUrl + '/' + name;
+        return this.apiConfig.adminApiUrl + '/' + name;
     }
 
     isServerOnline(baseUrl): Observable<any> {
         return this.http.get<any>(baseUrl);
+    }
+
+    createFormData(obj: any, imageAttribut: string, file: any): FormData {
+        let formData = new FormData(); 
+        Object.keys(obj).forEach(key => formData.append(key, obj[key]));
+
+        if (file)
+        {
+            formData.set(imageAttribut, file, file.name);
+        }
+
+        return formData;
     }
 }

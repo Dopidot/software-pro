@@ -95,15 +95,15 @@
                 <input type="file" id="image" style="display: none;" (change)="fileChangeEvent($event)"
                     accept=".png, .jpeg, .jpg">
 
-                <button nbButton [size]="medium" class="close-button" (click)="imageBase64 = null; imagePath = null;"
+                <button nbButton [size]="medium" class="close-button" (click)="removePicture()"
                     *ngIf="imageBase64 || imagePath">
                     <i class="fas fa-times" style="margin-top: 2px;"></i>
                 </button>
 
-                <div style="text-align: center;" *ngIf="imageBase64 && popupType === 0">
+                <div style="text-align: center;" *ngIf="imageBase64 && !imagePath">
                     <img [src]="imageBase64" style="max-width: 200px; max-height: 160px;" />
                 </div>
-                <div style="text-align: center;" *ngIf="imagePath && !imageBase64 && popupType === 1">
+                <div style="text-align: center;" *ngIf="imagePath">
                     <img [src]="imagePath" style="max-width: 200px; max-height: 160px;" />
                 </div>
             </div>

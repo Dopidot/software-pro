@@ -9,10 +9,6 @@ export class ExerciseService {
     baseUrl: string = 'http://localhost:4000';
     baseUrlHttp: string = this.baseUrl + '/api/exercises';
 
-    private headers = new HttpHeaders({
-        'Content-Type': 'multipart/form-data',
-    });
-
     constructor(private http: HttpClient) { }
 
     getExercises(): Observable<any> {
@@ -27,15 +23,31 @@ export class ExerciseService {
         return this.baseUrl + '/' + exerciseImage;
     }
 
-    createExercise(exercise: Exercise): Observable<any> {
-        return this.http.post<any>(this.baseUrlHttp, exercise/*, { headers: headers }*/);
+    createExercise(exercise: Exercise, file: any): Observable<any> {
+        let form = this.createFormData(exercise, 'exerciseImage', file);
+
+        return this.http.post<any>(this.baseUrlHttp, form);
     }
 
-    updateExercise(id: number, exercise: Exercise): Observable<any> {
-        return this.http.put<any>(this.baseUrlHttp + '/' + id, exercise/*, { headers: this.headers }*/);
+    updateExercise(id: number, exercise: Exercise, file: any): Observable<any> {
+        let form = this.createFormData(exercise, 'exerciseImage', file);
+
+        return this.http.put<any>(this.baseUrlHttp + '/' + id, form);
     }
 
     deleteExercise(id: number): Observable<any> {
         return this.http.delete<any>(this.baseUrlHttp + '/' + id);
+    }
+
+    createFormData(obj: any, imageAttribut: string, file: any): FormData {
+        let formData = new FormData(); 
+        Object.keys(obj).forEach(key => formData.append(key, obj[key]));
+
+        if (file)
+        {
+            formData.set(imageAttribut, file, file.name);
+        }
+
+        return formData;
     }
 }

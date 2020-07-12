@@ -23,6 +23,7 @@ export class NewsComponent implements OnInit {
     popupType: number = 0;
     imageBase64: string;
     imagePath: string;
+    imageFile: string;
 
     constructor(
         private menuService: MenuService,
@@ -38,6 +39,8 @@ export class NewsComponent implements OnInit {
 
     selectNews(news): void {
         this.imagePath = null;
+        this.imageBase64 = null;
+        this.imageFile = null;
         this.currentNews = news;
 
         if (news['newsletterimage'])
@@ -48,7 +51,6 @@ export class NewsComponent implements OnInit {
 
     loadNews(): void {
         this.commonService.getNews().subscribe(data => {
-            console.log(data);
             this.news = data;
         });
     }
@@ -56,13 +58,19 @@ export class NewsComponent implements OnInit {
     addNews(): void {
         this.currentNews['creationDate'] = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
 
-        this.commonService.createNews(this.currentNews, this.imagePath).subscribe(data => {
+        this.commonService.createNews(this.currentNews, this.imageFile).subscribe(data => {
+            let res = data['body']['newsletter'];
+
+            this.imagePath = this.commonService.getPicture(res['newsletterimage']);
             this.loadNews();
         });
     }
 
     updateNews(): void {
-        this.commonService.updateNews(this.currentNews['id'], this.currentNews).subscribe(data => {
+        this.commonService.updateNews(this.currentNews['id'], this.currentNews, this.imageFile).subscribe(data => {
+            let res = data['body']['newsletter'];
+            
+            this.imagePath = this.commonService.getPicture(res['newsletterimage']);
             this.loadNews();
         });
     }
@@ -89,7 +97,13 @@ export class NewsComponent implements OnInit {
             };
 
             reader.readAsDataURL(fileInput.target.files[0]);
-            this.imagePath = fileInput.target.files[0];
+            this.imageFile = fileInput.target.files[0];
         }
+    }
+
+    removePicture(): void {
+        this.imageBase64 = null; 
+        this.imagePath = null; 
+        this.imageFile = null;
     }
 }
