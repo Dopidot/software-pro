@@ -5,7 +5,7 @@ class Program {
   String name;
   String description;
   String programImage;
-  List<String> exercises;
+  List<int> exercises;
 
   Program({this.id, this.name, this.description,this.programImage,this.exercises});
 
@@ -14,8 +14,9 @@ class Program {
         id:json['id'],
         name:json['name'],
         description:json['description'],
-        programImage:json['programimage'],
-        exercises: List<String>.from(json['exercises']));
+        programImage:json['programImage'],
+       // exercises: List<int>.from(json['exercises']["idexercise"])
+    );
   }
 
 }

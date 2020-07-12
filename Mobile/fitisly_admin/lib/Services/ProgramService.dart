@@ -34,7 +34,7 @@ class ProgramService{
       'name':p.name,
       'description':p.description,
       "programImage": await MultipartFile.fromFile(p.programImage, filename:p.programImage.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
-      "exercises":p.exercises
+     // "exercises":p.exercises
     });
 
     var response = await dio.post(ConstApiRoute.createProgram, data:formData,options: Options(headers: headers));
@@ -50,8 +50,7 @@ class ProgramService{
       "Authorization": "Baerer " + token,
     };
 
-    final response = await http
-        .get(ConstApiRoute.getAllPrograms, headers: headers);
+    final response = await http.get(ConstApiRoute.getAllPrograms, headers: headers);
 
     if (response.statusCode == 200) {
       return fetchAllPrograms(response.body);

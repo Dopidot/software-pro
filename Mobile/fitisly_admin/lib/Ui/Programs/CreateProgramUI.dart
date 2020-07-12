@@ -17,9 +17,7 @@ class CreateProgramScreen extends StatefulWidget {
 }
 
 class _CreateProgramScreen extends State<CreateProgramScreen> {
-  List items = List();
   List<String> _selectExercise;
-  var itemsSelected;
   ProgramService servicesProg = ProgramService();
   ExerciseService serviceEx = ExerciseService();
 
@@ -41,8 +39,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
       body: Form(
         key: _formKey,
         autovalidate: _autoValidate,
-        child:
-            futureBuilderExercise(), //SingleChildScrollView(child: _buildField()),
+        child: SingleChildScrollView(child: futureBuilderExercise()), //SingleChildScrollView(child: _buildField()),
       ),
     );
   }
@@ -229,10 +226,10 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
   void _validateForm(){
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      var idExercise = List<String>();
+      var idExercise = List<int>();
       if(_selectExercise.isNotEmpty){
         _selectExercise.forEach((element) {
-          idExercise.add(element.split("-").first);
+          idExercise.add(int.parse(element.split("-").first));
         });
       }
       Program p = Program(name: _name, description: _desc, programImage: _image.path,exercises: idExercise);
