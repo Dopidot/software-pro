@@ -78,7 +78,6 @@ export default class UserController {
                         if (err) {
                             console.log('userimage : ', response.rows[0].userimage);
                             console.error(err);
-                            throw err;
                         }
                     });
                 } else {
@@ -115,7 +114,6 @@ export default class UserController {
                         if (err) {
                             console.log('userimage :',  response.rows[0].userimage);
                             console.error(err);
-                            throw err;
                         }
                     });
                 }

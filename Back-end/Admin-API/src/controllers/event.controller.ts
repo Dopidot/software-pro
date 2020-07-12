@@ -72,7 +72,6 @@ export default class EventController {
                         if (err) {
                             console.log('eventimage : ', response.rows[0].eventimage);
                             console.error(err);
-                            throw err;
                         }
                     });
                 } else {
@@ -109,7 +108,6 @@ export default class EventController {
                     fs.unlink(process.cwd() + '/' + response.rows[0].eventimage, err => {
                         if (err) {
                             console.log('eventimage :', response.rows[0].eventimage);
-                            throw err;
                         }
                     });
                 }
