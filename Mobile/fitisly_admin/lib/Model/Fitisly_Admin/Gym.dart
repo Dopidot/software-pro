@@ -1,3 +1,5 @@
+// Author : DEYEHE Jean
+
 class Gym {
 
   int id;

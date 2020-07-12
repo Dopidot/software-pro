@@ -1,3 +1,5 @@
+// Author : DEYEHE Jean
+
 class User {
   String id;
   String firstName;

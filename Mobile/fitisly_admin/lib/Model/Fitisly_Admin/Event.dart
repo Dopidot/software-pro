@@ -1,3 +1,5 @@
+// Author : DEYEHE Jean
+
 import 'package:intl/intl.dart';
 
 class Event {

@@ -1,3 +1,4 @@
+// Author : DEYEHE Jean
 class UserFitisly {
   String id;
   String pseudonyme;

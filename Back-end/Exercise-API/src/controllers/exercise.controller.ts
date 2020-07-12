@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import {QueryResult } from 'pg';
-import { pool } from '../database';
+import { query } from '../database';
 import fs from "fs";
 
 export default class ExerciseController {
@@ -9,7 +9,7 @@ export default class ExerciseController {
 
     getExercises = async function(req: Request, res: Response): Promise<Response> {
         try {
-            const response: QueryResult = await pool.query('SELECT * FROM exercises');
+            const response: QueryResult = await query('SELECT * FROM exercises', undefined);
             return res.status(200).json(response.rows);
         } catch (e) {
             console.log(e);
@@ -20,7 +20,7 @@ export default class ExerciseController {
     getExerciseById = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
-            const response: QueryResult = await pool.query('SELECT * FROM exercises WHERE id = $1', [id]);
+            const response: QueryResult = await query('SELECT * FROM exercises WHERE id = $1', [id]);
             if (response.rowCount !== 0) {
                 return res.status(200).json(response.rows[0]);
             } else {
@@ -38,11 +38,11 @@ export default class ExerciseController {
             const exerciseImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
 
             if (exerciseImage === undefined) {
-                await pool.query('INSERT INTO exercises (name, description, repeat_number, rest_time) VALUES ($1, $2, $3, $4)', [name, description, repeat_number, rest_time]);
+                await query('INSERT INTO exercises (name, description, repeat_number, rest_time) VALUES ($1, $2, $3, $4)', [name, description, repeat_number, rest_time]);
             } else {
-                await pool.query('INSERT INTO exercises (name, description, repeat_number, rest_time, exerciseImage) VALUES ($1, $2, $3, $4, $5)', [name, description, repeat_number, rest_time, exerciseImage]);
+                await query('INSERT INTO exercises (name, description, repeat_number, rest_time, exerciseImage) VALUES ($1, $2, $3, $4, $5)', [name, description, repeat_number, rest_time, exerciseImage]);
             }
-            let response: QueryResult = await pool.query('SELECT * FROM exercises ORDER BY id DESC LIMIT 1');
+            const response: QueryResult = await query('SELECT * FROM exercises ORDER BY id DESC LIMIT 1', undefined);
             return res.status(201).json({
                 message: 'Exercise created sucessfully',
                 body: {
@@ -63,25 +63,26 @@ export default class ExerciseController {
 
             let response: QueryResult;
             if (exerciseImage === undefined) {
-                response = await pool.query('UPDATE exercises SET name = $1, description = $2, repeat_number = $3, rest_time = $4 WHERE id = $5', [name, description, repeat_number, rest_time, id]);
+                response = await query('UPDATE exercises SET name = $1, description = $2, repeat_number = $3, rest_time = $4 WHERE id = $5', [name, description, repeat_number, rest_time, id]);
             } else {
-                response = await pool.query('SELECT exerciseimage FROM exercises WHERE id = $1', [id]);
-                if (response.rowCount !== 0 && response.rows[0].exerciseimage !== undefined && response.rows[0].exerciseimage !== null) {
-                    fs.unlink(process.cwd() + '/' + response.rows[0].exerciseimage, err => {
-                        if (err) {
-                            console.log('exerciseimage : ', response.rows[0].exerciseimage);
-                            console.error(err);
-                            throw err;
-                        }
-                    });
+                response = await query('SELECT exerciseimage FROM exercises WHERE id = $1', [id]);
+                if (response.rowCount !== 0 && response.rows[0].exerciseimage !== undefined ) {
+                    if ( response.rows[0].exerciseimage !== null ) {
+                        fs.unlink(process.cwd() + '/' + response.rows[0].exerciseimage, err => {
+                            if (err) {
+                                console.log('exerciseimage : ', response.rows[0].exerciseimage);
+                                console.error(err);
+                            }
+                        });
+                    }
                 } else {
                     return res.status(404).json('User not found');
                 }
 
-                response = await pool.query('UPDATE exercises SET name = $1, description = $2, repeat_number = $3, rest_time = $4, exerciseImage = $5 WHERE id = $6', [name, description, repeat_number, rest_time, exerciseImage, id]);
+                response = await query('UPDATE exercises SET name = $1, description = $2, repeat_number = $3, rest_time = $4, exerciseImage = $5 WHERE id = $6', [name, description, repeat_number, rest_time, exerciseImage, id]);
             }
             if (response.rowCount !== 0 ) {
-                response = await pool.query('SELECT * FROM exercises WHERE id = $1', [id]);
+                response = await query('SELECT * FROM exercises WHERE id = $1', [id]);
                 return res.status(200).json({
                     message: `Exercise ${ response.rows[0].id } updated sucessfully`,
                     body: {
@@ -100,18 +101,17 @@ export default class ExerciseController {
     deleteExercise = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
-            let response: QueryResult = await pool.query('SELECT exerciseimage FROM exercises WHERE id = $1', [id]);
+            const response: QueryResult = await query('SELECT exerciseimage FROM exercises WHERE id = $1', [id]);
             if (response.rowCount !== 0) {
                 if (response.rows[0].exerciseimage !== undefined && response.rows[0].exerciseimage !== null) {
                     fs.unlink(process.cwd() + '/' + response.rows[0].exerciseimage, err => {
                         if (err) {
                             console.log('exerciseimage :', response.rows[0].exerciseimage);
                             console.error(err);
-                            throw err;
                         }
                     });
                 }
-                await pool.query('DELETE FROM exercises WHERE id = $1', [id]);
+                await query('DELETE FROM exercises WHERE id = $1', [id]);
                 return res.status(200).json(`Exercise ${id} deleted successfully`);
             } else {
                 return res.status(404).json('Exercise not found');

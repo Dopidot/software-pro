@@ -26,8 +26,6 @@ export default class Server {
             res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
             res.header("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
             next();
-
-
         });
 
         app.use('/api', swaggerRouter);
@@ -39,11 +37,9 @@ export default class Server {
         app.use('/api/gyms', gymRouter);
         app.use('/api/coachs', coachRouter);
         app.use('/uploads', express.static('uploads'));
-
-
         app.use('*', (req: Request, res: Response) => {
             res.send("Make sure the url is correct !!!");
-        })
+        });
 
         app.listen(this.port, () => {
             console.log('The Admin-API is currently running at http://localhost:' ,this.port); //https://api.fitisly.com
