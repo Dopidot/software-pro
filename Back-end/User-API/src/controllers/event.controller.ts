@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { QueryResult } from "pg";
-import { pool } from "../database";
+import { query } from "../database";
 import fs from "fs";
 
 export default class EventController {
@@ -9,7 +9,7 @@ export default class EventController {
 
     getEvents = async function(req: Request, res: Response): Promise<Response> {
         try {
-            const response: QueryResult = await pool.query('SELECT * FROM events');
+            const response: QueryResult = await query('SELECT * FROM events', undefined);
             return res.status(200).json(response.rows);
         } catch (e) {
             console.log(e);
@@ -20,7 +20,7 @@ export default class EventController {
     getEventById = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
-            const response: QueryResult = await pool.query('SELECT * FROM events WHERE id = $1', [id]);
+            const response: QueryResult = await query('SELECT * FROM events WHERE id = $1', [id]);
             if (response.rowCount !== 0 ) {
                 return res.status(200).json(response.rows[0]);
             } else {
@@ -38,12 +38,12 @@ export default class EventController {
             const eventImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
 
             if ( eventImage === undefined) {
-                await pool.query('INSERT INTO events (name, body, startdate, creationdate, address, zipcode, city, country) VALUES ($1, $2, $3, now(), $4, $5, $6, $7)', [name, body, startDate, address, zipCode, city, country]);
+                await query('INSERT INTO events (name, body, startdate, creationdate, address, zipcode, city, country) VALUES ($1, $2, $3, now(), $4, $5, $6, $7)', [name, body, startDate, address, zipCode, city, country]);
             } else {
-                await pool.query('INSERT INTO events (name, body, startdate, creationdate, address, zipcode, city, country, eventimage) VALUES ($1, $2, $3, now(), $4, $5, $6, $7, $8)', [name, body, startDate, address, zipCode, city, country, eventImage]);
+                await query('INSERT INTO events (name, body, startdate, creationdate, address, zipcode, city, country, eventimage) VALUES ($1, $2, $3, now(), $4, $5, $6, $7, $8)', [name, body, startDate, address, zipCode, city, country, eventImage]);
             }
 
-            const response: QueryResult = await pool.query('SELECT * from events order by id desc limit 1');
+            const response: QueryResult = await query('SELECT * from events order by id desc limit 1', undefined);
             return res.status(201).json({
                 message: 'Event created sucessfully',
                 body: {
@@ -64,25 +64,27 @@ export default class EventController {
 
             let response: QueryResult;
             if (eventImage === undefined) {
-                response = await pool.query('UPDATE events SET name = $1, body = $2, startdate = $3, address = $4, zipcode = $5, city = $6, country = $7 WHERE id = $8', [ name, body, startDate, address, zipCode, city, country, id]);
+                response = await query('UPDATE events SET name = $1, body = $2, startdate = $3, address = $4, zipcode = $5, city = $6, country = $7 WHERE id = $8', [ name, body, startDate, address, zipCode, city, country, id]);
             } else {
-                response = await pool.query('SELECT eventimage FROM events WHERE id = $1', [id]);
-                if (response.rowCount !== 0 && response.rows[0].eventimage !== undefined && response.rows[0].eventimage !== null) {
-                    fs.unlink(process.cwd() + '/' + response.rows[0].eventimage, err => {
-                        if (err) {
-                            console.log('eventimage : ', response.rows[0].eventimage);
-                            console.error(err);
-                        }
-                    });
+                response = await query('SELECT eventimage FROM events WHERE id = $1', [id]);
+                if (response.rowCount !== 0 && response.rows[0].eventimage !== undefined ) {
+                    if (response.rows[0].eventimage !== null) {
+                        fs.unlink(process.cwd() + '/' + response.rows[0].eventimage, err => {
+                            if (err) {
+                                console.log('eventimage : ', response.rows[0].eventimage);
+                                console.error(err);
+                            }
+                        });
+                    }
                 } else {
                     return res.status(404).json('Event not found');
                 }
 
-                response = await pool.query('UPDATE events SET name = $1, body = $2, startdate = $3, address = $4, zipcode = $5, city = $6, country = $7, eventimage = $8 WHERE id = $9', [ name, body, startDate, address, zipCode, city, country, eventImage, id]);
+                response = await query('UPDATE events SET name = $1, body = $2, startdate = $3, address = $4, zipcode = $5, city = $6, country = $7, eventimage = $8 WHERE id = $9', [ name, body, startDate, address, zipCode, city, country, eventImage, id]);
             }
 
             if (response.rowCount !== 0 ) {
-                response = await pool.query('SELECT * FROM events WHERE id = $1', [id]);
+                response = await query('SELECT * FROM events WHERE id = $1', [id]);
                 return res.status(200).json({
                     message: `Event ${ response.rows[0].id } updated sucessfully`,
                     body: {
@@ -102,7 +104,7 @@ export default class EventController {
     deleteEvent = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
-            const response: QueryResult = await pool.query('SELECT eventimage FROM events WHERE id = $1', [id]);
+            const response: QueryResult = await query('SELECT eventimage FROM events WHERE id = $1', [id]);
             if (response.rowCount !== 0 ) {
                 if (response.rows[0].eventimage !== undefined && response.rows[0].eventimage !== null) {
                     fs.unlink(process.cwd() + '/' + response.rows[0].eventimage, err => {
@@ -111,7 +113,7 @@ export default class EventController {
                         }
                     });
                 }
-                await pool.query('DELETE FROM events WHERE id = $1', [id]);
+                await query('DELETE FROM events WHERE id = $1', [id]);
                 return res.status(200).json(`Event ${id} deleted successfully`);
             } else {
                 return res.status(404).json('Event not found');

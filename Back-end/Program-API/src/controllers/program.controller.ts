@@ -1,6 +1,6 @@
 import { Request, Response} from 'express';
 import { QueryResult } from 'pg';
-import { pool } from '../database';
+import { query } from '../database';
 import fs from "fs";
 import ProgramModel from "../models/program.model";
 
@@ -10,16 +10,16 @@ export default class ProgramController {
 
     getPrograms = async function(req: Request, res: Response): Promise<Response> {
         try {
-            const response: QueryResult = await pool.query('SELECT * FROM programs');
+            const response: QueryResult = await query('SELECT * FROM programs', undefined);
             const program_list: ProgramModel[] = [];
             if (response.rowCount !== 0) {
                 for (let i = 0; i < response.rowCount; i++) {
-                    const exercise_list = await pool.query('SELECT idexercise FROM junction_program_exercise WHERE idprogram = $1', [response.rows[i].id]);
+                    const exercise_list = await query('SELECT idexercise FROM junction_program_exercise WHERE idprogram = $1', [response.rows[i].id]);
                     const program: ProgramModel= new ProgramModel(
                         response.rows[i].id,
                         response.rows[i].name,
                         response.rows[i].description,
-                        response.rows[i].programImage,
+                        response.rows[i].programimage,
                         exercise_list.rows);
                     program_list.push(program);
                 }
@@ -37,14 +37,14 @@ export default class ProgramController {
     getProgramById = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
-            const response: QueryResult = await pool.query('SELECT * FROM programs WHERE id = $1', [id]);
+            const response: QueryResult = await query('SELECT * FROM programs WHERE id = $1', [id]);
             if (response.rowCount !== 0){
-                const exercise_list = await pool.query('SELECT idexercise FROM junction_program_exercise WHERE idprogram = $1', [response.rows[0].id]);
+                const exercise_list = await query('SELECT idexercise FROM junction_program_exercise WHERE idprogram = $1', [response.rows[0].id]);
                 const program: ProgramModel = new ProgramModel(
                     response.rows[0].id,
                     response.rows[0].name,
                     response.rows[0].description,
-                    response.rows[0].programImage,
+                    response.rows[0].programimage,
                     exercise_list.rows
                 )
                 return res.status(200).json(program);
@@ -71,28 +71,28 @@ export default class ProgramController {
 
             //let response: QueryResult;
             if ( programImage === undefined) {
-                await pool.query('INSERT INTO programs (name, description) VALUES ($1, $2)', [name, description]);
+                await query('INSERT INTO programs (name, description) VALUES ($1, $2)', [name, description]);
             } else {
-                await pool.query('INSERT INTO programs (name, description, programImage) VALUES ($1, $2, $3)', [name, description, programImage]);
+                await query('INSERT INTO programs (name, description, programImage) VALUES ($1, $2, $3)', [name, description, programImage]);
             }
 
-            let program_id : QueryResult = await pool.query('SELECT id FROM programs ORDER BY id DESC LIMIT 1');
+            let program_id : QueryResult = await query('SELECT id FROM programs ORDER BY id DESC LIMIT 1', undefined);
 
             if (exercises !== undefined ) {
                 const ids: string[] = exercises.split(",");
                 for (const id_exo of ids) {
                     const id = BigInt(id_exo);
-                    await pool.query('INSERT INTO junction_program_exercise (idprogram, idexercise) VALUES($1, $2);', [program_id.rows[0].id, id]);
+                    await query('INSERT INTO junction_program_exercise (idprogram, idexercise) VALUES($1, $2);', [program_id.rows[0].id, id]);
                 }
             }
 
-            program_id = await pool.query('SELECT * FROM programs ORDER BY id DESC LIMIT 1');
-            const exercise_list = await pool.query('SELECT idexercise FROM junction_program_exercise WHERE idprogram = $1', [program_id.rows[0].id]);
+            program_id = await query('SELECT * FROM programs ORDER BY id DESC LIMIT 1', undefined);
+            const exercise_list = await query('SELECT idexercise FROM junction_program_exercise WHERE idprogram = $1', [program_id.rows[0].id]);
             const program: ProgramModel = new ProgramModel(
                 program_id.rows[0].id,
                 program_id.rows[0].name,
                 program_id.rows[0].description,
-                program_id.rows[0].programImage,
+                program_id.rows[0].programimage,
                 exercise_list.rows
             );
 
@@ -121,9 +121,9 @@ export default class ProgramController {
 
             let response: QueryResult;
             if (programImage === undefined) {
-                response = await pool.query('UPDATE programs SET name = $1, description = $2 WHERE id = $3', [name, description, id]);
+                response = await query('UPDATE programs SET name = $1, description = $2 WHERE id = $3', [name, description, id]);
             } else {
-                response = await pool.query('SELECT programimage FROM programs WHERE id = $1', [id]);
+                response = await query('SELECT programimage FROM programs WHERE id = $1', [id]);
                 if (response.rowCount !== 0) {
                     if (response.rows[0].programimage !== undefined && response.rows[0].programimage !== null) {
                         fs.unlink(process.cwd() + '/' + response.rows[0].programimage, err => {
@@ -139,24 +139,24 @@ export default class ProgramController {
                     });
                 }
 
-                await pool.query('DELETE FROM junction_program_exercise WHERE idprogram = $1', [id]);
+                await query('DELETE FROM junction_program_exercise WHERE idprogram = $1', [id]);
                 if (exercises !== undefined ) {
                     for ( const id_exo in exercises) {
-                        await pool.query('INSERT INTO junction_program_exercise (idprogram, idexercise) VALUES($1, $2);', [id, id_exo]);
+                        await query('INSERT INTO junction_program_exercise (idprogram, idexercise) VALUES($1, $2);', [id, id_exo]);
                     }
                 }
 
-                response = await pool.query('UPDATE programs SET name = $1, description = $2, programImage = $3 WHERE id = $4', [name, description, programImage, id]);
+                response = await query('UPDATE programs SET name = $1, description = $2, programImage = $3 WHERE id = $4', [name, description, programImage, id]);
             }
 
             if (response.rowCount !== 0) {
-                response = await pool.query('SELECT * FROM programs WHERE id = $1', [id]);
-                const exercise_list = await pool.query('SELECT idexercise FROM junction_program_exercise WHERE idprogram = $1', [id]);
+                response = await query('SELECT * FROM programs WHERE id = $1', [id]);
+                const exercise_list = await query('SELECT idexercise FROM junction_program_exercise WHERE idprogram = $1', [id]);
                 const program: ProgramModel = new ProgramModel(
                     response.rows[0].id,
                     response.rows[0].name,
                     response.rows[0].description,
-                    response.rows[0].programImage,
+                    response.rows[0].programimage,
                     exercise_list.rows
                 );
                 return res.status(200).json({
@@ -182,7 +182,7 @@ export default class ProgramController {
     deleteProgram = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
-            const response: QueryResult = await pool.query('SELECT programimage FROM programs WHERE id = $1', [id]);
+            const response: QueryResult = await query('SELECT programimage FROM programs WHERE id = $1', [id]);
             if (response.rowCount !== 0) {
                 if (response.rows[0].programimage !== undefined && response.rows[0].programimage) {
                     fs.unlink(process.cwd() + '/' + response.rows[0].programimage, err => {
@@ -193,8 +193,8 @@ export default class ProgramController {
                     });
                 }
 
-                await pool.query('DELETE FROM junction_program_exercise WHERE idprogram = $1 ', [id]);
-                await pool.query('DELETE FROM programs WHERE id = $1', [id]);
+                await query('DELETE FROM junction_program_exercise WHERE idprogram = $1 ', [id]);
+                await query('DELETE FROM programs WHERE id = $1', [id]);
                 return res.status(200).json(`Programs ${id} deleted successfully`);
             } else {
                 return res.status(404).json({
