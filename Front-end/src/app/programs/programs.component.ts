@@ -124,7 +124,6 @@ export class ProgramsComponent implements OnInit {
     } 
 
     addProgram(): void {
-        this.currentProgram.exercises = '3,4';
         this.programService.createProgram(this.currentProgram, this.imageFile).subscribe(data => {
             let res = data['body']['program'];
 
@@ -137,7 +136,7 @@ export class ProgramsComponent implements OnInit {
     }
 
     updateProgram(): void {
-        console.log(this.imageFile);
+        this.currentProgram.exercises = '3,4';
         this.programService.updateProgram(this.currentProgram['id'], this.currentProgram, this.imageFile).subscribe(data => {
             let res = data['body']['program'];
             
@@ -164,6 +163,19 @@ export class ProgramsComponent implements OnInit {
 
     addExercise(event: any): void {
         this.exercisesList.push(event['data']);
+
+        let temp = '';
+        this.exercisesList.forEach(element => {
+            if (temp.length !== 0)
+            {
+                temp += ',';
+            }
+
+            temp += element['id'];
+        });
+
+        this.currentProgram.exercises = temp;
+        this.updateProgram();
     }
 
     removeExercise(exercise: any): void {
