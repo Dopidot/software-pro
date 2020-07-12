@@ -1,6 +1,7 @@
 import 'package:fitislyadmin/Model/Fitisly_Admin/Event.dart';
-import 'package:fitislyadmin/Services/HttpServices.dart';
+import 'package:fitislyadmin/Services/EventService.dart';
 import 'package:fitislyadmin/Ui/Events/HomeEventUI.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 
 class CreateEventSecondScreen extends StatefulWidget {
@@ -25,21 +26,21 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
   String _zipCode;
   String _country;
   String _city;
-  HttpServices services = HttpServices();
+  EventService services = EventService();
 
   @override
   Widget build(BuildContext context) {
 
 
     return Scaffold(
-        appBar: AppBar(title: Text("Nouvel évènement"),
+        appBar: AppBar(title: Text(Translations.of(context).text("title_create_event")),
             centerTitle: true),
         body: Container(
             padding: EdgeInsets.all(20.0),
             child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    Text("Le lieu de l'évènement"),
+                    Text(Translations.of(context).text("subtitle_creation_event")),
                     Form(
                         autovalidate: _autoValidate,
                         key: _formKey,
@@ -62,7 +63,7 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
       validator: validateField,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
-          hintText: "Numéro et rue du lieu de l'évènement",
+          hintText: Translations.of(context).text("field_address_event"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -74,7 +75,7 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
       validator: validateField,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-          hintText: "Code postal",
+          hintText: Translations.of(context).text("field_zipCode"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
 
@@ -85,7 +86,7 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
       validator: validateField,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Ville",
+          hintText: Translations.of(context).text("field_city"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -97,9 +98,8 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
       validator: validateField,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Pays",
+          hintText: Translations.of(context).text("field_country"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-
     );
 
     final creationButton = Material(
@@ -109,7 +109,24 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
 
         child: MaterialButton(
           onPressed: _validateInput,
-          child: Text("Créer"),
+          child: Text(Translations.of(context).text("btn_Create")),
+        )
+    );
+
+    final cancelBtn = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.redAccent,
+
+        child: MaterialButton(
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomeEventScreen()),
+                  (Route<dynamic> route) => false,
+            );
+          },
+          child: Text(Translations.of(context).text("btn_cancel")),
         )
     );
 
@@ -132,10 +149,19 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
             child: country,
           ),
 
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: creationButton,
-          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: creationButton,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: cancelBtn,
+              ),
+            ],
+          )
         ]
     );
 
@@ -171,26 +197,9 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
   }
   String validateField(String value){
     if(value.isEmpty){
-      return "Attention votre champs est vide";
+      return Translations.of(context).text("field_is_empty");
     }
     return null;
   }
-
-
-  /*Future<String> tansformAddressToLocalistion() async {
-
-    var completeAddress = "$_address ,$_zipCode $_city ,$_country";
-
-    //Address address = Address(addressLine: _address,postalCode: _zipCode,countryName: _country, locality: _city);
-    var address = await Geocoder.local.findAddressesFromQuery(completeAddress);
-    var localisation = address.first.coordinates.latitude.toString() + " : " + address.first.coordinates.longitude.toString();
-    var a = Coordinates(address.first.coordinates.latitude, address.first.coordinates.longitude);
-    await Geocoder.local.findAddressesFromCoordinates(a).then(
-            (value) => {
-          print(value.first.addressLine)
-        });
-
-    return localisation;
-  }*/
 
 }

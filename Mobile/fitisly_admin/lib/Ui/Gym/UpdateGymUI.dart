@@ -1,10 +1,15 @@
 import 'dart:io';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Gym.dart';
 import 'package:fitislyadmin/Services/GymService.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UpdateGymUI extends StatefulWidget{
+
+  String gymId;
+  UpdateGymUI({Key key, @required this.gymId}) : super(key: key);
+
   @override
   State<UpdateGymUI> createState() {
     return _UpdateGymUI();
@@ -29,16 +34,13 @@ class _UpdateGymUI extends State<UpdateGymUI>{
 
   @override
   Widget build(BuildContext context) {
-    final int gymId = ModalRoute.of(context).settings.arguments;
-
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(centerTitle: true,
-          title: Text("Ma newsletter")),
+          title: Text(Translations.of(context).text("title_detail"))),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
-          child: buildFutureNewsletter(gymId.toString()),
+          child: buildFutureNewsletter(widget.gymId),
         ),
       ),
     );
@@ -50,9 +52,7 @@ class _UpdateGymUI extends State<UpdateGymUI>{
     return FutureBuilder<Gym>(
       future: services.getGymById(id),
       builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return _buildField(snapshot.data);
-        } else if (snapshot.hasError) {
+        if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
         return snapshot.hasData ?  _buildField(snapshot.data) : Center(child: CircularProgressIndicator());
@@ -62,7 +62,7 @@ class _UpdateGymUI extends State<UpdateGymUI>{
   }
 
   Widget _buildField(Gym gym){
-    Text titleScreen = Text("Les informations de la salle", style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),textAlign: TextAlign.center,);
+    Text titleScreen = Text(Translations.of(context).text("subtitle_gym"), style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),textAlign: TextAlign.center,);
 
     final nameField = TextFormField(
       initialValue: gym.name,
@@ -72,7 +72,7 @@ class _UpdateGymUI extends State<UpdateGymUI>{
       validator: validateField,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
-          hintText: "Nom de la salle",
+          hintText: Translations.of(context).text("field_name"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -85,7 +85,7 @@ class _UpdateGymUI extends State<UpdateGymUI>{
       validator: validateField,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
-          hintText: "Numéro et rue du lieu de la salle",
+          hintText: Translations.of(context).text("field_address_gym"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -98,7 +98,7 @@ class _UpdateGymUI extends State<UpdateGymUI>{
       validator: validateField,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-          hintText: "Code postal",
+          hintText: Translations.of(context).text("field_zipCode"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
 
@@ -110,7 +110,7 @@ class _UpdateGymUI extends State<UpdateGymUI>{
       validator: validateField,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Ville",
+          hintText: Translations.of(context).text("field_city"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -123,7 +123,7 @@ class _UpdateGymUI extends State<UpdateGymUI>{
       validator: validateField,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Pays",
+          hintText: Translations.of(context).text("field_country"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -154,14 +154,16 @@ class _UpdateGymUI extends State<UpdateGymUI>{
         color: new Color(0xFF45E15F),
 
         child: MaterialButton(
-          onPressed: _updateGym,
-          child: Text("Modifier"),
+          onPressed: () {
+            _updateGym(gym);
+          },
+          child: Text(Translations.of(context).text("btn_update")),
         )
     );
 
 
     RaisedButton cancelBtn = RaisedButton(
-      child: Text('Annuler'),
+      child: Text(Translations.of(context).text("btn_cancel")),
       color: Colors.red,
       onPressed: () {
         Navigator.pop(context);
@@ -225,10 +227,20 @@ class _UpdateGymUI extends State<UpdateGymUI>{
   }
 
 
-  void _updateGym() {
+  void _updateGym(Gym gym) {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
-      Gym gym = Gym(name: _name,address: _address,zipCode: _zipCode,city: _city,country: _country,gymImage: _image.path);
+
+      gym.name = _name;
+      gym.address = _address;
+      gym.zipCode = _zipCode;
+      gym.city = _city;
+      gym.country = _country;
+      gym.gymImage = _image != null ? _image.path : gym.gymImage;
+
+
+      //Gym gym = Gym(name: _name,address: _address,zipCode: _zipCode,city: _city,country: _country,gymImage: _image.path);
+      services.updateGym(gym);
       Navigator.pop(context,gym);
 
     } else {
@@ -244,7 +256,7 @@ class _UpdateGymUI extends State<UpdateGymUI>{
 
 String validateField(String value){
   if(value.isEmpty){
-    return "Attention votre champs est vide";
+    return Translations.of(context).text("field_is_empty");
   }
   return null;
 }

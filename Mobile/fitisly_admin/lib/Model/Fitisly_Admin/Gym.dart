@@ -14,7 +14,7 @@ class Gym {
   factory Gym.fromJson(Map<String, dynamic> json) {
 
     return Gym(
-        id: json['id'],
+        id: int.parse(json['id']),
         name: json['name'],
         address: json['address'],
         zipCode: json['zipcode'],

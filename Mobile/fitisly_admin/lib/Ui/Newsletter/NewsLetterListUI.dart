@@ -1,10 +1,10 @@
 import 'package:fitislyadmin/Model/Fitisly_Admin/Newsletter.dart';
 import 'package:fitislyadmin/Services/NewsletterService.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'CreateNewletterUI.dart';
 import 'ModifyNewsLetterUI.dart';
-
-
 
 class NewsletterList extends StatefulWidget {
   @override
@@ -17,35 +17,26 @@ class _NewsletterListState extends State<NewsletterList> {
 
   NewsletterService services = NewsletterService();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  Future<List<Newsletter>> futureNl;
-
-  @override
-  void initState() {
-    super.initState();
-   //futureNl = services.fetchNewsletters();
-  }
-
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Mes newsletters", style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
+        title: Text(Translations.of(context).text("title_application_news"),
+            style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
         centerTitle: true,
       ),
-      body: buildFutureNewsletter() ,
+      body: _buildFutureNewsletter(),
       floatingActionButton: FloatingActionButton(
-          child:Icon(Icons.add),
+          child: Icon(Icons.add),
           onPressed: () {
             Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => CreateNewsletter()))
-            .then((value) {
-              if(value != null){
-                updateUiAfterCreation();
+                context,
+                MaterialPageRoute(builder: (context) => CreateNewsletter()))
+                .then((value) {
+              if (value != null) {
+                _updateUiAfterCreation();
               }
             });
           }
@@ -54,91 +45,98 @@ class _NewsletterListState extends State<NewsletterList> {
   }
 
 
-
-  FutureBuilder<List<Newsletter>> buildFutureNewsletter() {
+  FutureBuilder<List<Newsletter>> _buildFutureNewsletter() {
     return FutureBuilder<List<Newsletter>>(
       future: services.fetchNewsletters(),
       builder: (context, snapshot) {
-       if (snapshot.hasError) {
-
+        if (snapshot.hasError) {
           return Center(child: Text("${snapshot.error}"));
         }
-        return snapshot.hasData ? buildList(snapshot.data) : Center(child: CircularProgressIndicator());
+        return snapshot.hasData ? _buildList(snapshot.data) : Center(
+            child: CircularProgressIndicator());
       },
     );
-
   }
 
 
-  Widget buildList(List<Newsletter> newsletters ){
-    return newsletters.isEmpty ? Center(child: Text("Aucune news, veuillez en ajouter svp")) : initListView(newsletters);
+  Widget _buildList(List<Newsletter> newsletters) {
+    return newsletters.isEmpty ? Center(
+        child: Text(Translations.of(context).text("no_news"))) : _initListView(newsletters);
   }
 
 
-  Widget initListView(List<Newsletter> newsletters){
-    return ListView.builder(
-        itemCount: newsletters.length
-        , itemBuilder: (context,index) {
-      return Dismissible(
-        key: Key(newsletters[index].id),
-        //confirmDismiss: ,
-        background: Container(
-          color: Colors.red,
-          child: Icon(Icons.cancel),
-        ),
-        onDismissed: (direction) {
-          delete(index,newsletters);
+  Widget _initListView(List<Newsletter> newsletters) {
+    return AnimationLimiter(
+      child: ListView.builder(
+        itemCount: newsletters.length,
+        itemBuilder: (BuildContext context, int index) {
+          return AnimationConfiguration.staggeredList(
+              position: index,
+              duration: const Duration(milliseconds: 375),
+              child: SlideAnimation(
+                verticalOffset: 50.0,
+                child: FadeInAnimation(
+                  child: Dismissible(
+                      key: Key(newsletters[index].id),
+                      //confirmDismiss: ,
+                      background: Container(
+                        color: Colors.red,
+                        child: Icon(Icons.cancel),
+                      ),
+                      onDismissed: (direction) {
+                        _delete(index, newsletters);
+                      },
+                      child: Padding(
+                        padding:
+                        const EdgeInsets.symmetric(
+                            vertical: 0.0, horizontal: 4.0),
+                        child: Card(
+                          child: ListTile(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (context) {
+                                    return ModifyNewsletter(newsletterId: newsletters[index].id);
+                                  })
+                              )
+                                  .then((value) {
+                                if (value != null) {
+                                  setState(() {
+                                    newsletters[index] = value;
+                                  });
+                                  _scaffoldKey.currentState.showSnackBar(
+                                      SnackBar(content: Text(Translations.of(context).text("update_news"))));
+                                }
+                              });
+                            },
+                            title: Text(newsletters[index].name),
+                          ),
+                        ),
+                      )
+                  ),
+                ),
+              )
+          );
         },
-        child: Padding(
-          padding:
-          const EdgeInsets.symmetric(vertical: 0.0, horizontal: 4.0),
-          child: Card(
-            child: ListTile(
-              onTap: () {
-                Navigator.push(context,MaterialPageRoute(
-                    builder: (context) {
-                      return ModifyNewsletter(newsletterId: newsletters[index].id);
-                    })
-                )
-                    .then((value) {
-
-                  if(value != null){
-                    setState(() {
-                      newsletters[index] = value;
-                    });
-                    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Newsletter modifiée ! ")));
-                  }
-                });
-              },
-              title: Text(newsletters[index].name),
-            ),
-          ),
-        ),
-      );
-    });
+      ),
+    );
   }
 
-
-  void updateUiAfterCreation() async {
+  void _updateUiAfterCreation() async {
     setState(() {
-      buildFutureNewsletter();
+      _buildFutureNewsletter();
     });
   }
 
 
-
-  void delete(var index,List<Newsletter> nl) async {
-
+  void _delete(var index, List<Newsletter> nl) async {
     var isDelete = await services.deleteNewsletter(nl[index].id);
 
-    if(isDelete){
-
+    if (isDelete) {
       setState(() {
         nl.removeAt(index);
       });
     }
-    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("La newsletter a été supprimé")));
-
+    _scaffoldKey.currentState.showSnackBar(
+        SnackBar(content: Text(Translations.of(context).text("delete_news"))));
   }
-
 }

@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Event.dart';
-import 'package:fitislyadmin/Services/HttpServices.dart';
+import 'package:fitislyadmin/Services/EventService.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
@@ -34,7 +35,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
   final _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
 
-  HttpServices services = HttpServices();
+  EventService services = EventService();
   Event eventFromDB;
 
 
@@ -59,8 +60,8 @@ class _DetailEventScreen extends State<DetailEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Mon évènement"),
-        centerTitle: true,),
+      appBar: AppBar(title: Text(Translations.of(context).text("title_event_detail")),
+        centerTitle: true),
       body:  Container(
           padding: EdgeInsets.all(20.0),
           child: SingleChildScrollView(
@@ -87,7 +88,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
       },
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Nom",
+          hintText: Translations.of(context).text("field_name"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
       validator: validateField,
     );
@@ -103,7 +104,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
       validator: validateField,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
-          hintText: "Description de l'évènement",
+          hintText: Translations.of(context).text("field_description_event"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -126,7 +127,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
       },
       format: format,
       decoration: InputDecoration(
-          hintText: "Début",
+          hintText: Translations.of(context).text("field_startDate"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -139,7 +140,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
       validator: validateField,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
-          hintText: "Numéro et rue du lieu de l'évènement",
+          hintText: Translations.of(context).text("field_address_event"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -152,7 +153,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
       validator: validateField,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-          hintText: "Code postal",
+          hintText: Translations.of(context).text("field_zipCode"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
 
@@ -164,7 +165,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
       validator: validateField,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Ville",
+          hintText: Translations.of(context).text("field_city"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -177,7 +178,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
       validator: validateField,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Pays",
+          hintText: Translations.of(context).text("field_country"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -201,23 +202,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
           margin: EdgeInsets.all(10),
         )
     );
-
-    final changePhotoBtn = Material(
-        elevation: 5.0,
-        borderRadius: BorderRadius.circular(30.0),
-        color: Colors.grey,
-
-        child: MaterialButton(
-          onPressed: () async {
-
-            final pickedFile = await _picker.getImage(source: ImageSource.gallery);
-            setState(() {
-              _image = File(pickedFile.path);
-            });
-          },
-          child: Text("Modifier l'image"),
-        )
-    );
+    
 
     final updateButton = Material(
         elevation: 5.0,
@@ -228,7 +213,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
           onPressed: () {
             _updateInput(eventFromDB);
           },
-          child: Text("Modifier"),
+          child: Text(Translations.of(context).text("btn_update_event")),
         )
     );
 
@@ -241,7 +226,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text("Annuler"),
+          child: Text(Translations.of(context).text("btn_cancel")),
         )
     );
 
@@ -336,49 +321,12 @@ class _DetailEventScreen extends State<DetailEventScreen> {
 
   String validateField(String value){
     if(value.isEmpty){
-      return "Attention votre champs est vide";
+      return Translations.of(context).text("field_is_empty");
     }
     return null;
   }
+
 }
 
-/*
-void _goToTheLake() async {
-  var addresses = await Geocoder.local.findAddressesFromQuery(widget.event.localisation);
-  var lat = double.parse(widget.event.localisation.split("-")[0]);
-  var lng = double.parse(widget.event.localisation.split("-")[1]);
-  var first = addresses.first;
 
-  var _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(lat,lng),
-      tilt: 65,
-      zoom: 20);
 
-  final GoogleMapController controller = await _controller.future;
-  controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-}
-*/
-
-/*
-var positionBtn = IconButton(
-  color: Colors.blue,
-  disabledColor: Colors.grey,
-  padding: EdgeInsets.all(8.0),
-  splashColor: Colors.blueAccent,
-  onPressed: () {
-    /* */
-  },
-  icon: Icon(Icons.location_on),
-
-);*/
-
-/*
-var mapBtn = GoogleMap(
-  mapType: MapType.normal,
-  initialCameraPosition: _kGooglePlex,
-  onMapCreated: (GoogleMapController controller) {
-    // _controller.complete(controller);
-  },
-  //markers: Marker(markerId: MarkerId("0"),
-);*/

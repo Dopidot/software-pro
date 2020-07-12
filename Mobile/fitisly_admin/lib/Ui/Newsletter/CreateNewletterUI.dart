@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Newsletter.dart';
 import 'package:fitislyadmin/Services/NewsletterService.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -30,8 +31,9 @@ class _CreateNewsletter extends State<CreateNewsletter>{
     // TODO: implement build
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(centerTitle: true,
-          title: Text("Nouvelle newsletter")),
+      appBar: AppBar(
+        centerTitle: true,
+          title: Text(Translations.of(context).text("title_create_news"))),
       body: Form(
         key: _formKey,
         autovalidate: _autoValidate,
@@ -44,7 +46,7 @@ class _CreateNewsletter extends State<CreateNewsletter>{
 
   Widget _buildField(){
 
-    Text titleScreen = Text("Les informations de la newsletter",
+    Text titleScreen = Text( Translations.of(context).text("subtitle_ncreate_news"),
       style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
       textAlign: TextAlign.center,);
 
@@ -55,7 +57,7 @@ class _CreateNewsletter extends State<CreateNewsletter>{
         },
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
-            hintText: "Nom de la newsletter",
+            hintText:  Translations.of(context).text("field_name"),
            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))
         ),
     );
@@ -67,7 +69,7 @@ class _CreateNewsletter extends State<CreateNewsletter>{
         },
         keyboardType: TextInputType.text,
         decoration: InputDecoration(
-            hintText: "Object du mail",
+            hintText: Translations.of(context).text("field_title"),
            border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))
         ),
     );
@@ -82,7 +84,7 @@ class _CreateNewsletter extends State<CreateNewsletter>{
       minLines: 2,
       maxLines: null,
       decoration: InputDecoration(
-          hintText: "Ecrire le contenu du mail ici",
+          hintText:  Translations.of(context).text("field_description"),
          border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))
          ),
     );
@@ -119,7 +121,7 @@ class _CreateNewsletter extends State<CreateNewsletter>{
 
 
    RaisedButton createBtn = RaisedButton(
-     child: Text('Créer'),
+     child: Text( Translations.of(context).text("btn_Create")),
      color: Colors.green,
      onPressed: () {
         if (_formKey.currentState.validate()) {
@@ -139,7 +141,7 @@ class _CreateNewsletter extends State<CreateNewsletter>{
     );
 
     RaisedButton cancelBtn = RaisedButton(
-      child: Text('Annuler'),
+      child: Text( Translations.of(context).text("btn_cancel")),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -196,7 +198,7 @@ class _CreateNewsletter extends State<CreateNewsletter>{
 
   String validateField(String val){
     if(val.isEmpty){
-      return "Attention votre champs mot de passe est vide";
+      return  Translations.of(context).text("field_is_empty");
     }
     return null;
   }

@@ -27,7 +27,7 @@ class _TabBarScreen extends State<TabBarScreen> {
         new Tab(icon: new Icon(Icons.call)),
         new Tab(
           icon: new Icon(Icons.chat),
-        ),
+        )
       ] ,
       controller: _tabController)
       ),

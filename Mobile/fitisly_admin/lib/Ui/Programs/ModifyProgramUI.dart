@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Program.dart';
 import 'package:fitislyadmin/Services/ProgramService.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -25,12 +26,10 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
   String _name;
   File _image;
   final _picker = ImagePicker();
-  Future<Program> futureProg;
 
   @override
   void initState() {
     // TODO: implement initState
-    futureProg = services.getProgramById(widget.programId);
     super.initState();
   }
 
@@ -39,7 +38,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
     // TODO: implement build
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(centerTitle: true, title: Text("Mon programme")),
+      appBar: AppBar(centerTitle: true, title: Text(Translations.of(context).text("title_program_detail"))),
       body: Form(
         key: _formKey,
         autovalidate: _autoValidate,
@@ -59,7 +58,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
       },
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Nom du programme",
+          hintText: Translations.of(context).text("field_name"),
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))),
     );
@@ -75,7 +74,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
       minLines: 2,
       maxLines: null,
       decoration: InputDecoration(
-          hintText: "La description du programme",
+          hintText: Translations.of(context).text("field_description"),
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))),
     );
@@ -99,7 +98,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
         ));
 
     RaisedButton updateBtn = RaisedButton(
-      child: Text('Modifier'),
+      child: Text(Translations.of(context).text("btn_update")),
       color: Colors.green,
       onPressed: () {
         if (_formKey.currentState.validate()) {
@@ -121,7 +120,8 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
     );
 
     RaisedButton cancelBtn = RaisedButton(
-      child: Text('Annuler'),
+      child: Text(Translations.of(context).text("btn_cancel")
+      ),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -167,7 +167,8 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
 
   String validateField(String val) {
     if (val.isEmpty) {
-      return "Attention votre champs mot de passe est vide";
+      return Translations.of(context).text("field_is_empty")
+      ;
     }
     return null;
   }
@@ -184,7 +185,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
 
   FutureBuilder<Program> buildFutureProgram() {
     return FutureBuilder<Program>(
-      future: futureProg,
+      future: services.getProgramById(widget.programId),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return _buildField(snapshot.data);

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Gym.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -33,7 +34,7 @@ class _CreateGymUI extends State<CreateGymUI>{
       validator: validateField,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
-          hintText: "Nom de la salle",
+          hintText: Translations.of(context).text("field_name"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -45,7 +46,7 @@ class _CreateGymUI extends State<CreateGymUI>{
       validator: validateField,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
-          hintText: "Numéro et rue du lieu de la salle",
+          hintText: Translations.of(context).text("field_address_gym"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -57,7 +58,7 @@ class _CreateGymUI extends State<CreateGymUI>{
       validator: validateField,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-          hintText: "Code postal",
+          hintText: Translations.of(context).text("field_zipCode"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
     );
 
@@ -68,7 +69,7 @@ class _CreateGymUI extends State<CreateGymUI>{
       validator: validateField,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Ville",
+          hintText: Translations.of(context).text("field_city"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -80,7 +81,7 @@ class _CreateGymUI extends State<CreateGymUI>{
       validator: validateField,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Pays",
+          hintText: Translations.of(context).text("field_country"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -122,7 +123,20 @@ class _CreateGymUI extends State<CreateGymUI>{
 
         child: MaterialButton(
           onPressed: _validateInput,
-          child: Text("Créer"),
+          child: Text(Translations.of(context).text("btn_Create")),
+        )
+    );
+
+    final cancelButton = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.red,
+
+        child: MaterialButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          child: Text(Translations.of(context).text("btn_cancel")),
         )
     );
 
@@ -134,7 +148,14 @@ class _CreateGymUI extends State<CreateGymUI>{
           Padding(padding: const EdgeInsets.all(8.0),child: city),
           Padding(padding: const EdgeInsets.all(8.0),child: country),
           Padding(padding: const EdgeInsets.all(5.0),child: photoField),
-          Padding(padding: const EdgeInsets.all(5.0),child: creationButton)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(padding: const EdgeInsets.all(5.0),child: creationButton),
+              Padding(padding: const EdgeInsets.all(5.0),child: cancelButton)
+
+            ],
+          ),
         ]
     );
 
@@ -144,14 +165,14 @@ class _CreateGymUI extends State<CreateGymUI>{
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-        appBar: AppBar(title: Text("Nouvel salle de sport"),
-          centerTitle: true,),
+        appBar: AppBar(title: Text(Translations.of(context).text("title_screen_gym")),
+          centerTitle: true),
         body: Container(
             padding: EdgeInsets.all(20.0),
             child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    Text("Informations sur la salle"),
+                Text(Translations.of(context).text("subtitle_create_gym")),
                     Form(
                         autovalidate: _autoValidate,
                         key: _formKey,
@@ -178,7 +199,7 @@ class _CreateGymUI extends State<CreateGymUI>{
 
   String validateField(String value){
     if(value.isEmpty){
-      return "Attention votre champs est vide";
+      return Translations.of(context).text("field_is_empty");
     }
     return null;
   }
