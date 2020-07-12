@@ -9,20 +9,12 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "localhost:4000",
-  "basePath": "/api/programs",
+  "host": "localhost:4001",
+  "basePath": "/",
   "tags": [
     {
-      "name": "program",
+      "name": "Programs",
       "description": "CRUD operation for program"
-    },
-    {
-      "name": "picture",
-      "description": "CRUD operation for picture"
-    },
-    {
-      "name": "video",
-      "description": "CRUD operation for video"
     }
   ],
   "schemes": [
@@ -48,68 +40,34 @@
         "description": {
           "type": "string"
         },
-        "pictureId": {
-          "type": "number"
+        "programImage": {
+          "type": "string"
         },
         "exercises": {
-          "type": "array"
-        }
-      }
-    },
-    "picture": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
-        }
-      }
-    },
-    "video": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     }
   },
   "paths": {
     "/api/programs": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
       "get": {
         "tags": [
-          "programs"
+          "Programs"
         ],
-        "summary": "Get all the programs in the database",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/program"
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "programs"
-        ],
-        "summary": "Create a new program in the database",
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "description": "program that we want to create",
-            "schema": {
-              "$ref": "#/definitions/program"
-            }
-          }
-        ],
+        "summary": "Get all the programs of the database",
         "responses": {
           "200": {
             "description": "OK",
@@ -117,8 +75,57 @@
               "$ref": "#/definitions/program"
             }
           },
-          "400": {
-            "description": "Failed. Bad post Data"
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Programs"
+        ],
+        "summary": "Create a new program in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "programImage",
+            "description": "the image of the program",
+            "type": "file"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "the name of the program"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "the description of the program"
+          },
+          {
+            "in": "formData",
+            "name": "exercises",
+            "type": "array",
+            "description": "The list of exercises ids of the program",
+            "items": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/program"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
@@ -129,15 +136,20 @@
           "name": "id",
           "in": "path",
           "required": true,
-          "description": "ID of the program that we want to retrieve",
+          "description": "ID of the programs that we want to retrieve",
           "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
         }
       ],
       "get": {
-        "tags": [
-          "programs"
-        ],
-        "summary": "Get program with given ID",
+        "tags": ["Programs"],
+        "summary": "Get the program with the given ID",
         "responses": {
           "200": {
             "description": "OK",
@@ -146,52 +158,66 @@
             }
           },
           "404": {
-            "description": "Failed. Program not found. "
+            "description": "Program not found"
+          },
+          "500":  {
+            "description": "Internal Server Error"
           }
         }
       },
       "put": {
-        "tags": [
-          "programs"
+        "tags": ["Programs"],
+        "consumes": [
+          "multipart/form-data"
         ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "description": "Programs with a new values of properties",
-            "schema": {
-              "$ref": "#/definitions/program"
-            }
+            "in": "formData",
+            "name": "programImage",
+            "description": "the image of the program",
+            "type": "file"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "the name of the program"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "the description of the program"
           }
         ],
-        "summary": "Update programs with given ID",
+        "summary": "Update the program with the given ID",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Program updated sucessfully",
             "schema": {
               "$ref": "#/definitions/program"
             }
           },
           "404": {
-            "description": "Failed. Program not found. "
+            "description": "Program not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       },
       "delete": {
-        "tags": [
-          "programs"
-        ],
-        "summary": "Delete program with given ID",
+        "tags": ["Programs"],
+        "summary": "Delete programs with the given ID",
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/program"
-            }
+            "description": "Program {id} was deleted sucessfully."
           },
           "404": {
-            "description": "Failed. Program not found. "
+            "description": "Program not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }

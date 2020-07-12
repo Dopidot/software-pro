@@ -1,0 +1,36 @@
+:host /deep/ ng2-st-tbody-edit-delete {
+    display: flex !important;
+    height: 0 !important;
+  }
+  
+  :host /deep/ ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    font-size: 1.1em;
+    padding-top: 8px;
+  }
+  
+  :host /deep/ ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
+    color: #5dcfe3;
+  }
+
+.default-background {
+    color: #222b45;
+    background-color: #f7f9fc;
+    padding: 20px;
+}
+
+.select-coach {
+    width: -webkit-fill-available;
+}
+
+.select-coach:hover {
+    background-color: #f7f9fc;
+    border-radius: 0;
+}
+
+.small-button {
+    font-size: 10px !important;
+    padding: 9px !important;
+}

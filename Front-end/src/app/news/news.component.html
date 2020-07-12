@@ -1,0 +1,139 @@
+<ngx-one-column-layout>
+    <nb-menu [items]="menu"></nb-menu>
+    <router-outlet>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-4">
+                    <nb-card class="list-card" size="small">
+                        <nb-card-header>Actualités</nb-card-header>
+                        <nb-list>
+                            <nb-list-item *ngFor="let new of news" style="padding: 0px;">
+                                <div class="default-background" style="position: relative;" (click)="selectNews(new)">
+                                    <i class="fas fa-comment fa-2x" style="margin-right: 20px; margin-left: 15px;"></i>
+                                    <button nbButton [size]="tiny" class="close-button" (click)="openPopup(dialog2);">
+                                        <i class="fas fa-times" style="margin-top: 2px;"></i>
+                                    </button>
+                                    <div style="display: inline-block; padding-bottom: 10px;">
+                                        {{new.name}}
+                                    </div>
+                                </div>
+                            </nb-list-item>
+                        </nb-list>
+                        <button nbButton [status]="success" (click)="openPopup(dialog); popupType = 0; currentNews = {}; imagePath = null;">
+                            Ajouter une actualité</button>
+                    </nb-card>
+                </div>
+
+                <div class="col-8">
+                    <nb-card>
+                        <nb-card-header>
+                            Contenu de l'actualité
+                        </nb-card-header>
+
+                        <nb-card-body>
+                            <div *ngIf="!currentNews.id" class="normal-background">
+                                <strong>Info !</strong>
+                                <div>Vous devez selectionner une actualité avant de pouvoir afficher ses informations.
+                                </div>
+                            </div>
+
+                            <div *ngIf="currentNews.id">
+                                <div class="col-6" style="display: inline-block;">
+                                    <strong>{{currentNews.name}}</strong> <br />
+                                    <div style="text-decoration: underline;">Titre : {{currentNews.title}}</div>
+                                    {{currentNews.body}} <br />
+                                </div>
+
+                                <div class="col-6" style="display: inline-block;">
+                                    <div style="text-align: center;" *ngIf="imagePath">
+                                        <img [src]="imagePath" style="max-width: 260px; max-height: 200px;" />
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div style="text-align: center; margin-top: 10px;">
+                                    <button nbButton [status]="primary" (click)="openPopup(dialog); popupType = 1;">
+                                        Modifier</button>
+                                </div>
+                            </div>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+
+            </div>
+        </div>
+    </router-outlet>
+</ngx-one-column-layout>
+
+<ng-template #dialog let-data let-ref="dialogRef" size="lg">
+    <nb-card>
+        <nb-card-header *ngIf="popupType === 0">Ajouter une actualité</nb-card-header>
+        <nb-card-header *ngIf="popupType === 1">Modifier une actualité</nb-card-header>
+        <nb-card-body style="max-width: 400px;">
+
+            <div class="form-group">
+                <label for="name" class="label">Nom</label>
+                <input type="text" nbInput fullWidth id="name" [(ngModel)]="currentNews.name" placeholder="Nom">
+            </div>
+
+            <div class="form-group">
+                <label for="title" class="label">Titre</label>
+                <input type="text" nbInput fullWidth id="title" [(ngModel)]="currentNews.title" placeholder="Titre">
+            </div>
+
+            <div class="form-group">
+                <label for="body" class="label">Contenu</label>
+                <textarea nbInput fullWidth id="body" [(ngModel)]="currentNews.body" placeholder="Contenu"></textarea>
+            </div>
+
+            <div style="position: relative;">
+                <label for="image" class="label" style="display: block;">Image</label>
+                <label nbButton for="image" *ngIf="!imageBase64 && !imagePath" class="input-file">
+                    <i class="fas fa-plus"></i>
+                </label>
+                <input type="file" id="image" style="display: none;" (change)="fileChangeEvent($event)"
+                    accept=".png, .jpeg, .jpg">
+
+                <button nbButton [size]="medium" class="close-button" (click)="removePicture()"
+                    *ngIf="imageBase64 || imagePath">
+                    <i class="fas fa-times" style="margin-top: 2px;"></i>
+                </button>
+
+                <div style="text-align: center;" *ngIf="imageBase64 && !imagePath">
+                    <img [src]="imageBase64" style="max-width: 200px; max-height: 160px;" />
+                </div>
+                <div style="text-align: center;" *ngIf="imagePath">
+                    <img [src]="imagePath" style="max-width: 200px; max-height: 160px;" />
+                </div>
+            </div>
+
+        </nb-card-body>
+        <nb-card-footer style="text-align: center;">
+            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">Annuler</button>
+
+            <button nbButton [status]="success" (click)="ref.close(); addNews();"
+                *ngIf="popupType === 0">Ajouter</button>
+            <button nbButton [status]="success" (click)="ref.close(); updateNews();"
+                *ngIf="popupType === 1">Sauvegarder</button>
+
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<ng-template #dialog2 let-data let-ref="dialogRef">
+    <nb-card>
+        <nb-card-header>Confirmation de suppression</nb-card-header>
+        <nb-card-body style="max-width: 400px;">
+
+            <div style="line-height: 1.5;">
+                Si vous confirmez, l'actualité {{currentNews.name}} sera définitivement supprimé.
+            </div>
+
+        </nb-card-body>
+        <nb-card-footer style="text-align: center;">
+            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">Annuler</button>
+            <button nbButton [status]="success" (click)="removeNews(); ref.close()">Confirmer</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

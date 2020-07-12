@@ -25,16 +25,20 @@
       "description": "CRUD operation for Programs"
     },
     {
-      "name": "Pictures",
-      "description": "CRUD operation for Pictures"
-    },
-    {
-      "name": "Videos",
-      "description": "CRUD operation for Videos"
-    },
-    {
       "name": "Newsletters",
       "description": "CRUD operation for Newsletters"
+    },
+    {
+      "name": "Events",
+      "description": "CRUD operation for Events"
+    },
+    {
+      "name": "Gyms",
+      "description": "CRUD operation for Gyms"
+    },
+    {
+      "name": "Coachs",
+      "description": "CRUD operation for Coachs"
     }
   ],
   "schemes": [
@@ -61,9 +65,8 @@
           "type": "string",
           "format": "email"
         },
-        "password": {
-          "type": "string",
-          "format": "password"
+        "userImage": {
+          "type": "string"
         }
       }
     },
@@ -83,10 +86,7 @@
           "type": "number",
           "format": "minute:second"
         },
-        "pictureId": {
-          "type": "number"
-        },
-        "videoId": {
+        "exerciseImage": {
           "type": "number"
         }
       }
@@ -103,30 +103,14 @@
         "description": {
           "type": "string"
         },
-        "pictureId": {
-          "type": "number"
-        }
-      }
-    },
-    "picture": {
-      "type": "object",
-      "properties": {
-        "name": {
+        "programImage": {
           "type": "string"
         },
-        "path": {
-          "type": "string"
-        }
-      }
-    },
-    "video": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "path": {
-          "type": "string"
+        "exercises": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -148,24 +132,95 @@
         },
         "isSent": {
           "type": "boolean"
+        },
+        "newsletterImage": {
+          "type": "string"
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date"
+        },
+        "eventImage": {
+          "type": "object"
+        },
+        "address": {
+          "type": "string"
+        },
+        "zipCode":  {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "gym": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "gymImage": {
+          "type": "object"
+        },
+        "address": {
+          "type": "string"
+        },
+        "zipCode":  {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "coach": {
+      "type": "object",
+      "properties": {
+        "coachId": {
+          "type": "string"
+        },
+        "isHighlighted": {
+          "type": "boolean"
         }
       }
     }
   },
   "paths": {
     "/api/users": {
-      "parameters": [
-        {
-          "name": "Authorization",
-          "in": "header",
-          "description": "Authorization header",
-          "required": true,
-          "type": "string"
-        }
-      ],
       "get": {
         "tags": [
           "Users"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Authorization header",
+            "required": true,
+            "type": "string"
+          }
         ],
         "summary": "Get all the users of the database",
         "responses": {
@@ -185,14 +240,39 @@
           "Users"
         ],
         "summary": "Create a new user in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "description": "User that we want to create",
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
+            "in": "formData",
+            "name": "userImage",
+            "type": "file",
+            "description": "The image to upload."
+          },
+          {
+            "in": "formData",
+            "name": "firstname",
+            "type": "string",
+            "description": "firstname of the user"
+          },
+          {
+            "in": "formData",
+            "name": "lastname",
+            "type": "string",
+            "description": "lastname of the user"
+          },
+          {
+            "in": "formData",
+            "name": "email",
+            "type": "string",
+            "description": "email of the user"
+          },
+          {
+            "in": "formData",
+            "name": "password",
+            "type": "string",
+            "description": "password of the user"
           }
         ],
         "responses": {
@@ -252,15 +332,33 @@
         "tags": [
           "Users"
         ],
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "description": "User with a new values of properties",
-            "schema": {
-              "$ref": "#/definitions/user"
-            }
+            "in": "formData",
+            "name": "userImage",
+            "type": "file",
+            "description": "The image to upload."
+          },
+          {
+            "in": "formData",
+            "name": "firstname",
+            "type": "string",
+            "description": "firstname of the user"
+          },
+          {
+            "in": "formData",
+            "name": "lastname",
+            "type": "string",
+            "description": "lastname of the user"
+          },
+          {
+            "in": "formData",
+            "name": "email",
+            "type": "string",
+            "description": "email of the user"
           }
         ],
         "summary": "Update user with given ID",
@@ -349,267 +447,6 @@
         }
       }
     },
-    "/api/pictures": {
-      "parameters": [
-        {
-          "name": "Authorization",
-          "in": "header",
-          "description": "Authorization header",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["Pictures"],
-        "summary": "Get all the pictures of the database",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/picture"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "post": {
-        "tags": ["Pictures"],
-        "summary": "Create a new picture in the database",
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "description": "Picture that we want to create",
-          "schema": {
-            "$ref": "#/definitions/picture"
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "Picture created sucessfully",
-            "schema": {
-              "$ref": "#/definitions/picture"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/pictures/{id}": {
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the picture that we want to retrieve",
-          "type": "integer"
-        },
-        {
-          "name": "Authorization",
-          "in": "header",
-          "description": "Authorization header",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["Pictures"],
-        "summary": "Get picture with the given ID",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/picture"
-            }
-          },
-          "404": {
-            "description": "Picture not found."
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "put": {
-        "tags": ["Pictures"],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "description": "Picture objects with new values",
-            "schema": {
-              "$ref": "#/definitions/picture"
-            }
-          }
-        ],
-        "summary": "Update the picture with the given ID",
-        "responses": {
-          "200": {
-            "description": "Picture updated sucessfully",
-            "schema": {
-              "$ref": "#/definitions/picture"
-            }
-          },
-          "404": {
-            "description": "Picture not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["Pictures"],
-        "summary": "Delete picture with the given ID",
-        "responses": {
-          "200": {
-            "description": "Picture {id} was deleted sucessfully."
-          },
-          "404": {
-            "description": "Picture not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/videos": {
-      "parameters": [
-        {
-          "name": "Authorization",
-          "in": "header",
-          "description": "Authorization header",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["Videos"],
-        "summary": "Get all the videos of the database",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "post": {
-        "tags": ["Videos"],
-        "summary": "Create a new video in the database",
-        "parameters": [{
-          "in": "body",
-          "name": "body",
-          "description": "Video that we want to create",
-          "schema": {
-            "$ref": "#/definitions/video"
-          }
-        }],
-        "responses": {
-          "200": {
-            "description": "Video created sucessfully",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          },
-          "404": {
-            "description": "Video not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/videos/{id}": {
-      "parameters": [
-        {
-          "name": "id",
-          "in": "path",
-          "required": true,
-          "description": "ID of the video that we want to retrieve",
-          "type": "integer"
-        },
-        {
-          "name": "Authorization",
-          "in": "header",
-          "description": "Authorization header",
-          "required": true,
-          "type": "string"
-        }
-      ],
-      "get": {
-        "tags": ["Videos"],
-        "summary": "Get video with the given ID",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          },
-          "404": {
-            "description": "Video not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "put": {
-        "tags": ["Videos"],
-        "parameters": [
-          {
-            "in": "body",
-            "name": "body",
-            "required": false,
-            "description": "Video objects with new values",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          }
-        ],
-        "summary": "Update the video with the given ID",
-        "responses": {
-          "200": {
-            "description": "Video updated sucessfully",
-            "schema": {
-              "$ref": "#/definitions/video"
-            }
-          },
-          "404": {
-            "description": "Video not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "delete": {
-        "tags": ["Videos"],
-        "summary": "Delete video with the given ID",
-        "responses": {
-          "200": {
-            "description": "Video {id} was deleted sucessfully."
-          },
-          "404": {
-            "description": "Video not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
     "/api/programs": {
       "parameters": [
         {
@@ -642,13 +479,35 @@
           "Programs"
         ],
         "summary": "Create a new program in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "description": "program that we want to create",
-            "schema": {
-              "$ref": "#/definitions/program"
+            "in": "formData",
+            "name": "programImage",
+            "description": "the image of the program",
+            "type": "file"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "the name of the program"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "the description of the program"
+          },
+          {
+            "in": "formData",
+            "name": "exercises",
+            "type": "array",
+            "description": "The list of exercises ids of the program",
+            "items": {
+              "type": "integer"
             }
           }
         ],
@@ -702,15 +561,27 @@
       },
       "put": {
         "tags": ["Programs"],
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "description": "Program objects with new values",
-            "schema": {
-              "$ref": "#/definitions/program"
-            }
+            "in": "formData",
+            "name": "programImage",
+            "description": "the image of the program",
+            "type": "file"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "the name of the program"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "the description of the program"
           }
         ],
         "summary": "Update the program with the given ID",
@@ -777,14 +648,39 @@
           "Exercises"
         ],
         "summary": "Create a new exercise in the database",
+        "produces": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "description": "Exercise that we want to create",
-            "schema": {
-              "$ref": "#/definitions/exercise"
-            }
+            "in": "formData",
+            "name": "exerciseImage",
+            "type": "file",
+            "description": "image of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "description of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "repeat_number",
+            "type": "number",
+            "description": "number of repetition of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "rest_time",
+            "type": "number",
+            "description": "the rest time required after the exercise"
           }
         ],
         "responses": {
@@ -839,15 +735,39 @@
       },
       "put": {
         "tags": ["Exercises"],
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
-            "name": "body",
-            "required": true,
-            "description": "Exercise object with new values",
-            "schema": {
-              "$ref": "#/definitions/exercise"
-            }
+            "in": "formData",
+            "name": "exerciseImage",
+            "type": "file",
+            "description": "image of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "description",
+            "type": "string",
+            "description": "description of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "repeat_number",
+            "type": "number",
+            "description": "number of repetition of the exercise"
+          },
+          {
+            "in": "formData",
+            "name": "rest_time",
+            "type": "number",
+            "description": "the rest time required after the exercise"
           }
         ],
         "summary": "Update the exercise with the given ID",
@@ -901,7 +821,7 @@
           "200": {
             "description": "OK",
             "schema": {
-              "$ref": "#/definitions/exercise"
+              "$ref": "#/definitions/newsletter"
             }
           },
           "500": {
@@ -912,14 +832,33 @@
       "post": {
         "tags": ["Newsletters"],
         "summary": "Create a newsletter in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
+            "in": "formData",
+            "name": "newsletterImage",
+            "type": "file",
+            "description": "image of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "title",
+            "type": "string",
+            "description": "the title of the newsletter"
+          },
+          {
+            "in": "formData",
             "name": "body",
-            "description": "Newsletter that we want to create",
-            "schema": {
-              "$ref": "#/definitions/newsletter"
-            }
+            "type": "string",
+            "description": "The body text of the newsletter"
           }
         ],
         "responses": {
@@ -941,7 +880,7 @@
           "name": "id",
           "in": "path",
           "required": true,
-          "description": "ID of the exercise that we want to retrieve",
+          "description": "ID of the newsletter that we want to retrieve",
           "type": "integer"
         },
         {
@@ -969,15 +908,39 @@
       },
       "put": {
         "tags": ["Newsletters"],
+        "produces": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
-            "in": "body",
+            "in": "formData",
+            "name": "newsletterImage",
+            "type": "file",
+            "description": "image of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "title",
+            "type": "string",
+            "description": "the title of the newsletter"
+          },
+          {
+            "in": "formData",
             "name": "body",
-            "required": true,
-            "description": "Newsletter object with new values",
-            "schema": {
-              "$ref": "#/definitions/newsletter"
-            }
+            "type": "string",
+            "description": "The body text of the newsletter"
+          },
+          {
+            "in": "formData",
+            "name": "isSent",
+            "type": "boolean",
+            "description": "boolean that states id the newsletter has been sent or not"
           }
         ],
         "summary": "Update the newsletter with the given ID",
@@ -1005,6 +968,541 @@
           },
           "404": {
             "description": "Newsletter not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/events": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Events"
+        ],
+        "summary": "Get all of the events of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/event"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Events"],
+        "summary": "Create an event in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "eventImage",
+            "type": "file",
+            "description": "image of the event"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the event"
+          },
+          {
+            "in": "formData",
+            "name": "body",
+            "type": "string",
+            "description": "the description of the event"
+          },
+          {
+            "in": "formData",
+            "name": "startDate",
+            "type": "string",
+            "description": "the start date of the event"
+          },
+          {
+            "in": "formData",
+            "name": "address",
+            "type": "string",
+            "description": "the address of the event"
+          },
+          {
+            "in": "formData",
+            "name": "zipCode",
+            "type": "string",
+            "description": "the zipcode"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "string",
+            "description": "the city of the event"
+          },
+          {
+            "in": "formData",
+            "name": "country",
+            "type": "string",
+            "description": "the country  of the event"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/event"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/events/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the event that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Events"],
+        "summary": "Get the event with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/event"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Events"],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "eventImage",
+            "type": "file",
+            "description": "image of the event"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the event"
+          },
+          {
+            "in": "formData",
+            "name": "body",
+            "type": "string",
+            "description": "the description of the event"
+          },
+          {
+            "in": "formData",
+            "name": "startDate",
+            "type": "string",
+            "description": "the start date of the event"
+          },
+          {
+            "in": "formData",
+            "name": "address",
+            "type": "string",
+            "description": "the address of the event"
+          },
+          {
+            "in": "formData",
+            "name": "zipCode",
+            "type": "string",
+            "description": "the zipcode of the event"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "string",
+            "description": "the city of the event"
+          },
+          {
+            "in": "formData",
+            "name": "country",
+            "type": "string",
+            "description": "the country of the event"
+          }
+        ],
+        "summary": "Update the event with the given ID",
+        "responses": {
+          "200":{
+            "description": "Event updated successfully",
+            "schema": {
+              "$ref": "#/definitions/event"
+            }
+          },
+          "404": {
+            "description": "Event not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Events"],
+        "summary": "Delete the event with the given ID",
+        "responses": {
+          "200": {
+            "description": "Event {id} was deleted successfully"
+          },
+          "404": {
+            "description": "Event not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/gyms": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Gyms"
+        ],
+        "summary": "Get all of the gyms of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/gym"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Gyms"],
+        "summary": "Create an gym in the database",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "gymImage",
+            "type": "file",
+            "description": "image of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "address",
+            "type": "string",
+            "description": "the address of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "zipCode",
+            "type": "string",
+            "description": "the zipcode"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "string",
+            "description": "the city of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "country",
+            "type": "string",
+            "description": "the country  of the gym"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/gym"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/gyms/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the gym that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Gyms"],
+        "summary": "Get the gym with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/gym"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Gyms"],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "gymImage",
+            "type": "file",
+            "description": "image of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "name",
+            "type": "string",
+            "description": "name of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "address",
+            "type": "string",
+            "description": "the address of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "zipCode",
+            "type": "string",
+            "description": "the zipcode of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "city",
+            "type": "string",
+            "description": "the city of the gym"
+          },
+          {
+            "in": "formData",
+            "name": "country",
+            "type": "string",
+            "description": "the country of the gym"
+          }
+        ],
+        "summary": "Update the gym with the given ID",
+        "responses": {
+          "200":{
+            "description": "gym updated successfully",
+            "schema": {
+              "$ref": "#/definitions/gym"
+            }
+          },
+          "404": {
+            "description": "Gym not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Gyms"],
+        "summary": "Delete the gym with the given ID",
+        "responses": {
+          "200": {
+            "description": "Gym {id} was deleted successfully"
+          },
+          "404": {
+            "description": "Gym not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/coachs": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Coachs"
+        ],
+        "summary": "Get all of the coach of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/coach"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Coachs"],
+        "summary": "Create an coach in the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "id of the referenced coach",
+            "schema": {
+              "$ref": "#/definitions/coach"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/coach"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/coachs/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the coach that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Coachs"],
+        "summary": "Get the coach with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/coach"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Coachs"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "id of the referenced coach",
+            "schema": {
+              "$ref": "#/definitions/coach"
+            }
+          }
+        ],
+        "summary": "Update the coach with the given ID",
+        "responses": {
+          "200":{
+            "description": "coach updated successfully",
+            "schema": {
+              "$ref": "#/definitions/coach"
+            }
+          },
+          "404": {
+            "description": "Coach not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Coachs"],
+        "summary": "Delete the coach with the given ID",
+        "responses": {
+          "200": {
+            "description": "Coach {id} was deleted successfully"
+          },
+          "404": {
+            "description": "Coach not found"
           },
           "500": {
             "description": "Internal Server Error"

@@ -1,0 +1,26 @@
+{
+    "LOGIN_CONNEXION": "CONNEXION",
+    "LOGIN_MAIL": "Email",
+    "LOGIN_PASSWORD": "Mot de passe",
+    "LOGIN_SUBMIT": "Se Connecter",
+    "LOGIN_INVALID": "Adresse email ou mot de passe incorrect.",
+
+    "NAVBAR_LOGOUT": "Se déconnecter",
+    "FOOTER_RIGHTS": "Tous droits réservés.",
+
+    "MENU_HOME": "Accueil",
+    "MENU_MEMBERS": "Membres",
+    "MENU_COACHING": "Coaching",
+    "MENU_COACH": "Coachs",
+    "MENU_PROGRAMS": "Programmes",
+    "MENU_EXERCISES": "Exercices",
+    "MENU_COMMUNITY": "Communauté",
+    "MENU_NEWS": "Actualités",
+    "MENU_INACTIVE": "Utilisateurs inactifs",
+    "MENU_EVENTS": "Evènements",
+    "MENU_INFOS": "Informations",
+
+    "HOME_NEXT_EVENTS": "Evènements à venir",
+    "HOME_NEW_USERS": "Nouveaux utilisateurs",
+    "HOME_EVENT_OF": "Evènement du"
+}

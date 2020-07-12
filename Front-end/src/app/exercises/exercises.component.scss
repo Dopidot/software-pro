@@ -1,0 +1,31 @@
+:host /deep/ ng2-st-tbody-edit-delete {
+    display: flex !important;
+    height: 0 !important;
+  }
+  
+  :host /deep/ ng2-st-tbody-custom {
+    display: flex;
+  }
+
+  :host /deep/ a.ng2-smart-action.ng2-smart-action-custom-custom {
+    display: inline-block !important;
+    width: 33% !important;
+    text-align: center;
+  }
+  
+  :host /deep/ ng2-st-tbody-custom a.ng2-smart-action.ng2-smart-action-custom-custom:hover {
+    color: #5dcfe3;
+  }
+
+.close-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 3px 6px;
+}
+
+.input-file {
+    background: #edf1f7;
+    padding: 10px 15px;
+    border-radius: 0.25rem;
+}

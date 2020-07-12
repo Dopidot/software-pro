@@ -1,0 +1,63 @@
+<ngx-one-column-layout>
+    <nb-menu [items]="menu"></nb-menu>
+    <router-outlet>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-12" *ngIf="selectedEvent">
+                    <nb-card style="margin-bottom: 20px;">
+                        <nb-card-body>
+                            <button nbButton [size]="medium" class="close-button" (click)="selectedEvent = null;">
+                                <i class="fas fa-times" style="margin-top: 2px;"></i>
+                            </button>
+                            <div><strong>{{ 'HOME_EVENT_OF' | translate }} {{date | date : "dd/MM/yyyy"}}</strong></div>
+                            <div>{{selectedEvent}}</div>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+
+                <div class="col-lg-6 col-md-6">
+                    <nb-card>
+                        <nb-card-header>Connexion sur les derniers jours</nb-card-header>
+                        <nb-card-body>
+                            <chart #chart1 style="height: 400px;" type="bar" [data]="data2" [options]="options2"></chart>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+
+                <div class="col-6">
+                    <nb-card>
+                        <nb-card-header>Répartition par âge</nb-card-header>
+                        <nb-card-body>
+                            <div echarts [options]="options" class="echart"></div>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <nb-card class="list-card" size="small">
+                        <nb-card-header>{{ 'HOME_NEW_USERS' | translate }}</nb-card-header>
+                        <nb-list>
+                            <nb-list-item *ngFor="let user of users">
+                                <nb-user [name]="user.name" [title]="user.title" [picture]="user.picture" size="large">
+                                </nb-user>
+                            </nb-list-item>
+                        </nb-list>
+                    </nb-card>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="calendar-container">
+                        <!-- <div class="subtitle" style="margin-bottom: 10px;">
+                          {{ 'HOME_NEXT_EVENTS' | translate }}
+                        </div> -->
+                        <nb-calendar [(date)]="date" (click)="showEvent($event)" [boundingMonth]="true"
+                            [dayCellComponent]="dayCellComponent" showWeekNumber></nb-calendar>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </router-outlet>
+</ngx-one-column-layout>

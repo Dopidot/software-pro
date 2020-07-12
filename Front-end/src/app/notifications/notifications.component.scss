@@ -1,0 +1,29 @@
+.default-background {
+    color: #222b45;
+    padding: 20px;
+    position: relative;
+    width: 100%;
+}
+
+.default-background:hover {
+    background-color: #f7f9fc;
+}
+
+.default-background-selected {
+    background-color: #f7f9fc !important;
+}
+
+.primary-background {
+    color: #ffffff;
+    background-color: #45e15f;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 4px;
+    padding: 2px 5px !important;
+}

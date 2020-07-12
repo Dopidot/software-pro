@@ -1,0 +1,120 @@
+<ngx-one-column-layout>
+    <nb-menu [items]="menu"></nb-menu>
+    <router-outlet>
+        <div class="container">
+            <div class="row">
+
+                <div class="col-5">
+                    <nb-card class="list-card" size="small">
+                        <nb-card-header>Programmes</nb-card-header>
+                        <nb-list>
+                            <nb-list-item *ngFor="let program of programs" style="padding: 0px;">
+                                <div class="default-background" style="position: relative;"
+                                    (click)="selectProgram(program)">
+                                    <i class="fas fa-book-open fa-2x"
+                                        style="margin-right: 20px; margin-left: 15px;"></i>
+                                    <div style="display: inline-block; padding-bottom: 10px;">
+                                        {{program.name}}
+                                    </div>
+                                    <button nbButton style="float: right;" (click)="openPopup(dialog); popupType = 1;">
+                                        <nb-icon icon="edit-2-outline" pack="eva"></nb-icon>
+                                    </button>
+                                </div>
+                            </nb-list-item>
+                        </nb-list>
+                        <button nbButton [status]="success"
+                            (click)="openPopup(dialog); popupType = 0; currentProgram = {}; imagePath = null;">
+                            Ajouter un programme</button>
+                    </nb-card>
+                </div>
+
+                <div class="col-7">
+                    <nb-card>
+                        <nb-card-header>
+                            Liste des exercices
+                        </nb-card-header>
+
+                        <nb-card-body>
+                            <div *ngIf="!currentProgram.id" class="normal-background">
+                                <strong>Info !</strong>
+                                <div>Vous devez selectionner un programme avant de pouvoir ajouter des exercices.
+                                </div>
+                            </div>
+
+                            <div *ngIf="currentProgram.id">
+                                <ng2-smart-table [settings]="settings" [source]="source" (custom)="addExercise($event)">
+                                </ng2-smart-table>
+
+                                <hr>
+
+                                <div style="text-decoration: underline; font-weight: bold; margin-bottom: 10px;">
+                                    Exercices sélectionnés :</div>
+                                <div *ngFor="let exercise of exercisesList" class="exercise-button"
+                                    (click)="removeExercise(exercise)">
+                                    {{exercise.name}}
+                                </div>
+                                <div *ngIf="exercisesList.length === 0">
+                                    Ce programme ne contient aucun exercice.
+                                </div>
+                            </div>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+
+            </div>
+        </div>
+    </router-outlet>
+</ngx-one-column-layout>
+
+<ng-template #dialog let-data let-ref="dialogRef" size="lg">
+    <nb-card>
+        <nb-card-header *ngIf="popupType === 0">Ajouter un programme</nb-card-header>
+        <nb-card-header *ngIf="popupType === 1">Modifier un programme</nb-card-header>
+        <nb-card-body style="max-width: 400px;">
+
+            <div class="form-group">
+                <label for="name" class="label">Nom</label>
+                <input type="text" nbInput fullWidth id="name" [(ngModel)]="currentProgram.name" placeholder="Nom">
+            </div>
+
+            <div class="form-group">
+                <label for="description" class="label">Description</label>
+                <textarea nbInput fullWidth id="description" [(ngModel)]="currentProgram.description"
+                    placeholder="Description"></textarea>
+            </div>
+
+            <div style="position: relative;">
+                <label for="image" class="label" style="display: block;">Image</label>
+                <label nbButton for="image" *ngIf="!imageBase64 && !imagePath" class="input-file">
+                    <i class="fas fa-plus"></i>
+                </label>
+                <input type="file" id="image" style="display: none;" (change)="fileChangeEvent($event)"
+                    accept=".png, .jpeg, .jpg">
+
+                <button nbButton [size]="medium" class="close-button" (click)="removePicture()"
+                    *ngIf="imageBase64 || imagePath">
+                    <i class="fas fa-times" style="margin-top: 2px;"></i>
+                </button>
+
+                <div style="text-align: center;" *ngIf="imageBase64 && !imagePath">
+                    <img [src]="imageBase64" style="max-width: 200px; max-height: 160px;" />
+                </div>
+                <div style="text-align: center;" *ngIf="imagePath">
+                    <img [src]="imagePath" style="max-width: 200px; max-height: 160px;" />
+                </div>
+            </div>
+
+        </nb-card-body>
+        <nb-card-footer style="text-align: center;">
+            <button nbButton [status]="primary" (click)="ref.close()" style="margin-right: 10px;">Annuler</button>
+
+            <button nbButton [status]="success" (click)="ref.close(); addProgram();"
+                *ngIf="popupType === 0">Ajouter</button>
+            <button nbButton [status]="danger" (click)="ref.close(); removeProgram();"
+                *ngIf="popupType === 1" style="margin-right: 10px;">Supprimer</button>
+            <button nbButton [status]="success" (click)="ref.close(); updateProgram();"
+                *ngIf="popupType === 1">Sauvegarder</button>
+
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

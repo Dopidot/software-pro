@@ -1,0 +1,47 @@
+@import '../@theme/styles/themes';
+
+@include nb-install-component() {
+
+    ngx-chartjs-pie,
+    ngx-chartjs-bar,
+    ngx-chartjs-line,
+    ngx-chartjs-multiple-xaxis,
+    ngx-chartjs-bar-horizontal,
+    ngx-chartjs-radar {
+      display: block;
+      height: nb-theme(card-height-medium);
+      width: 100%;
+  
+      ::ng-deep chart {
+        display: block;
+        height: 100%;
+        width: 100%;
+      }
+    }
+
+    ngx-echarts-pie,
+    ngx-echarts-bar,
+    ngx-echarts-line,
+    ngx-echarts-multiple-xaxis,
+    ngx-echarts-area-stack,
+    ngx-echarts-bar-animation,
+    ngx-chartjs-bar,
+    ngx-echarts-radar {
+      display: block;
+      height: nb-theme(card-height-medium);
+      width: 100%;
+    }
+  
+    ::ng-deep .echart {
+      height: 100%;
+      width: 100%;
+    }
+}
+  
+.close-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 3px 6px;
+}
+

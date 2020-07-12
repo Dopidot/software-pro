@@ -1,0 +1,41 @@
+.default-background {
+    color: #222b45;
+    padding: 20px;
+    position: relative;
+    width: 100%;
+}
+
+.default-background:hover {
+    background-color: #f7f9fc;
+}
+
+.default-background-selected {
+    background-color: #f7f9fc !important;
+}
+
+.normal-background {
+    color: #222b45;
+    background-color: #f7f9fc;
+    padding: 20px;
+}
+
+.primary-background {
+    color: #ffffff;
+    background-color: #45e15f;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.close-button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 4px;
+    padding: 2px 5px !important;
+}
+
+.input-file {
+    background: #edf1f7;
+    padding: 10px 15px;
+    border-radius: 0.25rem;
+}

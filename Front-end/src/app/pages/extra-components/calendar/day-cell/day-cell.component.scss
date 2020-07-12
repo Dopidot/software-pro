@@ -1,0 +1,34 @@
+@import '../../../../@theme/styles/themes';
+
+@include nb-install-component() {
+  text-align: center;
+  flex-direction: column;
+
+  .caption {
+    display: block;
+  }
+
+  &.selected .caption,
+  &:hover .caption {
+    color: nb-theme(text-control-color);
+  }
+
+  &.bounding-month .caption {
+    color: inherit;
+  }
+
+  .day-cell {
+    background: #45e15f;
+    color: white;
+    border-radius: 0.25rem;
+  }
+
+  .selected-day {
+    background: #efefef;
+    border-radius: 0.25rem;
+    width: 100%;
+    padding: 10px 0px;
+    color: #222b45;
+  }
+
+}
