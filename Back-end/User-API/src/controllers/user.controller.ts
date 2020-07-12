@@ -74,10 +74,11 @@ export default class UserController {
             } else {
                 response =  await query('SELECT userimage FROM users WHERE id = $1', [id]);
                 if (response.rowCount !== 0 && response.rows[0].userimage !== undefined ) {
-                    if (response.rows[0].userimage !== null) {
+                    if (response.rows[0].userimage !== null ) {
                         fs.unlink(process.cwd() + '/' + response.rows[0].userimage, err => {
                             if (err) {
                                 console.log('userimage : ', response.rows[0].userimage);
+                                console.error(err);
                             }
                         });
                     }
@@ -110,14 +111,13 @@ export default class UserController {
             const id = parseInt(req.params.id);
             const response: QueryResult = await query('SELECT userimage FROM users WHERE id = $1', [id]);
             if (response.rowCount !== 0) {
-                if (response.rows[0].userimage !== null) {
-                    if ( response.rows[0].userimage !== undefined) {
-                        fs.unlink(process.cwd() + '/' + response.rows[0].userimage, err => {
-                            if (err) {
-                                console.log('userimage :', response.rows[0].userimage);
-                            }
-                        });
-                    }
+                if (response.rows[0].userimage !== null && response.rows[0].userimage !== undefined) {
+                    fs.unlink(process.cwd() + '/' + response.rows[0].userimage, err => {
+                        if (err) {
+                            console.log('userimage :',  response.rows[0].userimage);
+                            console.error(err);
+                        }
+                    });
                 }
                 await query('DELETE FROM users WHERE id = $1', [id]);
                 return res.json(`User ${id} deleted successfully`);

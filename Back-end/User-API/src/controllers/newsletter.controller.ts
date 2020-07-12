@@ -73,7 +73,7 @@ export default class NewsletterController {
                 response = await query('SELECT newsletterimage FROM newsletters WHERE id = $1', [id]);
                 if (response.rowCount !== 0) {
                     if ( response.rows[0].newsletterimage !== undefined ) {
-                        if (response.rows[0].newsletterimage !== null) {
+                        if (response.rows[0].newsletterimage !== null ) {
                             fs.unlink(process.cwd() + '/' + response.rows[0].newsletterimage, err => {
                                 if (err) {
                                     console.log('newsletterimage : ', response.rows[0].newsletterimage);
