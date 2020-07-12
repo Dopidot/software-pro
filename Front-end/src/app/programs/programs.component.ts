@@ -2,14 +2,10 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MenuService } from '../services/menu.service';
 import { LocalDataSource } from 'ng2-smart-table';
 import { CommonService } from '../services/common.service';
-import { DatePipe } from '@angular/common';
 import { NbDialogService } from '@nebular/theme';
-
 import { ProgramService } from '../services/program.service';
 import { Program } from '../models/program.model';
 import { ExerciseService } from '../services/exercise.service';
-
-
 import * as _ from 'lodash';
 
 @Component({
@@ -62,7 +58,6 @@ export class ProgramsComponent implements OnInit {
     constructor(
         private menuService: MenuService,
         private commonService: CommonService,
-        private datePipe: DatePipe,
         private dialogService: NbDialogService,
         private programService: ProgramService,
         private exerciseService: ExerciseService,
@@ -90,7 +85,6 @@ export class ProgramsComponent implements OnInit {
     loadPrograms(): void {
         this.programService.getPrograms().subscribe(data => {
             this.programs = data;
-            console.log(data);
         });
     }
 
@@ -136,7 +130,8 @@ export class ProgramsComponent implements OnInit {
     }
 
     updateProgram(): void {
-        this.currentProgram.exercises = '3,4';
+        this.assignExerciseIds();
+
         this.programService.updateProgram(this.currentProgram['id'], this.currentProgram, this.imageFile).subscribe(data => {
             let res = data['body']['program'];
             
@@ -163,30 +158,31 @@ export class ProgramsComponent implements OnInit {
 
     addExercise(event: any): void {
         this.exercisesList.push(event['data']);
+        let index = this.data.findIndex(x => x['id'] === event['data']['id']);
 
-        let temp = '';
-        this.exercisesList.forEach(element => {
-            if (temp.length !== 0)
-            {
-                temp += ',';
-            }
+        if (index !== -1)
+        {
+            this.data.splice(index, 1);
+            this.source.load(this.data);
+        }
 
-            temp += element['id'];
-        });
-
-        this.currentProgram.exercises = temp;
         this.updateProgram();
     }
 
     removeExercise(exercise: any): void {
+
+        if (this.exercisesList.length === 1) {
+            return;
+        }
+
         let index = this.exercisesList.findIndex(x => x['id'] === exercise['id']);
 
         if (index !== -1)
         {
+            this.data.push(this.exercisesList[index]);
             this.exercisesList.splice(index, 1);
-
-            //this.updateProgram();
-            this.loadAllExercises();
+            this.source.load(this.data);
+            this.updateProgram();
         }
     }
 
@@ -207,5 +203,20 @@ export class ProgramsComponent implements OnInit {
         this.imageBase64 = null; 
         this.imagePath = null; 
         this.imageFile = null;
+    }
+
+    assignExerciseIds(): void {
+        let temp = '';
+
+        this.exercisesList.forEach(element => {
+            if (temp.length !== 0)
+            {
+                temp += ',';
+            }
+
+            temp += element['id'];
+        });
+
+        this.currentProgram.exercises = temp;
     }
 }

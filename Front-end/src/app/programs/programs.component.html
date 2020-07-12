@@ -53,10 +53,9 @@
                                     (click)="removeExercise(exercise)">
                                     {{exercise.name}}
                                 </div>
-                                <!-- <div style="text-align: center; margin-top: 10px;">
-                                    <button nbButton [status]="primary" (click)="openPopup(dialog); popupType = 1;">
-                                        Modifier</button>
-                                </div> -->
+                                <div *ngIf="exercisesList.length === 0">
+                                    Ce programme ne contient aucun exercice.
+                                </div>
                             </div>
                         </nb-card-body>
                     </nb-card>
