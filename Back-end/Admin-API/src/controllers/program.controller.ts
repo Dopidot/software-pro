@@ -141,19 +141,17 @@ export default class ProgramController {
                         message: 'Program not found'
                     });
                 }
-
-                await query('DELETE FROM junction_program_exercise WHERE idprogram = $1', [id]);
-                if (exercises !== undefined ) {
-                    const ids: string[] = exercises.split(",");
-                    for ( const id_exo of ids) {
-                        const id_exercice = BigInt(id_exo);
-                        await query('INSERT INTO junction_program_exercise (idprogram, idexercise) VALUES($1, $2);', [id, id_exercice]);
-                    }
-                }
-
-
-
                 response = await query('UPDATE programs SET name = $1, description = $2, programimage = $3 WHERE id = $4', [name, description, programImage, id]);
+            }
+
+
+            await query('DELETE FROM junction_program_exercise WHERE idprogram = $1', [id]);
+            if (exercises !== undefined ) {
+                const ids: string[] = exercises.split(",");
+                for ( const id_exo of ids) {
+                    const id_exercice = BigInt(id_exo);
+                    await query('INSERT INTO junction_program_exercise (idprogram, idexercise) VALUES($1, $2);', [id, id_exercice]);
+                }
             }
 
             if (response.rowCount !== 0) {
