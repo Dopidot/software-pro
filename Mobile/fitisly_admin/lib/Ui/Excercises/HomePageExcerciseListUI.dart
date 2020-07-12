@@ -25,10 +25,6 @@ class _ExerciseListUI extends State<ExerciseListUI>{
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text(Translations.of(context).text("title_exercice_list"), style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
-        centerTitle: true,
-      ),
       body: futureBuilderExercise(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),

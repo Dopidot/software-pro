@@ -8,6 +8,7 @@ import 'package:fitislyadmin/Ui/Home/LoginScreenUI.dart';
 import 'package:fitislyadmin/Ui/Newsletter/NewsLetterListUI.dart';
 import 'package:fitislyadmin/Ui/Programs/ProgramHomeUI.dart';
 import 'package:fitislyadmin/Ui/StatisticUI.dart';
+import 'package:fitislyadmin/Ui/TabBarApplicationUI.dart';
 import 'package:fitislyadmin/Ui/User/UserScreenSettingUI.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
@@ -116,59 +117,38 @@ class _HomeScreen extends State<HomeScreenPage> {
               }
             ),
             _buildTile(
-              Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+
+                            Padding(padding: EdgeInsets.only(bottom: 1.0)),
+                            Text(Translations.of(context).text("title_application_home_case"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                            Text(Translations.of(context).text("subtitle_application_case_program"), style: TextStyle(color: Colors.black45)),
+                            Text(Translations.of(context).text("subtitle_application_case_exercise"), style: TextStyle(color: Colors.black45)),
+
+                          ]
+                      ),
                       Material(
                           color: Colors.teal,
                           shape: CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: Icon(Icons.settings_applications, color: Colors.white, size: 30.0),
+                            child: Icon(Icons.accessibility, color: Colors.white, size: 30.0),
                           )
                       ),
-                      Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                      Text(Translations.of(context).text("title_application_home_case"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                      Text(Translations.of(context).text("subtitle_application_case_exercise"), style: TextStyle(color: Colors.black45)),
-                    ]
-                ),
-              ),
-                onTap: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
-                    return ExerciseListUI();
-                  })
-                  );
-
-                }
-            ),
-
-            _buildTile(
-                Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Material(
-                            color: Colors.teal,
-                            shape: CircleBorder(),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Icon(Icons.accessibility, color: Colors.white, size: 30.0),
-                            )
-                        ),
-                        Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                        Text(Translations.of(context).text("title_application_home_case"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                        Text(Translations.of(context).text("subtitle_application_case_program"), style: TextStyle(color: Colors.black45)),
-                      ]
+                    ],
                   ),
                 ),
                 onTap: () {
                   Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
-                    return ProgramHomeScreen();
+                    return TabBarApplicationUI();
                   })
                   );
 
@@ -193,6 +173,7 @@ class _HomeScreen extends State<HomeScreenPage> {
                       ),
                       Padding(padding: EdgeInsets.only(bottom: 1.0)),
                       Text(Translations.of(context).text('title_application_news'), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                      Text(Translations.of(context).text('subtitle_application_case_gym'), style: TextStyle(color: Colors.black45)),
 
                     ]
                 ),
@@ -271,22 +252,28 @@ class _HomeScreen extends State<HomeScreenPage> {
             _buildTile(
                 Padding(
                   padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Material(
-                            color: Colors.teal,
-                            shape: CircleBorder(),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Icon(Icons.account_box, color: Colors.white, size: 30.0),
-                            )
-                        ),
-                        Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                        Text(Translations.of(context).text("title_application_home_coach"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                        Text(Translations.of(context).text("subtitle_application_case_coach"), style: TextStyle(color: Colors.black45)),
-                      ]
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(padding: EdgeInsets.only(bottom: 1.0)),
+                            Text(Translations.of(context).text("title_application_home_coach"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                            Text(Translations.of(context).text("subtitle_application_case_coach"), style: TextStyle(color: Colors.black45)),
+                          ]
+                      ),
+                      Material(
+                          color: Colors.teal,
+                          shape: CircleBorder(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Icon(Icons.account_box, color: Colors.white, size: 30.0),
+                          )
+                      ),
+                    ],
                   ),
                 ),
               onTap: (){
@@ -299,8 +286,7 @@ class _HomeScreen extends State<HomeScreenPage> {
           ],
           staggeredTiles: [
             StaggeredTile.fit(2),
-            StaggeredTile.fit(1),
-            StaggeredTile.fit(1),
+            StaggeredTile.fit(2),
             StaggeredTile.fit(1),
             StaggeredTile.fit(1),
             StaggeredTile.fit(2),

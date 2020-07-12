@@ -22,12 +22,10 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: buildAppBar(),
       body:buildFutureProgram(),
       floatingActionButton: FloatingActionButton(
           child:Icon(Icons.add),
@@ -45,34 +43,7 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
     );
   }
 
-  Widget buildAppBar(){
-    return AppBar(
-        title: Text(Translations.of(context).text("title_program_list"),style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.account_circle,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => UserScreenSetting()),
-                    (Route<dynamic> route) => true,
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.power_settings_new,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              logOut();
-            },
-          ),
 
-        ],
-        centerTitle: true);
-  }
 
 
 

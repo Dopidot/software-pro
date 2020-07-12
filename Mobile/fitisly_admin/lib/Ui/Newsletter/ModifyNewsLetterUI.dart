@@ -81,7 +81,7 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
       },
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: Translations.of(context).text("field_description"),
+          hintText: Translations.of(context).text("field_title"),
           border:
               OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))),
     );
@@ -96,7 +96,7 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
       minLines: 2,
       maxLines: null,
       decoration: InputDecoration(
-          hintText: "Ecrire le contenu du mail ici",
+          hintText:  Translations.of(context).text("field_description"),
           border:
               OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))),
     );

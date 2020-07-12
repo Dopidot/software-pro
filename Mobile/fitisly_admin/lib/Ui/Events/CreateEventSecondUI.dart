@@ -1,6 +1,5 @@
 import 'package:fitislyadmin/Model/Fitisly_Admin/Event.dart';
 import 'package:fitislyadmin/Services/EventService.dart';
-import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/Ui/Events/HomeEventUI.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
@@ -121,7 +120,11 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
 
         child: MaterialButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomeEventScreen()),
+                  (Route<dynamic> route) => false,
+            );
           },
           child: Text(Translations.of(context).text("btn_cancel")),
         )

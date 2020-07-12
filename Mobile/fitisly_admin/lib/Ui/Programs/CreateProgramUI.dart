@@ -81,7 +81,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
         ));
 
     RaisedButton createBtn = RaisedButton(
-      child: Text(Translations.of(context).text("btn_create")),
+      child: Text(Translations.of(context).text("btn_Create")),
       color: Colors.green,
       onPressed: () {
         if (_formKey.currentState.validate()) {
@@ -103,7 +103,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
     );
 
     RaisedButton cancelBtn = RaisedButton(
-      child: Text('Annuler'),
+      child: Text(Translations.of(context).text("btn_cancel")),
       onPressed: () {
         Navigator.pop(context);
       },

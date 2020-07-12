@@ -123,7 +123,20 @@ class _CreateGymUI extends State<CreateGymUI>{
 
         child: MaterialButton(
           onPressed: _validateInput,
-          child: Text(Translations.of(context).text("btn_create")),
+          child: Text(Translations.of(context).text("btn_Create")),
+        )
+    );
+
+    final cancelButton = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.red,
+
+        child: MaterialButton(
+          onPressed: (){
+            Navigator.pop(context);
+          },
+          child: Text(Translations.of(context).text("btn_cancel")),
         )
     );
 
@@ -135,7 +148,14 @@ class _CreateGymUI extends State<CreateGymUI>{
           Padding(padding: const EdgeInsets.all(8.0),child: city),
           Padding(padding: const EdgeInsets.all(8.0),child: country),
           Padding(padding: const EdgeInsets.all(5.0),child: photoField),
-          Padding(padding: const EdgeInsets.all(5.0),child: creationButton)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(padding: const EdgeInsets.all(5.0),child: creationButton),
+              Padding(padding: const EdgeInsets.all(5.0),child: cancelButton)
+
+            ],
+          ),
         ]
     );
 

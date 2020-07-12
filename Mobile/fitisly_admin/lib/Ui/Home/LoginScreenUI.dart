@@ -4,6 +4,8 @@ import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:route_transitions/route_transitions.dart';
 import 'HomeUI.dart';
+import 'package:permission_handler/permission_handler.dart' as PermissionHandler;
+
 
 class LoginScreen extends StatefulWidget {
 
@@ -29,10 +31,7 @@ class _LoginScreen extends State<LoginScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    _pw = "";
-    _email = "";
   }
 
   @override
@@ -168,6 +167,8 @@ class _LoginScreen extends State<LoginScreen> {
     );
 
   }
+
+
 
 }
 

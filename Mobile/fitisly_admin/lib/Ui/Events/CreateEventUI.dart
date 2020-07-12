@@ -75,7 +75,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       validator: validateField,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
-          hintText: Translations.of(context).text("field_description_event"),
+          hintText: Translations.of(context).text("field_description"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -142,6 +142,19 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         )
     );
 
+    final cancelButton = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.red,
+
+        child: MaterialButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text(Translations.of(context).text("btn_cancel")),
+        )
+    );
+
     return Column(
         children: <Widget>[
           Padding(
@@ -162,9 +175,19 @@ class _CreateEventScreen extends State<CreateEventScreen> {
 
           ),
 
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: creationButton,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: creationButton,
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: cancelButton,
+              ),
+            ],
           ),
         ]
     );
