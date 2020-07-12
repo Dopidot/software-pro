@@ -11,6 +11,7 @@ export default class ProgramController {
     getPrograms = async function(req: Request, res: Response): Promise<Response> {
         try {
             const response: QueryResult = await query('SELECT * FROM programs', undefined);
+            console.log(response);
             const program_list: ProgramModel[] = [];
             if (response.rowCount !== 0) {
                 for (let i = 0; i < response.rowCount; i++) {
@@ -19,7 +20,7 @@ export default class ProgramController {
                         response.rows[i].id,
                         response.rows[i].name,
                         response.rows[i].description,
-                        response.rows[i].programImage,
+                        response.rows[i].programimage,
                         exercise_list.rows);
                     program_list.push(program);
                 }
@@ -44,7 +45,7 @@ export default class ProgramController {
                     response.rows[0].id,
                     response.rows[0].name,
                     response.rows[0].description,
-                    response.rows[0].programImage,
+                    response.rows[0].programimage,
                     exercise_list.rows
                 )
                 return res.status(200).json(program);
@@ -73,7 +74,7 @@ export default class ProgramController {
             if ( programImage === undefined) {
                 await query('INSERT INTO programs (name, description) VALUES ($1, $2)', [name, description]);
             } else {
-                await query('INSERT INTO programs (name, description, programImage) VALUES ($1, $2, $3)', [name, description, programImage]);
+                await query('INSERT INTO programs (name, description, programimage) VALUES ($1, $2, $3)', [name, description, programImage]);
             }
 
             let program_id : QueryResult = await query('SELECT id FROM programs ORDER BY id DESC LIMIT 1', undefined);
@@ -92,7 +93,7 @@ export default class ProgramController {
                 program_id.rows[0].id,
                 program_id.rows[0].name,
                 program_id.rows[0].description,
-                program_id.rows[0].programImage,
+                program_id.rows[0].programimage,
                 exercise_list.rows
             );
 
@@ -148,7 +149,7 @@ export default class ProgramController {
                     }
                 }
 
-                response = await query('UPDATE programs SET name = $1, description = $2, programImage = $3 WHERE id = $4', [name, description, programImage, id]);
+                response = await query('UPDATE programs SET name = $1, description = $2, programimage = $3 WHERE id = $4', [name, description, programImage, id]);
             }
 
             if (response.rowCount !== 0) {
@@ -158,7 +159,7 @@ export default class ProgramController {
                     response.rows[0].id,
                     response.rows[0].name,
                     response.rows[0].description,
-                    response.rows[0].programImage,
+                    response.rows[0].programimage,
                     exercise_list.rows
                 );
                 return res.status(200).json({

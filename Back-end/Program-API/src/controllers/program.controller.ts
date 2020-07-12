@@ -19,7 +19,7 @@ export default class ProgramController {
                         response.rows[i].id,
                         response.rows[i].name,
                         response.rows[i].description,
-                        response.rows[i].programImage,
+                        response.rows[i].programimage,
                         exercise_list.rows);
                     program_list.push(program);
                 }
@@ -44,7 +44,7 @@ export default class ProgramController {
                     response.rows[0].id,
                     response.rows[0].name,
                     response.rows[0].description,
-                    response.rows[0].programImage,
+                    response.rows[0].programimage,
                     exercise_list.rows
                 )
                 return res.status(200).json(program);
@@ -92,7 +92,7 @@ export default class ProgramController {
                 program_id.rows[0].id,
                 program_id.rows[0].name,
                 program_id.rows[0].description,
-                program_id.rows[0].programImage,
+                program_id.rows[0].programimage,
                 exercise_list.rows
             );
 
@@ -156,7 +156,7 @@ export default class ProgramController {
                     response.rows[0].id,
                     response.rows[0].name,
                     response.rows[0].description,
-                    response.rows[0].programImage,
+                    response.rows[0].programimage,
                     exercise_list.rows
                 );
                 return res.status(200).json({
