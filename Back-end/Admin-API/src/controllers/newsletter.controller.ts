@@ -77,7 +77,6 @@ export default class NewsletterController {
                             if (err) {
                                 console.log('newsletterimage : ', response.rows[0].newsletterimage);
                                 console.error(err);
-                                throw err;
                             }
                         });
                     }
@@ -115,7 +114,6 @@ export default class NewsletterController {
                         if (err) {
                             console.log('newsletterimage :', response.rows[0].newsletterimage);
                             console.error(err);
-                            throw err;
                         }
                     });
                 }

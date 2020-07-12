@@ -72,7 +72,6 @@ export default class GymController {
                         if (err) {
                             console.log('gymimage : ', response.rows[0].gymimage);
                             console.error(err);
-                            throw err;
                         }
                     });
                 } else {
@@ -109,7 +108,6 @@ export default class GymController {
                     fs.unlink(process.cwd() + '/' + response.rows[0].gymimage, err => {
                         if (err) {
                             console.log('gymimage :', response.rows[0].gymimage);
-                            throw err;
                         }
                     });
                 }
