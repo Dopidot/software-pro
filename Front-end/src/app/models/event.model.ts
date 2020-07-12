@@ -1,3 +1,9 @@
+/**
+ * Model : Event
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
+
 export class Event {
     public id: number;
     public name: string;

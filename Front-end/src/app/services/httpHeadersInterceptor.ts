@@ -1,3 +1,9 @@
+/**
+ * Class : HttpHeadersInterceptor
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
+
 import {
     HttpEvent,
     HttpInterceptor,

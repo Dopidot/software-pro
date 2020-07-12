@@ -1,6 +1,11 @@
+/**
+ * Component : CoachsComponent
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
+
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MenuService } from '../services/menu.service';
-
 import { LocalDataSource } from 'ng2-smart-table';
 import { NbDialogService } from '@nebular/theme';
 import { FitislyService } from '../services/fitisly.service';
@@ -71,6 +76,9 @@ export class CoachsComponent implements OnInit {
         this.loadCoachs();
     }
 
+    /**
+     * Load coaches from database
+     */
     loadCoachs(): void {
         this.coaches = [];
 
@@ -94,6 +102,9 @@ export class CoachsComponent implements OnInit {
         });
     }
 
+    /**
+     * Load highlighted attribut for coaches
+     */
     loadCoachsHiglighted(): void {
         this.userService.getCoachHighlighted().subscribe(data => {
             data.forEach(element => {
@@ -107,6 +118,9 @@ export class CoachsComponent implements OnInit {
         });
     }
 
+    /**
+     * Load users from a specific coach
+     */
     loadUsers(coach): void {
         this.currentCoach = coach;
         this.coachNameUserList = coach['name'];
@@ -138,6 +152,9 @@ export class CoachsComponent implements OnInit {
         });
     } 
 
+    /**
+     * Open popup with user informations
+     */
     openUnfollow(event, dialog: TemplateRef<any>): void {
         this.currentUser = event.data;
 
@@ -146,6 +163,9 @@ export class CoachsComponent implements OnInit {
         );
     }
 
+    /**
+     * Open popup to update coach attribut
+     */
     openEditCoach(coach, dialog: TemplateRef<any>): void {
         this.currentCoach = coach;
 
@@ -154,6 +174,9 @@ export class CoachsComponent implements OnInit {
         );
     }
 
+    /**
+     * Update (insert or delete) highlighted attribut for a specific coach
+     */
     updatehighlightCoach(toHighlight: boolean): void {
         if (toHighlight)
         {
@@ -180,6 +203,11 @@ export class CoachsComponent implements OnInit {
         }
     }
 
+    /**
+     * Capitalize the first letter for a string
+     * @input s : string
+     * @output string
+     */
     capitalize(s: string): string {
         return s.charAt(0).toUpperCase() + s.slice(1);
     }

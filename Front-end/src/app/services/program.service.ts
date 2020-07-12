@@ -1,6 +1,11 @@
+/**
+ * Service : ProgramService
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
+
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Program } from "../models/program.model";
+import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs/index";
 
 @Injectable()

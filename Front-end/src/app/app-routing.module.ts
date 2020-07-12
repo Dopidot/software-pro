@@ -1,3 +1,9 @@
+/**
+ * Class : AppRoutingModule
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
+
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 import {

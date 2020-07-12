@@ -1,6 +1,11 @@
+/**
+ * Service : MenuService
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
+
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from "rxjs/index";
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()

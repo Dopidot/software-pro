@@ -1,3 +1,9 @@
+/**
+ * Model : User
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
+
 export class User {
     public id: number;
     public firstname: string;

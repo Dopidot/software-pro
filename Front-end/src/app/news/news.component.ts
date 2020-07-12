@@ -1,3 +1,9 @@
+/**
+ * Component : NewsComponent
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
+
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MenuService } from '../services/menu.service';
 import { CommonService } from '../services/common.service';

@@ -16,24 +16,43 @@
                     </nb-card>
                 </div>
 
-                <div class="col-md-6 col-lg-4 col-xxxl-4">
+                <div class="col-lg-6 col-md-6">
+                    <nb-card>
+                        <nb-card-header>Connexion sur les derniers jours</nb-card-header>
+                        <nb-card-body>
+                            <chart #chart1 style="height: 400px;" type="bar" [data]="data2" [options]="options2"></chart>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+
+                <div class="col-6">
+                    <nb-card>
+                        <nb-card-header>Répartition par âge</nb-card-header>
+                        <nb-card-body>
+                            <div echarts [options]="options" class="echart"></div>
+                        </nb-card-body>
+                    </nb-card>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
                     <nb-card class="list-card" size="small">
                         <nb-card-header>{{ 'HOME_NEW_USERS' | translate }}</nb-card-header>
                         <nb-list>
-                        <nb-list-item *ngFor="let user of users">
-                            <nb-user [name]="user.name" [title]="user.title" [picture]="user.picture" size="large">
-                            </nb-user>
-                        </nb-list-item>
+                            <nb-list-item *ngFor="let user of users">
+                                <nb-user [name]="user.name" [title]="user.title" [picture]="user.picture" size="large">
+                                </nb-user>
+                            </nb-list-item>
                         </nb-list>
                     </nb-card>
                 </div>
-        
-                <div class="col-md-6 col-lg-3 col-xxxl-3">
+
+                <div class="col-lg-4 col-md-6">
                     <div class="calendar-container">
-                        <div class="subtitle" style="margin-bottom: 10px;">
+                        <!-- <div class="subtitle" style="margin-bottom: 10px;">
                           {{ 'HOME_NEXT_EVENTS' | translate }}
-                        </div>
-                        <nb-calendar [(date)]="date" (click)="showEvent($event)" [boundingMonth]="true" [dayCellComponent]="dayCellComponent" showWeekNumber></nb-calendar>
+                        </div> -->
+                        <nb-calendar [(date)]="date" (click)="showEvent($event)" [boundingMonth]="true"
+                            [dayCellComponent]="dayCellComponent" showWeekNumber></nb-calendar>
                     </div>
                 </div>
 

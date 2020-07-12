@@ -1,3 +1,9 @@
+/**
+ * Component : InactivityComponent
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { MenuService } from '../services/menu.service';
 

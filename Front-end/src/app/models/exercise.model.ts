@@ -1,5 +1,8 @@
-import { Program } from './program.model';
-import { User } from './user.model';
+/**
+ * Model : Exercise
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
 
 export class Exercise {
     public id: number;

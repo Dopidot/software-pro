@@ -1,4 +1,8 @@
-import { Exercise } from './exercise.model';
+/**
+ * Model : Program
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
 
 export class Program {
 

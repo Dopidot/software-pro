@@ -1,5 +1,11 @@
+/**
+ * Service : CommonService
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
+
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs/index";
 import { ApiConfig } from '../../../src/api.config';
 

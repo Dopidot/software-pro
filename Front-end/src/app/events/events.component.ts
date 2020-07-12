@@ -1,3 +1,9 @@
+/**
+ * Component : EventsComponent
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
+
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MenuService } from '../services/menu.service';
 import { DayCellComponent } from '../pages/extra-components/calendar/day-cell/day-cell.component';
@@ -39,6 +45,9 @@ export class EventsComponent implements OnInit {
         this.loadEvents();
     }
 
+    /**
+     * Load events from database
+     */
     loadEvents(): void {
         this.eventsDate = [];
         this.dayCellComponent.prototype.loadEvents(this.eventsDate);
@@ -55,6 +64,9 @@ export class EventsComponent implements OnInit {
         });
     }
 
+    /**
+     * Insert new event in database
+     */
     addEvent(): void {
         this.currentEvent.startDate = this.datePipe.transform(this.date, 'yyyy-MM-dd');
         this.currentEvent.creationDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
@@ -69,6 +81,9 @@ export class EventsComponent implements OnInit {
         });
     }
 
+    /**
+     * Update specific event in database
+     */
     updateEvent(): void {
         this.currentEvent.startDate = this.datePipe.transform(this.date, 'yyyy-MM-dd');
         this.currentEvent.creationDate = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
@@ -82,12 +97,18 @@ export class EventsComponent implements OnInit {
         });
     }
 
+    /**
+     * Remove specific event in database
+     */
     deleteEvent(): void {
         this.commonService.deleteEvent(this.currentEvent['id']).subscribe(data => {
             this.loadEvents();
         });
     }
 
+    /**
+     * Select informations from event
+     */
     showEvent(event: any): void {
         let html = event['target'];
 
@@ -105,6 +126,9 @@ export class EventsComponent implements OnInit {
         }
     }
 
+    /**
+     * Compare the selected date and select the corresponding event
+     */
     compareDateAndAssignEvent(date: string): void {
         let index = this.events.findIndex(x => this.internalCompareDate(new Date(x['startdate']), new Date(date)));
 
@@ -117,12 +141,18 @@ export class EventsComponent implements OnInit {
         }
     }
 
+    /**
+     * Open popup with informations
+     */
     openPopup(dialog: TemplateRef<any>): void {
         this.dialogService.open(
             dialog
         );
     }
 
+    /**
+     * Get the file from selection
+     */
     fileChangeEvent(fileInput: any) {
         if (fileInput.target.files && fileInput.target.files[0]) {
             const reader = new FileReader();
@@ -136,6 +166,11 @@ export class EventsComponent implements OnInit {
         }
     }
 
+    /**
+     * Check if the 2 given dates are the same day
+     * @input date1 : Date, date2 : Date
+     * @output boolean
+     */
     internalCompareDate(date1: Date, date2: Date): boolean {
         if (!date1 || !date2)
             return false;
@@ -146,6 +181,9 @@ export class EventsComponent implements OnInit {
         return true;
     }
 
+    /**
+     * Reset picture selection
+     */
     removePicture(): void {
         this.imageBase64 = null; 
         this.imagePath = null; 

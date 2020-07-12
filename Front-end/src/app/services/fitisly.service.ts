@@ -1,6 +1,11 @@
+/**
+ * Service : FitislyService
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
+
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { User } from "../models/user.model";
+import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs/index";
 
 @Injectable()
@@ -26,27 +31,7 @@ export class FitislyService {
         return this.baseUrl + 'get-user-profile-picture/' + pictureId;
     }
 
-    /*getUserById(id: number): Observable<User> {
-        return this.http.get<User>(this.baseUrl + '/' + id);
-    }*/
-
-    /*getUsers(): Observable<ApiResponse> {
-        return this.http.get<ApiResponse>(this.baseUrl);
+    getConnectionByGender(date: string): Observable<any> {
+        return this.http.get<any>(this.baseUrl + 'get-connections-by-gender/' + date);
     }
-
-    getUserById(id: number): Observable<ApiResponse> {
-        return this.http.get<ApiResponse>(this.baseUrl + id);
-    }
-
-    createUser(user: User): Observable<ApiResponse> {
-        return this.http.post<ApiResponse>(this.baseUrl, user);
-    }
-
-    updateUser(user: User): Observable<ApiResponse> {
-        return this.http.put<ApiResponse>(this.baseUrl + user.id, user);
-    }
-
-    deleteUser(id: number): Observable<ApiResponse> {
-        return this.http.delete<ApiResponse>(this.baseUrl + id);
-    }*/
 }

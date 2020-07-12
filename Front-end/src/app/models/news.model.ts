@@ -1,3 +1,9 @@
+/**
+ * Model : News
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
+
 export class News {
     public id: number;
     public name: string;

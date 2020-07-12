@@ -1,3 +1,9 @@
+/**
+ * Component : LoginComponent
+ * @author Mickael MOREIRA
+ * @version 1.0.0 
+ */
+
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
