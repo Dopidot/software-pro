@@ -1,5 +1,5 @@
 import {Router} from "express";
-import ProgramController from "../controllers/programs.controller";
+import ProgramController from "../controllers/program.controller";
 import { verifyToken } from "../core/JWT";
 import { upload } from "../core/Multer";
 

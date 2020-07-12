@@ -1,5 +1,7 @@
 import { Pool } from 'pg';
-require('dotenv').config();
+import * as dotenv from "dotenv";
+import * as path from "path";
+dotenv.config({ path: path.join(process.cwd(), '.env') });
 
 export const pool = new Pool({
     user: process.env.DATABASE_USER,

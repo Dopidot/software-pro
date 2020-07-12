@@ -71,7 +71,6 @@ export default class ExerciseController {
                         if (err) {
                             console.log('exerciseimage : ', response.rows[0].exerciseimage);
                             console.error(err);
-                            throw err;
                         }
                     });
                 } else {
@@ -107,7 +106,6 @@ export default class ExerciseController {
                         if (err) {
                             console.log('exerciseimage :', response.rows[0].exerciseimage);
                             console.error(err);
-                            throw err;
                         }
                     });
                 }
