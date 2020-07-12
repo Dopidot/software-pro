@@ -12,7 +12,7 @@
     "start": "tsc && node dist/index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Guillaume Tako",
   "license": "ISC",
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
