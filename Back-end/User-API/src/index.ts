@@ -1,3 +1,7 @@
+/**
+ * author : Guillaume Tako
+ */
+
 import Server from './server';
 import * as dotenv from "dotenv";
 import * as path from "path";

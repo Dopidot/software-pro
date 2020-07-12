@@ -1,3 +1,7 @@
+/**
+ * author : Guillaume Tako
+ */
+
 import { Router } from "express";
 import UserController  from '../controllers/user.controller'
 import AuthenticationController from "../controllers/authentication.controller";

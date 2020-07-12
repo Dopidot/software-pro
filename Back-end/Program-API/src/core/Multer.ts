@@ -1,3 +1,7 @@
+/**
+ * author : Guillaume Tako
+ */
+
 import multer from "multer";
 import {Request} from "express";
 import * as path from "path";

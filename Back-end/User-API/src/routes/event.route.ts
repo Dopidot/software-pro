@@ -1,3 +1,7 @@
+/**
+ * author : Guillaume Tako
+ */
+
 import { Router } from "express";
 import EventController from "../controllers/event.controller";
 import { verifyToken } from "../core/JWT";

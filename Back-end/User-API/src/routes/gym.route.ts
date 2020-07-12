@@ -1,3 +1,7 @@
+/**
+ * author : Guillaume Tako
+ */
+
 import { Router } from "express";
 import GymController from "../controllers/gym.controller";
 import { verifyToken } from "../core/JWT";

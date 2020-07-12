@@ -1,4 +1,6 @@
-//import UserModel from "./user.model";
+/**
+ * author : Guillaume Tako
+ */
 
 export default class ExerciseModel{
     name: string;
@@ -6,7 +8,6 @@ export default class ExerciseModel{
     repeatNumber: number;
     restTime: string;
     exerciseImage: string;
-    //users: UserModel[];
 
     constructor(name: string, description: string, repeatNumber: number, restTime: string, exerciseImage: string) {//, programs: ProgramModel[], users: UserModel[]) {
         this.name = name;
@@ -14,6 +15,5 @@ export default class ExerciseModel{
         this.repeatNumber = repeatNumber;
         this.restTime = restTime;
         this.exerciseImage = exerciseImage;
-        //this.users = users;
     }
 }

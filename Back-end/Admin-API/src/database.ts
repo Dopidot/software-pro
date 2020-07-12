@@ -1,3 +1,7 @@
+/**
+ * author : Guillaume Tako
+ */
+
 import {Pool, QueryResult} from 'pg';
 import * as dotenv from "dotenv";
 import path from "path";

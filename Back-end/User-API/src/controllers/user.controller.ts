@@ -1,3 +1,7 @@
+/**
+ * author : Guillaume Tako
+ */
+
 import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
 import { query } from '../database';

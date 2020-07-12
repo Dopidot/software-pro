@@ -1,3 +1,7 @@
+/**
+ * author : Guillaume Tako
+ */
+
 export default class EventModel {
     name: string;
     body: string;

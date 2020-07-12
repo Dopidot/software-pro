@@ -1,3 +1,7 @@
+/**
+ * author : Guillaume Tako
+ */
+
 export default class NewsletterModel {
     name: string;
     title: string;

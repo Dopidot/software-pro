@@ -1,3 +1,7 @@
+/**
+ * author : Guillaume Tako
+ */
+
 import { Router } from "express";
 import CoachController from "../controllers/coach.controller";
 import { verifyToken } from "../core/JWT";

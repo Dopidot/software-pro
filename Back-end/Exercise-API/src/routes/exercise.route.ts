@@ -1,3 +1,7 @@
+/**
+ * author : Guillaume Tako
+ */
+
 import {Router} from "express";
 import ExerciseController from "../controllers/exercise.controller";
 import { verifyToken } from "../core/JWT";

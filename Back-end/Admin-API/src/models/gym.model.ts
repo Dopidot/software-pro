@@ -1,3 +1,7 @@
+/**
+ * author : Guillaume Tako
+ */
+
 export default interface gymModel {
     name: string;
     address: string;

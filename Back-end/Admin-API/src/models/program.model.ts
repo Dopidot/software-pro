@@ -1,3 +1,7 @@
+/**
+ * author : Guillaume Tako
+ */
+
 export default class ProgramModel {
     id!: bigint;
     name: string;

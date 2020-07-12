@@ -1,3 +1,7 @@
+/**
+ * author : Guillaume Tako
+ */
+
 export class UserModel {
     id: bigint;
     firstname: string;
