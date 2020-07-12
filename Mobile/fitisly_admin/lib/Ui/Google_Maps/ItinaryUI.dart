@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:permission_handler/permission_handler.dart' as PermissionHandler;
 
 
 class ItinaryUI extends StatefulWidget {
@@ -23,6 +24,12 @@ class _ItinaryUI extends State<ItinaryUI> {
   String googleAPiKey = "AIzaSyBVmFs4d8-gPsosPci2Zx5rRwQ5GyxdFrk";
   CameraPosition _cameraPosition = CameraPosition(target: LatLng(0,0),zoom: 14);
   Completer<GoogleMapController> _controller = Completer();
+
+  @override
+  void initState() {
+    _askForLocationPermission();
+    super.initState();
+  }
 
 
   @override
@@ -100,10 +107,11 @@ class _ItinaryUI extends State<ItinaryUI> {
 
 
   void _askForLocationPermission() async {
-    Map<PermissionGroup, PermissionStatus> permissions;
-    permissions = await PermissionHandler().requestPermissions([
-      PermissionGroup.location,
-    ]);
+
+    Map<PermissionHandler.Permission,PermissionHandler.PermissionStatus> permissions;
+    permissions = await [
+      PermissionHandler.Permission.location
+    ].request();
   }
 
 

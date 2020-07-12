@@ -5,6 +5,7 @@ import 'package:fitislyadmin/Ui/Home/LoginScreenUI.dart';
 import 'package:fitislyadmin/Ui/Programs/CreateProgramUI.dart';
 import 'package:fitislyadmin/Ui/Programs/ModifyProgramUI.dart';
 import 'package:fitislyadmin/Ui/User/UserScreenSettingUI.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
@@ -46,7 +47,7 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
 
   Widget buildAppBar(){
     return AppBar(
-        title: Text("Mes programmes",style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
+        title: Text(Translations.of(context).text("title_program_list"),style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -90,7 +91,7 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
 
 
   Widget buildList(List<Program> programs ){
-    return programs.isEmpty ? Center(child: Text("Veuillez ajouter des programmes svp")) : buildListView(programs);
+    return programs.isEmpty ? Center(child: Text(Translations.of(context).text("no_program"))) : buildListView(programs);
   }
 
   Widget buildListView(List<Program> programs) {
@@ -179,7 +180,7 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
         prog.removeAt(index);
       });
     }
-    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Le programme a été supprimé")));
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("delete_program"))));
   }
 
 

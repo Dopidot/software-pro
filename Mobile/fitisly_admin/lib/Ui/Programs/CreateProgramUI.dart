@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Program.dart';
 import 'package:fitislyadmin/Services/ProgramService.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -23,10 +24,9 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(centerTitle: true, title: Text("Nouveau programme")),
+      appBar: AppBar(centerTitle: true, title: Text(Translations.of(context).text("subtitle_creation_prog"))),
       body: Form(
         key: _formKey,
         autovalidate: _autoValidate,
@@ -44,7 +44,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
       },
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Nom du programme",
+          hintText: Translations.of(context).text("field_name"),
           border:
               OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))),
     );
@@ -59,7 +59,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
       minLines: 2,
       maxLines: null,
       decoration: InputDecoration(
-          hintText: "La description du programme",
+          hintText: Translations.of(context).text("field_description"),
           border:
               OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))),
     );
@@ -81,7 +81,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
         ));
 
     RaisedButton createBtn = RaisedButton(
-      child: Text('Créer'),
+      child: Text(Translations.of(context).text("btn_create")),
       color: Colors.green,
       onPressed: () {
         if (_formKey.currentState.validate()) {
@@ -149,7 +149,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
 
   String validateField(String val) {
     if (val.isEmpty) {
-      return "Attention votre champs mot de passe est vide";
+      return Translations.of(context).text("field_is_empty");
     }
     return null;
   }

@@ -2,6 +2,7 @@ import 'package:fitislyadmin/Model/Fitisly_Admin/Event.dart';
 import 'package:fitislyadmin/Services/EventService.dart';
 import 'package:fitislyadmin/Ui/Events/CreateEventUI.dart';
 import 'package:fitislyadmin/Ui/Events/DetailEventScreenUI.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:intl/intl.dart';
@@ -22,7 +23,7 @@ class _HomeEventScreen extends State<HomeEventScreen> {
     return Scaffold(
         key: _scaffoldKey,
         appBar: AppBar(
-          title: Text("Mes évènements",
+          title: Text(Translations.of(context).text("title_application_home_event"),
               style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
           centerTitle: true,
         ),
@@ -55,7 +56,7 @@ class _HomeEventScreen extends State<HomeEventScreen> {
 
   Widget _buildList(List<Event> events) {
     return events.isEmpty
-        ? Center(child: Text("Aucun évènement, veuillez en ajouter svp"))
+        ? Center(child: Text(Translations.of(context).text("no_event")))
         : _buildListView(events);
   }
 
@@ -103,7 +104,7 @@ class _HomeEventScreen extends State<HomeEventScreen> {
                               children: <Widget>[
                                 Text(
                                     "A ${events[index].zipCode} ${events[index].city}"),
-                                Text(DateFormat('le dd MMM yyyy')
+                                Text(DateFormat('dd MMM yyyy')
                                     .format(events[index].startDate))
                               ],
                             ),
@@ -125,6 +126,6 @@ class _HomeEventScreen extends State<HomeEventScreen> {
       });
     }
     _scaffoldKey.currentState
-        .showSnackBar(SnackBar(content: Text("l'évènement a été supprimé")));
+        .showSnackBar(SnackBar(content: Text(Translations.of(context).text("event_delete"))));
   }
 }

@@ -1,5 +1,6 @@
 import 'package:fitislyadmin/Model/Fitisly_Admin/Newsletter.dart';
 import 'package:fitislyadmin/Services/NewsletterService.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'CreateNewletterUI.dart';
@@ -22,7 +23,7 @@ class _NewsletterListState extends State<NewsletterList> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Mes newsletters",
+        title: Text(Translations.of(context).text("title_application_news"),
             style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
         centerTitle: true,
       ),
@@ -60,7 +61,7 @@ class _NewsletterListState extends State<NewsletterList> {
 
   Widget _buildList(List<Newsletter> newsletters) {
     return newsletters.isEmpty ? Center(
-        child: Text("Aucune news, veuillez en ajouter svp")) : _initListView(newsletters);
+        child: Text(Translations.of(context).text("no_news"))) : _initListView(newsletters);
   }
 
 
@@ -103,8 +104,7 @@ class _NewsletterListState extends State<NewsletterList> {
                                     newsletters[index] = value;
                                   });
                                   _scaffoldKey.currentState.showSnackBar(
-                                      SnackBar(content: Text(
-                                          "Newsletter modifiée ! ")));
+                                      SnackBar(content: Text(Translations.of(context).text("update_news"))));
                                 }
                               });
                             },
@@ -137,6 +137,6 @@ class _NewsletterListState extends State<NewsletterList> {
       });
     }
     _scaffoldKey.currentState.showSnackBar(
-        SnackBar(content: Text("La newsletter a été supprimé")));
+        SnackBar(content: Text(Translations.of(context).text("delete_news"))));
   }
 }

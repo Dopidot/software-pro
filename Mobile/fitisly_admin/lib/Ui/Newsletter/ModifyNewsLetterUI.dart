@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Newsletter.dart';
 import 'package:fitislyadmin/Services/NewsletterService.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -31,7 +32,7 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
   Widget build(BuildContext context) {
     // TODO: implement build
     return Scaffold(
-      appBar: AppBar(centerTitle: true, title: Text("Ma newsletter")),
+      appBar: AppBar(centerTitle: true, title: Text(Translations.of(context).text("title_news_detail"))),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -48,16 +49,13 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
         if (snapshot.hasError) {
           return Center(child: Text("${snapshot.error}"));
         }
-        return snapshot.hasData
-            ? _buildField(snapshot.data)
-            : Center(child: CircularProgressIndicator());
+        return snapshot.hasData ? _buildField(snapshot.data) : Center(child: CircularProgressIndicator());
       },
     );
   }
 
   Widget _buildField(Newsletter newsletter) {
-    Text titleScreen = Text(
-      "Les informations de la newsletter",
+    Text titleScreen = Text(Translations.of(context).text("title_screen_news"),
       style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
       textAlign: TextAlign.center,
     );
@@ -70,7 +68,7 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
       },
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Nom de la newsletter",
+          hintText: Translations.of(context).text("field_name"),
           border:
               OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))),
     );
@@ -83,7 +81,7 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
       },
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Object du mail",
+          hintText: Translations.of(context).text("field_description"),
           border:
               OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))),
     );
@@ -115,7 +113,7 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
     );
 
     RaisedButton cancelBtn = RaisedButton(
-      child: Text('Annuler'),
+      child: Text(Translations.of(context).text("btn_cancel")),
       color: Colors.red,
       onPressed: () {
         Navigator.pop(context);
@@ -204,11 +202,12 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
       });
     }
   }
+  String validateField(String val) {
+    if (val.isEmpty) {
+      return Translations.of(context).text("field_is_empty");
+    }
+    return null;
+  }
 }
 
-String validateField(String val) {
-  if (val.isEmpty) {
-    return "Attention votre champs mot de passe est vide";
-  }
-  return null;
-}
+

@@ -1,4 +1,5 @@
 import 'package:fitislyadmin/Services/ApiFitisly/StatisticService.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import '../model/Api_Fitisly/Statistic.dart';
 import 'package:pie_chart/pie_chart.dart';
@@ -18,7 +19,7 @@ class _StatisticUI extends State<StatisticUI> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-            title: Text("Statistiques"), centerTitle: true),
+            title: Text(Translations.of(context).text("title_stat")), centerTitle: true),
         body: _buildFutureStatistic()
     );
   }
@@ -41,11 +42,11 @@ class _StatisticUI extends State<StatisticUI> {
   Widget _buildField(Statistic stat) {
 
     Map<String, double> dataMap = {
-      "Plus de 35 ans":stat.moreThanThirtyFive.toDouble(),
-      "De 30 à 35 ans":stat.thirtyOneToThirtyFive.toDouble(),
-      "De 26 à 30 ans":stat.twentySixToThirty.toDouble(),
-      "De 18 à 25 ans":stat.eighteenToTwentyFive.toDouble(),
-      "Moins de 18 ans":stat.lessThanEighteen.toDouble()
+      Translations.of(context).text("legend_more_35"):stat.moreThanThirtyFive.toDouble(),
+      Translations.of(context).text("legend_30_35"):stat.thirtyOneToThirtyFive.toDouble(),
+      Translations.of(context).text("legend_26_30"):stat.twentySixToThirty.toDouble(),
+      Translations.of(context).text("legent_18_25"):stat.eighteenToTwentyFive.toDouble(),
+      Translations.of(context).text("legend_less_18"):stat.lessThanEighteen.toDouble()
     };
 
 
@@ -55,7 +56,7 @@ class _StatisticUI extends State<StatisticUI> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Text("Pourcentage des utilisateurs par rapport à la tranche d'âge",style: TextStyle(fontSize: 25),),
+              child: Text(Translations.of(context).text("title_stat_detail"),style: TextStyle(fontSize: 25),),
             ),
             Card(child: PieChart(dataMap: dataMap, showChartValuesInPercentage: true)),
           ],

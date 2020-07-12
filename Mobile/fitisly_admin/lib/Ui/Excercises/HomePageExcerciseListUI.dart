@@ -1,6 +1,7 @@
 import 'package:fitislyadmin/Model/Fitisly_Admin/Exercise.dart';
 import 'package:fitislyadmin/Services/ExerciseService.dart';
 import 'package:fitislyadmin/Ui/Excercises/ModifyExerciseUI.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'CreateExerciseUI.dart';
@@ -25,7 +26,7 @@ class _ExerciseListUI extends State<ExerciseListUI>{
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Mes exercices", style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
+        title: Text(Translations.of(context).text("title_exercice_list"), style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
         centerTitle: true,
       ),
       body: futureBuilderExercise(),
@@ -37,7 +38,7 @@ class _ExerciseListUI extends State<ExerciseListUI>{
           })).then((value) {
             if(value != null){
               updateUi();
-              _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("L'exercice a été ajouté")));
+              _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("add_exercise"))));
             }
           });
         },
@@ -52,7 +53,7 @@ class _ExerciseListUI extends State<ExerciseListUI>{
         builder: (context, snapshot) {
           if (snapshot.hasError){
             return Center(
-                child: Text("Probème de serveur, la page n'a pas pu être chargé")
+                child: Text(Translations.of(context).text("error_server"))
             );
           }
           return snapshot.hasData ? buildUI(snapshot.data) : Center(child: CircularProgressIndicator());
@@ -62,7 +63,7 @@ class _ExerciseListUI extends State<ExerciseListUI>{
 
 
   Widget buildUI(List<Exercise> exercises) {
-    return exercises.isEmpty ? Center(child: Text("Aucun exercice, veuillez en ajouter svp")) : buildListView(exercises);
+    return exercises.isEmpty ? Center(child: Text(Translations.of(context).text("no_exercise"))) : buildListView(exercises);
   }
 
 
@@ -82,7 +83,7 @@ class _ExerciseListUI extends State<ExerciseListUI>{
       setState(() {
         exercises.removeAt(index);
       });
-      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("L'exercice a été supprimé")));
+      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("exercise_delete"))));
     }
   }
 

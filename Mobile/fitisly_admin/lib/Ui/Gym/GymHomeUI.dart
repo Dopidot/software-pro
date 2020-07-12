@@ -3,6 +3,7 @@ import 'package:fitislyadmin/Services/GymService.dart';
 import 'package:fitislyadmin/Ui/Google_Maps/ItinaryUI.dart';
 import 'package:fitislyadmin/Ui/Gym/CreateGymUI.dart';
 import 'package:fitislyadmin/Ui/Gym/UpdateGymUI.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
@@ -22,7 +23,7 @@ class _GymHomeUI extends State<GymHomeUI> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
-        title: Text("Salles de sport référencées",
+        title: Text(Translations.of(context).text("title_gym_list"),
             style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
         centerTitle: true,
       ),
@@ -57,7 +58,7 @@ class _GymHomeUI extends State<GymHomeUI> {
 
   Widget buildList(List<Gym> gyms) {
     return gyms.isEmpty
-        ? Center(child: Text("Aucune news, veuillez en ajouter svp"))
+        ? Center(child: Text(Translations.of(context).text("no_news")))
         : initListView(gyms);
   }
 
@@ -106,7 +107,7 @@ class _GymHomeUI extends State<GymHomeUI> {
                                   gyms[index] = value;
                                 });
                                 _scaffoldKey.currentState.showSnackBar(
-                                    SnackBar(content: Text("Gym modifiée ! ")));
+                                    SnackBar(content: Text(Translations.of(context).text("update_gyp"))));
                               }
                             });
                           },
@@ -146,6 +147,6 @@ class _GymHomeUI extends State<GymHomeUI> {
       });
     }
     _scaffoldKey.currentState
-        .showSnackBar(SnackBar(content: Text("La newsletter a été supprimé")));
+        .showSnackBar(SnackBar(content: Text(Translations.of(context).text("delete_gym"))));
   }
 }
