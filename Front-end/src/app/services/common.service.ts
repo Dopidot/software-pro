@@ -9,9 +9,7 @@ export class CommonService {
     baseUrlEvent: string = 'http://localhost:4000/api/events';
     baseUrlNews: string = 'http://localhost:4000/api/newsletters';
 
-
     constructor(private http: HttpClient) { }
-
 
     /* EVENTS */
     getEvents(): Observable<any> {
@@ -35,8 +33,12 @@ export class CommonService {
         return this.http.get<any>(this.baseUrlNews);
     }
 
-    createNews(news: any): Observable<any> {
-        return this.http.post<any>(this.baseUrlNews, news);
+    createNews(news: any, file: any): Observable<any> {
+        let formData = new FormData(); 
+        Object.keys(news).forEach(key => formData.append(key, news[key]));
+        formData.set('newsletterImage', file, file.name);
+
+        return this.http.post<any>(this.baseUrlNews, formData);
     }
 
     updateNews(id: number, news: any): Observable<any> {

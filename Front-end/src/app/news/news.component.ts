@@ -56,7 +56,7 @@ export class NewsComponent implements OnInit {
     addNews(): void {
         this.currentNews['creationDate'] = this.datePipe.transform(new Date(), 'yyyy-MM-dd');
 
-        this.commonService.createNews(this.currentNews).subscribe(data => {
+        this.commonService.createNews(this.currentNews, this.imagePath).subscribe(data => {
             this.loadNews();
         });
     }
@@ -78,5 +78,18 @@ export class NewsComponent implements OnInit {
         this.dialogService.open(
             dialog
         );
+    }
+
+    fileChangeEvent(fileInput: any) {
+        if (fileInput.target.files && fileInput.target.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = (e: any) => {
+                this.imageBase64 = e.target.result;
+            };
+
+            reader.readAsDataURL(fileInput.target.files[0]);
+            this.imagePath = fileInput.target.files[0];
+        }
     }
 }
