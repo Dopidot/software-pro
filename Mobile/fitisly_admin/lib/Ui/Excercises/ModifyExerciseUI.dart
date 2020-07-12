@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Exercise.dart';
 import 'package:fitislyadmin/Services/ExerciseService.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -39,7 +40,7 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
 
     return Scaffold(
         appBar: AppBar(
-          title: Text("Mon exercice"),
+          title: Text(Translations.of(context).text("title_exercise_detail")),
           centerTitle: true,
         ),
         body: Container(
@@ -60,7 +61,7 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
         builder: (context, snapshot) {
           if (snapshot.hasError){
             return Center(
-                child: Text("Probème de serveur, la page n'a pas pu être chargé")
+                child: Text(Translations.of(context).text("error_server"))
             );
           }
           return snapshot.hasData ? buildForm(snapshot.data) : Center(child: CircularProgressIndicator());
@@ -91,7 +92,7 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
       },
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Nom",
+          hintText: Translations.of(context).text("field_name"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
       validator: _validateField,
     );
@@ -105,7 +106,7 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
       validator: _validateField,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Description",
+          hintText: Translations.of(context).text("field_description"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -118,7 +119,7 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
       validator: _validateField,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-          hintText: "Nombre de répétition",
+          hintText: Translations.of(context).text("field_nb_repeate"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -131,7 +132,7 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
       validator: _validateField,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-          hintText: "Temps de récupération",
+          hintText: Translations.of(context).text("field_recup"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -144,12 +145,12 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
 
         child: MaterialButton(
           onPressed: _validateInput,
-          child: Text("Modifier"),
+          child: Text(Translations.of(context).text("btn_update")),
         )
     );
 
     RaisedButton cancelBtn = RaisedButton(
-      child: Text('Annuler'),
+      child: Text(Translations.of(context).text("btn_cancel")),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -222,7 +223,7 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
 
   String _validateField(String value){
     if(value.isEmpty){
-      return "Attention votre champs est vide";
+      return Translations.of(context).text("field_is_empty") ;
     }
     return null;
   }

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
-import 'package:fitislyadmin/ConstApiRoute.dart';
+import 'package:fitislyadmin/Util/ConstApiRoute.dart';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Newsletter.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as Storage;
 import 'package:image_downloader/image_downloader.dart';

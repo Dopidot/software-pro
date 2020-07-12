@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Event.dart';
 import 'package:fitislyadmin/Ui/Events/CreateEventSecondUI.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -31,14 +32,14 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Nouvel évènement"),
+        appBar: AppBar(title: Text(Translations.of(context).text("title_create_event")),
           centerTitle: true,),
         body: Container(
             padding: EdgeInsets.all(20.0),
             child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    Text("Informations sur l'évènement"),
+                    Text(Translations.of(context).text("subtitle_second_part_creation_event")),
                     Form(
                         autovalidate: _autoValidate,
                         key: _formKey,
@@ -59,7 +60,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       },
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Nom",
+          hintText: Translations.of(context).text("field_name"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
       validator: validateField,
     );
@@ -74,7 +75,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       validator: validateField,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
-          hintText: "Description de l'évènement",
+          hintText: Translations.of(context).text("field_description"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -93,7 +94,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       },
       format: format,
       decoration: InputDecoration(
-          hintText: "Début",
+          hintText: Translations.of(context).text("field_startDate"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -137,7 +138,20 @@ class _CreateEventScreen extends State<CreateEventScreen> {
 
         child: MaterialButton(
           onPressed: _validateInput,
-          child: Text("Suivant"),
+          child: Text(Translations.of(context).text("btn_next")),
+        )
+    );
+
+    final cancelButton = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.red,
+
+        child: MaterialButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text(Translations.of(context).text("btn_cancel")),
         )
     );
 
@@ -161,9 +175,19 @@ class _CreateEventScreen extends State<CreateEventScreen> {
 
           ),
 
-          Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: creationButton,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: creationButton,
+              ),
+
+              Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: cancelButton,
+              ),
+            ],
           ),
         ]
     );
@@ -191,7 +215,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
 
   String validateField(String value){
     if(value.isEmpty){
-      return "Attention votre champs est vide";
+      return Translations.of(context).text("field_is_empty");
     }
     return null;
   }

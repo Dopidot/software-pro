@@ -1,7 +1,9 @@
 import 'package:fitislyadmin/Model/Fitisly_Admin/Exercise.dart';
 import 'package:fitislyadmin/Services/ExerciseService.dart';
 import 'package:fitislyadmin/Ui/Excercises/ModifyExerciseUI.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'CreateExerciseUI.dart';
 
 class ExerciseListUI extends StatefulWidget{
@@ -17,20 +19,12 @@ class _ExerciseListUI extends State<ExerciseListUI>{
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: AppBar(
-        title: Text("Mes exercices", style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
-        centerTitle: true,
-      ),
       body: futureBuilderExercise(),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
@@ -40,7 +34,7 @@ class _ExerciseListUI extends State<ExerciseListUI>{
           })).then((value) {
             if(value != null){
               updateUi();
-              _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("L'exercice a été ajouté")));
+              _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("add_exercise"))));
             }
           });
         },
@@ -55,7 +49,7 @@ class _ExerciseListUI extends State<ExerciseListUI>{
         builder: (context, snapshot) {
           if (snapshot.hasError){
             return Center(
-                child: Text("Probème de serveur, la page n'a pas pu être chargé")
+                child: Text(Translations.of(context).text("error_server"))
             );
           }
           return snapshot.hasData ? buildUI(snapshot.data) : Center(child: CircularProgressIndicator());
@@ -65,54 +59,7 @@ class _ExerciseListUI extends State<ExerciseListUI>{
 
 
   Widget buildUI(List<Exercise> exercises) {
-    return exercises.isEmpty ? Center(child: Text("Aucun exercice, veuillez en ajouter svp")) : buildListView(exercises);
-  }
-
-  Widget buildListView(List<Exercise> exercises){
-    return ListView.builder(
-        itemCount: exercises.length,
-        itemBuilder: (context, index) {
-          return Dismissible(
-            key: Key(exercises[index].id),
-            background: Container(
-              color: Colors.red,
-              child: Icon(Icons.cancel),
-            ),
-            onDismissed: (direction) {
-              delete(index,exercises);
-            },
-            child: Card(
-              elevation: 15,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.accessibility, size: 50),
-                    title: Text(exercises[index].name),
-                    subtitle: Text(exercises[index].description),
-                    onTap: () {
-
-                      Navigator.push(context,MaterialPageRoute(
-                          builder: (context) {
-                            return ModifyExerciseUI();
-                          },
-                          settings: RouteSettings(
-                            arguments: exercises[index].id,
-                          )),
-                      );
-
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-    );
+    return exercises.isEmpty ? Center(child: Text(Translations.of(context).text("no_exercise"))) : buildListView(exercises);
   }
 
 
@@ -132,9 +79,66 @@ class _ExerciseListUI extends State<ExerciseListUI>{
       setState(() {
         exercises.removeAt(index);
       });
-      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("L'exercice a été supprimé")));
+      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("exercise_delete"))));
     }
   }
+
+
+  Widget buildListView(List<Exercise> exercises){
+    return AnimationLimiter(
+      child: ListView.builder(
+        itemCount: exercises.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Dismissible(
+            key: Key(exercises[index].id),
+            background: Container(
+              color: Colors.red,
+              child: Icon(Icons.cancel),
+            ),
+            onDismissed: (direction) {
+              delete(index,exercises);
+            },
+            child: AnimationConfiguration.staggeredList(
+              position: index,
+              duration: const Duration(milliseconds: 450),
+              child: SlideAnimation(
+                horizontalOffset: 50.0,
+                child: FadeInAnimation(
+                  child:Card(
+                    elevation: 15,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        ListTile(
+                          leading: Icon(Icons.accessibility, size: 50),
+                          title: Text(exercises[index].name),
+                          subtitle: Text(exercises[index].description),
+                          onTap: () {
+                            Navigator.push(context,MaterialPageRoute(
+                                builder: (context) {
+                                  return ModifyExerciseUI();
+                                },
+                                settings: RouteSettings(
+                                  arguments: exercises[index].id,
+                                )),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
 
 }
 

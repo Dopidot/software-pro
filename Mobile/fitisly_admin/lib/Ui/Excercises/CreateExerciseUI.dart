@@ -1,8 +1,9 @@
 import 'dart:io';
 
-import 'package:fitislyadmin/ConstApiRoute.dart';
+import 'package:fitislyadmin/Util/ConstApiRoute.dart';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Exercise.dart';
 import 'package:fitislyadmin/Services/ExerciseService.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -33,7 +34,7 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
     return Scaffold(
       key: _scaffoldKey,
         appBar: AppBar(
-          title: Text("Nouveau exercice"),
+          title: Text(Translations.of(context).text("title_create_exo")),
           centerTitle: true,
         ),
         body: Container(
@@ -82,7 +83,7 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
       },
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Nom",
+          hintText: Translations.of(context).text("field_name"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
       validator: _validateField,
     );
@@ -95,7 +96,7 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
       validator: _validateField,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
-          hintText: "Description",
+          hintText: Translations.of(context).text("field_description"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -107,7 +108,7 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
       validator: _validateField,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-          hintText: "Nombre de répétition",
+          hintText: Translations.of(context).text("field_nb_repeate"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
@@ -119,13 +120,13 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
       validator: _validateField,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-          hintText: "Temps de récupération",
+          hintText: Translations.of(context).text("field_recup"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
 
     );
 
     RaisedButton cancelBtn = RaisedButton(
-      child: Text('Annuler'),
+      child: Text(Translations.of(context).text("btn_cancel")),
       onPressed: () {
         Navigator.pop(context);
       },
@@ -142,7 +143,7 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
 
         child: MaterialButton(
           onPressed: _validateInput,
-          child: Text("Créer"),
+          child: Text(Translations.of(context).text("btn_Create")),
         )
     );
 
@@ -214,7 +215,7 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
 
   String _validateField(String value){
     if(value.isEmpty){
-      return "Attention votre champs est vide";
+      return Translations.of(context).text("field_is_empty");
     }
     return null;
   }

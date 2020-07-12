@@ -1,91 +1,142 @@
+import 'dart:async';
+import 'package:fitislyadmin/Model/Fitisly_Admin/Gym.dart';
+import 'package:fitislyadmin/Services/GymService.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
+import 'package:permission_handler/permission_handler.dart' as PermissionHandler;
+
 
 class ItinaryUI extends StatefulWidget {
+
+  String gymId;
+  ItinaryUI({Key key, @required this.gymId}) : super(key: key);
+
   @override
   State<ItinaryUI> createState() => _ItinaryUI();
 }
 
 class _ItinaryUI extends State<ItinaryUI> {
 
-  GoogleMapController mapController;
-  double _originLatitude = 6.5212402, _originLongitude = 3.3679965;
-  double _destLatitude = 6.849660, _destLongitude = 3.648190;
-  Map<MarkerId, Marker> markers = {};
-  Map<PolylineId, Polyline> polylines = {};
-  List<LatLng> polylineCoordinates = [];
-  PolylinePoints polylinePoints = PolylinePoints();
+  GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
+  GymService service = GymService();
   String googleAPiKey = "AIzaSyBVmFs4d8-gPsosPci2Zx5rRwQ5GyxdFrk";
+  CameraPosition _cameraPosition = CameraPosition(target: LatLng(0,0),zoom: 14);
+  Completer<GoogleMapController> _controller = Completer();
 
   @override
   void initState() {
+    _askForLocationPermission();
     super.initState();
-
-    /// origin marker
-    _addMarker(LatLng(_originLatitude, _originLongitude), "origin",
-        BitmapDescriptor.defaultMarker);
-
-    /// destination marker
-    _addMarker(LatLng(_destLatitude, _destLongitude), "destination",
-        BitmapDescriptor.defaultMarkerWithHue(90));
-    _getPolyline();
   }
+
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-          body: GoogleMap(
-            initialCameraPosition: CameraPosition(
-                target: LatLng(_originLatitude, _originLongitude), zoom: 15),
-            myLocationEnabled: true,
-            tiltGesturesEnabled: true,
-            compassEnabled: true,
-            scrollGesturesEnabled: true,
-            zoomGesturesEnabled: true,
-            onMapCreated: _onMapCreated,
-            markers: Set<Marker>.of(markers.values),
-            polylines: Set<Polyline>.of(polylines.values),
-          )
-      ),
-    );
+
+    return Scaffold(
+      key: _globalKey,
+        appBar: AppBar(
+          title: Text("Map"),
+          centerTitle: true
+        ),
+         // body:buildFutureNewsletter()
+      body: FutureBuilder(
+          future: setMapDisplay(),
+          builder: (context, AsyncSnapshot snapshot) {
+            if(snapshot.hasError){
+              throw snapshot.error;
+            }
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              return GoogleMap(
+                  initialCameraPosition: snapshot.data["cameraPosition"],
+                  mapType: MapType.normal,
+                  onMapCreated: (GoogleMapController controller) {
+                    _controller.complete(controller);
+                  },
+                  markers: snapshot.data["markers"]);
+            }
+          }),
+      );
   }
 
-  void _onMapCreated(GoogleMapController controller) async {
-    mapController = controller;
+
+  Future<Marker> gymToMarker(Gym gym) async {
+    var addressComplete = "${gym.address} ${gym.zipCode} ${gym.city} ${gym.country}";
+
+    Marker output = await Geocoder.local
+        .findAddressesFromQuery(addressComplete)
+        .then((values) => Marker(
+        markerId: MarkerId(gym.id.toString()),
+        position: LatLng(values.first.coordinates.latitude,
+            values.first.coordinates.longitude),
+        infoWindow: InfoWindow(title: gym.name),
+        onTap: () => {
+         /* Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => DetailEventPage(
+                    event: event, token: token, volunteer: volunteer,)))*/
+
+        }));
+
+    return output;
   }
 
-  _addMarker(LatLng position, String id, BitmapDescriptor descriptor) {
-    MarkerId markerId = MarkerId(id);
-    Marker marker =
-    Marker(markerId: markerId, icon: descriptor, position: position);
-    markers[markerId] = marker;
+  Future<Map<String, Object>> setMapDisplay() async {
+
+    Gym gym = await service.getGymById(widget.gymId);
+    Set<Marker> markers = new Set<Marker>();
+
+      Marker marker = await gymToMarker(gym);
+      markers.add((marker));
+
+    CameraPosition cameraPosition = await getUsersCameraPosition();
+    Map<String, Object> output = Map<String, Object>();
+    output.addEntries([
+      MapEntry("cameraPosition", cameraPosition),
+      MapEntry("markers", markers)
+    ]);
+    return output;
   }
 
-  _addPolyLine() {
-    PolylineId id = PolylineId("poly");
-    Polyline polyline = Polyline(
-        polylineId: id, color: Colors.red, points: polylineCoordinates);
-    polylines[id] = polyline;
-    setState(() {});
+
+  void _askForLocationPermission() async {
+
+    Map<PermissionHandler.Permission,PermissionHandler.PermissionStatus> permissions;
+    permissions = await [
+      PermissionHandler.Permission.location
+    ].request();
   }
 
-  _getPolyline() async {
-    var Constants = "AIzaSyBVmFs4d8-gPsosPci2Zx5rRwQ5GyxdFrk";
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        googleAPiKey,
-        PointLatLng(_originLatitude, _originLongitude),
-        PointLatLng(_destLatitude, _destLongitude),
-        travelMode: TravelMode.driving,
-        wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")]
-    );
-    if (result.points.isNotEmpty) {
-      result.points.forEach((PointLatLng point) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      });
+
+  Future<CameraPosition> getUsersCameraPosition() async {
+    var location = new Location();
+    Gym gym = await service.getGymById(widget.gymId);
+    var addressComplete = "${gym.address} ${gym.zipCode} ${gym.city} ${gym.country}";
+
+    var addressWithCoordinate = await Geocoder.local.findAddressesFromQuery(addressComplete);
+
+
+    try {
+      var currentLocation = await location.getLocation();
+      return new CameraPosition(
+          target: LatLng(addressWithCoordinate.first.coordinates.latitude, addressWithCoordinate.first.coordinates.longitude),
+          zoom: 15);
+    } catch (e) {
+      return new CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 15);
     }
-    _addPolyLine();
   }
+  
+
+  
+
 }
+
+
 

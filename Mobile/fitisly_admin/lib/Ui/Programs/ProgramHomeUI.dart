@@ -5,7 +5,9 @@ import 'package:fitislyadmin/Ui/Home/LoginScreenUI.dart';
 import 'package:fitislyadmin/Ui/Programs/CreateProgramUI.dart';
 import 'package:fitislyadmin/Ui/Programs/ModifyProgramUI.dart';
 import 'package:fitislyadmin/Ui/User/UserScreenSettingUI.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class ProgramHomeScreen extends StatefulWidget {
   @override
@@ -20,12 +22,10 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      appBar: buildAppBar(),
       body:buildFutureProgram(),
       floatingActionButton: FloatingActionButton(
           child:Icon(Icons.add),
@@ -43,34 +43,7 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
     );
   }
 
-  Widget buildAppBar(){
-    return AppBar(
-        title: Text("Mes programmes",style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.account_circle,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => UserScreenSetting()),
-                    (Route<dynamic> route) => true,
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.power_settings_new,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              logOut();
-            },
-          ),
 
-        ],
-        centerTitle: true);
-  }
 
 
 
@@ -89,54 +62,63 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
 
 
   Widget buildList(List<Program> programs ){
-    return programs.isEmpty ? Center(child: Text("Veuillez ajouter des programmes svp")) : buildListView(programs);
+    return programs.isEmpty ? Center(child: Text(Translations.of(context).text("no_program"))) : buildListView(programs);
   }
 
+  Widget buildListView(List<Program> programs) {
+    return AnimationLimiter(
+      child: ListView.builder(
+        itemCount: programs.length,
+        itemBuilder: (BuildContext context, int index) {
+          return AnimationConfiguration.staggeredList(
+              position: index,
+              duration: const Duration(milliseconds: 375),
+              child: SlideAnimation(
+                verticalOffset: 50.0,
+                child: FadeInAnimation(
+                  child: Dismissible(
+                    key: Key(programs[index].id),
+                    //confirmDismiss: ,
+                    background: Container(
+                      color: Colors.red,
+                      child: Icon(Icons.cancel),
+                    ),
+                    onDismissed: (direction) {
+                      delete(index,programs);
+                    },
+                    child: Padding(
+                      padding:
+                      const EdgeInsets.symmetric(vertical: 0.0, horizontal: 4.0),
+                      child: Card(
+                        child: ListTile(
+                          onTap: () {
+                            Navigator.push(context,MaterialPageRoute(
+                                builder: (context) {
+                                  return ModifyProgramUI(programId : programs[index].id);
+                                })
+                            )
+                                .then((value) {
 
-  Widget buildListView(List<Program> programs){
-    return ListView.builder(
-        itemCount: programs.length
-        , itemBuilder: (context,index) {
-      return Dismissible(
-        key: Key(programs[index].id),
-        //confirmDismiss: ,
-        background: Container(
-          color: Colors.red,
-          child: Icon(Icons.cancel),
-        ),
-        onDismissed: (direction) {
-          delete(index,programs);
+                              if(value != null){
+                                setState(() {
+                                  programs[index] = value;
+                                });
+                                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Programme modifié ! ")));
+                              }
+                            });
+                          },
+
+                          title: Text(programs[index].name),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+          );
         },
-        child: Padding(
-          padding:
-          const EdgeInsets.symmetric(vertical: 0.0, horizontal: 4.0),
-          child: Card(
-            child: ListTile(
-              onTap: () {
-                Navigator.push(context,MaterialPageRoute(
-                    builder: (context) {
-                      return ModifyProgramUI(programId : programs[index].id);
-                    })
-                )
-                    .then((value) {
-
-                  if(value != null){
-                    setState(() {
-                      programs[index] = value;
-                    });
-                    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Programme modifié ! ")));
-                  }
-
-
-                });
-              },
-
-              title: Text(programs[index].name),
-            ),
-          ),
-        ),
-      );
-    });
+      ),
+    );
   }
 
   Future<void> logOut() async {
@@ -169,7 +151,7 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
         prog.removeAt(index);
       });
     }
-    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Le programme a été supprimé")));
+    _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("delete_program"))));
   }
 
 

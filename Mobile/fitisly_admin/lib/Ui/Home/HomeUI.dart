@@ -1,15 +1,19 @@
 import 'package:fitislyadmin/Services/ApiFitisly/UserSportService.dart';
 import 'package:fitislyadmin/Services/HttpServices.dart';
+import 'package:fitislyadmin/Ui/Coach/CoachListUI.dart';
 import 'package:fitislyadmin/Ui/Events/HomeEventUI.dart';
 import 'package:fitislyadmin/Ui/Excercises/HomePageExcerciseListUI.dart';
 import 'package:fitislyadmin/Ui/Gym/GymHomeUI.dart';
 import 'package:fitislyadmin/Ui/Home/LoginScreenUI.dart';
 import 'package:fitislyadmin/Ui/Newsletter/NewsLetterListUI.dart';
 import 'package:fitislyadmin/Ui/Programs/ProgramHomeUI.dart';
+import 'package:fitislyadmin/Ui/StatisticUI.dart';
+import 'package:fitislyadmin/Ui/TabBarApplicationUI.dart';
 import 'package:fitislyadmin/Ui/User/UserScreenSettingUI.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_sparkline/flutter_sparkline.dart';
+import 'package:route_transitions/route_transitions.dart';
 
 
 class HomeScreenPage extends StatefulWidget
@@ -27,28 +31,16 @@ class _HomeScreen extends State<HomeScreenPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     initNumberUser();
     super.initState();
   }
-
-
-  final List<List<double>> data  =
-  [
-    [0.0, 0.3, 0.7, 0.6, 0.55, 0.8, 1.2, 1.3, 1.35, 0.9, 1.5, 1.7, 1.8, 1.7, 1.2, 0.8, 1.9, 2.0, 2.2, 1.9, 2.2, 2.1, 2.0, 2.3, 2.4, 2.45, 2.6, 3.6, 2.6, 2.7, 2.9, 2.8, 3.4],
-    [0.0, 0.3, 0.7, 0.6, 0.55, 0.8, 1.2, 1.3, 1.35, 0.9, 1.5, 1.7, 1.8, 1.7, 1.2, 0.8, 1.9, 2.0, 2.2, 1.9, 2.2, 2.1, 2.0, 2.3, 2.4, 2.45, 2.6, 3.6, 2.6, 2.7, 2.9, 2.8, 3.4, 0.0, 0.3, 0.7, 0.6, 0.55, 0.8, 1.2, 1.3, 1.35, 0.9, 1.5, 1.7, 1.8, 1.7, 1.2, 0.8, 1.9, 2.0, 2.2, 1.9, 2.2, 2.1, 2.0, 2.3, 2.4, 2.45, 2.6, 3.6, 2.6, 2.7, 2.9, 2.8, 3.4,],
-  ];
-
-  static final List<String> chartDropdownItems = [ 'Les programmes', 'Les utilisateurs'];
-  String actualDropdown = chartDropdownItems[0];
-  int actualChart = 0;
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Accueil", style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
+          title: Text(Translations.of(context).text("title_home"), style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
           centerTitle: true,
           actions: <Widget>[
             IconButton(
@@ -57,7 +49,10 @@ class _HomeScreen extends State<HomeScreenPage> {
                 color: Colors.white,
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => UserScreenSetting())
+                Navigator.push(context, PageRouteTransition(
+                  animationType: AnimationType.slide_down,
+                  builder: (context) => UserScreenSetting(),
+                )
                 );
               },
             ),
@@ -90,7 +85,7 @@ class _HomeScreen extends State<HomeScreenPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('Total des utilisateurs', style: TextStyle(color: Colors.blueAccent)),
+                          Text(Translations.of(context).text("title_number_user"), style: TextStyle(color: Colors.blueAccent)),
                           Text(nbUser.toString() , style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 34.0))
                         ],
                       ),
@@ -108,61 +103,52 @@ class _HomeScreen extends State<HomeScreenPage> {
                     ]
                 ),
               ),
+              onTap: (){
+
+                Navigator.push(context,PageRouteTransition(
+                  animationType: AnimationType.scale,
+                  builder: (context) => StatisticUI(),
+                ));
+
+              /*  Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
+                  return StatisticUI();
+                })
+                );    */
+              }
             ),
             _buildTile(
-              Padding(
-                padding: const EdgeInsets.all(24.0),
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+
+                            Padding(padding: EdgeInsets.only(bottom: 1.0)),
+                            Text(Translations.of(context).text("title_application_home_case"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                            Text(Translations.of(context).text("subtitle_application_case_program"), style: TextStyle(color: Colors.black45)),
+                            Text(Translations.of(context).text("subtitle_application_case_exercise"), style: TextStyle(color: Colors.black45)),
+
+                          ]
+                      ),
                       Material(
                           color: Colors.teal,
                           shape: CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
-                            child: Icon(Icons.settings_applications, color: Colors.white, size: 30.0),
+                            child: Icon(Icons.accessibility, color: Colors.white, size: 30.0),
                           )
                       ),
-                      Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                      Text("Application", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                      Text("Exercices", style: TextStyle(color: Colors.black45)),
-                    ]
-                ),
-              ),
-                onTap: () {
-                  Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
-                    return ExerciseListUI();
-                  })
-                  );
-
-                }
-            ),
-
-            _buildTile(
-                Padding(
-                  padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Material(
-                            color: Colors.teal,
-                            shape: CircleBorder(),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Icon(Icons.accessibility, color: Colors.white, size: 30.0),
-                            )
-                        ),
-                        Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                        Text("Application", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                        Text("Programme", style: TextStyle(color: Colors.black45)),
-                      ]
+                    ],
                   ),
                 ),
                 onTap: () {
                   Navigator.push(context,MaterialPageRoute(builder: (BuildContext context) {
-                    return ProgramHomeScreen();
+                    return TabBarApplicationUI();
                   })
                   );
 
@@ -186,7 +172,8 @@ class _HomeScreen extends State<HomeScreenPage> {
                           )
                       ),
                       Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                      Text('Mes newletters', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                      Text(Translations.of(context).text('title_application_news'), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                      Text(Translations.of(context).text('subtitle_application_case_gym'), style: TextStyle(color: Colors.black45)),
 
                     ]
                 ),
@@ -216,8 +203,8 @@ class _HomeScreen extends State<HomeScreenPage> {
                             )
                         ),
                         Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                        Text("Les salles de sport", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                        Text("Référencement", style: TextStyle(color: Colors.black45)),
+                        Text(Translations.of(context).text('title_application_home_gym'), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                        Text(Translations.of(context).text('subtitle_application_case_gym'), style: TextStyle(color: Colors.black45)),
                       ]
                   ),
                 ),
@@ -237,8 +224,8 @@ class _HomeScreen extends State<HomeScreenPage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text('Mes Évènements', style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                          Text('Gestion des évènements', style: TextStyle(color: Colors.redAccent))
+                          Text(Translations.of(context).text('title_application_home_event'), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                          Text(Translations.of(context).text('subtitle_application_case_event'), style: TextStyle(color: Colors.redAccent))
                         ],
                       ),
                       Material(
@@ -265,30 +252,41 @@ class _HomeScreen extends State<HomeScreenPage> {
             _buildTile(
                 Padding(
                   padding: const EdgeInsets.all(24.0),
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Material(
-                            color: Colors.teal,
-                            shape: CircleBorder(),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Icon(Icons.account_box, color: Colors.white, size: 30.0),
-                            )
-                        ),
-                        Padding(padding: EdgeInsets.only(bottom: 1.0)),
-                        Text("Les coachs", style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                        Text("Information sur les coachs sportifs", style: TextStyle(color: Colors.black45)),
-                      ]
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Padding(padding: EdgeInsets.only(bottom: 1.0)),
+                            Text(Translations.of(context).text("title_application_home_coach"), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
+                            Text(Translations.of(context).text("subtitle_application_case_coach"), style: TextStyle(color: Colors.black45)),
+                          ]
+                      ),
+                      Material(
+                          color: Colors.teal,
+                          shape: CircleBorder(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Icon(Icons.account_box, color: Colors.white, size: 30.0),
+                          )
+                      ),
+                    ],
                   ),
                 ),
+              onTap: (){
+                  Navigator.push(context, PageRouteTransition(
+                    animationType: AnimationType.fade,
+                    builder: (context) => CoachListUI(),
+                  ));
+              }
             ),
           ],
           staggeredTiles: [
             StaggeredTile.fit(2),
-            StaggeredTile.fit(1),
-            StaggeredTile.fit(1),
+            StaggeredTile.fit(2),
             StaggeredTile.fit(1),
             StaggeredTile.fit(1),
             StaggeredTile.fit(2),
@@ -331,4 +329,6 @@ class _HomeScreen extends State<HomeScreenPage> {
       });
     });
   }
+
+
 }

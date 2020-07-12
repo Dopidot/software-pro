@@ -3,8 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Gym.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as Storage;
 import 'package:http_parser/http_parser.dart';
+import 'package:image_downloader/image_downloader.dart';
 import 'package:mime/mime.dart';
-import 'package:fitislyadmin/ConstApiRoute.dart';
+import 'package:fitislyadmin/Util/ConstApiRoute.dart';
 import 'package:http/http.dart' as http;
 
 
@@ -74,13 +75,23 @@ class GymService{
 
   Future<bool> updateGym(Gym gym) async {
     String token = await getToken();
-
+    var multiPart;
+    var mimeTypeData;
     Map<String, String> headers = {
       "Content-Type": "multipart/form-data",
       "Authorization": "Baerer " + token,
     };
-    final mimeTypeData = lookupMimeType(
-        gym.gymImage, headerBytes: [0xFF, 0xD8]).split('/');
+
+    if(gym.gymImage.contains("uploads")){
+      var url = "http://www.localhost:4000/"+gym.gymImage;
+      var imageId = await ImageDownloader.downloadImage(url);
+      mimeTypeData = await ImageDownloader.findMimeType(imageId);
+      var path = await ImageDownloader.findPath(imageId);
+      multiPart = await MultipartFile.fromFile(path, filename:path.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
+    }else{
+      mimeTypeData = lookupMimeType(gym.gymImage, headerBytes: [0xFF, 0xD8]).split('/');
+      multiPart = await MultipartFile.fromFile(gym.gymImage, filename:gym.gymImage.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
+    }
 
     var formData = FormData.fromMap({
       'name': gym.name,
@@ -88,11 +99,7 @@ class GymService{
       'zipCode': gym.zipCode,
       'city': gym.city,
       'country': gym.country,
-      "gymImage": await MultipartFile.fromFile(gym.gymImage,
-          filename: gym.gymImage
-              .split("/")
-              .last,
-          contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
+      "gymImage": multiPart,
     });
 
     var response = await dio.put(
@@ -133,12 +140,11 @@ class GymService{
     if (response.statusCode == 200) {
       return getAllGyms(response.body);
     }
-
     throw Exception("Not find gyms");
   }
 
   List<Gym> getAllGyms(String responseBody) {
-    final parsed = jsonDecode(responseBody);
+    final parsed = json.decode(responseBody);
 
     return parsed.map<Gym>((json) => Gym.fromJson(json)).toList();
   }
