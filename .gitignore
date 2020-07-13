@@ -1,10 +1,9 @@
+
 # Ignoring directories
 # Both the directory itself and its contents will be ignored.
-Back-end/
-Front-end/
+Back-end/uploads/*
 .DS_Store
 /*.xcconfig
 /*.pbxproj
 *.lock
 *.json
-
