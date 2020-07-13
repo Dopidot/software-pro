@@ -2,9 +2,9 @@
  * author : Guillaume Tako
  */
 
-import multer from "multer";
-import {Request} from "express";
-import * as path from "path";
+import multer from 'multer';
+import { Request } from 'express';
+import { extname } from 'path';
 
 const storage = multer.diskStorage({
     destination: function (req: Request, file, cb) {
@@ -17,10 +17,10 @@ const storage = multer.diskStorage({
 
 function checkFileType(file: Express.Multer.File, callback: multer.FileFilterCallback) {
     const filetypes = /jpeg|jpg|png|gif/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+    const extensionname = filetypes.test(extname(file.originalname).toLowerCase());
     const mimetype = filetypes.test(file.mimetype);
 
-    if (mimetype && extname) {
+    if (mimetype && extensionname) {
         return callback(null, true);
     } else {
         return callback(null, false);

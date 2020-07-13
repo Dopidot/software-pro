@@ -8,6 +8,7 @@ import swaggerDocument from '../swagger.json';
 
 const router = Router();
 
+// SWAGGER
 router.use('/swagger', swaggerUi.serve);
 router.get('/swagger', swaggerUi.setup(swaggerDocument));
 

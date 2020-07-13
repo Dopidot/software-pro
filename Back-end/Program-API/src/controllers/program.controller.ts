@@ -5,8 +5,8 @@
 import { Request, Response} from 'express';
 import { QueryResult } from 'pg';
 import { query } from '../database';
-import fs from "fs";
-import ProgramModel from "../models/program.model";
+import { unlink } from 'fs';
+import ProgramModel from '../models/program.model';
 import { removeLastDirectoryFromCWDPath } from '../core/StringUtils';
 
 export default class ProgramController {
@@ -16,7 +16,6 @@ export default class ProgramController {
     getPrograms = async function(req: Request, res: Response): Promise<Response> {
         try {
             const response: QueryResult = await query('SELECT * FROM programs', undefined);
-            console.log(response);
             const program_list: ProgramModel[] = [];
             if (response.rowCount !== 0) {
                 for (let i = 0; i < response.rowCount; i++) {
@@ -60,7 +59,7 @@ export default class ProgramController {
                 });
             }
         } catch (e) {
-            console.log(e);
+            console.error(e);
             return res.status(500).json({
                 message : 'Internal Server Error',
                 error : e.message
@@ -75,9 +74,8 @@ export default class ProgramController {
             const exercises: string = req.body.exercises;
             let programImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
 
-            //let response: QueryResult;
             if ( programImage === undefined) {
-                await query('INSERT INTO programs (name, description) VALUES ($1, $2)', [name, description]);
+                await query('\nINSERT INTO programs (name, description) VALUES ($1, $2)', [name, description]);
             } else {
                 programImage = programImage?.substr(3);
                 await query('INSERT INTO programs (name, description, programimage) VALUES ($1, $2, $3)', [name, description, programImage]);
@@ -86,7 +84,7 @@ export default class ProgramController {
             let program_id : QueryResult = await query('SELECT id FROM programs ORDER BY id DESC LIMIT 1', undefined);
 
             if (exercises !== undefined ) {
-                const ids: string[] = exercises.split(",");
+                const ids: string[] = exercises.split(',');
                 for (const id_exo of ids) {
                     const id = BigInt(id_exo);
                     await query('INSERT INTO junction_program_exercise (idprogram, idexercise) VALUES($1, $2);', [program_id.rows[0].id, id]);
@@ -110,7 +108,7 @@ export default class ProgramController {
                 }
             });
         } catch (e) {
-            console.log(e);
+            console.error(e);
             return res.status(500).json({
                 message : 'Internal Server Error',
                 error : e.message
@@ -134,7 +132,7 @@ export default class ProgramController {
                 if (response.rowCount !== 0) {
                     if (response.rows[0].programimage !== undefined ) {
                         if ( response.rows[0].programimage !== null) {
-                            fs.unlink(removeLastDirectoryFromCWDPath(process.cwd()) + '/' + response.rows[0].programimage, err => {
+                            unlink(removeLastDirectoryFromCWDPath(process.cwd()) + '/' + response.rows[0].programimage, err => {
                                 if (err) {
                                     console.log('programimage : ', response.rows[0].programimage);
                                     console.error(err);
@@ -154,7 +152,7 @@ export default class ProgramController {
 
             await query('DELETE FROM junction_program_exercise WHERE idprogram = $1', [id]);
             if (exercises !== undefined ) {
-                const ids: string[] = exercises.split(",");
+                const ids: string[] = exercises.split(',');
                 for ( const id_exo of ids) {
                     const id_exercice = BigInt(id_exo);
                     await query('INSERT INTO junction_program_exercise (idprogram, idexercise) VALUES($1, $2);', [id, id_exercice]);
@@ -183,7 +181,7 @@ export default class ProgramController {
                 });
             }
         } catch (e)  {
-            console.log(e);
+            console.error(e);
             return res.status(500).json({
                 message : 'Internal Server Error',
                 error : e.message
@@ -197,7 +195,7 @@ export default class ProgramController {
             const response: QueryResult = await query('SELECT programimage FROM programs WHERE id = $1', [id]);
             if (response.rowCount !== 0) {
                 if (response.rows[0].programimage !== undefined && response.rows[0].programimage) {
-                    fs.unlink(removeLastDirectoryFromCWDPath(process.cwd()) + '/' + response.rows[0].programimage, err => {
+                    unlink(removeLastDirectoryFromCWDPath(process.cwd()) + '/' + response.rows[0].programimage, err => {
                         if (err) {
                             console.log('programimage :', response.rows[0].programimage);
                             console.error(err);
@@ -215,7 +213,7 @@ export default class ProgramController {
             }
 
         } catch (e) {
-            console.log(e);
+            console.error(e);
             return res.status(500).json({
                 message : 'Internal Server Error',
                 error : e.message

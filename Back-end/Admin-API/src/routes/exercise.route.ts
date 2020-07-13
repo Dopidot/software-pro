@@ -2,15 +2,15 @@
  * author : Guillaume Tako
  */
 
-import {Router} from "express";
-import ExerciseController from "../controllers/exercise.controller";
-import { verifyToken } from "../core/JWT";
-import { upload } from "../core/Multer";
+import {Router} from 'express';
+import ExerciseController from '../controllers/exercise.controller';
+import { verifyToken } from '../core/JWT';
+import { upload } from '../core/Multer';
 
 const router = Router();
 const exerciseController = new ExerciseController();
 
-//EXERCISES
+// EXERCISES
 router.get('', verifyToken, exerciseController.getExercises );
 router.get('/:id', verifyToken, exerciseController.getExerciseById);
 router.post('', verifyToken, upload.single('exerciseImage'), exerciseController.createExercise);

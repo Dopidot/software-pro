@@ -2,10 +2,10 @@
  * author : Guillaume Tako
  */
 
-import { Router } from "express";
-import EventController from "../controllers/event.controller";
-import { verifyToken } from "../core/JWT";
-import { upload } from "../core/Multer";
+import { Router } from 'express';
+import EventController from '../controllers/event.controller';
+import { verifyToken } from '../core/JWT';
+import { upload } from '../core/Multer';
 
 const router = Router();
 const eventController = new EventController();
