@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:fitislyadmin/Util/ConstApiRoute.dart';
-import 'package:fitislyadmin/model/Api_Fitisly/CoachFitisly.dart';
+import 'package:fitislyadmin/Model/Api_Fitisly/CoachFitisly.dart';
 import 'package:http/http.dart' as http;
 
 class CoachServiceApiFitisly {

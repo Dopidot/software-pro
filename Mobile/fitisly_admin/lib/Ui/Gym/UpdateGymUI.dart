@@ -136,6 +136,7 @@ class _UpdateGymUI extends State<UpdateGymUI>{
         width: 175,
 
         child:Card(
+
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           child: Center(
@@ -144,7 +145,7 @@ class _UpdateGymUI extends State<UpdateGymUI>{
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),
-          elevation: 5,
+          elevation: 15,
           margin: EdgeInsets.all(10),
         )
     );

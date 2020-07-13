@@ -17,10 +17,6 @@ class EventService {
   final storage = Storage.FlutterSecureStorage();
   final dio = Dio();
 
-
-
-
-
   Future<bool> createEvent(Event event) async {
     String token = await getToken();
 

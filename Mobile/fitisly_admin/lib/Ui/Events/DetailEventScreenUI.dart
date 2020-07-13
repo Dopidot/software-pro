@@ -191,6 +191,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
         width: 175,
 
         child:Card(
+
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           child: Center(
@@ -199,7 +200,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30.0),
           ),
-          elevation: 5,
+          elevation: 15,
           margin: EdgeInsets.all(10),
         )
     );
