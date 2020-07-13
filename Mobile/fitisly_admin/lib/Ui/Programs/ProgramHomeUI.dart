@@ -45,9 +45,6 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
   }
 
 
-
-
-
   FutureBuilder<List<Program>> buildFutureProgram() {
     return FutureBuilder<List<Program>>(
       future: services.getAllPrograms(),
@@ -91,6 +88,10 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
                       padding:
                       const EdgeInsets.symmetric(vertical: 0.0, horizontal: 4.0),
                       child: Card(
+                        elevation: 15,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
                         child: ListTile(
                           onTap: () {
                             Navigator.push(context,MaterialPageRoute(
@@ -108,7 +109,6 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
                               }
                             });
                           },
-
                           title: Text(programs[index].name),
                         ),
                       ),

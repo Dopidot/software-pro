@@ -23,10 +23,16 @@ class CoachService {
       "isHighlighted":true
     };
 
-    var response = await http.post(ConstApiRoute.creatCoach,
-        headers: headers, body: json.encode(coachID));
+    var coachApi = await getCoachById(id);
 
-    return response.statusCode == 201;
+    if(coachApi == null){
+      var response = await http.post(ConstApiRoute.creatCoach, headers: headers, body: json.encode(coachID));
+
+      return response.statusCode == 201;
+    }
+    return true;
+
+
   }
 
   Future<bool> deleteCoachById(String id) async {
@@ -37,13 +43,19 @@ class CoachService {
       "Authorization": "Baerer " + token,
     };
 
-    var response =
-        await http.delete(ConstApiRoute.deleteCoachById + id, headers: headers);
+    var coachApi = await getCoachById(id);
 
-    return response.statusCode == 200;
+    if(coachApi != null){
+      var response = await http.delete(ConstApiRoute.deleteCoachById + coachApi.id, headers: headers);
+      return response.statusCode == 200;
+    }
+
+
+return false;
+
   }
 
-  Future<bool> getCoachById(String id) async {
+  Future<CoachApi> getCoachById(String id) async {
     String token = await getToken();
 
     Map<String, String> headers = {
@@ -59,14 +71,28 @@ class CoachService {
     for(CoachApi coach in listCoachs){
 
       if(coach.coachId == id){
-        return true;
+        return coach;
       }
     }
-    return false;
+    return null;
   }
 
   Future<String> getToken() async {
     var token = await storage.read(key: "token");
     return token;
+  }
+
+
+
+  List<String> getFollowers(List<dynamic> jsonList){
+
+    List<String> followers = List<String>();
+    for(var i in jsonList){
+
+      if(i!= null){
+        followers.add(i["account_id"]);
+      }
+    }
+    return followers;
   }
 }

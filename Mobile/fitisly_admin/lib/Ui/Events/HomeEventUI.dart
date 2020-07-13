@@ -85,6 +85,10 @@ class _HomeEventScreen extends State<HomeEventScreen> {
                         padding: const EdgeInsets.symmetric(
                             vertical: 0.0, horizontal: 4.0),
                         child: Card(
+                          elevation: 15,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                          ),
                           child: ListTile(
                             onTap: () {
                               Navigator.push(context,
