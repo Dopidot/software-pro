@@ -5,12 +5,11 @@
  */
 
 import { Component, OnInit } from '@angular/core';
-import { DayCellComponent } from '../pages/extra-components/calendar/day-cell/day-cell.component';
 import { FitislyService } from '../services/fitisly.service';
 import { MenuService } from '../services/menu.service';
 import { NbThemeService, NbColorHelper } from '@nebular/theme';
 import { DatePipe } from '@angular/common';
-import { ChartjsBarComponent } from '../pages/charts/chartjs/chartjs-bar.component';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'ngx-home',
@@ -19,46 +18,164 @@ import { ChartjsBarComponent } from '../pages/charts/chartjs/chartjs-bar.compone
 })
 export class HomeComponent implements OnInit {
 
-    chart1: ChartjsBarComponent;
+    menu = [];
     data: any;
     options: any = {};
     data2: any;
-    options2: any;
+    options2: any = {};
     themeSubscription: any;
-    genderDatasetMen = [];
-    genderDatasetWomen = [];
-
-    selectedEvent: any;
-    events: any;
-    menu = [];
-    users = [];
-    date = new Date();
-    currentDate = new Date();
-    dayCellComponent = DayCellComponent;
+    genderDatasetMen: number[] = [7];
+    genderDatasetWomen: number[] = [7];
+    ageStats: number[] = [];
+    showGenderChart: boolean = false;
+    titleMen = '';
+    titleWomen = '';
+    titleYearsOld = '';
+    titleUser = '';
 
     constructor(
         private fitisly: FitislyService,
         private menuService: MenuService,
         private theme: NbThemeService,
         private datePipe: DatePipe,
-    ) {
-        
-     }
+        private translate: TranslateService,
+    ) { }
 
     ngOnInit(): void {
         this.menu = this.menuService.getMenu();
-        this.loadConnectionByGender();
-        this.loadUsers();
-        this.loadEvents();
-        
+
+        this.translate.get(['HOME_MEN', 'HOME_WOMEN', 'HOME_YEARS_OLD', 'HOME_USERS']).subscribe((res: string) => {
+
+            this.titleMen = res['HOME_MEN'];
+            this.titleWomen = res['HOME_WOMEN'];
+            this.titleYearsOld = res['HOME_YEARS_OLD'];
+            this.titleUser = res['HOME_USERS'];
+
+            this.loadConnectionByGender();
+            this.loadAgeStats();
+        });
     }
 
-    ngAfterViewInit() {
+    ngOnDestroy(): void {
+        this.themeSubscription.unsubscribe();
+    }
+
+    loadConnectionByGender(): void {
+        let index = 0;
+
+        for (let i = 13; i > 6; i--) {
+            this.loadConnectionByGenderPerDay(i, index);
+            index++;
+        }
+    }
+
+    loadConnectionByGenderPerDay(minusDay: number, index: number): void {
+        this.fitisly.getConnectionByGender(this.getPastDate(minusDay, 2)).subscribe(data => {
+            let res = data['body']['connections'];
+            this.genderDatasetMen[index] = res['men'];
+            this.genderDatasetWomen[index] = res['women'];
+
+            this.initGenderChart();
+        });
+    }
+
+    loadAgeStats(): void {
+        this.fitisly.getUserAgeStats().subscribe(data => {
+            let res = data['body']['data']['statistics'];
+
+            this.ageStats.push(res['less_than_eighteen']);
+            this.ageStats.push(res['eighteen_to_twenty_five']);
+            this.ageStats.push(res['twenty_six_to_thirty']);
+            this.ageStats.push(res['thirty_one_to_thirty_five']);
+            this.ageStats.push(res['more_than_thirty_five']);
+
+            this.initAgeChart();
+        });
+    }
+
+    getPastDate(day: number, format: number): string {
+        let result = '';
+        const date = new Date(2020, 6, 13);
+        date.setDate(date.getDate() - day);
+
+        if (format === 1) {
+            result = this.datePipe.transform(date, 'dd MMM');
+        }
+        else {
+            result = this.datePipe.transform(date, 'yyyy-MM-dd');
+        }
+
+        return result;
+    }
+
+    initGenderChart(): void {
+        this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
+
+            const colors: any = config.variables;
+            const chartjs: any = config.variables.chartjs;
+
+            this.data2 = {
+                labels: [
+                    this.getPastDate(13, 1),
+                    this.getPastDate(12, 1),
+                    this.getPastDate(11, 1),
+                    this.getPastDate(10, 1),
+                    this.getPastDate(9, 1),
+                    this.getPastDate(8, 1),
+                    this.getPastDate(7, 1)],
+                datasets: [{
+                    data: this.genderDatasetMen,
+                    label: this.titleMen,
+                    backgroundColor: NbColorHelper.hexToRgbA(colors.primaryLight, 0.8),
+                }, {
+                    data: this.genderDatasetWomen,
+                    label: this.titleWomen,
+                    backgroundColor: NbColorHelper.hexToRgbA(colors.infoLight, 0.8),
+                }],
+            };
+
+            this.options2 = {
+                maintainAspectRatio: false,
+                responsive: true,
+                legend: {
+                    labels: {
+                        fontColor: chartjs.textColor,
+                    },
+                },
+                scales: {
+                    xAxes: [
+                        {
+                            gridLines: {
+                                display: false,
+                                color: chartjs.axisLineColor,
+                            },
+                            ticks: {
+                                fontColor: chartjs.textColor,
+                            },
+                        },
+                    ],
+                    yAxes: [
+                        {
+                            gridLines: {
+                                display: true,
+                                color: chartjs.axisLineColor,
+                            },
+                            ticks: {
+                                fontColor: chartjs.textColor,
+                            },
+                        },
+                    ],
+                },
+            };
+            this.showGenderChart = true;
+        });
+    }
+
+    initAgeChart(): void {
         this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
 
             const colors = config.variables;
             const echarts: any = config.variables.echarts;
-            const titleYearsOld = 'years old';
 
             this.options = {
                 backgroundColor: echarts.bg,
@@ -71,11 +188,11 @@ export class HomeComponent implements OnInit {
                     orient: 'vertical',
                     left: 'left',
                     data: [
-                        '-18 ' + titleYearsOld, 
-                        '18 - 25 ' + titleYearsOld, 
-                        '26 - 30 ' + titleYearsOld, 
-                        '31 - 35 ' + titleYearsOld, 
-                        '+35 ' + titleYearsOld
+                        '-18 ' + this.titleYearsOld,
+                        '18 - 25 ' + this.titleYearsOld,
+                        '26 - 30 ' + this.titleYearsOld,
+                        '31 - 35 ' + this.titleYearsOld,
+                        '+35 ' + this.titleYearsOld
                     ],
                     textStyle: {
                         color: echarts.textColor,
@@ -83,16 +200,16 @@ export class HomeComponent implements OnInit {
                 },
                 series: [
                     {
-                        name: 'Users',
+                        name: this.titleUser,
                         type: 'pie',
                         radius: '50%',
                         center: ['50%', '50%'],
                         data: [
-                            { value: 335, name: '-18 ' + titleYearsOld },
-                            { value: 310, name: '18 - 25 ' + titleYearsOld },
-                            { value: 234, name: '26 - 30 ' + titleYearsOld },
-                            { value: 135, name: '31 - 35 ' + titleYearsOld },
-                            { value: 1548, name: '+35 ' + titleYearsOld },
+                            { value: this.ageStats[0], name: '-18 ' + this.titleYearsOld },
+                            { value: this.ageStats[1], name: '18 - 25 ' + this.titleYearsOld },
+                            { value: this.ageStats[2], name: '26 - 30 ' + this.titleYearsOld },
+                            { value: this.ageStats[3], name: '31 - 35 ' + this.titleYearsOld },
+                            { value: this.ageStats[4], name: '+35 ' + this.titleYearsOld },
                         ],
                         itemStyle: {
                             emphasis: {
@@ -120,144 +237,5 @@ export class HomeComponent implements OnInit {
             };
 
         });
-    }
-
-    ngOnDestroy(): void {
-        this.themeSubscription.unsubscribe();
-    }
-
-    loadUsers(): void {
-        this.fitisly.getUsers().subscribe(data => {
-            let users = data['body']['list'];
-
-            let lastUsers = users.slice(1).slice(-10);
-
-            lastUsers.forEach(element => {
-                this.fitisly.getUserInfo(element['account_id']).subscribe(info => {
-                    info = info['body']['user_profile'];
-
-                    this.users.push({
-                        name: this.capitalize(info['pseudonyme']),
-                        title: this.capitalize(info['first_name']),
-                        picture: this.fitisly.getPicture(info['profile_picture'])
-                    });
-
-                });
-            });
-        });
-    }
-
-    capitalize(s: string): string {
-        return s.charAt(0).toUpperCase() + s.slice(1);
-    }
-
-    loadEvents(): void {
-        this.events = [new Date(2020, 5, 25), new Date(2020, 5, 9)];
-
-        this.dayCellComponent.prototype.loadEvents(this.events);
-    }
-
-    showEvent(event: any): void {
-        this.selectedEvent = null;
-        let html = event['target'];
-
-        if (html['id'] === 'flagEvent') {
-            this.selectedEvent = 'Seance entrainement gratuit du 28 au 30 Juin !';
-        }
-    }
-
-    loadConnectionByGender(): void {
-        for(let i = 7; i < 14; i++)
-        {
-            this.fitisly.getConnectionByGender(this.getPastDate(i, 2)).subscribe(data => {
-                let res = data['body']['connections'];
-                this.genderDatasetMen.push(res['men']);
-                this.genderDatasetWomen.push(res['women']);
-            });
-
-            if(i === 13)
-            {
-                this.initChart();
-            }
-        }
-    }
-
-    getPastDate(day: number, format: number): string {
-        let result = '';
-        const date = new Date();
-        date.setDate(date.getDate() - day);
-
-        if(format === 1)
-        {
-            result = this.datePipe.transform(date, 'dd MMM');
-        }
-        else
-        {
-            result = this.datePipe.transform(date, 'yyyy-MM-dd');
-        }
-
-        return result;
-    }
-
-    initChart(): void {
-        this.themeSubscription = this.theme.getJsTheme().subscribe(config => {
-
-            const colors: any = config.variables;
-            const chartjs: any = config.variables.chartjs;
-      
-            this.data2 = {
-              labels: [
-                  this.getPastDate(13, 1), 
-                  this.getPastDate(12, 1), 
-                  this.getPastDate(11, 1), 
-                  this.getPastDate(10, 1), 
-                  this.getPastDate(9, 1), 
-                  this.getPastDate(8, 1), 
-                  this.getPastDate(7, 1)],
-              datasets: [{
-                data: this.genderDatasetMen,
-                label: 'Homme',
-                backgroundColor: NbColorHelper.hexToRgbA(colors.primaryLight, 0.8),
-              }, {
-                data: this.genderDatasetWomen,
-                label: 'Femme',
-                backgroundColor: NbColorHelper.hexToRgbA(colors.infoLight, 0.8),
-              }],
-            };
-      
-            this.options2 = {
-              maintainAspectRatio: false,
-              responsive: true,
-              legend: {
-                labels: {
-                  fontColor: chartjs.textColor,
-                },
-              },
-              scales: {
-                xAxes: [
-                  {
-                    gridLines: {
-                      display: false,
-                      color: chartjs.axisLineColor,
-                    },
-                    ticks: {
-                      fontColor: chartjs.textColor,
-                    },
-                  },
-                ],
-                yAxes: [
-                  {
-                    gridLines: {
-                      display: true,
-                      color: chartjs.axisLineColor,
-                    },
-                    ticks: {
-                      fontColor: chartjs.textColor,
-                    },
-                  },
-                ],
-              },
-            };
-          });
     }
 }

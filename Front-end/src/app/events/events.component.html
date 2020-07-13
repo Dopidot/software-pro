@@ -14,14 +14,14 @@
                 <div class="col-8">
                     <nb-card>
                         <nb-card-header>
-                            Date : {{date | date : "dd/MM/yyyy"}}
+                            {{ 'EVENTS_DATE' | translate }} : {{date | date : "dd/MM/yyyy"}}
                         </nb-card-header>
 
                         <nb-card-body *ngIf="!currentEvent.id">
-                            <div class="default-background">Il n'y a pas d'évènement à cette date.</div>
+                            <div class="default-background">{{ 'EVENTS_NOT_FOUND' | translate }}</div>
                             <div style="text-align: center; margin-top: 10px;">
                                 <button nbButton [status]="success" (click)="openPopup(dialog); popupType = 0;">
-                                    Ajouter un évènement</button>
+                                    {{ 'EVENTS_ADD' | translate }}</button>
                             </div>
                         </nb-card-body>
 
@@ -40,9 +40,9 @@
 
                             <div style="text-align: center; margin-top: 10px;">
                                 <button nbButton [status]="success" (click)="openPopup(dialog); popupType = 1;" 
-                                    style="margin-right: 10px;">Modifier</button>
+                                    style="margin-right: 10px;">{{ 'EVENTS_MODIFY' | translate }}</button>
                                 <button nbButton [status]="danger" (click)="openPopup(dialog2);">
-                                    Supprimer</button>
+                                    {{ 'EVENTS_DELETE' | translate }}</button>
                             </div>
                         </nb-card-body>
 
@@ -56,41 +56,41 @@
 
 <ng-template #dialog let-data let-ref="dialogRef" size="lg">
     <nb-card>
-        <nb-card-header *ngIf="popupType === 0">Ajouter un évènement</nb-card-header>
-        <nb-card-header *ngIf="popupType === 1">Modifier un évènement</nb-card-header>
+        <nb-card-header *ngIf="popupType === 0">{{ 'EVENTS_ADD' | translate }}</nb-card-header>
+        <nb-card-header *ngIf="popupType === 1">{{ 'EVENTS_MODIFY_2' | translate }}</nb-card-header>
         <nb-card-body style="max-width: 400px;">
 
             <div class="form-group">
-                <label for="name" class="label">Nom</label>
-                <input type="text" nbInput fullWidth id="name" [(ngModel)]="currentEvent.name" placeholder="Nom">
+                <label for="name" class="label">{{ 'EVENTS_NAME' | translate }}</label>
+                <input type="text" nbInput fullWidth id="name" [(ngModel)]="currentEvent.name" placeholder="{{ 'EVENTS_NAME' | translate }}">
             </div>
 
             <div class="form-group">
-                <label for="body" class="label">Contenu</label>
-                <textarea nbInput fullWidth id="body" [(ngModel)]="currentEvent.body" placeholder="Contenu"></textarea>
+                <label for="body" class="label">{{ 'EVENTS_BODY' | translate }}</label>
+                <textarea nbInput fullWidth id="body" [(ngModel)]="currentEvent.body" placeholder="{{ 'EVENTS_BODY' | translate }}"></textarea>
             </div>
 
             <div class="form-group">
-                <label for="address" class="label">Adresse</label>
+                <label for="address" class="label">{{ 'EVENTS_ADDRESS' | translate }}</label>
                 <input type="text" nbInput fullWidth id="address" [(ngModel)]="currentEvent.address"
-                    placeholder="Adresse">
+                    placeholder="{{ 'EVENTS_ADDRESS' | translate }}">
             </div>
 
             <div class="form-group">
                 <div class="col-5" style="display: inline-block; padding-left: 0px;">
-                    <label for="zipcode" class="label">Code postal</label>
+                    <label for="zipcode" class="label">{{ 'EVENTS_ZIPCODE' | translate }}</label>
                     <input type="number" nbInput fullWidth id="zipcode" [(ngModel)]="currentEvent.zipcode"
-                        placeholder="Code postal">
+                        placeholder="{{ 'EVENTS_ZIPCODE' | translate }}">
                 </div>
 
                 <div class="col-7" style="display: inline-block; padding: 0px;">
-                    <label for="city" class="label">Ville</label>
-                    <input type="text" nbInput fullWidth id="city" [(ngModel)]="currentEvent.city" placeholder="Ville">
+                    <label for="city" class="label">{{ 'EVENTS_CITY' | translate }}</label>
+                    <input type="text" nbInput fullWidth id="city" [(ngModel)]="currentEvent.city" placeholder="{{ 'EVENTS_CITY' | translate }}">
                 </div>
             </div>
 
             <div style="position: relative;">
-                <label for="image" class="label" style="display: block;">Image</label>
+                <label for="image" class="label" style="display: block;">{{ 'EVENTS_IMAGE' | translate }}</label>
                 <label nbButton for="image" *ngIf="!imageBase64 && !imagePath" class="input-file">
                     <i class="fas fa-plus"></i>
                 </label>
@@ -112,12 +112,12 @@
 
         </nb-card-body>
         <nb-card-footer style="text-align: center;">
-            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">Annuler</button>
+            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">{{ 'EVENTS_CANCEL' | translate }}</button>
 
             <button nbButton [status]="success" (click)="ref.close(); addEvent(); showEvent($event)"
-                *ngIf="popupType === 0">Ajouter</button>
+                *ngIf="popupType === 0">{{ 'EVENTS_ADD_2' | translate }}</button>
             <button nbButton [status]="success" (click)="ref.close(); updateEvent(); showEvent($event)"
-                *ngIf="popupType === 1">Sauvegarder</button>
+                *ngIf="popupType === 1">{{ 'EVENTS_SAVE' | translate }}</button>
 
         </nb-card-footer>
     </nb-card>
@@ -125,17 +125,17 @@
 
 <ng-template #dialog2 let-data let-ref="dialogRef">
     <nb-card>
-        <nb-card-header>Confirmation de suppression</nb-card-header>
+        <nb-card-header>{{ 'EVENTS_DELETE_CONFIRMATION' | translate }}</nb-card-header>
         <nb-card-body style="max-width: 400px;">
 
             <div style="line-height: 1.5;">
-                Si vous confirmez, l'évènement {{currentEvent.name}} sera définitivement supprimé.
+                {{ 'EVENTS_DELETE_INFO_1' | translate }} {{currentEvent.name}} {{ 'EVENTS_DELETE_INFO_2' | translate }}
             </div>
 
         </nb-card-body>
         <nb-card-footer style="text-align: center;">
-            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">Annuler</button>
-            <button nbButton [status]="success" (click)="deleteEvent(); ref.close(); showEvent($event)">Confirmer</button>
+            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">{{ 'EVENTS_CANCEL' | translate }}</button>
+            <button nbButton [status]="success" (click)="deleteEvent(); ref.close(); showEvent($event)">{{ 'EVENTS_CONFIRM' | translate }}</button>
         </nb-card-footer>
     </nb-card>
 </ng-template>

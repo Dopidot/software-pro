@@ -13,6 +13,7 @@ import { ProgramService } from '../services/program.service';
 import { Program } from '../models/program.model';
 import { ExerciseService } from '../services/exercise.service';
 import * as _ from 'lodash';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'ngx-programs',
@@ -36,30 +37,8 @@ export class ProgramsComponent implements OnInit {
     imagePath: string;
     imageFile: string;
     source: LocalDataSource = new LocalDataSource();
-
-    settings = {
-        pager: {
-            display: true,
-            perPage: 4
-        },
-        actions: {
-            custom: [
-                {
-                    name: 'add',
-                    title: '<i class="fas fa-plus fa-xs"></i>',
-                },
-            ],
-            add: false,
-            edit: false,
-            delete: false,
-        },
-        columns: {
-            name: {
-                title: 'Nom',
-                type: 'string',
-            },
-        },
-    };
+    settings = this.getTableSettings();
+    titleName = '';
 
     constructor(
         private menuService: MenuService,
@@ -67,11 +46,18 @@ export class ProgramsComponent implements OnInit {
         private dialogService: NbDialogService,
         private programService: ProgramService,
         private exerciseService: ExerciseService,
+        private translate: TranslateService,
     ) { }
 
     ngOnInit(): void {
         this.menu = this.menuService.getMenu();
         this.loadPrograms();
+
+        this.translate.get('PROGRAMS_NAME').subscribe((res: string) => {
+            this.titleName = res;
+
+            this.settings = this.getTableSettings();
+        });
     }
 
     selectProgram(program): void {
@@ -224,5 +210,31 @@ export class ProgramsComponent implements OnInit {
         });
 
         this.currentProgram.exercises = temp;
+    }
+
+    getTableSettings(): any {
+        return {
+            pager: {
+                display: true,
+                perPage: 4
+            },
+            actions: {
+                custom: [
+                    {
+                        name: 'add',
+                        title: '<i class="fas fa-plus fa-xs"></i>',
+                    },
+                ],
+                add: false,
+                edit: false,
+                delete: false,
+            },
+            columns: {
+                name: {
+                    title: this.titleName,
+                    type: 'string',
+                },
+            },
+        };
     }
 }
