@@ -7,11 +7,10 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { MenuService } from '../services/menu.service';
 import { LocalDataSource } from 'ng2-smart-table';
-
 import { NbDialogService } from '@nebular/theme';
-
 import { ExerciseService } from '../services/exercise.service';
 import { Exercise } from '../models/exercise.model';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'ngx-exercises',
@@ -30,48 +29,28 @@ export class ExercisesComponent implements OnInit {
     imageBase64: string;
     imagePath: string;
     imageFile: string;
-
-    settings = {
-        actions: {
-            custom: [
-                {
-                    name: 'show',
-                    title: '<i class="far fa-eye fa-xs"></i>',
-                },
-                {
-                    name: 'edit',
-                    title: '<i class="far fa-edit fa-xs"></i>',
-                },
-                {
-                    name: 'delete',
-                    title: '<i class="far fa-trash-alt fa-xs"></i>',
-                },
-            ],
-            add: false,
-            edit: false,
-            delete: false,
-        },
-        columns: {
-            name: {
-                title: 'Name',
-                type: 'string',
-            },
-            description: {
-                title: 'Description',
-                type: 'string',
-            },
-        },
-    };
+    settings = this.getTableSettings();
+    titleName = '';
+    titleDescription = '';
 
     constructor(
         private dialogService: NbDialogService,
         private exerciseService: ExerciseService,
         private menuSerivce: MenuService,
+        private translate: TranslateService,
     ) { }
 
     ngOnInit(): void {
         this.menu = this.menuSerivce.getMenu();
         this.loadExercise();
+
+        this.translate.get(['EXERCISES_NAME', 'EXERCISES_DESCRIPTION']).subscribe((res: string) => {
+            this.titleName = res['EXERCISES_NAME'];
+            this.titleDescription = res['EXERCISES_DESCRIPTION'];
+
+            this.settings = this.getTableSettings();
+        });
+
     }
 
     loadExercise(): void {
@@ -125,7 +104,7 @@ export class ExercisesComponent implements OnInit {
     addExercise(): void {
         this.exerciseService.createExercise(this.currentExercise, this.imageFile).subscribe(data => {
             let res = data['body']['exercise'];
-            
+
             this.imagePath = this.exerciseService.getPicture(res['exerciseimage']);
             this.loadExercise();
         }, error => {
@@ -136,7 +115,7 @@ export class ExercisesComponent implements OnInit {
     editExercise(): void {
         this.exerciseService.updateExercise(this.currentExercise['id'], this.currentExercise, this.imageFile).subscribe(data => {
             let res = data['body']['exercise'];
-            
+
             this.imagePath = this.exerciseService.getPicture(res['exerciseimage']);
             this.loadExercise();
         }, error => {
@@ -166,8 +145,42 @@ export class ExercisesComponent implements OnInit {
     }
 
     removePicture(): void {
-        this.imageBase64 = null; 
-        this.imagePath = null; 
+        this.imageBase64 = null;
+        this.imagePath = null;
         this.imageFile = null;
+    }
+
+    getTableSettings(): any {
+        return {
+            actions: {
+                custom: [
+                    {
+                        name: 'show',
+                        title: '<i class="far fa-eye fa-xs"></i>',
+                    },
+                    {
+                        name: 'edit',
+                        title: '<i class="far fa-edit fa-xs"></i>',
+                    },
+                    {
+                        name: 'delete',
+                        title: '<i class="far fa-trash-alt fa-xs"></i>',
+                    },
+                ],
+                add: false,
+                edit: false,
+                delete: false,
+            },
+            columns: {
+                name: {
+                    title: this.titleName,
+                    type: 'string',
+                },
+                description: {
+                    title: this.titleDescription,
+                    type: 'string',
+                },
+            },
+        };
     }
 }

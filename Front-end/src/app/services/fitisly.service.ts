@@ -34,4 +34,8 @@ export class FitislyService {
     getConnectionByGender(date: string): Observable<any> {
         return this.http.get<any>(this.baseUrl + 'get-connections-by-gender/' + date);
     }
+
+    getUserAgeStats(): Observable<any> {
+        return this.http.get<any>(this.baseUrl + 'get-age-statistics/');
+    }
 }

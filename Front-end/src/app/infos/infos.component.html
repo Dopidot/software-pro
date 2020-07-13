@@ -15,9 +15,9 @@
                                 <i [className]="'fas ' + item.icon + ' fa-4x'"></i>
                             </div>
                             <div class="col-6 vertical-center">
-                                Statut : 
-                                <strong *ngIf="item.status" class="text-success">OK</strong>
-                                <strong *ngIf="!item.status" class="text-danger">ERROR</strong>
+                                {{ 'INFOS_STATUT' | translate }} 
+                                <strong *ngIf="item.status" class="text-success">{{ 'INFOS_OK' | translate }}</strong>
+                                <strong *ngIf="!item.status" class="text-danger">{{ 'INFOS_ERROR' | translate }}</strong>
                             </div>
                         </nb-card-body>
                     </nb-card>

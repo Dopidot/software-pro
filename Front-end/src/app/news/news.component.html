@@ -6,7 +6,7 @@
 
                 <div class="col-4">
                     <nb-card class="list-card" size="small">
-                        <nb-card-header>Actualités</nb-card-header>
+                        <nb-card-header>{{ 'NEWS_TITLE' | translate }}</nb-card-header>
                         <nb-list>
                             <nb-list-item *ngFor="let new of news" style="padding: 0px;">
                                 <div class="default-background" style="position: relative;" (click)="selectNews(new)">
@@ -21,27 +21,26 @@
                             </nb-list-item>
                         </nb-list>
                         <button nbButton [status]="success" (click)="openPopup(dialog); popupType = 0; currentNews = {}; imagePath = null;">
-                            Ajouter une actualité</button>
+                            {{ 'NEWS_ADD' | translate }}</button>
                     </nb-card>
                 </div>
 
                 <div class="col-8">
                     <nb-card>
                         <nb-card-header>
-                            Contenu de l'actualité
+                            {{ 'NEWS_BODY' | translate }}
                         </nb-card-header>
 
                         <nb-card-body>
                             <div *ngIf="!currentNews.id" class="normal-background">
-                                <strong>Info !</strong>
-                                <div>Vous devez selectionner une actualité avant de pouvoir afficher ses informations.
-                                </div>
+                                <strong>{{ 'NEWS_INFO' | translate }}</strong>
+                                <div>{{ 'NEWS_INFO_SELECT' | translate }}</div>
                             </div>
 
                             <div *ngIf="currentNews.id">
                                 <div class="col-6" style="display: inline-block;">
                                     <strong>{{currentNews.name}}</strong> <br />
-                                    <div style="text-decoration: underline;">Titre : {{currentNews.title}}</div>
+                                    <div style="text-decoration: underline;">{{ 'NEWS_LABEL' | translate }} {{currentNews.title}}</div>
                                     {{currentNews.body}} <br />
                                 </div>
 
@@ -54,7 +53,7 @@
                                 <hr>
                                 <div style="text-align: center; margin-top: 10px;">
                                     <button nbButton [status]="primary" (click)="openPopup(dialog); popupType = 1;">
-                                        Modifier</button>
+                                        {{ 'NEWS_MODIFY' | translate }}</button>
                                 </div>
                             </div>
                         </nb-card-body>
@@ -68,27 +67,27 @@
 
 <ng-template #dialog let-data let-ref="dialogRef" size="lg">
     <nb-card>
-        <nb-card-header *ngIf="popupType === 0">Ajouter une actualité</nb-card-header>
-        <nb-card-header *ngIf="popupType === 1">Modifier une actualité</nb-card-header>
+        <nb-card-header *ngIf="popupType === 0">{{ 'NEWS_ADD' | translate }}</nb-card-header>
+        <nb-card-header *ngIf="popupType === 1">{{ 'NEWS_MODIFY_2' | translate }}</nb-card-header>
         <nb-card-body style="max-width: 400px;">
 
             <div class="form-group">
-                <label for="name" class="label">Nom</label>
-                <input type="text" nbInput fullWidth id="name" [(ngModel)]="currentNews.name" placeholder="Nom">
+                <label for="name" class="label">{{ 'NEWS_NAME' | translate }}</label>
+                <input type="text" nbInput fullWidth id="name" [(ngModel)]="currentNews.name" placeholder="{{ 'NEWS_NAME' | translate }}">
             </div>
 
             <div class="form-group">
-                <label for="title" class="label">Titre</label>
-                <input type="text" nbInput fullWidth id="title" [(ngModel)]="currentNews.title" placeholder="Titre">
+                <label for="title" class="label">{{ 'NEWS_LABEL_2' | translate }}</label>
+                <input type="text" nbInput fullWidth id="title" [(ngModel)]="currentNews.title" placeholder="{{ 'NEWS_LABEL_2' | translate }}">
             </div>
 
             <div class="form-group">
-                <label for="body" class="label">Contenu</label>
-                <textarea nbInput fullWidth id="body" [(ngModel)]="currentNews.body" placeholder="Contenu"></textarea>
+                <label for="body" class="label">{{ 'NEWS_BODY_2' | translate }}</label>
+                <textarea nbInput fullWidth id="body" [(ngModel)]="currentNews.body" placeholder="{{ 'NEWS_BODY_2' | translate }}"></textarea>
             </div>
 
             <div style="position: relative;">
-                <label for="image" class="label" style="display: block;">Image</label>
+                <label for="image" class="label" style="display: block;">{{ 'NEWS_IMAGE' | translate }}</label>
                 <label nbButton for="image" *ngIf="!imageBase64 && !imagePath" class="input-file">
                     <i class="fas fa-plus"></i>
                 </label>
@@ -110,12 +109,12 @@
 
         </nb-card-body>
         <nb-card-footer style="text-align: center;">
-            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">Annuler</button>
+            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">{{ 'NEWS_CANCEL' | translate }}</button>
 
             <button nbButton [status]="success" (click)="ref.close(); addNews();"
-                *ngIf="popupType === 0">Ajouter</button>
+                *ngIf="popupType === 0">{{ 'NEWS_ADD_2' | translate }}</button>
             <button nbButton [status]="success" (click)="ref.close(); updateNews();"
-                *ngIf="popupType === 1">Sauvegarder</button>
+                *ngIf="popupType === 1">{{ 'NEWS_SAVE' | translate }}</button>
 
         </nb-card-footer>
     </nb-card>
@@ -123,17 +122,17 @@
 
 <ng-template #dialog2 let-data let-ref="dialogRef">
     <nb-card>
-        <nb-card-header>Confirmation de suppression</nb-card-header>
+        <nb-card-header>{{ 'NEWS_CONFIRM_DELETE' | translate }}</nb-card-header>
         <nb-card-body style="max-width: 400px;">
 
             <div style="line-height: 1.5;">
-                Si vous confirmez, l'actualité {{currentNews.name}} sera définitivement supprimé.
+                {{ 'NEWS_CONFIRM_INFO_1' | translate }} {{currentNews.name}} {{ 'NEWS_CONFIRM_INFO_2' | translate }}
             </div>
 
         </nb-card-body>
         <nb-card-footer style="text-align: center;">
-            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">Annuler</button>
-            <button nbButton [status]="success" (click)="removeNews(); ref.close()">Confirmer</button>
+            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">{{ 'NEWS_CANCEL' | translate }}</button>
+            <button nbButton [status]="success" (click)="removeNews(); ref.close()">{{ 'NEWS_CONFIRM' | translate }}</button>
         </nb-card-footer>
     </nb-card>
 </ng-template>

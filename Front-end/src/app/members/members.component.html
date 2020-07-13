@@ -6,7 +6,7 @@
 
                 <nb-card style="width: 100%;">
                     <nb-card-header>
-                        Liste des utilisateurs
+                        {{ 'MEMBERS_LIST_USERS' | translate }}
                     </nb-card-header>
 
                     <nb-card-body>
@@ -22,24 +22,24 @@
 
 <ng-template #dialog let-data let-ref="dialogRef">
     <nb-card>
-        <nb-card-header>Informations sur {{currentUser.pseudo}}</nb-card-header>
+        <nb-card-header>{{ 'MEMBERS_INFO_ABOUT' | translate }} {{currentUser.pseudo}}</nb-card-header>
         <nb-card-body>
 
             <div class="col-4" style="margin: auto; padding: 0px 5px;">
                 <nb-user [picture]="currentUser.picture" [onlyPicture]="true" size="giant"></nb-user>
             </div>
 
-            <div style="margin-top: 20px;"><strong>Pseudonyme</strong></div>
+            <div style="margin-top: 20px;"><strong>{{ 'MEMBERS_PSEUDONYM' | translate }}</strong></div>
             <div>{{currentUser.pseudo}}</div>
 
             <div style="margin-bottom: 20px;"></div>
 
-            <div><strong>Nom et prénom</strong></div>
+            <div><strong>{{ 'MEMBERS_FULL_NAME' | translate }}</strong></div>
             <div>{{currentUser.lastName}} {{currentUser.firstName}}</div>
 
         </nb-card-body>
         <nb-card-footer>
-            <button nbButton [status]="danger" (click)="ref.close()" style="width: 250px;">Fermer</button>
+            <button nbButton [status]="danger" (click)="ref.close()" style="width: 250px;">{{ 'MEMBERS_CLOSE' | translate }}</button>
         </nb-card-footer>
     </nb-card>
 </ng-template>

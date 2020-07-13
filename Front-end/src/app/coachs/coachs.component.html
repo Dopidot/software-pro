@@ -6,7 +6,7 @@
 
                 <div class="col-4">
                     <nb-card class="list-card" size="medium">
-                        <nb-card-header>Coachs</nb-card-header>
+                        <nb-card-header>{{ 'COACH_TITLE' | translate }}</nb-card-header>
                         <nb-list>
                             <nb-list-item *ngFor="let coach of coaches">
                                 <nb-user nbButton [picture]="coach.picture" [name]="coach.name" [title]="coach.title"
@@ -23,7 +23,7 @@
                 <div class="col-8">
                     <nb-card *ngIf="currentCoach">
                         <nb-card-header>
-                            Les utilisateurs qui suivent {{coachNameUserList}}
+                            {{ 'COACH_FOLLOWED_USERS' | translate }} {{coachNameUserList}}
                         </nb-card-header>
 
                         <nb-card-body>
@@ -35,14 +35,13 @@
 
                     <nb-card *ngIf="!currentCoach">
                         <nb-card-header>
-                            Utilisateurs suivis
+                            {{ 'COACH_FOLLOWING_USERS' | translate }}
                         </nb-card-header>
 
                         <nb-card-body>
                             <div class="default-background">
-                                <strong>Info !</strong> <br />
-                                Vous devez sélectionner un coach avant de pouvoir afficher les utilisateurs qui le
-                                suivent.
+                                <strong>{{ 'COACH_INFO' | translate }}</strong> <br />
+                                {{ 'COACH_INFO_MISSING' | translate }}
                             </div>
                         </nb-card-body>
                     </nb-card>
@@ -56,7 +55,7 @@
 
 <ng-template #dialog2 let-data let-ref="dialogRef">
     <nb-card>
-        <nb-card-header>Informations sur {{currentCoach.name}}</nb-card-header>
+        <nb-card-header>{{ 'COACH_INFO_TO' | translate }} {{currentCoach.name}}</nb-card-header>
         <nb-card-body style="max-width: 400px;">
 
             <div class="col-4" style="margin: auto; padding: 0px 5px;">
@@ -64,43 +63,43 @@
             </div>
 
             <div style="margin-top: 20px; line-height: 1.5;">
-                Followed by {{currentCoach.followers.length}} people.
+                {{ 'COACH_FOLLOW_BY' | translate }} {{currentCoach.followers.length}} {{ 'COACH_PEOPLE' | translate }}.
             </div>
 
             <div style="margin-bottom: 20px;"></div>
 
             <button nbButton [status]="success" *ngIf="!currentCoach.isHighlighted" class="small-button"
-                (click)="updatehighlightCoach(true);">Mettre en avant</button>
+                (click)="updatehighlightCoach(true);">{{ 'COACH_HIGHLIGHT' | translate }}</button>
             <button nbButton [status]="info" *ngIf="currentCoach.isHighlighted" class="small-button"
-                (click)="updatehighlightCoach(false);">Ne plus mettre en avant</button>
+                (click)="updatehighlightCoach(false);">{{ 'COACH_NOT_HIGHLIGHT' | translate }}</button>
 
         </nb-card-body>
         <nb-card-footer style="text-align: center;">
-            <button nbButton [status]="danger" (click)="ref.close()">Fermer</button>
+            <button nbButton [status]="danger" (click)="ref.close()">{{ 'COACH_CLOSE' | translate }}</button>
         </nb-card-footer>
     </nb-card>
 </ng-template>
 
 <ng-template #dialog let-data let-ref="dialogRef">
     <nb-card>
-        <nb-card-header>Informations sur {{currentUser.pseudo}}</nb-card-header>
+        <nb-card-header>{{ 'COACH_INFO_TO' | translate }} {{currentUser.pseudo}}</nb-card-header>
         <nb-card-body>
 
             <div class="col-4" style="margin: auto; padding: 0px 5px;">
                 <nb-user [picture]="currentUser.picture" [onlyPicture]="true" size="giant"></nb-user>
             </div>
 
-            <div style="margin-top: 20px;"><strong>Pseudonyme</strong></div>
+            <div style="margin-top: 20px;"><strong>{{ 'COACH_PSEUDO' | translate }}</strong></div>
             <div>{{currentUser.pseudo}}</div>
 
             <div style="margin-bottom: 20px;"></div>
 
-            <div><strong>Nom et prénom</strong></div>
+            <div><strong>{{ 'COACH_FULL_NAME' | translate }}</strong></div>
             <div>{{currentUser.lastName}} {{currentUser.firstName}}</div>
 
         </nb-card-body>
         <nb-card-footer>
-            <button nbButton [status]="danger" (click)="ref.close()" style="width: 250px;">Fermer</button>
+            <button nbButton [status]="danger" (click)="ref.close()" style="width: 250px;">{{ 'COACH_CLOSE' | translate }}</button>
         </nb-card-footer>
     </nb-card>
 </ng-template>

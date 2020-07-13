@@ -80,7 +80,6 @@ import { ProgramsComponent } from './programs/programs.component';
 import { CoachsComponent } from './coachs/coachs.component';
 import { MembersComponent } from './members/members.component';
 import { InfosComponent } from './infos/infos.component';
-import { NotificationsComponent } from './notifications/notifications.component';
 import { LoginComponent } from './login/login.component';
 
 import { FormsModule } from '@angular/forms';
@@ -133,7 +132,7 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 
 @NgModule({
-    declarations: [AppComponent, HomeComponent, EventsComponent, ExercisesComponent, ProgramsComponent, CoachsComponent, MembersComponent, InfosComponent, NotificationsComponent, LoginComponent, NewsComponent, InactivityComponent/*, ...routedComponents, ...components*/],
+    declarations: [AppComponent, HomeComponent, EventsComponent, ExercisesComponent, ProgramsComponent, CoachsComponent, MembersComponent, InfosComponent, LoginComponent, NewsComponent, InactivityComponent/*, ...routedComponents, ...components*/],
     imports: [
         BrowserModule,
         BrowserAnimationsModule,
