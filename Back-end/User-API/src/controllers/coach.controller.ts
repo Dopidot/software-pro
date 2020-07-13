@@ -1,6 +1,10 @@
-import { Request, Response } from "express";
-import { QueryResult } from "pg";
-import { query } from "../database";
+/**
+ * author : Guillaume Tako
+ */
+
+import { Request, Response } from 'express';
+import { QueryResult } from 'pg';
+import { query } from '../database';
 
 export default class CoachController {
 
@@ -11,8 +15,11 @@ export default class CoachController {
             const response: QueryResult = await query('SELECT * FROM coachs', undefined);
             return res.status(200).json(response.rows);
         } catch (e) {
-            console.log(e);
-            return res.status(500).json('Internal Server Error');
+            console.error(e);
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 
@@ -26,8 +33,11 @@ export default class CoachController {
                 return res.status(404).json('Coach not found')
             }
         } catch (e) {
-            console.log(e);
-            return res.status(500).json('Internal Server Error');
+            console.error(e);
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 
@@ -43,8 +53,11 @@ export default class CoachController {
                 }
             });
         } catch (e) {
-            console.log(e);
-            return res.status(500).json('Internal Server Error');
+            console.error(e);
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 
@@ -64,12 +77,17 @@ export default class CoachController {
                     }
                 });
             } else {
-                return res.status(404).json('Coach not found');
+                return res.status(404).json({
+                    message : 'Coach not found'
+                });
             }
 
         } catch (e)  {
-            console.log(e);
-            return res.status(500).json('Internal Server Error');
+            console.error(e);
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 
@@ -80,12 +98,17 @@ export default class CoachController {
             if (response.rowCount !== 0 ) {
                 return res.status(200).json(`Coach ${id} deleted successfully`);
             } else {
-                return res.status(404).json('Coach not found');
+                return res.status(404).json({
+                    message : 'Coach not found'
+                });
             }
 
         } catch (e) {
-            console.log(e);
-            return res.status(500).json('Internal Server Error');
+            console.error(e);
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 
