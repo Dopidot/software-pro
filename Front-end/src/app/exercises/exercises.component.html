@@ -18,7 +18,7 @@
                 <div class="col-md-12 col-lg-12 col-xxxl-12">
                     <nb-card>
                         <nb-card-header>
-                            Exercices
+                            {{ 'EXERCISES_TITLE' | translate }}
                         </nb-card-header>
 
                         <nb-card-body>
@@ -29,7 +29,7 @@
                             <div style="text-align: center; margin-top: 10px;">
                                 <button nbButton [status]="success"
                                     (click)="openPopup(dialog2); popupType = 2; currentExercise = {}; imageBase64 = null; imagePath = null;">
-                                    Ajouter un exercice</button>
+                                    {{ 'EXERCISES_ADD' | translate }}</button>
                             </div>
                         </nb-card-body>
                     </nb-card>
@@ -42,34 +42,34 @@
 
 <ng-template #dialog2 let-data let-ref="dialogRef" size="lg">
     <nb-card>
-        <nb-card-header *ngIf="popupType === 0">Afficher un exercice</nb-card-header>
-        <nb-card-header *ngIf="popupType === 1">Modifier un exercice</nb-card-header>
-        <nb-card-header *ngIf="popupType === 2">Ajouter un exercice</nb-card-header>
+        <nb-card-header *ngIf="popupType === 0">{{ 'EXERCISES_SHOW' | translate }}</nb-card-header>
+        <nb-card-header *ngIf="popupType === 1">{{ 'EXERCISES_MODIFY' | translate }}</nb-card-header>
+        <nb-card-header *ngIf="popupType === 2">{{ 'EXERCISES_ADD' | translate }}</nb-card-header>
         <nb-card-body style="max-width: 400px;">
 
             <div class="form-group">
-                <label for="name" class="label">Nom</label>
+                <label for="name" class="label">{{ 'EXERCISES_NAME' | translate }}</label>
                 <input type="text" nbInput fullWidth id="name" [(ngModel)]="currentExercise.name" [readonly]="popupType === 0"
-                    placeholder="Nom">
+                    placeholder="{{ 'EXERCISES_NAME' | translate }}">
             </div>
             <div class="form-group">
-                <label for="description" class="label">Description</label>
+                <label for="description" class="label">{{ 'EXERCISES_DESCRIPTION' | translate }}</label>
                 <input type="text" nbInput fullWidth id="description" [(ngModel)]="currentExercise.description"
-                    [readonly]="popupType === 0" placeholder="Description">
+                    [readonly]="popupType === 0" placeholder="{{ 'EXERCISES_DESCRIPTION' | translate }}">
             </div>
             <div class="form-group">
-                <label for="repetition" class="label">Repetition</label>
+                <label for="repetition" class="label">{{ 'EXERCISES_REPEAT' | translate }}</label>
                 <input type="number" nbInput fullWidth id="repetition" [(ngModel)]="currentExercise.repeat_number"
-                    [readonly]="popupType === 0" placeholder="Repetition">
+                    [readonly]="popupType === 0" placeholder="{{ 'EXERCISES_REPEAT' | translate }}">
             </div>
             <div class="form-group">
-                <label for="restTime" class="label">Rest time</label>
+                <label for="restTime" class="label">{{ 'EXERCISES_REST_TIME' | translate }}</label>
                 <input type="number" nbInput fullWidth id="restTime" [(ngModel)]="currentExercise.rest_time"
-                    [readonly]="popupType === 0" placeholder="Rest time">
+                    [readonly]="popupType === 0" placeholder="{{ 'EXERCISES_REST_TIME' | translate }}">
             </div>
 
             <div style="position: relative;" *ngIf="imageBase64 || imagePath || popupType !== 0">
-                <label for="image" class="label" style="display: block;">Image</label>
+                <label for="image" class="label" style="display: block;">{{ 'EXERCISES_IMAGE' | translate }}</label>
                 <label nbButton for="image" *ngIf="(!imageBase64 && !imagePath) && (popupType !== 0 || popupType === 2)" class="input-file">
                     <i class="fas fa-plus"></i>
                 </label>
@@ -89,31 +89,31 @@
 
         </nb-card-body>
         <nb-card-footer style="text-align: center;">
-            <button nbButton [status]="success" (click)="ref.close();" *ngIf="popupType === 0">Fermer</button>
+            <button nbButton [status]="success" (click)="ref.close();" *ngIf="popupType === 0">{{ 'EXERCISES_CLOSE' | translate }}</button>
 
             <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;"
-                *ngIf="popupType !== 0">Annuler</button>
+                *ngIf="popupType !== 0">{{ 'EXERCISES_CANCEL' | translate }}</button>
             <button nbButton [status]="success" (click)="ref.close(); editExercise();"
-                *ngIf="popupType === 1">Sauvegarder</button>
+                *ngIf="popupType === 1">{{ 'EXERCISES_SAVE' | translate }}</button>
             <button nbButton [status]="success" (click)="ref.close(); addExercise();"
-                *ngIf="popupType === 2">Ajouter</button>
+                *ngIf="popupType === 2">{{ 'EXERCISES_ADD_2' | translate }}</button>
         </nb-card-footer>
     </nb-card>
 </ng-template>
 
 <ng-template #dialog let-data let-ref="dialogRef">
     <nb-card>
-        <nb-card-header>Confirmation de suppression</nb-card-header>
+        <nb-card-header>{{ 'EXERCISES_CONFIRM_DELETE' | translate }}</nb-card-header>
         <nb-card-body style="max-width: 400px;">
 
             <div style="line-height: 1.5;">
-                Si vous confirmez, l'exercice {{currentExercise.name}} sera définitivement supprimé.
+                {{ 'EXERCISES_INFO_DELETE_1' | translate }} {{currentExercise.name}} {{ 'EXERCISES_INFO_DELETE_2' | translate }}
             </div>
 
         </nb-card-body>
         <nb-card-footer style="text-align: center;">
-            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">Annuler</button>
-            <button nbButton [status]="success" (click)="confirmDelete(); ref.close()">Confirmer</button>
+            <button nbButton [status]="danger" (click)="ref.close()" style="margin-right: 10px;">{{ 'EXERCISES_CANCEL' | translate }}</button>
+            <button nbButton [status]="success" (click)="confirmDelete(); ref.close()">{{ 'EXERCISES_CONFIRM' | translate }}</button>
         </nb-card-footer>
     </nb-card>
 </ng-template>

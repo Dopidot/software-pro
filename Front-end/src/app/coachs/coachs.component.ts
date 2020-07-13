@@ -11,6 +11,7 @@ import { NbDialogService } from '@nebular/theme';
 import { FitislyService } from '../services/fitisly.service';
 import { UserService } from '../services/user.service';
 import { DatePipe } from '@angular/common';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'ngx-coachs',
@@ -32,48 +33,66 @@ export class CoachsComponent implements OnInit {
     source: LocalDataSource = new LocalDataSource();
     coachNameUserList: string;
     date = new Date();
-
-    settings = {
-        pager: {
-            display: true,
-            perPage: 4
-        },
-        actions: {
-            custom: [
-                {
-                    name: 'show',
-                    title: '<i class="far fa-address-card fa-xs"></i>',
-                },
-            ],
-            add: false,
-            edit: false,
-            delete: false,
-        },
-        columns: {
-            pseudo: {
-                title: 'Pseudonyme',
-                type: 'string',
-            },
-            connection: {
-                title: 'Dernière connexion',
-                valuePrepareFunction: (date) => {
-                    return this.datePipe.transform(new Date(date), 'yyyy-MM-dd - HH:mm:ss');
-                }
-            },
-        },
-    };
+    titlePseudonym = '';
+    titleLastConnection = '';
+    settings = {};
 
     constructor(
         private dialogService: NbDialogService,
         private fitislyService: FitislyService,
         private menuService: MenuService,
         private userService: UserService,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private translate: TranslateService,
     ) { }
 
     ngOnInit(): void {
         this.menu = this.menuService.getMenu();
         this.loadCoachs();
+
+        this.translate.get('COACH_PSEUDO').subscribe((res: string) => {
+            this.titlePseudonym = res;
+
+            this.translate.get('COACH_LAST_CONNECTION').subscribe((res: string) => {
+                this.titleLastConnection = res;
+                this.initTable();
+            });
+        });        
+    }
+
+    /**
+     * Init configuration for table
+     */
+    initTable(): void {
+        this.settings = {
+            pager: {
+                display: true,
+                perPage: 4
+            },
+            actions: {
+                custom: [
+                    {
+                        name: 'show',
+                        title: '<i class="far fa-address-card fa-xs"></i>',
+                    },
+                ],
+                add: false,
+                edit: false,
+                delete: false,
+            },
+            columns: {
+                pseudo: {
+                    title: this.titlePseudonym,
+                    type: 'string',
+                },
+                connection: {
+                    title: this.titleLastConnection,
+                    valuePrepareFunction: (date) => {
+                        return this.datePipe.transform(new Date(date), 'yyyy-MM-dd - HH:mm:ss');
+                    }
+                },
+            },
+        };
     }
 
     /**

@@ -18,12 +18,11 @@ export class InfosComponent implements OnInit {
 
     menu = [];
     data: any;
-
-    private userInfo = localStorage.getItem('userInfo') != null ? JSON.parse(localStorage.getItem('userInfo')) : '';
-    private fitislyAdminAPI;
-    private fitislyAdminDB;
-    private fitislyAPI;
-    private fitislyDB;
+    userInfo = localStorage.getItem('userInfo') != null ? JSON.parse(localStorage.getItem('userInfo')) : '';
+    fitislyAdminAPI;
+    fitislyAdminDB;
+    fitislyAPI;
+    fitislyDB;
 
     constructor(
         private userService: UserService,
@@ -36,7 +35,7 @@ export class InfosComponent implements OnInit {
         this.loadStatuts();
     }
 
-    private initUrl(): void {
+    initUrl(): void {
         this.fitislyAdminAPI = this.commonService.apiConfig.adminApiUrl;
         this.fitislyAdminDB = this.userService.baseUrlUser + '/' + this.userInfo['id'];
         this.fitislyAPI = this.commonService.apiConfig.fitislyApiUrl;

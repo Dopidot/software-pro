@@ -8,14 +8,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Exercise } from "../models/exercise.model";
 import { Observable } from "rxjs/index";
+import { ApiConfig } from '../../../src/api.config';
 
 @Injectable()
 export class ExerciseService {
 
-    baseUrl: string = 'http://localhost:4000';
-    baseUrlHttp: string = this.baseUrl + '/api/exercises';
+    apiConfig: ApiConfig = new ApiConfig();
+    baseUrlHttp: string;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        this.baseUrlHttp = this.apiConfig.adminApiUrl + '/api/exercises';
+     }
 
     getExercises(): Observable<any> {
         return this.http.get<any>(this.baseUrlHttp);
@@ -26,7 +29,7 @@ export class ExerciseService {
     }
 
     getPicture(exerciseImage: string): string {
-        return this.baseUrl + '/' + exerciseImage;
+        return this.apiConfig.adminApiUrl + '/' + exerciseImage;
     }
 
     createExercise(exercise: Exercise, file: any): Observable<any> {

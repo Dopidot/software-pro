@@ -5,14 +5,12 @@
  */
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 
 @Injectable()
 export class MenuService {
 
     constructor(
-        private http: HttpClient,
         private translate: TranslateService,
         ) {}
 
