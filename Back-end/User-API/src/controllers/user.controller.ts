@@ -7,6 +7,7 @@ import { QueryResult } from 'pg';
 import { query } from '../database';
 import * as bcrypt from 'bcrypt';
 import * as fs from "fs";
+import { removeLastDirectoryFromCWDPath } from '../core/StringUtils';
 
 export default class UserController {
 
@@ -29,7 +30,7 @@ export default class UserController {
             if (response.rowCount !== 0) {
                 return res.status(200).json( response.rows[0]);
             } else {
-                return res.status(404).json("User not found");
+                return res.status(404).json('User not found');
             }
         } catch (e) {
             console.error(e);
@@ -41,11 +42,12 @@ export default class UserController {
         try {
             const { firstname, lastname, email } = req.body;
             const hashedPassword =  await bcrypt.hash(req.body.password, 10);
-            const userImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
+            let userImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
 
             if (userImage === undefined) {
                 await query('INSERT INTO users (firstname, lastname, email, password) VALUES ($1, $2, $3, $4)', [firstname, lastname, email, hashedPassword]);
             } else {
+                userImage = userImage?.substr(3);
                 await query('INSERT INTO users (firstname, lastname, email, password, userimage) VALUES ($1, $2, $3, $4, $5)', [firstname, lastname, email, hashedPassword, userImage]);
             }
 
@@ -70,7 +72,7 @@ export default class UserController {
         try {
             const id = parseInt(req.params.id);
             const { firstname, lastname, email } = req.body;
-            const userImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
+            let userImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
 
             let response: QueryResult;
             if (userImage === undefined) {
@@ -78,8 +80,8 @@ export default class UserController {
             } else {
                 response =  await query('SELECT userimage FROM users WHERE id = $1', [id]);
                 if (response.rowCount !== 0 && response.rows[0].userimage !== undefined ) {
-                    if (response.rows[0].userimage !== null ) {
-                        fs.unlink(process.cwd() + '/' + response.rows[0].userimage, err => {
+                    if ( response.rows[0].userimage !== null ) {
+                        fs.unlink(removeLastDirectoryFromCWDPath(process.cwd()) + '/' + response.rows[0].userimage, err => {
                             if (err) {
                                 console.log('userimage : ', response.rows[0].userimage);
                                 console.error(err);
@@ -89,7 +91,7 @@ export default class UserController {
                 } else {
                     return res.status(400).json('User not found');
                 }
-
+                userImage = userImage?.substr(3);
                 response = await query('UPDATE users SET firstname = $1, lastname = $2, email = $3, userimage = $4 WHERE id = $5', [firstname, lastname, email, userImage, id]);
             }
 
@@ -116,7 +118,7 @@ export default class UserController {
             const response: QueryResult = await query('SELECT userimage FROM users WHERE id = $1', [id]);
             if (response.rowCount !== 0) {
                 if (response.rows[0].userimage !== null && response.rows[0].userimage !== undefined) {
-                    fs.unlink(process.cwd() + '/' + response.rows[0].userimage, err => {
+                    fs.unlink(removeLastDirectoryFromCWDPath(process.cwd()) + '/' + response.rows[0].userimage, err => {
                         if (err) {
                             console.log('userimage :',  response.rows[0].userimage);
                             console.error(err);

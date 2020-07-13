@@ -6,6 +6,7 @@ import { Request, Response } from "express";
 import { QueryResult } from "pg";
 import { query } from "../database";
 import fs from "fs";
+import { removeLastDirectoryFromCWDPath } from '../core/StringUtils';
 
 export default class GymController {
 
@@ -39,11 +40,12 @@ export default class GymController {
     createGym = async function(req: Request, res: Response): Promise<Response> {
         try {
             const { name, address, zipCode, city, country } = req.body;
-            const gymImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
+            let gymImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
 
             if ( gymImage === undefined) {
                 await query('INSERT INTO gyms (name, address, zipcode, city, country) VALUES ($1, $2, $3, $4, $5)', [name, address, zipCode, city, country]);
             } else {
+                gymImage = gymImage?.substr(3);
                 await query('INSERT INTO gyms (name, address, zipcode, city, country, gymimage) VALUES ($1, $2, $3, $4, $5, $6)', [name,address, zipCode, city, country, gymImage]);
             }
 
@@ -64,7 +66,7 @@ export default class GymController {
         try {
             const id = parseInt(req.params.id);
             const { name, address, zipCode, city, country } = req.body;
-            const gymImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
+            let gymImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
 
             let response: QueryResult;
             if (gymImage === undefined) {
@@ -73,7 +75,7 @@ export default class GymController {
                 response = await query('SELECT gymimage FROM gyms WHERE id = $1', [id]);
                 if (response.rowCount !== 0 && response.rows[0].gymimage !== undefined ) {
                     if (response.rows[0].gymimage !== null) {
-                        fs.unlink(process.cwd() + '/' + response.rows[0].gymimage, err => {
+                        fs.unlink(removeLastDirectoryFromCWDPath(process.cwd()) + '/' + response.rows[0].gymimage, err => {
                             if (err) {
                                 console.log('gymimage : ', response.rows[0].gymimage);
                                 console.error(err);
@@ -84,6 +86,7 @@ export default class GymController {
                     return res.status(404).json('Gym not found');
                 }
 
+                gymImage = gymImage?.substr(3);
                 response = await query('UPDATE gyms SET name = $1, address = $2, zipcode = $3, city = $4, country = $5, gymimage = $6 WHERE id = $7', [ name, address, zipCode, city, country, gymImage, id]);
             }
 
@@ -111,7 +114,7 @@ export default class GymController {
             const response: QueryResult = await query('SELECT gymimage FROM gyms WHERE id = $1', [id]);
             if (response.rowCount !== 0 ) {
                 if (response.rows[0].gymimage !== undefined && response.rows[0].gymimage !== null) {
-                    fs.unlink(process.cwd() + '/' + response.rows[0].gymimage, err => {
+                    fs.unlink(removeLastDirectoryFromCWDPath(process.cwd()) + '/' + response.rows[0].gymimage, err => {
                         if (err) {
                             console.log('gymimage :', response.rows[0].gymimage);
                         }

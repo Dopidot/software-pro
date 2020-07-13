@@ -27,7 +27,7 @@ export default class Server {
         });
         app.use('/api', swaggerRouter);
         app.use('/api/exercises', exerciseRouter);
-        app.use('/uploads', express.static('uploads'));
+        app.use('/uploads', express.static('../uploads'));
         app.use('*', (req: Request, res: Response) => {
             res.send("Make sure the url is correct !!!");
         });

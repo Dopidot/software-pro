@@ -7,6 +7,7 @@ import { QueryResult } from 'pg';
 import { query } from '../database';
 import fs from "fs";
 import ProgramModel from "../models/program.model";
+import { removeLastDirectoryFromCWDPath } from '../core/StringUtils';
 
 export default class ProgramController {
 
@@ -72,12 +73,13 @@ export default class ProgramController {
             const name: string = req.body.name;
             const description: string = req.body.description;
             const exercises: string = req.body.exercises;
-            const programImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
+            let programImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
 
             //let response: QueryResult;
             if ( programImage === undefined) {
                 await query('INSERT INTO programs (name, description) VALUES ($1, $2)', [name, description]);
             } else {
+                programImage = programImage?.substr(3);
                 await query('INSERT INTO programs (name, description, programimage) VALUES ($1, $2, $3)', [name, description, programImage]);
             }
 
@@ -122,7 +124,7 @@ export default class ProgramController {
             const name: string = req.body.name;
             const description: string = req.body.description;
             const exercises: string = req.body.exercises;
-            const programImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
+            let programImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
 
             let response: QueryResult;
             if (programImage === undefined) {
@@ -132,7 +134,7 @@ export default class ProgramController {
                 if (response.rowCount !== 0) {
                     if (response.rows[0].programimage !== undefined ) {
                         if ( response.rows[0].programimage !== null) {
-                            fs.unlink(process.cwd() + '/' + response.rows[0].programimage, err => {
+                            fs.unlink(removeLastDirectoryFromCWDPath(process.cwd()) + '/' + response.rows[0].programimage, err => {
                                 if (err) {
                                     console.log('programimage : ', response.rows[0].programimage);
                                     console.error(err);
@@ -145,6 +147,7 @@ export default class ProgramController {
                         message: 'Program not found'
                     });
                 }
+                programImage = programImage?.substr(3);
                 response = await query('UPDATE programs SET name = $1, description = $2, programimage = $3 WHERE id = $4', [name, description, programImage, id]);
             }
 
@@ -194,7 +197,7 @@ export default class ProgramController {
             const response: QueryResult = await query('SELECT programimage FROM programs WHERE id = $1', [id]);
             if (response.rowCount !== 0) {
                 if (response.rows[0].programimage !== undefined && response.rows[0].programimage) {
-                    fs.unlink(process.cwd() + '/' + response.rows[0].programimage, err => {
+                    fs.unlink(removeLastDirectoryFromCWDPath(process.cwd()) + '/' + response.rows[0].programimage, err => {
                         if (err) {
                             console.log('programimage :', response.rows[0].programimage);
                             console.error(err);

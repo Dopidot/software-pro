@@ -35,7 +35,7 @@ export default class Server {
         app.use('/api/events', eventRouter);
         app.use('/api/gyms', gymRouter);
         app.use('/api/coachs', coachRouter);
-        app.use('/uploads', express.static('uploads'));
+        app.use('/uploads', express.static('../uploads'));
 
         app.use('*', (req: Request, res: Response) => {
             res.send("Make sure the url is correct !!!");
