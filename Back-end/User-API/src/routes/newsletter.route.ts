@@ -1,7 +1,11 @@
-import {Router} from "express";
-import NewsletterController from "../controllers/newsletter.controller";
-import { verifyToken } from "../core/JWT";
-import { upload } from "../core/Multer";
+/**
+ * author : Guillaume Tako
+ */
+
+import {Router} from 'express';
+import NewsletterController from '../controllers/newsletter.controller';
+import { verifyToken } from '../core/JWT';
+import { upload } from '../core/Multer';
 
 const router = Router();
 const newsletterController = new NewsletterController();

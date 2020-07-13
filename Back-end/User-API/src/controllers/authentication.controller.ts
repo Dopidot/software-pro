@@ -1,12 +1,17 @@
-import * as jwt from 'jsonwebtoken';
-import {Request, Response} from "express";
-import {QueryResult} from "pg";
-import {query} from "../database";
-import * as bcrypt from "bcrypt";
-import { UserLoginModel } from "../models/user.model";
-import * as dotenv from "dotenv";
-import * as path from "path";
-dotenv.config({ path: path.join(process.cwd(), '.env') });
+/**
+ * author : Guillaume Tako
+ */
+
+import { sign } from 'jsonwebtoken';
+import { Request, Response } from 'express';
+import { QueryResult } from 'pg';
+import { query } from '../database';
+import { compare } from 'bcrypt';
+import { UserModel } from '../models/user.model';
+import { config } from 'dotenv';
+import { join } from 'path';
+
+config({ path: join(process.cwd(), '.env') });
 
 export default class AuthenticationController {
 
@@ -19,15 +24,14 @@ export default class AuthenticationController {
             if ( response.rowCount === 0) {
                 return res.status(404).json('User not found.')
             }
-            let user: UserLoginModel = response.rows[0];
-            if (await bcrypt.compare(req.body.password, user.password) ) {
+            let user: UserModel = response.rows[0];
+            if (await compare(req.body.password, user.password) ) {
 
                 await query('UPDATE users SET lastconnection = now() WHERE email = $1', [email]);
                 response = await query('SELECT id, firstname, lastname, email, lastconnection, userimage FROM users WHERE email = $1', [email]);
 
                 user = response.rows[0];
-                // creating webtoken
-                const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET as string, {expiresIn: '2h'});
+                const accessToken = sign(user, process.env.ACCESS_TOKEN_SECRET as string, {expiresIn: '2h'});
                 return res.status(200).json({
                     accessToken: accessToken,
                     user : user
@@ -37,7 +41,10 @@ export default class AuthenticationController {
             }
         } catch (e) {
             console.error(e);
-            return res.status(500).json('Internal Server Error');
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 }

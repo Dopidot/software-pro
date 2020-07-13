@@ -1,15 +1,20 @@
-import {Router} from "express";
-import NewsletterController from "../controllers/newsletter.controller";
-import { upload } from "../utils/multer.utils";
+/**
+ * author : Guillaume Tako
+ */
+
+import { Router } from 'express';
+import ExerciseController from '../controllers/exercise.controller';
+import { verifyToken } from '../core/JWT';
+import { upload } from '../core/Multer';
 
 const router = Router();
-const newsletterController = new NewsletterController();
+const exerciseController = new ExerciseController();
 
-// NEWSLETTER
-router.get('', newsletterController.getNewsletters);
-router.get('/:id', newsletterController.getNewslettersById);
-router.post('', upload.single('newsletterImage'), newsletterController.createNewsletter);
-router.put('/:id', upload.single('newsletterImage'), newsletterController.updateNewsletter);
-router.delete('/:id', newsletterController.deleteNewsletter);
+// EXERCISES
+router.get('', verifyToken, exerciseController.getExercises );
+router.get('/:id', verifyToken, exerciseController.getExerciseById);
+router.post('', verifyToken, upload.single('exerciseImage'), exerciseController.createExercise);
+router.put('/:id', verifyToken, upload.single('exerciseImage'), exerciseController.updateExercise);
+router.delete('/:id', verifyToken, exerciseController.deleteExercise);
 
 export default router;

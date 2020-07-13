@@ -1,22 +1,23 @@
-import ExerciseModel from "./exercise.model";
+/**
+ * author : Guillaume Tako
+ */
 
-export default class UserModel {
+export class UserModel {
+    id: bigint;
     firstname: string;
     lastname: string;
     email: string;
     password: string;
-    userImage: string;
-    lastConnection: Date;
-    //exercises: ExerciseModel[];
+    lastconnection: Date;
+    userimage: string;
 
-    constructor(id: number, firstname: string, lastname: string, email: string, password: string, userImage: string, lastConnection: Date) {//, exercises: ExerciseModel[]) {
+    constructor(id: bigint, firstname: string, lastname: string, email: string, password: string, lastconnection: Date, userimage: string) {
+        this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
-        this.userImage = userImage;
-        this.lastConnection = lastConnection;
-        //this.exercises = exercises;
+        this.lastconnection = lastconnection;
+        this.userimage = userimage;
     }
 }
-
