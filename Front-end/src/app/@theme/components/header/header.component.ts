@@ -7,6 +7,7 @@ import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { CommonService } from '../../../services/common.service';
 
 @Component({
     selector: 'ngx-header',
@@ -49,7 +50,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
         private layoutService: LayoutService,
         private breakpointService: NbMediaBreakpointsService,
         private router: Router,
-        public translate: TranslateService,
+        private translate: TranslateService,
+        private commonService: CommonService,
     ) {
         translate.addLangs(['en', 'fr']);
         this.loadLanguage();
@@ -69,7 +71,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
         this.user = {
             'name': userInfo['firstname'] + ' ' + userInfo['lastname'],
-            'picture': 'assets/images/nick.png'
+            'picture': userInfo['userimage'] ? this.commonService.getPicture(userInfo['userimage']) : ''
         };
 
         /*this.userService.getUsers()
