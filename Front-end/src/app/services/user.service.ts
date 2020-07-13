@@ -8,14 +8,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from "../models/user.model";
 import { Observable } from "rxjs/index";
+import { ApiConfig } from '../../../src/api.config';
 
 @Injectable()
 export class UserService {
 
-    baseUrlUser: string = 'http://localhost:4000/api/users';
-    baseUrlCoach: string = 'http://localhost:4000/api/coachs';
+    apiConfig: ApiConfig = new ApiConfig();
+    baseUrlUser: string;
+    baseUrlCoach: string;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        this.baseUrlUser = this.apiConfig.adminApiUrl + '/api/users';
+        this.baseUrlCoach = this.apiConfig.adminApiUrl + '/api/coachs';
+     }
 
     connectUser(user: User): Observable<any> {
         return this.http.post<any>(this.baseUrlUser + '/login', user);
@@ -36,24 +41,4 @@ export class UserService {
     deleteCoachHighlighted(id: string): Observable<any> {
         return this.http.delete<any>(this.baseUrlCoach + '/' + id);
     }
-
-    /*getUsers(): Observable<ApiResponse> {
-        return this.http.get<ApiResponse>(this.baseUrl);
-    }
-
-    getUserById(id: number): Observable<ApiResponse> {
-        return this.http.get<ApiResponse>(this.baseUrl + id);
-    }
-
-    createUser(user: User): Observable<ApiResponse> {
-        return this.http.post<ApiResponse>(this.baseUrl, user);
-    }
-
-    updateUser(user: User): Observable<ApiResponse> {
-        return this.http.put<ApiResponse>(this.baseUrl + user.id, user);
-    }
-
-    deleteUser(id: number): Observable<ApiResponse> {
-        return this.http.delete<ApiResponse>(this.baseUrl + id);
-    }*/
 }

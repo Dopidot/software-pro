@@ -7,13 +7,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs/index";
+import { ApiConfig } from '../../../src/api.config';
 
 @Injectable()
 export class FitislyService {
 
-    baseUrl: string = 'http://51.178.16.171:8150/';
+    apiConfig: ApiConfig = new ApiConfig();
+    baseUrl: string;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        this.baseUrl = this.apiConfig.fitislyApiUrl + '/';
+     }
 
     getUsers(): Observable<any> {
         return this.http.get<any>(this.baseUrl + 'get-users');

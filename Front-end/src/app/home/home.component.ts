@@ -24,8 +24,8 @@ export class HomeComponent implements OnInit {
     data2: any;
     options2: any = {};
     themeSubscription: any;
-    genderDatasetMen: number[] = [];
-    genderDatasetWomen: number[] = [];
+    genderDatasetMen: number[] = [7];
+    genderDatasetWomen: number[] = [7];
     ageStats: number[] = [];
     showGenderChart: boolean = false;
     titleMen = '';
@@ -61,17 +61,22 @@ export class HomeComponent implements OnInit {
     }
 
     loadConnectionByGender(): void {
-        for (let i = 7; i < 14; i++) {
-            this.fitisly.getConnectionByGender(this.getPastDate(i, 2)).subscribe(data => {
-                let res = data['body']['connections'];
-                this.genderDatasetMen.push(res['men']);
-                this.genderDatasetWomen.push(res['women']);
+        let index = 0;
 
-                if (i === 13) {
-                    this.initGenderChart();
-                }
-            });
+        for (let i = 13; i > 6; i--) {
+            this.loadConnectionByGenderPerDay(i, index);
+            index++;
         }
+    }
+
+    loadConnectionByGenderPerDay(minusDay: number, index: number): void {
+        this.fitisly.getConnectionByGender(this.getPastDate(minusDay, 2)).subscribe(data => {
+            let res = data['body']['connections'];
+            this.genderDatasetMen[index] = res['men'];
+            this.genderDatasetWomen[index] = res['women'];
+
+            this.initGenderChart();
+        });
     }
 
     loadAgeStats(): void {
@@ -90,7 +95,7 @@ export class HomeComponent implements OnInit {
 
     getPastDate(day: number, format: number): string {
         let result = '';
-        const date = new Date();
+        const date = new Date(2020, 6, 13);
         date.setDate(date.getDate() - day);
 
         if (format === 1) {

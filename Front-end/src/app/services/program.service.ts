@@ -7,13 +7,17 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs/index";
+import { ApiConfig } from '../../../src/api.config';
 
 @Injectable()
 export class ProgramService {
 
-    baseUrl: string = 'http://localhost:4000/api/programs';
+    apiConfig: ApiConfig = new ApiConfig();
+    baseUrl: string;
 
-    constructor(private http: HttpClient) { }
+    constructor(private http: HttpClient) {
+        this.baseUrl = this.apiConfig.adminApiUrl + '/api/programs';
+    }
 
     getPrograms(): Observable<any> {
         return this.http.get<any>(this.baseUrl);
@@ -36,11 +40,10 @@ export class ProgramService {
     }
 
     createFormData(obj: any, imageAttribut: string, file: any): FormData {
-        let formData = new FormData(); 
+        let formData = new FormData();
         Object.keys(obj).forEach(key => formData.append(key, obj[key]));
 
-        if (file)
-        {
+        if (file) {
             formData.set(imageAttribut, file, file.name);
         }
 
