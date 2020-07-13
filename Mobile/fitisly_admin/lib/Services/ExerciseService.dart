@@ -1,6 +1,8 @@
 // Author : DEYEHE Jean
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:fitislyadmin/Model/Fitisly_Admin/Program.dart';
+import 'package:fitislyadmin/Services/ProgramService.dart';
 import 'package:fitislyadmin/Util/ConstApiRoute.dart';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Exercise.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as Storage;
@@ -14,6 +16,7 @@ class ExerciseService {
 
   final storage = Storage.FlutterSecureStorage();
   final dio = Dio();
+  ProgramService programService = ProgramService();
 
   Future<String> getToken() async {
     var token = await storage.read(key: "token");
@@ -137,6 +140,32 @@ class ExerciseService {
     }
 
     throw Exception("Not find event with id: $id");
+  }
+
+
+  Future<List<Exercise>> getExerciseByProgram(String programId) async {
+
+    String token = await getToken();
+    Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Baerer " + token,
+    };
+
+    var urlExercise;
+    List<Exercise> exercises = List<Exercise>();
+    Program program = await programService.getProgramById(programId);
+    List<String> exerciseId =  program.exercises;
+
+    for(var e in exerciseId){
+      urlExercise = ConstApiRoute.getExerciseById+e;
+      final response = await http.get(urlExercise,headers: headers);
+      if (response.statusCode == 200) {
+        final parsed = json.decode(response.body);
+        exercises.add(Exercise.fromJson(parsed));
+      }
+
+    }
+    return exercises;
   }
 
   Exercise getExercise(String responseBody) {
