@@ -1,9 +1,13 @@
 // Author : DEYEHE Jean
+import 'package:fitislyadmin/Model/Api_Fitisly/ConnectionGenderFitisly.dart';
+import 'package:fitislyadmin/Services/ApiFitisly/ConnectionByGenderService.dart';
 import 'package:fitislyadmin/Services/ApiFitisly/StatisticService.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import '../model/Api_Fitisly/Statistic.dart';
 import 'package:pie_chart/pie_chart.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
+
 
 
 class StatisticUI extends StatefulWidget{
@@ -14,7 +18,9 @@ class StatisticUI extends StatefulWidget{
 }
 
 class _StatisticUI extends State<StatisticUI> {
-  StatisticService _service = StatisticService();
+  StatisticService _serviceStatisticYear = StatisticService();
+  ConnectionByGenderService _serviceConnectionGender = ConnectionByGenderService();
+  List<charts.Series> seriesList = List<charts.Series>();
 
   @override
   Widget build(BuildContext context) {
@@ -27,17 +33,47 @@ class _StatisticUI extends State<StatisticUI> {
 
   FutureBuilder<Statistic> _buildFutureStatistic() {
     return FutureBuilder<Statistic>(
-      future: _service.getStatisticByAge(),
+      future: _serviceStatisticYear.getStatisticByAge(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           print(snapshot.hasError);
-
           return Center(child: Text("Une erreur est survenue, veuillez contacter le support si le problème persiste"));
         }
         return snapshot.hasData ? _buildField(snapshot.data) : Center(child: CircularProgressIndicator());
       },
     );
   }
+
+  FutureBuilder<List<ConnectionGenderFitisly>> _buildTest() {
+    return FutureBuilder<List<ConnectionGenderFitisly>>(
+      future: _serviceConnectionGender.getConnectionNumber(),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          print(snapshot.hasError);
+          return Center(child: Text("Une erreur est survenue, veuillez contacter le support si le problème persiste"));
+        }
+        return snapshot.hasData ? _buildBarChart(snapshot.data) : Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+
+
+  Widget _buildBarChart(List<ConnectionGenderFitisly> connections){
+
+    List<charts.Series<ConnectionGenderFitisly, String>> series = [
+      charts.Series(
+          id: "Connection",
+          data: connections,
+          domainFn: (ConnectionGenderFitisly connections, _) => connections.men.toString(),
+          measureFn: (ConnectionGenderFitisly connections, _) => connections.women)
+    ];
+
+
+      return charts.BarChart(series, animate: true);
+  }
+
+
+
 
 
   Widget _buildField(Statistic stat) {
@@ -60,14 +96,11 @@ class _StatisticUI extends State<StatisticUI> {
               child: Text(Translations.of(context).text("title_stat_detail"),style: TextStyle(fontSize: 25),),
             ),
             Card(child: PieChart(dataMap: dataMap, showChartValuesInPercentage: true)),
+            //Card(child: _buildTest())
           ],
         )
     );
   }
-   void initData(){
 
-
-
-   }
 
 }

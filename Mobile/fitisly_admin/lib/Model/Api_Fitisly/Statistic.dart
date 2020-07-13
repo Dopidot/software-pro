@@ -9,7 +9,6 @@ class Statistic {
   Statistic({this.eighteenToTwentyFive, this.twentySixToThirty, this.thirtyOneToThirtyFive, this.moreThanThirtyFive,this.lessThanEighteen});
 
   factory Statistic.fromJson(Map<String, dynamic> json) {
-    print(json);
 
     return Statistic(
         eighteenToTwentyFive: json['eighteen_to_twenty_five'],

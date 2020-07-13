@@ -17,9 +17,7 @@ class CreateProgramScreen extends StatefulWidget {
 }
 
 class _CreateProgramScreen extends State<CreateProgramScreen> {
-  List items = List();
   List<String> _selectExercise;
-  var itemsSelected;
   ProgramService servicesProg = ProgramService();
   ExerciseService serviceEx = ExerciseService();
 
@@ -41,8 +39,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
       body: Form(
         key: _formKey,
         autovalidate: _autoValidate,
-        child:
-            futureBuilderExercise(), //SingleChildScrollView(child: _buildField()),
+        child: SingleChildScrollView(child: futureBuilderExercise()), //SingleChildScrollView(child: _buildField()),
       ),
     );
   }
