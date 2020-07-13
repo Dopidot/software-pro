@@ -34,7 +34,8 @@ class ProgramService{
       'name':p.name,
       'description':p.description,
       "programImage": await MultipartFile.fromFile(p.programImage, filename:p.programImage.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
-     // "exercises":p.exercises
+      "exercises":p.exercises.map((i) => i.toString()).join(",")
+
     });
 
     var response = await dio.post(ConstApiRoute.createProgram, data:formData,options: Options(headers: headers));
@@ -90,8 +91,10 @@ class ProgramService{
     var formData = FormData.fromMap({
       'id':p.id,
       'name':p.name,
-      'desciption':p.description,
-      "programImage": multiPart
+      'description':p.description,
+      "programImage": multiPart,
+      "exercises":p.exercises.map((i) => i.toString()).join(",")
+
     });
 
     var response = await dio.put(ConstApiRoute.updateProgram+p.id, data:formData,options: Options(headers: headers));
@@ -113,7 +116,6 @@ class ProgramService{
     final http.Response response = await http.get(url,headers: headers);
 
     if(response.statusCode == 200){
-      //var responseJson = jsonDecode(response.body);
       return getProgram(response.body) ;
     }
 

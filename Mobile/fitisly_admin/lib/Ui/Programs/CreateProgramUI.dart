@@ -226,10 +226,10 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
   void _validateForm(){
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      var idExercise = List<int>();
+      var idExercise = List<String>();
       if(_selectExercise.isNotEmpty){
         _selectExercise.forEach((element) {
-          idExercise.add(int.parse(element.split("-").first));
+          idExercise.add(element.split("-").first);
         });
       }
       Program p = Program(name: _name, description: _desc, programImage: _image.path,exercises: idExercise);
