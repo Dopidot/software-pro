@@ -180,7 +180,7 @@ class _HomeScreen extends State<HomeScreenPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Material(
-                            color: Colors.teal,
+                            color: Colors.indigo,
                             shape: CircleBorder(),
                             child: Padding(
                               padding: const EdgeInsets.all(16.0),
@@ -210,7 +210,7 @@ class _HomeScreen extends State<HomeScreenPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(Translations.of(context).text('title_application_home_event'), style: TextStyle(color: Colors.black, fontWeight: FontWeight.w700, fontSize: 20.0)),
-                          Text(Translations.of(context).text('subtitle_application_case_event'), style: TextStyle(color: Colors.redAccent))
+                          Text(Translations.of(context).text('subtitle_application_case_event'), style: TextStyle(color: Colors.black45))
                         ],
                       ),
                       Material(
@@ -251,7 +251,7 @@ class _HomeScreen extends State<HomeScreenPage> {
                           ]
                       ),
                       Material(
-                          color: Colors.teal,
+                          color: Colors.black87,
                           shape: CircleBorder(),
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),

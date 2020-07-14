@@ -51,6 +51,8 @@ class _HomeEventScreen extends State<HomeEventScreen> {
               })).then((value) {
                 if (value != null) {
                   _updateUI();
+                  _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("event_success_create"))));
+
                 }
               });
             }));
@@ -63,9 +65,7 @@ class _HomeEventScreen extends State<HomeEventScreen> {
           if (snapshot.hasError) {
             return Center(child: Text("${snapshot.error}"));
           }
-          return snapshot.hasData
-              ? _buildListView(snapshot.data)
-              : Center(child: CircularProgressIndicator());
+          return snapshot.hasData ? _buildListView(snapshot.data) : Center(child: CircularProgressIndicator());
         });
   }
 
@@ -111,6 +111,7 @@ class _HomeEventScreen extends State<HomeEventScreen> {
                               })).then((value) {
                                 if (value != null) {
                                   _updateUI();
+                                  _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("event_success_update"))));
                                 }
                               }).catchError((error) {
                                 print(error);

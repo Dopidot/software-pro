@@ -105,7 +105,7 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
                                 setState(() {
                                   _updateUI();
                                 });
-                                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Programme modifié ! ")));
+                                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("program_update_success"))));
                               }
                             });
                           },

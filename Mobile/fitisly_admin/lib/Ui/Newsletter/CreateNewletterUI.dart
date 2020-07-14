@@ -118,39 +118,45 @@ class _CreateNewsletter extends State<CreateNewsletter>{
     );
 
 
-   RaisedButton createBtn = RaisedButton(
-     child: Text( Translations.of(context).text("btn_Create")),
-     color: Colors.green,
-     onPressed: () {
-        if (_formKey.currentState.validate()) {
-          _formKey.currentState.save();
+   final createBtn =  Material(
+       elevation: 5.0,
+       borderRadius: BorderRadius.circular(30.0),
+       color: Color(0xFF45E15F),
 
-          if(_name == null || _title == null || _image == null || _body == null ){
-            displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_field_null'));
-          }
-          Newsletter nl = Newsletter(name:_name,title:_title,body: _body, newsletterImage: _image.path);
-          createNlInServer(nl);
-        }else{
-          setState (() {
-            _autoValidate = true;
+       child: MaterialButton(
+         onPressed: () {
 
-          });
-        }
-      },
-     shape: RoundedRectangleBorder(
-         borderRadius: BorderRadius.circular(18.0),
-     ),
-    );
+           if (_formKey.currentState.validate()) {
+             _formKey.currentState.save();
 
-    RaisedButton cancelBtn = RaisedButton(
-      child: Text( Translations.of(context).text("btn_cancel")),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      color: Colors.red,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-      ),
+             if(_name == null || _title == null || _image == null || _body == null ){
+               displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_field_null'));
+             }
+             Newsletter nl = Newsletter(name:_name,title:_title,body: _body, newsletterImage: _image.path);
+             createNlInServer(nl);
+           }else{
+             setState (() {
+               _autoValidate = true;
+
+             });
+           }
+
+         },
+         child: Text(Translations.of(context).text("btn_cancel")),
+       )
+   );
+
+    final cancelBtn =  Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.redAccent,
+
+        child: MaterialButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(Translations.of(context).text("btn_cancel"))
+        )
     );
 
 

@@ -50,7 +50,7 @@ class _NewsletterListState extends State<NewsletterList> {
                 .then((value) {
               if (value != null) {
                 _updateUI();
-                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("add_exercise"))));
+                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("news_success_create"))));
               }
             });
           }
