@@ -106,7 +106,7 @@ class _LoginScreen extends State<LoginScreen> {
             onPressed: () async {
               if ( _formKey.currentState.validate()) {
                 _formKey.currentState.save();
-                _futureLogin = services.login(_email, _pw,_scaffoldKey);
+                _futureLogin = services.login(_email, _pw);
 
                 _futureLogin
                     .then((value) {
@@ -124,6 +124,12 @@ class _LoginScreen extends State<LoginScreen> {
                   }else{
                     ConstApiRoute.displayDialog(Translations.of(context).text('title_no_access'),Translations.of(context).text('login_descption_no_access'),_scaffoldKey);
                   }
+                }).catchError((onError){
+
+                  print(onError);
+
+                  ConstApiRoute.displayDialog(Translations.of(context).text('title_no_access'),Translations.of(context).text('login_descption_no_access'),_scaffoldKey);
+
                 });
               }
               else {
@@ -167,6 +173,9 @@ class _LoginScreen extends State<LoginScreen> {
     );
 
   }
+
+
+
 
 
 

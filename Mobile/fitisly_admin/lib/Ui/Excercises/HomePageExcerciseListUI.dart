@@ -125,7 +125,11 @@ class _ExerciseListUI extends State<ExerciseListUI>{
                                 settings: RouteSettings(
                                   arguments: exercises[index].id,
                                 )),
-                            );
+                            ).then((value) {
+                              if(value != null){
+                                updateUi();
+                              }
+                            });
                           },
                         ),
                       ],

@@ -1,6 +1,7 @@
 // Author : DEYEHE Jean
 import 'dart:io';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Gym.dart';
+import 'package:fitislyadmin/Services/GymService.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,6 +15,9 @@ class CreateGymUI extends StatefulWidget{
 }
 
 class _CreateGymUI extends State<CreateGymUI>{
+
+  GymService services = GymService();
+
 
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
@@ -185,11 +189,15 @@ class _CreateGymUI extends State<CreateGymUI>{
   }
 
 
-  void _validateInput() {
+  Future<void> _validateInput() async {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
       Gym gym = Gym(name: _name,address: _address,zipCode: _zipCode,city: _city,country: _country,gymImage: _image.path);
-      Navigator.pop(context,gym);
+      var isCreated = await services.createGym(gym);
+
+      if(isCreated){
+        Navigator.pop(context,gym);
+      }
 
     } else {
       setState (() {

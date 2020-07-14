@@ -19,8 +19,7 @@ class HttpServices {
 
   /* ------------------------ Début Login -----------------------------*/
 
-  Future<int> login(String email, String password,
-      GlobalKey<ScaffoldState> context) async {
+  Future<int> login(String email, String password) async {
     try {
       final http.Response response = await http.post(ConstApiRoute.login,
           headers: <String, String>{
@@ -33,17 +32,14 @@ class HttpServices {
       );
 
       if (response.statusCode == 200) {
-        print("Vous êtes connecté !");
         var token = getTokenFromJson(response.body);
         writeTokenInSecureStorage(token);
       }
       return response.statusCode;
     } catch (e) {
-      //throw Exception(e);
-      context.currentState.showSnackBar(SnackBar(content: Text(e)));
+      throw Exception("Failed to login'");
     }
 
-    throw Exception('Failed to login');
   }
 
   void writeTokenInSecureStorage(String jwt) {
