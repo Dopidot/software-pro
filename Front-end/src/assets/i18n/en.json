@@ -129,5 +129,13 @@
     "PROGRAMS_CANCEL": "Cancel",
     "PROGRAMS_ADD_2": "Add",
     "PROGRAMS_REMOVE": "Remove",
-    "PROGRAMS_SAVE": "Save"
+    "PROGRAMS_SAVE": "Save",
+
+    "INACTIVITY_INACTIVE_USERS": "Inactive users",
+    "INACTIVITY_TITLE": "Program suggestion",
+    "INACTIVITY_FOR": "for",
+    "INACTIVITY_INFO": "Info !",
+    "INACTIVITY_INFO_MSG": "You must select a user before viewing their suggested program.",
+    "INACTIVITY_INFO_NOT_FOUND": "No program was recommended.",
+    "INACTIVITY_SUGGEST": "Suggest"
 }

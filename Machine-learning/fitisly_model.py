@@ -104,6 +104,7 @@ def start(height, weight, age):
     programs = ['5dfd030820593d3c5d743dbf', '5e10c1aa67eeb33f8955df3e', '5e1f22d867eeb33f8955e075',
                 '5e202c3e67eeb33f8955e09e', '5e2083bd67eeb33f8955e0c8']
     result = programs[int(sum(temp[0]))]
+    print(result)
 
     print(f"----------------------------------------------------------------")
 

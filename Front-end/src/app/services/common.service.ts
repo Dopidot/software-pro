@@ -15,10 +15,12 @@ export class CommonService {
     apiConfig: ApiConfig = new ApiConfig();
     baseUrlEvent: string;
     baseUrlNews: string;
+    baseUrlSuggestion: string;
 
     constructor(private http: HttpClient) {
         this.baseUrlEvent = this.apiConfig.adminApiUrl + '/api/events';
         this.baseUrlNews = this.apiConfig.adminApiUrl + '/api/newsletters';
+        this.baseUrlSuggestion = this.apiConfig.adminApiUrl + '/api/suggestions';
      }
 
     /* EVENTS */
@@ -61,6 +63,21 @@ export class CommonService {
 
     deleteNews(id: number): Observable<any> {
         return this.http.delete<any>(this.baseUrlNews + '/' + id);
+    }
+
+    /* Machine Learning */
+    getSuggestions(): Observable<any> {
+        return this.http.get<any>(this.baseUrlSuggestion);
+    }
+
+    createSuggestion(suggestion: any): Observable<any> {
+        return this.http.post<any>(this.baseUrlSuggestion, suggestion);
+    }
+
+    getSuggestionByProfile(height: number, weight: number, age: number): any {
+        return this.http.get<any>(
+            this.apiConfig.machineLearningApiUrl + '/api/suggestionByProfile?height=' + height + '&weight=' + weight + '&age=' + age
+        );
     }
 
     /* COMMON */

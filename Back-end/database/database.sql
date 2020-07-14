@@ -155,7 +155,7 @@ CREATE TABLE junction_program_exercise (
 
 -- DROP TABLE public.suggestions;
 
-CREATE TABLE public.suggestions (
+CREATE TABLE suggestions (
 	iduser varchar(255) NOT NULL,
 	idprogram varchar(255) NOT NULL,
 	datecreation timestamp NOT NULL,
