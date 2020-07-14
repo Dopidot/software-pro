@@ -1,9 +1,11 @@
 import flask
 from flask import request, jsonify
 from fitisly_model import start
+from flask_cors import CORS
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+CORS(app)
 
 
 @app.route('/', methods=['GET'])

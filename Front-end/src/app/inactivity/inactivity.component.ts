@@ -18,9 +18,12 @@ export class InactivityComponent implements OnInit {
 
     menu = [];
     users = [];
-    currentProgram = {};
-    currentUser = {};
+    suggestions = [];
+    currentProgram: any;
+    currentUser: any;
     success = 'success';
+    isLoading = false;
+    imagePath: string;
 
     constructor(
         private menuService: MenuService,
@@ -54,29 +57,62 @@ export class InactivityComponent implements OnInit {
         });
     }
 
-    loadProgram(user: any): void {
-        
-    }
-
-    loadSuggestion(user: any): void {
-        this.currentUser = user;
-
-
+    loadSuggestions(user: any): void {
+        if (!this.isLoading)
+        {
+            this.currentUser = user;
+            this.currentProgram = null;
+            
+            this.commonService.getSuggestions().subscribe(data => {
+                this.suggestions = data;
+                data = data.sort((a,b) => b['id'] - a['id']);
+    
+                let value = data.filter(x => x['iduser'] === user['account_id'])[0];
+    
+                if (value)
+                {
+                    this.getProgramInfo(value['idprogram']);
+                }
+            });
+        }
     }
 
     startSuggestion(): void {
-        this.commonService.getSuggestionByProfile(this.currentUser['weight'], 
-            this.currentUser['height'], this.currentUser['age']).subscribe(data => {
-            console.log(data);
+        this.isLoading = true;
 
-            this.fitislyService.getProgramInfo(data['value']).subscribe(data => {
-                let temp = data['body']['program'];
-                this.currentProgram= temp;
-            });
+        let timeDiff = Math.abs(Date.now() - new Date(this.currentUser['birth_date']).getTime());
+        let age = Math.floor((timeDiff / (1000 * 3600 * 24))/365.25);
 
-            /*this.commonService.createSuggestion().subscribe(data => {
+        this.commonService.getSuggestionByProfile(this.currentUser['height'], this.currentUser['weight'], age).subscribe(data => {
+            this.isLoading = false;
+            let idProgram = data['value'];
 
-            });*/
+            this.getProgramInfo(idProgram);
+            this.createSuggestion(idProgram);
+            
+        }, error => {
+            this.isLoading = false;
+        });
+    }
+
+    getProgramInfo(idProgram: string): void {
+        this.fitislyService.getProgramInfo(idProgram).subscribe(data => {
+            let temp = data['body']['program'];
+
+            temp['name'] = this.capitalize(temp['name']);
+            this.currentProgram = temp;
+            this.imagePath = this.fitislyService.getProgramPicture(temp['picture']);
+        });
+    }
+
+    createSuggestion(idProgram: string): void {
+        let suggestion = {
+            idProgram: idProgram,
+            idUser: this.currentUser['account_id']
+        };
+
+        this.commonService.createSuggestion(suggestion).subscribe(data => {
+            this.loadSuggestions(this.currentUser);
         });
     }
 

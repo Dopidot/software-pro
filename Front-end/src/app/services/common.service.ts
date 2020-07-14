@@ -74,12 +74,10 @@ export class CommonService {
         return this.http.post<any>(this.baseUrlSuggestion, suggestion);
     }
 
-    updateSuggestion(id: number, suggestion: any): Observable<any> {
-        return this.http.put<any>(this.baseUrlSuggestion + '/' + id, suggestion);
-    }
-
     getSuggestionByProfile(height: number, weight: number, age: number): any {
-        return this.apiConfig.machineLearningApiUrl + '/api/suggestionByProfile?height=' + height + '&weight=' + weight + '&age=' + age;
+        return this.http.get<any>(
+            this.apiConfig.machineLearningApiUrl + '/api/suggestionByProfile?height=' + height + '&weight=' + weight + '&age=' + age
+        );
     }
 
     /* COMMON */

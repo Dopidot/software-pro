@@ -63,8 +63,8 @@ export default class SuggestionController {
     createSuggestion = async function (req: Request, res: Response): Promise<Response> {
         try {
             console.log(req.body);
-            const {idUser, idProgram, dateCreation} = req.body;
-            await query('INSERT INTO suggestions (iduser, idprogram, datecreation ) VALUES ($1, $2, $3)', [idUser, idProgram, dateCreation]);
+            const {idUser, idProgram} = req.body;
+            await query('INSERT INTO suggestions (iduser, idprogram, datecreation ) VALUES ($1, $2, now())', [idUser, idProgram]);
             const response: QueryResult = await query('SELECT * from suggestions order by id desc limit 1', undefined);
             return res.status(201).json({
                 message: 'Suggestion created successfully',

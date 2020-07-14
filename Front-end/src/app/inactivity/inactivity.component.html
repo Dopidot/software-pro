@@ -6,11 +6,11 @@
 
                 <div class="col-4">
                     <nb-card class="list-card" size="medium">
-                        <nb-card-header>Utilisateurs inactifs</nb-card-header>
+                        <nb-card-header>{{ 'INACTIVITY_INACTIVE_USERS' | translate }}</nb-card-header>
                         <nb-list>
                             <nb-list-item *ngFor="let user of users">
                                 <nb-user nbButton [picture]="user.picture" [name]="user.name"
-                                    size="large" class="select-user" (click)="loadSuggestion(user)">
+                                    size="large" class="select-user" (click)="loadSuggestions(user)">
                                 </nb-user>
                             </nb-list-item>
                         </nb-list>
@@ -20,20 +20,37 @@
                 <div class="col-8">
                     <nb-card>
                         <nb-card-header>
-                            Programme recommandé
+                            {{ 'INACTIVITY_TITLE' | translate }} <span *ngIf="currentUser">{{ 'INACTIVITY_FOR' | translate }} {{currentUser.name}}</span>
                         </nb-card-header>
 
-                        <nb-card-body *ngIf="currentProgram">
-                            Un programme .....
-                        </nb-card-body>
-                        <nb-card-body *ngIf="!currentProgram">
+                        <nb-card-body *ngIf="!currentUser">
                             <div class="default-background">
-                                <strong>Info !</strong> <br />
-                                Vous devez sélectionner un utilisateur pour afficher sa suggestion de programme.
+                                <strong>{{ 'INACTIVITY_INFO' | translate }}</strong> <br />
+                                {{ 'INACTIVITY_INFO_MSG' | translate }}
                             </div>
                         </nb-card-body>
+
+                        <nb-card-body *ngIf="currentUser">
+                            <div *ngIf="!currentProgram" class="default-background">
+                                {{ 'INACTIVITY_INFO_NOT_FOUND' | translate }}
+                            </div>
+                            <div *ngIf="currentProgram">
+                                <div class="col-6" style="display: inline-block;">
+                                    <div style="text-decoration: underline;">{{currentProgram.name}}</div>
+                                    {{currentProgram.description}}
+                                </div>
+        
+                                <div class="col-6" style="display: inline-block;">
+                                    <div style="text-align: center;" *ngIf="imagePath">
+                                        <img [src]="imagePath" style="max-width: 260px; max-height: 200px;" />
+                                    </div>
+                                </div>
+                            </div>
+                        </nb-card-body>
+
                         <nb-card-footer *ngIf="currentUser" style="text-align: center;">
-                            <button nbButton [status]="success" (click)="startSuggestion()">Suggérer</button>
+                            <button *ngIf="!isLoading" nbButton [status]="success" (click)="startSuggestion()">{{ 'INACTIVITY_SUGGEST' | translate }}</button>
+                            <i *ngIf="isLoading" class="fas fa-spinner fa-spin fa-2x"></i>
                         </nb-card-footer>
                     </nb-card>
                 </div>
