@@ -67,12 +67,17 @@ class EventService {
   Future<bool> updateEvent(Event event) async {
     String token = await getToken();
 
+    var mimeTypeData;
+
     Map<String, String> headers = {
       "Content-Type": "multipart/form-data",
       "Authorization": "Baerer " + token,
     };
-    final mimeTypeData = lookupMimeType(
-        event.eventImage, headerBytes: [0xFF, 0xD8]).split('/');
+
+
+    if (event.eventImage!= null) {
+      mimeTypeData = lookupMimeType(event.eventImage, headerBytes: [0xFF, 0xD8]).split('/');
+    }
 
     var formData = FormData.fromMap({
       'name': event.name,
@@ -83,11 +88,8 @@ class EventService {
       'zipCode': event.zipCode,
       'city': event.city,
       'country': event.country,
-      "eventImage": await MultipartFile.fromFile(event.eventImage,
-          filename: event.eventImage
-              .split("/")
-              .last,
-          contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
+      "eventImage": event.eventImage != null ? await MultipartFile.fromFile(event.eventImage, filename: event.eventImage.split("/").last, contentType: MediaType(mimeTypeData[0], mimeTypeData[1])) : null,
+
     });
 
     var response = await dio.put(

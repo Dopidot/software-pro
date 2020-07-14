@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'fitisly Admin',
+      title: 'Fitisly Admin',
       debugShowCheckedModeBanner: false,
         localizationsDelegates: [
           const TranslationsDelegate(),

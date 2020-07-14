@@ -203,6 +203,7 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
            Navigator.pop(context,e);
          }
        }catch(e){
+         print(e);
          ConstApiRoute.displayDialog("Erreur", "Erreur du serveur, veuillez vérifier votre connexion internet svp",_scaffoldKey);
        }
 

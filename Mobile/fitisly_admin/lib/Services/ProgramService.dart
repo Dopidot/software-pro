@@ -6,7 +6,6 @@ import 'package:fitislyadmin/Model/Fitisly_Admin/Program.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as Storage;
 import 'package:http_parser/http_parser.dart';
-import 'package:image_downloader/image_downloader.dart';
 import 'package:mime/mime.dart';
 
 
@@ -69,7 +68,6 @@ class ProgramService{
 
   Future<bool> updateProgram(Program p) async {
     String token = await getToken();
-    var multiPart;
     var mimeTypeData;
 
     Map<String, String> headers = {
@@ -77,22 +75,16 @@ class ProgramService{
       "Authorization": "Baerer " + token,
     };
 
-    if(p.programImage.contains("uploads")){
-      var url = "http://www.localhost:4000/"+p.programImage;
-      var imageId = await ImageDownloader.downloadImage(url);
-      mimeTypeData = await ImageDownloader.findMimeType(imageId);
-      var path = await ImageDownloader.findPath(imageId);
-      multiPart = await MultipartFile.fromFile(path, filename:path.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
-    }else{
+    if(p.programImage!= null){
       mimeTypeData = lookupMimeType(p.programImage, headerBytes: [0xFF, 0xD8]).split('/');
-      multiPart = await MultipartFile.fromFile(p.programImage, filename:p.programImage.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
     }
+
 
     var formData = FormData.fromMap({
       'id':p.id,
       'name':p.name,
       'description':p.description,
-      "programImage": multiPart,
+      "programImage": p.programImage != null ? await MultipartFile.fromFile(p.programImage, filename:p.programImage.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1])) : null,
       "exercises":p.exercises.map((i) => i.toString()).join(",")
 
     });

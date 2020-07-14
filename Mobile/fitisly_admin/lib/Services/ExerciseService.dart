@@ -93,30 +93,23 @@ class ExerciseService {
 
   Future<bool> updateExercise(Exercise e) async {
     String token = await getToken();
-    var multiPart;
     var mimeTypeData;
     Map<String, String> headers = {
       "Content-Type": "multipart/form-data",
       "Authorization": "Baerer " + token,
     };
 
-    if(e.exerciseImage.contains("uploads")){
-      var url = "http://www.localhost:4000/"+e.exerciseImage;
-      var imageId = await ImageDownloader.downloadImage(url);
-      mimeTypeData = await ImageDownloader.findMimeType(imageId);
-      var path = await ImageDownloader.findPath(imageId);
-      multiPart = await MultipartFile.fromFile(path, filename:path.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
-    }else{
+    if(e.exerciseImage != null){
       mimeTypeData = lookupMimeType(e.exerciseImage, headerBytes: [0xFF, 0xD8]).split('/');
-      multiPart = await MultipartFile.fromFile(e.exerciseImage, filename:e.exerciseImage.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
     }
+
 
     var formData = FormData.fromMap({
       'name': e.name,
       'description': e.description,
       'repeat_number': e.repetitionNumber.toString(),
       'rest_time': e.restTime.toString(),
-      'exerciseImage': multiPart,
+      'exerciseImage': e.exerciseImage != null ? await MultipartFile.fromFile(e.exerciseImage, filename:e.exerciseImage.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1])) : null,
     });
 
     var response = await dio.put(ConstApiRoute.updateExercise+e.id, data:formData,options: Options(headers: headers));

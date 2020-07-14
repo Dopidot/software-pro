@@ -27,10 +27,6 @@ class NewsletterService {
       "Authorization": "Baerer " + token,
     };
 
-
-    //var f = File(nl.newsletterImage).readAsBytesSync();
-    //var img = base64Encode(f);
-
     final mimeTypeData = lookupMimeType(nl.newsletterImage, headerBytes: [0xFF, 0xD8]).split('/');
 
     var formData = FormData.fromMap({
@@ -38,8 +34,8 @@ class NewsletterService {
       'name':nl.name,
       'title':nl.title,
       'body':nl.body,
+      'isSent':true,
       "newsletterImage": await MultipartFile.fromFile(nl.newsletterImage, filename:nl.newsletterImage.split("/").last ,contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
-     // "newsletterImage": await MultipartFile.fromBytes(f,contentType: MediaType(mimeTypeData[0], mimeTypeData[1]))
 
     });
 
@@ -72,30 +68,23 @@ class NewsletterService {
 
   Future<bool> updateNewsletter(Newsletter nl) async {
     String token = await getToken();
-    var multiPart;
     var mimeTypeData;
     Map<String, String> headers = {
       "Content-Type": "multipart/form-data",
       "Authorization": "Baerer " + token,
     };
 
-    if(nl.newsletterImage.contains("uploads")){
-      var url = "http://www.localhost:4000/"+nl.newsletterImage;
-      var imageId = await ImageDownloader.downloadImage(url);
-      mimeTypeData = await ImageDownloader.findMimeType(imageId);
-      var path = await ImageDownloader.findPath(imageId);
-      multiPart = await MultipartFile.fromFile(path, filename:path.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
-    }else{
+    if(nl.newsletterImage!= null){
       mimeTypeData = lookupMimeType(nl.newsletterImage, headerBytes: [0xFF, 0xD8]).split('/');
-      multiPart = await MultipartFile.fromFile(nl.newsletterImage, filename:nl.newsletterImage.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
     }
+
 
     var formData = FormData.fromMap({
       'id':nl.id,
       'name':nl.name,
       'title':nl.title,
       'body':nl.body,
-      "newsletterImage": multiPart
+      "newsletterImage": nl.newsletterImage != null ? await MultipartFile.fromFile(nl.newsletterImage, filename:nl.newsletterImage.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1])) : null,
     });
 
     var response = await dio.put(ConstApiRoute.updateNewsletters+nl.id, data:formData,options: Options(headers: headers));

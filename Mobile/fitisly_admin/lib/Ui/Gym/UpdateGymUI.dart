@@ -135,18 +135,28 @@ class _UpdateGymUI extends State<UpdateGymUI>{
         height: 200,
         width: 175,
 
-        child:Card(
+        child:
 
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Center(
-            child: Image.network(urlImage),
+        GestureDetector(
+          child: Card(
+
+            semanticContainer: true,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: _image == null ? Center(
+              child: Image.network(urlImage),
+            ) : Image.file(_image),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            elevation: 15,
+            margin: EdgeInsets.all(10),
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          elevation: 15,
-          margin: EdgeInsets.all(10),
+          onTap: () async {
+            final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+            setState(() {
+              _image = File(pickedFile.path);
+            });
+          },
         )
     );
 
@@ -238,12 +248,13 @@ class _UpdateGymUI extends State<UpdateGymUI>{
       gym.zipCode = _zipCode;
       gym.city = _city;
       gym.country = _country;
-      gym.gymImage = _image != null ? _image.path : gym.gymImage;
+      gym.gymImage = _image != null ? _image.path : _image;
 
 
-      //Gym gym = Gym(name: _name,address: _address,zipCode: _zipCode,city: _city,country: _country,gymImage: _image.path);
-      services.updateGym(gym);
-      Navigator.pop(context,gym);
+      services.updateGym(gym).then((value) {
+        Navigator.pop(context,gym);
+
+      });
 
     } else {
       setState (() {
