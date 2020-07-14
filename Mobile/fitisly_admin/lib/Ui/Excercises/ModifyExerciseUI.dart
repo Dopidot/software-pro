@@ -29,22 +29,27 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
   final picker = ImagePicker();
   String exerciseId;
   ExerciseService services = ExerciseService();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
   @override
   Widget build(BuildContext context) {
     final String id = ModalRoute.of(context).settings.arguments;
 
     return Scaffold(
+      key: _scaffoldKey,
         appBar: AppBar(
           title: Text(Translations.of(context).text("title_exercise_detail")),
           centerTitle: true,
         ),
-        body: Container(
-            padding: EdgeInsets.all(20.0),
-            child: Form(
-                autovalidate: _autoValidate,
-                key: _formKey,
-                child: futureBuilderExercise(id))
+        body: SingleChildScrollView(
+          child: Container(
+              padding: EdgeInsets.all(20.0),
+              child: Form(
+                  autovalidate: _autoValidate,
+                  key: _formKey,
+                  child: futureBuilderExercise(id))
+          ),
         )
     );
   }
@@ -66,7 +71,11 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
 
   Widget buildForm(Exercise e){
 
-    var urlImage = ConstApiRoute.baseUrlImage + e.exerciseImage;
+    var urlImage;
+
+    if(e.exerciseImage != null){
+      urlImage = ConstApiRoute.baseUrlImage + e.exerciseImage;
+    }
 
     final photoField = Container(
         height: 200,
@@ -163,15 +172,17 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
         )
     );
 
-    RaisedButton cancelBtn = RaisedButton(
-      child: Text(Translations.of(context).text("btn_cancel")),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      color: Colors.red,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-      ),
+    final cancelBtn = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.red,
+
+        child: MaterialButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text(Translations.of(context).text("btn_update")),
+        )
     );
 
     return Column(
@@ -220,6 +231,10 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
 
+      if( _name == null || _description == null || _reapeat_number == null || _rest_time == null){
+        _displayDialog(Translations.of(context).text('error_title'), Translations.of(context).text('error_field_null'));
+      }
+
        e.name=_name;
        e.description= _description;
        e.repetitionNumber= _reapeat_number;
@@ -261,6 +276,13 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
     }
     return int.tryParse(result) != null;
   }
+
+  void _displayDialog(String title, String text) => showDialog(
+    context: _scaffoldKey.currentState.context,
+    builder: (context) =>
+        AlertDialog(title: Text(title), content: Text(text)),
+  );
+
 }
 
 

@@ -104,6 +104,7 @@ class _ExerciseListUI extends State<ExerciseListUI>{
                             ).then((value) {
                               if(value != null){
                                 updateUi();
+                                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("exercise_success_update"))));
                               }
                             });
                           },
