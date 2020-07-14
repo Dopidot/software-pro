@@ -55,21 +55,28 @@ export class InactivityComponent implements OnInit {
     }
 
     loadProgram(user: any): void {
-        this.currentUser = user;
-
-        this.fitislyService.getProgramInfo(this.currentProgram['']).subscribe(data => {
-            let temp = data['body']['program'];
-            this.currentProgram= temp;
-        });
-    }
-
-    loadSuggestion(user: any): void {
         
     }
 
+    loadSuggestion(user: any): void {
+        this.currentUser = user;
+
+
+    }
+
     startSuggestion(): void {
-        this.commonService.getSuggestion(this.currentUser['weight'], this.currentUser['height'], this.currentUser['age']).subscribe(data => {
+        this.commonService.getSuggestionByProfile(this.currentUser['weight'], 
+            this.currentUser['height'], this.currentUser['age']).subscribe(data => {
             console.log(data);
+
+            this.fitislyService.getProgramInfo(data['value']).subscribe(data => {
+                let temp = data['body']['program'];
+                this.currentProgram= temp;
+            });
+
+            /*this.commonService.createSuggestion().subscribe(data => {
+
+            });*/
         });
     }
 
