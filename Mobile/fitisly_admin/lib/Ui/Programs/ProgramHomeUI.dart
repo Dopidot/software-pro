@@ -2,10 +2,8 @@
 import 'package:fitislyadmin/Model/Fitisly_Admin/Program.dart';
 import 'package:fitislyadmin/Services/HttpServices.dart';
 import 'package:fitislyadmin/Services/ProgramService.dart';
-import 'package:fitislyadmin/Ui/Home/LoginScreenUI.dart';
 import 'package:fitislyadmin/Ui/Programs/CreateProgramUI.dart';
 import 'package:fitislyadmin/Ui/Programs/ModifyProgramUI.dart';
-import 'package:fitislyadmin/Ui/User/UserScreenSettingUI.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -27,7 +25,7 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      body:buildFutureProgram(),
+      body: _buildFutureProgram(),
       floatingActionButton: FloatingActionButton(
           child:Icon(Icons.add),
           onPressed: () {
@@ -36,7 +34,7 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
                 MaterialPageRoute(builder: (context) => CreateProgramScreen()))
             .then((value) {
               if(value != null){
-                updateUI();
+                _updateUI();
                 _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("add_program"))));
               }
             });
@@ -46,7 +44,7 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
   }
 
 
-  FutureBuilder<List<Program>> buildFutureProgram() {
+  FutureBuilder<List<Program>> _buildFutureProgram() {
     return FutureBuilder<List<Program>>(
       future: services.getAllPrograms(),
       builder: (context, snapshot) {
@@ -54,17 +52,18 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
 
           return Text("${snapshot.error}");
         }
-        return snapshot.hasData ? buildList(snapshot.data) : Center(child: CircularProgressIndicator());
+        return snapshot.hasData ? _buildListView(snapshot.data) : Center(child: CircularProgressIndicator());
       },
     );
   }
 
 
-  Widget buildList(List<Program> programs ){
-    return programs.isEmpty ? Center(child: Text(Translations.of(context).text("no_program"))) : buildListView(programs);
-  }
+  Widget _buildListView(List<Program> programs) {
 
-  Widget buildListView(List<Program> programs) {
+    if(programs.isEmpty){
+      return Center(child: Text(Translations.of(context).text("no_program")));
+    }
+
     return AnimationLimiter(
       child: ListView.builder(
         itemCount: programs.length,
@@ -83,7 +82,7 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
                       child: Icon(Icons.cancel),
                     ),
                     onDismissed: (direction) {
-                      delete(index,programs);
+                      _delete(index,programs);
                     },
                     child: Padding(
                       padding:
@@ -104,8 +103,7 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
 
                               if(value != null){
                                 setState(() {
-                                 // programs[index] = value;
-                                  updateUI();
+                                  _updateUI();
                                 });
                                 _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Programme modifié ! ")));
                               }
@@ -124,28 +122,14 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
     );
   }
 
-  Future<void> logOut() async {
-
-    var futureLogOut = serviceHttp.logOut();
-
-    futureLogOut
-        .then((value) => Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => LoginScreen()),
-          (Route<dynamic> route) => false,
-    ))
-        .catchError((onError) => print(onError));
-  }
-
-
-  void updateUI(){
+  void _updateUI(){
     setState(() {
-      buildFutureProgram();
+      _buildFutureProgram();
     });
 
   }
 
-  void delete(var index,List<Program> prog) async {
+  void _delete(var index,List<Program> prog) async {
 
     var isDelete = await services.deleteProgram(prog[index].id);
     if(isDelete){

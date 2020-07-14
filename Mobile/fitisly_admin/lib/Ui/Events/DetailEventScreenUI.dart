@@ -43,7 +43,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(Translations.of(context).text("title_event_detail")),
+      appBar: AppBar(title: Text(Translations.of(context).text("title_event_detail") , style: TextStyle(fontFamily: 'OpenSans')),
         centerTitle: true),
       body:  Container(
           padding: EdgeInsets.all(20.0),
@@ -147,7 +147,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
       onSaved: (String val){
         _zipCode = val;
       },
-      validator: validateField,
+      validator: _validZipCode,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
           hintText: Translations.of(context).text("field_zipCode"),
@@ -327,6 +327,21 @@ class _DetailEventScreen extends State<DetailEventScreen> {
       return Translations.of(context).text("field_is_empty");
     }
     return null;
+  }
+
+  String _validZipCode(String val){
+    if(_isNumeric(val)){
+      return null;
+    }
+    return Translations.of(context).text("invalid_zip_code");
+  }
+
+
+  bool _isNumeric(String result) {
+    if (result == null) {
+      return false;
+    }
+    return int.tryParse(result) != null;
   }
 
 }

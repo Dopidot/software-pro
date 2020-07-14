@@ -5,6 +5,7 @@ import 'package:fitislyadmin/Model/Api_Fitisly/UserFitisly.dart';
 import 'package:fitislyadmin/Services/ApiFitisly/CoachServiceApiFitisly.dart';
 import 'package:fitislyadmin/Services/ApiFitisly/UserSportService.dart';
 import 'package:fitislyadmin/Services/CoachService.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
@@ -31,7 +32,6 @@ class _FollowersCoachUI extends State<FollowersCoachUI> {
     );
   }
 
-
   FutureBuilder<List<UserFitisly>> futureBuilderUserFitisly(){
 
     List<String> l = serviceCoach.getFollowers(widget.coach.followers);
@@ -43,17 +43,16 @@ class _FollowersCoachUI extends State<FollowersCoachUI> {
 
           return Center(child: Text("${snapshot.error}"));
         }
-        return snapshot.hasData ? _buildList(snapshot.data) : Center(child: CircularProgressIndicator());      },
+        return snapshot.hasData ? _initFollowersList(snapshot.data) : Center(child: CircularProgressIndicator());      },
     );
   }
 
 
-
-  Widget _buildList(List<UserFitisly> followersProfils ){
-    return followersProfils.isEmpty ? Center(child: Text("Aucune coach, veuillez vérifier votre connexion svp")) : _initFollowersList(followersProfils);
-  }
-
   Widget _initFollowersList(List<UserFitisly> followers) {
+
+    if(followers.isEmpty){
+      return Center(child: Text(Translations.of(context).text('no_follower')));
+    }
 
     return AnimationLimiter(
       child: ListView.builder(

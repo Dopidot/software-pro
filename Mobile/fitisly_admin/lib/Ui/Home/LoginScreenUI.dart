@@ -18,7 +18,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreen extends State<LoginScreen> {
 
-
   TextStyle styleOS = TextStyle(fontFamily: 'OpenSans', fontSize: 20.0);
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
@@ -27,12 +26,6 @@ class _LoginScreen extends State<LoginScreen> {
   Future<int> _futureLogin;
   HttpServices services = HttpServices();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +59,10 @@ class _LoginScreen extends State<LoginScreen> {
             hintText: Translations.of(context).text('field_login_email'),
             border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
         validator: (value){
-          String pattern = r'^(([^&lt;&gt;()[\]\\.,;:\s@\"]+(\.[^&lt;&gt;()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-          RegExp regExp = new RegExp(pattern);
+
           if (value.isEmpty) {
             return Translations.of(context).text('field_is_empty');
-          } else if (!regExp.hasMatch(value)) {
+          } else if (!value.contains('@')) {
             return Translations.of(context).text('email_is_valid');
           } else {
             return null;
@@ -165,20 +157,12 @@ class _LoginScreen extends State<LoginScreen> {
               ),
               Padding(child: loginButton,
                       padding: EdgeInsets.only(top:5,bottom: 10)),
-             
             ],
           ),
         ),
       ),
     );
-
   }
-
-
-
-
-
-
 }
 
 

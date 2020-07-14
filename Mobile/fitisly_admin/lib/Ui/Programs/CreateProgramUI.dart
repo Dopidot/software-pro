@@ -36,15 +36,35 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
       appBar: AppBar(
           centerTitle: true,
           title: Text(Translations.of(context).text("subtitle_creation_prog"))),
-      body: Form(
-        key: _formKey,
-        autovalidate: _autoValidate,
-        child: SingleChildScrollView(child: futureBuilderExercise()), //SingleChildScrollView(child: _buildField()),
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          autovalidate: _autoValidate,
+          child: SingleChildScrollView(child: futureBuilderExercise()), //SingleChildScrollView(child: _buildField()),
+        ),
       ),
     );
   }
 
+  FutureBuilder<List<Exercise>> futureBuilderExercise() {
+    return FutureBuilder<List<Exercise>>(
+        future: serviceEx.fetchExercises(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Center(child: Text(Translations.of(context).text("error_server")));
+          }
+          return snapshot.hasData ? _buildField(snapshot.data) : Center(child: CircularProgressIndicator());
+        });
+  }
+
   Widget _buildField(List<Exercise> exercises) {
+
+    if(exercises.isEmpty){
+      return Center(child: Text(Translations.of(context).text("no_exercise")));
+    }
+
+
+
     final nameField = TextFormField(
       validator: validateField,
       onSaved: (String val) {
@@ -174,28 +194,13 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
     }
   }
 
-  void displayDialog(String title, String text) => showDialog(
-        context: _scaffoldKey.currentState.context,
-        builder: (context) =>
-            AlertDialog(title: Text(title), content: Text(text)),
-      );
-
-  FutureBuilder<List<Exercise>> futureBuilderExercise() {
-    return FutureBuilder<List<Exercise>>(
-        future: serviceEx.fetchExercises(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Center(child: Text(Translations.of(context).text("error_server")));
-          }
-          return snapshot.hasData ? buildUI(snapshot.data) : Center(child: CircularProgressIndicator());
-        });
-  }
-
-  Widget buildUI(List<Exercise> exercises) {
-    return exercises.isEmpty ? Center(child: Text(Translations.of(context).text("no_exercise"))) : _buildField(exercises); //buildListView(exercises);
-  }
 
   Widget _listExercise(List<Exercise> exercises) {
+
+    if(exercises.isEmpty){
+      return Center(child: Text(Translations.of(context).text('no_exercise')));
+    }
+
     final items = exercises.map((e) => MultiSelectItem<String>("${e.id}-${e.name}", e.name)).toList();
     return Container(
       child: MultiSelectField(
@@ -232,7 +237,13 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
           idExercise.add(element.split("-").first);
         });
       }
+
+      if(_name == null || _image == null || _desc == null ){
+        displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_field_null'));
+      }
       Program p = Program(name: _name, description: _desc, programImage: _image.path,exercises: idExercise);
+
+
       createProgramInServer(p);
     } else {
       setState(() {
@@ -240,5 +251,12 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
       });
     }
   }
+
+
+  void displayDialog(String title, String text) => showDialog(
+    context: _scaffoldKey.currentState.context,
+    builder: (context) =>
+        AlertDialog(title: Text(title), content: Text(text)),
+  );
 
 }

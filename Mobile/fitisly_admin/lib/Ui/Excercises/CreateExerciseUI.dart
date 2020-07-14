@@ -35,16 +35,17 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
     return Scaffold(
       key: _scaffoldKey,
         appBar: AppBar(
-          title: Text(Translations.of(context).text("title_create_exo")),
+          title: Text(Translations.of(context).text("title_create_exo") , style : TextStyle(fontFamily: 'OpenSans')),
           centerTitle: true,
         ),
-        body: Container(
-            padding: EdgeInsets.all(20.0),
-            child: SingleChildScrollView(
-                child:Form(
-                    autovalidate: _autoValidate,
-                    key: _formKey,
-                    child: buildForm()))
+        body: SingleChildScrollView(
+          child: Container(
+              padding: EdgeInsets.all(20.0),
+              child: Form(
+                  autovalidate: _autoValidate,
+                  key: _formKey,
+                  child: buildForm())
+          ),
         )
     );
   }
@@ -106,7 +107,7 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
       onSaved: (String val){
         _reapeat_number = int.parse(val);
       },
-      validator: _validateField,
+      validator: isNumericValue,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
           hintText: Translations.of(context).text("field_nb_repeate"),
@@ -118,7 +119,7 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
       onSaved: (String val){
         _rest_time = int.parse(val);
       },
-      validator: _validateField,
+      validator: isNumericValue,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
           hintText: Translations.of(context).text("field_recup"),
@@ -194,6 +195,10 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
 
+      if( _name == null || _description == null || _reapeat_number == null || _rest_time == null){
+        _displayDialog(Translations.of(context).text('error_title'), Translations.of(context).text('error_field_null'));
+      }
+
       Exercise e = Exercise(name:_name,description: _description,repetitionNumber: _reapeat_number,restTime: _rest_time,exerciseImage: _image.path);
 
 
@@ -203,8 +208,7 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
            Navigator.pop(context,e);
          }
        }catch(e){
-         print(e);
-         ConstApiRoute.displayDialog("Erreur", "Erreur du serveur, veuillez vérifier votre connexion internet svp",_scaffoldKey);
+         _displayDialog(Translations.of(context).text('error_title'), Translations.of(context).text('error_server'));
        }
 
     } else {
@@ -221,6 +225,29 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
     }
     return null;
   }
+
+
+  String isNumericValue(String val){
+    if(_isNumeric(val)){
+      return null;
+    }
+    return Translations.of(context).text("error_no_numeric_value");
+  }
+
+
+  bool _isNumeric(String result) {
+    if (result == null) {
+      return false;
+    }
+    return int.tryParse(result) != null;
+  }
+
+
+  void _displayDialog(String title, String text) => showDialog(
+    context: _scaffoldKey.currentState.context,
+    builder: (context) =>
+        AlertDialog(title: Text(title), content: Text(text)),
+  );
 }
 
 
