@@ -1,7 +1,12 @@
-import { Request, Response } from "express";
-import { QueryResult } from "pg";
-import { query } from "../database";
-import fs from "fs";
+/**
+ * author : Guillaume Tako
+ */
+
+import { Request, Response } from 'express';
+import { QueryResult } from 'pg';
+import { query } from '../database';
+import { unlink } from 'fs';
+import { removeLastDirectoryFromCWDPath } from '../core/StringUtils';
 
 export default class NewsletterController {
 
@@ -12,8 +17,11 @@ export default class NewsletterController {
             const response: QueryResult = await query('SELECT * FROM newsletters', undefined);
             return res.status(200).json(response.rows);
         } catch (e) {
-            console.log(e);
-            return res.status(500).json('Internal Server Error');
+            console.error(e);
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 
@@ -24,22 +32,28 @@ export default class NewsletterController {
             if (response.rowCount !== 0 ) {
                 return res.status(200).json(response.rows[0]);
             } else {
-                return res.status(404).json('Newsletter not found')
+                return res.status(404).json({
+                    message :'Newsletter not found'
+                })
             }
         } catch (e) {
-            console.log(e);
-            return res.status(500).json('Internal Server Error');
+            console.error(e);
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 
     createNewsletter = async function(req: Request, res: Response): Promise<Response> {
         try {
             const { name, title, body } = req.body;
-            const newsletterImage : string | undefined = req.file !== undefined ? req.file.path : undefined;
+            let newsletterImage : string | undefined = req.file !== undefined ? req.file.path : undefined;
 
             if (newsletterImage === undefined) {
                 await query('INSERT INTO newsletters (name, title, body, creationDate, isSent) VALUES ($1, $2, $3, now(), false)', [name, title, body]);
             } else {
+                newsletterImage = newsletterImage?.substr(3);
                 await query('INSERT INTO newsletters (name, title, body, creationDate, isSent, newsletterImage) VALUES ($1, $2, $3, now(), false, $4)', [name, title, body, newsletterImage]);
             }
 
@@ -51,11 +65,17 @@ export default class NewsletterController {
                 }
             });
         } catch (e) {
-            console.log(e);
+            console.error(e);
             if (e.code == 22001) {
-                return res.status(400).json('The title is too long the maximum is 50 characters');
+                return res.status(400).json({
+                    message :'The title is too long the maximum is 50 characters',
+                    error : e.message
+                });
             } else {
-                return res.status(500).json('Internal Server Error');
+                return res.status(500).json({
+                    message : 'Internal Server Error',
+                    error: e.message
+                });
             }
         }
     }
@@ -64,7 +84,7 @@ export default class NewsletterController {
         try {
             const id = parseInt(req.params.id);
             const { name, title, body, isSent } = req.body;
-            const newsletterImage : string | undefined = req.file !== undefined ? req.file.path : undefined;
+            let newsletterImage : string | undefined = req.file !== undefined ? req.file.path : undefined;
 
             let response: QueryResult;
             if (newsletterImage === undefined) {
@@ -74,7 +94,7 @@ export default class NewsletterController {
                 if (response.rowCount !== 0) {
                     if ( response.rows[0].newsletterimage !== undefined ) {
                         if ( response.rows[0].newsletterimage !== null ) {
-                            fs.unlink(process.cwd() + '/' + response.rows[0].newsletterimage, err => {
+                            unlink(removeLastDirectoryFromCWDPath(process.cwd()) + '/' + response.rows[0].newsletterimage, err => {
                                 if (err) {
                                     console.log('newsletterimage : ', response.rows[0].newsletterimage);
                                     console.error(err);
@@ -83,9 +103,12 @@ export default class NewsletterController {
                         }
                     }
                 } else {
-                    return res.status(404).json('Newsletter not found');
+                    return res.status(404).json({
+                        message : 'Newsletter not found'
+                    });
                 }
 
+                newsletterImage = newsletterImage?.substr(3);
                 response = await query('UPDATE newsletters SET name = $1, title = $2, body = $3, issent = $4, newsletterimage = $5 WHERE id = $6', [ name, title, body, isSent, newsletterImage, id]);
             }
 
@@ -98,11 +121,16 @@ export default class NewsletterController {
                     }
                 });
             } else {
-                return res.status(404).json('Newsletter not found');
+                return res.status(404).json({
+                    message : 'Newsletter not found'
+                });
             }
         } catch (e)  {
-            console.log(e);
-            return res.status(500).json('Internal Server Error');
+            console.error(e);
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 
@@ -112,7 +140,7 @@ export default class NewsletterController {
             const response: QueryResult = await query('SELECT newsletterimage FROM newsletters WHERE id = $1', [id]);
             if (response.rowCount !== 0) {
                 if (response.rows[0].newsletterimage !== undefined && response.rows[0].newsletterimage !== null) {
-                    fs.unlink(process.cwd() + '/' + response.rows[0].newsletterimage, err => {
+                    unlink(removeLastDirectoryFromCWDPath(process.cwd()) + '/' + response.rows[0].newsletterimage, err => {
                         if (err) {
                             console.log('newsletterimage :', response.rows[0].newsletterimage);
                             console.error(err);
@@ -123,12 +151,17 @@ export default class NewsletterController {
                 await query('DELETE FROM newsletters WHERE id = $1', [id]);
                 return res.status(200).json(`Newsletter ${id} deleted successfully`);
             } else {
-                return res.status(404).json('Newsletter not found');
+                return res.status(404).json({
+                    message : 'Newsletter not found'
+                });
             }
 
         } catch (e) {
-            console.log(e);
-            return res.status(500).json('Internal Server Error');
+            console.error(e);
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 }

@@ -1,12 +1,16 @@
-import { Router } from "express";
-import EventController from "../controllers/event.controller";
-import { verifyToken } from "../core/JWT";
-import { upload } from "../core/Multer";
+import { Router } from 'express';
+import EventController from '../controllers/event.controller';
+import { verifyToken } from '../core/JWT';
+import { upload } from '../core/Multer';
+
+/**
+ * Author : Guillaume Tako
+ */
 
 const router = Router();
 const eventController = new EventController();
 
-// EVENTS
+// EVENTS routes
 router.get('', verifyToken, eventController.getEvents);
 router.get('/:id', verifyToken, eventController.getEventById);
 router.post('', verifyToken, upload.single('eventImage'), eventController.createEvent);
