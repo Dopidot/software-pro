@@ -37,7 +37,8 @@ class _NewsletterListState extends State<NewsletterList> {
                 MaterialPageRoute(builder: (context) => CreateNewsletter()))
                 .then((value) {
               if (value != null) {
-                _updateUiAfterCreation();
+                _updateUI();
+                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("add_exercise"))));
               }
             });
           }
@@ -53,8 +54,7 @@ class _NewsletterListState extends State<NewsletterList> {
         if (snapshot.hasError) {
           return Center(child: Text("${snapshot.error}"));
         }
-        return snapshot.hasData ? _buildList(snapshot.data) : Center(
-            child: CircularProgressIndicator());
+        return snapshot.hasData ? _buildList(snapshot.data) : Center(child: CircularProgressIndicator());
       },
     );
   }
@@ -105,9 +105,8 @@ class _NewsletterListState extends State<NewsletterList> {
                               )
                                   .then((value) {
                                 if (value != null) {
-                                  setState(() {
-                                    newsletters[index] = value;
-                                  });
+                                  _updateUI();
+
                                   _scaffoldKey.currentState.showSnackBar(
                                       SnackBar(content: Text(Translations.of(context).text("update_news"))));
                                 }
@@ -126,7 +125,7 @@ class _NewsletterListState extends State<NewsletterList> {
     );
   }
 
-  void _updateUiAfterCreation() async {
+  void _updateUI() async {
     setState(() {
       _buildFutureNewsletter();
     });

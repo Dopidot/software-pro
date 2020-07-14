@@ -9,12 +9,9 @@ import 'package:mime/mime.dart';
 import 'package:fitislyadmin/Util/ConstApiRoute.dart';
 import 'package:http/http.dart' as http;
 
-
-class GymService{
-
+class GymService {
   final storage = Storage.FlutterSecureStorage();
   final dio = Dio();
-
 
   Future<String> getToken() async {
     var token = await storage.read(key: "token");
@@ -37,8 +34,8 @@ class GymService{
       "Content-Type": "multipart/form-data",
       "Authorization": "Baerer " + token,
     };
-    final mimeTypeData = lookupMimeType(
-        gym.gymImage, headerBytes: [0xFF, 0xD8]).split('/');
+    final mimeTypeData =
+        lookupMimeType(gym.gymImage, headerBytes: [0xFF, 0xD8]).split('/');
 
     var formData = FormData.fromMap({
       'name': gym.name,
@@ -47,18 +44,15 @@ class GymService{
       'city': gym.city,
       'country': gym.country,
       "gymImage": await MultipartFile.fromFile(gym.gymImage,
-          filename: gym.gymImage
-              .split("/")
-              .last,
+          filename: gym.gymImage.split("/").last,
           contentType: MediaType(mimeTypeData[0], mimeTypeData[1])),
     });
 
-    var response = await dio.post(ConstApiRoute.createGym, data: formData,
-        options: Options(headers: headers));
+    var response = await dio.post(ConstApiRoute.createGym,
+        data: formData, options: Options(headers: headers));
 
     return response.statusCode == 201;
   }
-
 
   Future<bool> deleteGym(int id) async {
     String token = await getToken();
@@ -76,22 +70,16 @@ class GymService{
 
   Future<bool> updateGym(Gym gym) async {
     String token = await getToken();
-    var multiPart;
+
     var mimeTypeData;
     Map<String, String> headers = {
       "Content-Type": "multipart/form-data",
       "Authorization": "Baerer " + token,
     };
 
-    if(gym.gymImage.contains("uploads")){
-      var url = "http://www.localhost:4000/"+gym.gymImage;
-      var imageId = await ImageDownloader.downloadImage(url);
-      mimeTypeData = await ImageDownloader.findMimeType(imageId);
-      var path = await ImageDownloader.findPath(imageId);
-      multiPart = await MultipartFile.fromFile(path, filename:path.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
-    }else{
-      mimeTypeData = lookupMimeType(gym.gymImage, headerBytes: [0xFF, 0xD8]).split('/');
-      multiPart = await MultipartFile.fromFile(gym.gymImage, filename:gym.gymImage.split("/").last , contentType: MediaType(mimeTypeData[0], mimeTypeData[1]));
+    if (gym.gymImage != null) {
+      mimeTypeData =
+          lookupMimeType(gym.gymImage, headerBytes: [0xFF, 0xD8]).split('/');
     }
 
     var formData = FormData.fromMap({
@@ -100,12 +88,11 @@ class GymService{
       'zipCode': gym.zipCode,
       'city': gym.city,
       'country': gym.country,
-      "gymImage": multiPart,
+      "gymImage": gym.gymImage != null ? await MultipartFile.fromFile(gym.gymImage, filename: gym.gymImage.split("/").last, contentType: MediaType(mimeTypeData[0], mimeTypeData[1])) : null,
     });
 
-    var response = await dio.put(
-        ConstApiRoute.updateGym + gym.id.toString(), data: formData,
-        options: Options(headers: headers));
+    var response = await dio.put(ConstApiRoute.updateGym + gym.id.toString(),
+        data: formData, options: Options(headers: headers));
 
     return response.statusCode == 200;
   }
@@ -150,11 +137,8 @@ class GymService{
     return parsed.map<Gym>((json) => Gym.fromJson(json)).toList();
   }
 
-
   Gym getGym(String responseBody) {
     final parsed = json.decode(responseBody);
     return Gym.fromJson(parsed);
   }
-
-
 }

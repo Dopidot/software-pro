@@ -36,7 +36,8 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
                 MaterialPageRoute(builder: (context) => CreateProgramScreen()))
             .then((value) {
               if(value != null){
-                updateUIAfterCreate();
+                updateUI();
+                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("add_program"))));
               }
             });
           }
@@ -103,7 +104,8 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
 
                               if(value != null){
                                 setState(() {
-                                  programs[index] = value;
+                                 // programs[index] = value;
+                                  updateUI();
                                 });
                                 _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text("Programme modifié ! ")));
                               }
@@ -136,7 +138,7 @@ class _ProgramHomeScreen extends State<ProgramHomeScreen> {
   }
 
 
-  void updateUIAfterCreate(){
+  void updateUI(){
     setState(() {
       buildFutureProgram();
     });

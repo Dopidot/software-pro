@@ -36,6 +36,7 @@ class _CoachListUI extends State<CoachDetailUI> {
     );
   }
 
+  //Widget permettant de récupérer au niveau du front les données en provenance de l'api
   FutureBuilder<Widget> _futureBuilder() {
     return FutureBuilder<Widget>(
       future: _buildField(widget.coach),

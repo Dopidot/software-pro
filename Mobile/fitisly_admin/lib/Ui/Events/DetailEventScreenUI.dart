@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Event.dart';
 import 'package:fitislyadmin/Services/EventService.dart';
+import 'package:fitislyadmin/Util/ConstApiRoute.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -11,8 +12,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
 class DetailEventScreen extends StatefulWidget {
-  Event event;
-  DetailEventScreen({Key key, @required this.event}) : super(key: key);
+  String eventId;
+  DetailEventScreen({Key key, @required this.eventId}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -37,26 +38,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
   final _formKey = GlobalKey<FormState>();
 
   EventService services = EventService();
-  Event eventFromDB;
 
-
-  @override
-  void initState() {
-    initEventFromDB(widget.event.id)
-        .then((value){
-          setState(() {
-            eventFromDB = value;
-          });
-    });
-    super.initState();
-  }
-
-
-  Completer<GoogleMapController> _controller = Completer();
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(100, -100),
-    zoom: 14.4746,
-  );
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +53,8 @@ class _DetailEventScreen extends State<DetailEventScreen> {
                   Form(
                       autovalidate: _autoValidate,
                       key: _formKey,
-                      child: buildForm(eventFromDB)),
+                      child: _buildFutureNewsletter(widget.eventId)
+                  ),
                 ],
               )
           )
@@ -79,7 +62,20 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     );
   }
 
-  Widget buildForm(Event event){
+  FutureBuilder<Event> _buildFutureNewsletter(String id) {
+    return FutureBuilder<Event>(
+      future: services.getEventById(id),
+      builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Text("${snapshot.error}");
+        }
+        return snapshot.hasData ?  _buildForm(snapshot.data) : Center(child: CircularProgressIndicator());
+      },
+    );
+
+  }
+
+  Widget _buildForm(Event event){
     final format = DateFormat("yyyy-MM-dd");
 
     final nameField = TextFormField(
@@ -184,27 +180,36 @@ class _DetailEventScreen extends State<DetailEventScreen> {
 
     );
 
-    var urlImage = "http://localhost:4000/"+event.eventImage;
-   // _image = Image.network(urlImage).
+    var urlImage = ConstApiRoute.baseUrlImage+event.eventImage;
+
     final photoField = Container (
         height: 200,
         width: 175,
 
-        child:Card(
+        child:
+        GestureDetector (
+          child: Card(
 
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Center(
-            child: Image.network(urlImage),
+            semanticContainer: true,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: _image == null ?  Center(
+              child: Image.network(urlImage),
+            ) : Image.file(_image),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            elevation: 15,
+            margin: EdgeInsets.all(10),
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          elevation: 15,
-          margin: EdgeInsets.all(10),
+          onTap: () async {
+            final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+            setState(() {
+              _image = File(pickedFile.path);
+            });
+          },
         )
     );
-    
+
 
     final updateButton = Material(
         elevation: 5.0,
@@ -213,9 +218,9 @@ class _DetailEventScreen extends State<DetailEventScreen> {
 
         child: MaterialButton(
           onPressed: () {
-            _updateInput(eventFromDB);
+            _updateInput(event);
           },
-          child: Text(Translations.of(context).text("btn_update_event")),
+          child: Text(Translations.of(context).text("btn_update")),
         )
     );
 
@@ -270,10 +275,6 @@ class _DetailEventScreen extends State<DetailEventScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              /*Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: changePhotoBtn,
-              ),*/
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: updateButton,
@@ -301,10 +302,10 @@ class _DetailEventScreen extends State<DetailEventScreen> {
       e.zipCode = _zipCode;
       e.city = _city;
       e.country = _country;
-      e.eventImage = _image.path;
+      e.eventImage = _image != null ? _image.path : _image;
 
-      var futureUpdateEvent = services.updateEvent(e);
-      futureUpdateEvent.then((value) {
+      services.updateEvent(e)
+          .then((value) {
 
         Navigator.pop(context,e);
       });

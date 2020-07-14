@@ -1,7 +1,9 @@
 // Author : DEYEHE Jean
 import 'dart:io';
+import 'dart:math';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Exercise.dart';
 import 'package:fitislyadmin/Services/ExerciseService.dart';
+import 'package:fitislyadmin/Util/ConstApiRoute.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,6 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
   int _reapeat_number;
   int _rest_time;
   bool _autoValidate = false;
-  Future<String> _futureCreateExo;
   final _formKey = GlobalKey<FormState>();
   File _image;
   final picker = ImagePicker();
@@ -67,24 +68,41 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
           }
           return snapshot.hasData ? buildForm(snapshot.data) : Center(child: CircularProgressIndicator());
         });
-
-
   }
 
 
   Widget buildForm(Exercise e){
 
-    final photoField = Card(
+    var urlImage = ConstApiRoute.baseUrlImage + e.exerciseImage;
+
+    final photoField = Container(
+        height: 200,
+        width: 175,
+        child:
+    GestureDetector(
+
+      child:
+    Card(
       semanticContainer: true,
       clipBehavior: Clip.antiAliasWithSaveLayer,
-      child: Center(
-        child: Image.network("http://www.localhost:4000/"+e.exerciseImage)),
+      child: _image == null ? Center(
+          child: e.exerciseImage != null ? Image.network(urlImage) : _image
+      ) : Image.file(_image),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30.0),
       ),
       elevation: 5,
       margin: EdgeInsets.all(10),
+    ),
+      onTap: () async {
+        final pickedFile = await picker.getImage(source: ImageSource.gallery);
+        setState(() {
+          _image = File(pickedFile.path);
+        });
+      },
+    )
     );
+
 
     final nameField = TextFormField(
       initialValue: e.name,
@@ -145,7 +163,9 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
         color: new Color(0xFF45E15F),
 
         child: MaterialButton(
-          onPressed: _validateInput,
+          onPressed: () {
+            _validateInput(e);
+          },
           child: Text(Translations.of(context).text("btn_update")),
         )
     );
@@ -203,11 +223,15 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
   }
 
 
-  void _validateInput() {
+  void _validateInput(Exercise e) {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-      Exercise e = Exercise(name:_name,description: _description,repetitionNumber: _reapeat_number,restTime: _rest_time,exerciseImage: _image.path);
+       e.name=_name;
+       e.description= _description;
+       e.repetitionNumber= _reapeat_number;
+       e.restTime = _rest_time;
+       e.exerciseImage = _image != null ? _image.path : _image;
 
       services.updateExercise(e)
           .then((value) {

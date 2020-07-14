@@ -1,7 +1,12 @@
+/**
+ * author : Guillaume Tako
+ */
+
 import { Request, Response } from 'express';
-import {QueryResult } from 'pg';
+import { QueryResult } from 'pg';
 import { query } from '../database';
-import fs from "fs";
+import { unlink } from 'fs';
+import { removeLastDirectoryFromCWDPath } from '../core/StringUtils';
 
 export default class ExerciseController {
 
@@ -12,8 +17,11 @@ export default class ExerciseController {
             const response: QueryResult = await query('SELECT * FROM exercises', undefined);
             return res.status(200).json(response.rows);
         } catch (e) {
-            console.log(e);
-            return res.status(500).json('Internal Server Error');
+            console.error(e);
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 
@@ -24,22 +32,28 @@ export default class ExerciseController {
             if (response.rowCount !== 0) {
                 return res.status(200).json(response.rows[0]);
             } else {
-                return res.status(404).json("Exercise not found.");
+                return res.status(404).json({
+                    message : 'Exercise not found.'
+                });
             }
         } catch (e) {
-            console.log(e);
-            return res.status(500).json('Internal Server Error');
+            console.error(e);
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 
     createExercise = async function(req: Request, res: Response): Promise<Response> {
         try {
             const { name, description, repeat_number, rest_time } = req.body;
-            const exerciseImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
+            let exerciseImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
 
             if (exerciseImage === undefined) {
                 await query('INSERT INTO exercises (name, description, repeat_number, rest_time) VALUES ($1, $2, $3, $4)', [name, description, repeat_number, rest_time]);
             } else {
+                exerciseImage = exerciseImage?.substr(3);
                 await query('INSERT INTO exercises (name, description, repeat_number, rest_time, exerciseImage) VALUES ($1, $2, $3, $4, $5)', [name, description, repeat_number, rest_time, exerciseImage]);
             }
             const response: QueryResult = await query('SELECT * FROM exercises ORDER BY id DESC LIMIT 1', undefined);
@@ -50,8 +64,11 @@ export default class ExerciseController {
                 }
             });
         } catch (e) {
-            console.log(e);
-            return res.status(500).json('Internal Server Error');
+            console.error(e);
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 
@@ -59,7 +76,7 @@ export default class ExerciseController {
         try {
             const id = parseInt(req.params.id);
             const { name, description, repeat_number, rest_time } = req.body;
-            const exerciseImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
+            let exerciseImage: string | undefined = req.file !== undefined ? req.file.path : undefined;
 
             let response: QueryResult;
             if (exerciseImage === undefined) {
@@ -68,7 +85,7 @@ export default class ExerciseController {
                 response = await query('SELECT exerciseimage FROM exercises WHERE id = $1', [id]);
                 if (response.rowCount !== 0 && response.rows[0].exerciseimage !== undefined ) {
                     if (response.rows[0].exerciseimage !== null) {
-                        fs.unlink(process.cwd() + '/' + response.rows[0].exerciseimage, err => {
+                        unlink(removeLastDirectoryFromCWDPath(process.cwd()) + '/' + response.rows[0].exerciseimage, err => {
                             if (err) {
                                 console.log('exerciseimage : ', response.rows[0].exerciseimage);
                                 console.error(err);
@@ -76,9 +93,11 @@ export default class ExerciseController {
                         });
                     }
                 } else {
-                    return res.status(404).json('User not found');
+                    return res.status(404).json({
+                        message : 'User not found'
+                    });
                 }
-
+                exerciseImage = exerciseImage?.substr(3);
                 response = await query('UPDATE exercises SET name = $1, description = $2, repeat_number = $3, rest_time = $4, exerciseImage = $5 WHERE id = $6', [name, description, repeat_number, rest_time, exerciseImage, id]);
             }
             if (response.rowCount !== 0 ) {
@@ -90,11 +109,16 @@ export default class ExerciseController {
                     }
                 });
             } else {
-                return res.status(404).json('Exercise not found');
+                return res.status(404).json({
+                    message : 'Exercise not found'
+                });
             }
         } catch (e)  {
-            console.log(e);
-            return res.status(500).json('Internal Server Error');
+            console.error(e);
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 
@@ -104,7 +128,7 @@ export default class ExerciseController {
             const response: QueryResult = await query('SELECT exerciseimage FROM exercises WHERE id = $1', [id]);
             if (response.rowCount !== 0) {
                 if (response.rows[0].exerciseimage !== undefined && response.rows[0].exerciseimage !== null) {
-                    fs.unlink(process.cwd() + '/' + response.rows[0].exerciseimage, err => {
+                    unlink(removeLastDirectoryFromCWDPath(process.cwd()) + '/' + response.rows[0].exerciseimage, err => {
                         if (err) {
                             console.log('exerciseimage :', response.rows[0].exerciseimage);
                             console.error(err);
@@ -114,12 +138,17 @@ export default class ExerciseController {
                 await query('DELETE FROM exercises WHERE id = $1', [id]);
                 return res.status(200).json(`Exercise ${id} deleted successfully`);
             } else {
-                return res.status(404).json('Exercise not found');
+                return res.status(404).json({
+                    message : 'Exercise not found'
+                });
             }
 
         } catch (e) {
-            console.log(e);
-            return res.status(500).json('Internal Server Error');
+            console.error(e);
+            return res.status(500).json({
+                message : 'Internal Server Error',
+                error: e.message
+            });
         }
     }
 }

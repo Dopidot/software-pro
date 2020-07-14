@@ -47,10 +47,6 @@ class _CreateNewsletter extends State<CreateNewsletter>{
 
   Widget _buildField(){
 
-    Text titleScreen = Text( Translations.of(context).text("subtitle_ncreate_news"),
-      style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20),
-      textAlign: TextAlign.center,);
-
     final nameField = TextFormField(
       validator: validateField,
         onSaved: (String val){
@@ -158,10 +154,6 @@ class _CreateNewsletter extends State<CreateNewsletter>{
           mainAxisAlignment: MainAxisAlignment.spaceAround,
          children: <Widget>[
 
-           Padding(
-             padding: const EdgeInsets.all(8.0),
-             child: titleScreen,
-           ),
            Padding(
              padding: const EdgeInsets.all(8.0),
              child: nameField,

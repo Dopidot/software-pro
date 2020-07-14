@@ -4,6 +4,7 @@ import 'package:fitislyadmin/Model/Fitisly_Admin/Exercise.dart';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Program.dart';
 import 'package:fitislyadmin/Services/ExerciseService.dart';
 import 'package:fitislyadmin/Services/ProgramService.dart';
+import 'package:fitislyadmin/Util/ConstApiRoute.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -120,9 +121,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
           });
         },
         chipDisplay: MultiSelectChipDisplay(
-          items: _selectExercise
-              .map((e) => MultiSelectItem<String>(e, e.split("-").last))
-              .toList(),
+          items: _selectExercise != null ? _selectExercise.map((e) => MultiSelectItem<String>(e, e.split("-").last)).toList() : null,
           onTap: (value) {
             setState(() {
               _selectExercise.remove(value);
@@ -162,21 +161,32 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
               OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))),
     );
 
-    var urlImage = "http://localhost:4000/" + prog.programImage;
+    var urlImage = ConstApiRoute.baseUrlImage + prog.programImage;
 
     final photoField = Container(
         height: 200,
         width: 175,
-        child: Card(
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Center(child: Image.network(urlImage)),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
+        child: GestureDetector(
+          child: Card(
+            semanticContainer: true,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: _image == null ? Center(
+                child: prog.programImage != null ? Image.network(urlImage) : _image,
+            ) : Image.file(_image),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            elevation: 5,
+            margin: EdgeInsets.all(10),
           ),
-          elevation: 5,
-          margin: EdgeInsets.all(10),
-        ));
+          onTap: () async {
+            final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+            setState(() {
+              _image = File(pickedFile.path);
+            });
+          },
+        )
+    );
 
     var updateBtn = RaisedButton(
       child: Text(Translations.of(context).text("btn_update")),
@@ -264,7 +274,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
   Future<void> _updateProgram(Program p) async {
     p.name = _name;
     p.description = _desc;
-    p.programImage = _image != null ? _image.path : p.programImage;
+    p.programImage = _image != null ? _image.path : _image;
 
     var idExercise = List<String>();
 
@@ -272,7 +282,6 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
       _selectExercise.forEach((element) {
         idExercise.add(element.split("-").first);
       });
-
       p.exercises = idExercise;
     }
 

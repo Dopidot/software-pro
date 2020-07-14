@@ -1,19 +1,21 @@
-//import UserModel from "./user.model";
+/**
+ * author : Guillaume Tako
+ */
 
-export default class ExerciseModel{
+export default class ExerciseModel {
+    id: bigint;
     name: string;
     description: string;
-    repeatNumber: number;
-    restTime: string;
-    exerciseImage: string;
-    //users: UserModel[];
+    repeatnumber: number;
+    resttime: string;
+    exerciseimage: string;
 
-    constructor(name: string, description: string, repeatNumber: number, restTime: string, exerciseImage: string) {//, programs: ProgramModel[], users: UserModel[]) {
+    constructor(id: bigint, name: string, description: string, repeatnumber: number, resttime: string, exerciseimage: string) {
+        this.id = id;
         this.name = name;
         this.description = description;
-        this.repeatNumber = repeatNumber;
-        this.restTime = restTime;
-        this.exerciseImage = exerciseImage;
-        //this.users = users;
+        this.repeatnumber = repeatnumber;
+        this.resttime = resttime;
+        this.exerciseimage = exerciseimage;
     }
 }

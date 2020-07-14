@@ -30,6 +30,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
 
 
 
+  // Constructionde l'écran dans sa généralité
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,18 +41,19 @@ class _CreateEventScreen extends State<CreateEventScreen> {
             child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
-                    Text(Translations.of(context).text("subtitle_second_part_creation_event")),
                     Form(
                         autovalidate: _autoValidate,
                         key: _formKey,
                         child: buildForm()),
                   ],
-                ))
+                )
+            )
         )
     );
   }
 
 
+  // Construction du formulaire
   Widget buildForm(){
     final format = DateFormat("yyyy-MM-dd");
 
@@ -106,7 +108,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         height: 200,
         width: 175,
 
-        child:Card(
+        child: Card(
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           child: Center(
@@ -196,6 +198,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   }
 
 
+// Fonction appelée au clic du bouton créer
   void _validateInput() {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
@@ -213,7 +216,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     }
   }
 
-
+//Fonction vérifiant que les champs du formulaire ne sont pas vide
   String validateField(String value){
     if(value.isEmpty){
       return Translations.of(context).text("field_is_empty");

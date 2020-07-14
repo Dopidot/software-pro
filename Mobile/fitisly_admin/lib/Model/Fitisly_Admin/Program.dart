@@ -28,7 +28,7 @@ class Program {
         id:json['id'],
         name:json['name'],
         description:json['description'],
-        programImage:json['programImage'],
+        programImage:json['programimage'],
        exercises: exercisesId
     );
   }
