@@ -32,19 +32,16 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: Text(Translations.of(context).text("title_news_detail"))),
       body: Form(
         key: _formKey,
-        child: SingleChildScrollView(
-          child: buildFutureNewsletter(),
-        ),
+        child: _buildFutureNewsletter(),
       ),
     );
   }
 
-  FutureBuilder<Newsletter> buildFutureNewsletter() {
+  FutureBuilder<Newsletter> _buildFutureNewsletter() {
     return FutureBuilder<Newsletter>(
       future: services.getNewsletterById(widget.newsletterId),
       builder: (context, snapshot) {
@@ -58,9 +55,14 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
 
   Widget _buildField(Newsletter newsletter) {
 
+    if(newsletter != null){
+      return Center(child: Text(Translations.of(context).text('error_server')));
+    }
+
+
     final nameField = TextFormField(
       initialValue: newsletter.name,
-      validator: validateField,
+      validator: _validateField,
       onSaved: (String val) {
         _name = val;
       },
@@ -73,7 +75,7 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
 
     final titleField = TextFormField(
       initialValue: newsletter.title,
-      validator: validateField,
+      validator: _validateField,
       onSaved: (String val) {
         _title = val;
       },
@@ -86,7 +88,7 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
 
     final bodyField = TextFormField(
       initialValue: newsletter.body,
-      validator: validateField,
+      validator: _validateField,
       onSaved: (String val) {
         _desc = val;
       },
@@ -103,7 +105,7 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
       child: Text('Modifier'),
       color: Colors.green,
       onPressed: () {
-        updateNewsletter(newsletter);
+        _updateNewsletter(newsletter);
       },
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(18.0),
@@ -186,7 +188,7 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
     );
   }
 
-  void updateNewsletter(Newsletter nl) {
+  void _updateNewsletter(Newsletter nl) {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
 
@@ -205,7 +207,7 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
       });
     }
   }
-  String validateField(String val) {
+  String _validateField(String val) {
     if (val.isEmpty) {
       return Translations.of(context).text("field_is_empty");
     }

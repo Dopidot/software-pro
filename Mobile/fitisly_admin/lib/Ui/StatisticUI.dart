@@ -37,44 +37,12 @@ class _StatisticUI extends State<StatisticUI> {
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           print(snapshot.hasError);
-          return Center(child: Text("Une erreur est survenue, veuillez contacter le support si le problème persiste"));
+          return Center(child: Text(Translations.of(context).text('error_server')));
         }
         return snapshot.hasData ? _buildField(snapshot.data) : Center(child: CircularProgressIndicator());
       },
     );
   }
-
-  FutureBuilder<List<ConnectionGenderFitisly>> _buildTest() {
-    return FutureBuilder<List<ConnectionGenderFitisly>>(
-      future: _serviceConnectionGender.getConnectionNumber(),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          print(snapshot.hasError);
-          return Center(child: Text("Une erreur est survenue, veuillez contacter le support si le problème persiste"));
-        }
-        return snapshot.hasData ? _buildBarChart(snapshot.data) : Center(child: CircularProgressIndicator());
-      },
-    );
-  }
-
-
-  Widget _buildBarChart(List<ConnectionGenderFitisly> connections){
-
-    List<charts.Series<ConnectionGenderFitisly, String>> series = [
-      charts.Series(
-          id: "Connection",
-          data: connections,
-          domainFn: (ConnectionGenderFitisly connections, _) => connections.men.toString(),
-          measureFn: (ConnectionGenderFitisly connections, _) => connections.women)
-    ];
-
-
-      return charts.BarChart(series, animate: true);
-  }
-
-
-
-
 
   Widget _buildField(Statistic stat) {
 
@@ -93,7 +61,7 @@ class _StatisticUI extends State<StatisticUI> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Text(Translations.of(context).text("title_stat_detail"),style: TextStyle(fontSize: 25),),
+              child: Text(Translations.of(context).text("title_stat_detail"),style: TextStyle(fontSize: 25,fontFamily: 'OpenSans')),
             ),
             Card(child: PieChart(dataMap: dataMap, showChartValuesInPercentage: true)),
             //Card(child: _buildTest())

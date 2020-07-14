@@ -1,10 +1,11 @@
+// Author : DEYEHE Jean
+
 import 'package:fitislyadmin/Model/Fitisly_Admin/Exercise.dart';
 import 'package:fitislyadmin/Services/ExerciseService.dart';
 import 'package:fitislyadmin/Ui/Excercises/ModifyExerciseUI.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-// Author : DEYEHE Jean
 import 'CreateExerciseUI.dart';
 
 class ExerciseListUI extends StatefulWidget{
@@ -18,9 +19,6 @@ class _ExerciseListUI extends State<ExerciseListUI>{
 
   ExerciseService services = ExerciseService();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -53,39 +51,17 @@ class _ExerciseListUI extends State<ExerciseListUI>{
                 child: Text(Translations.of(context).text("error_server"))
             );
           }
-          return snapshot.hasData ? buildUI(snapshot.data) : Center(child: CircularProgressIndicator());
+          return snapshot.hasData ? buildListView(snapshot.data) : Center(child: CircularProgressIndicator());
         });
 
   }
 
 
-  Widget buildUI(List<Exercise> exercises) {
-    return exercises.isEmpty ? Center(child: Text(Translations.of(context).text("no_exercise"))) : buildListView(exercises);
-  }
-
-
-  void updateUi() async {
-    setState(() {
-      futureBuilderExercise();
-    });
-  }
-
-
-  void delete(var index,List<Exercise> exercises) async {
-
-    var isDelete = await services.deleteExercise(exercises[index].id);
-
-    if(isDelete){
-
-      setState(() {
-        exercises.removeAt(index);
-      });
-      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("exercise_delete"))));
-    }
-  }
-
-
   Widget buildListView(List<Exercise> exercises){
+
+    if(exercises.isEmpty){
+      return Center(child: Text(Translations.of(context).text("no_exercise")));
+    }
     return AnimationLimiter(
       child: ListView.builder(
         itemCount: exercises.length,
@@ -144,7 +120,25 @@ class _ExerciseListUI extends State<ExerciseListUI>{
     );
   }
 
+  void updateUi() async {
+    setState(() {
+      futureBuilderExercise();
+    });
+  }
 
+
+  void delete(var index,List<Exercise> exercises) async {
+
+    var isDelete = await services.deleteExercise(exercises[index].id);
+
+    if(isDelete){
+
+      setState(() {
+        exercises.removeAt(index);
+      });
+      _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("exercise_delete"))));
+    }
+  }
 }
 
 
