@@ -1,4 +1,6 @@
 // Author : DEYEHE Jean
+import 'dart:async';
+
 import 'package:fitislyadmin/Model/Fitisly_Admin/Event.dart';
 import 'package:fitislyadmin/Services/EventService.dart';
 import 'package:fitislyadmin/Ui/Events/CreateEventUI.dart';
@@ -27,6 +29,18 @@ class _HomeEventScreen extends State<HomeEventScreen> {
           title: Text(Translations.of(context).text("title_application_home_event"),
               style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
           centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(
+                Icons.refresh,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                _updateUI();
+              },
+            ),
+
+          ],
         ),
         body: _buildFutureEvent(),
         floatingActionButton: FloatingActionButton(
@@ -120,9 +134,22 @@ class _HomeEventScreen extends State<HomeEventScreen> {
   }
 
   void _updateUI(){
+    final Completer<void> completer = Completer<void>();
     setState(() {
       _buildFutureEvent();
     });
+  }
+
+
+  Future<void> _handleRefresh() {
+    final Completer<void> completer = Completer<void>();
+    Timer(const Duration(seconds: 1), () {
+      completer.complete();
+    });
+    setState(() {
+     // refreshNum = new Random().nextInt(100);
+    });
+    return completer.future;
   }
 
   void delete(List<Event> events, int index) async {

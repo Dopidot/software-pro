@@ -27,6 +27,18 @@ class _NewsletterListState extends State<NewsletterList> {
         title: Text(Translations.of(context).text("title_application_news"),
             style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.refresh,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              _updateUI();
+            },
+          ),
+
+        ],
       ),
       body: _buildFutureNewsletter(),
       floatingActionButton: FloatingActionButton(
