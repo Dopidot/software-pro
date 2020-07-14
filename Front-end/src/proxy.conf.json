@@ -1,6 +1,6 @@
 {
-	"/api": { 
-		"target": "http://localhost:4000",
-		"secure": false 
-	} 
+	"/api": {
+		"target": "http://ec2-3-14-244-98.us-east-2.compute.amazonaws.com",
+		"secure": false
+	}
 }
