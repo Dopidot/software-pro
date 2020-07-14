@@ -40,9 +40,7 @@ class _UpdateGymUI extends State<UpdateGymUI>{
           title: Text(Translations.of(context).text("title_detail"))),
       body: Form(
         key: _formKey,
-        child: SingleChildScrollView(
-          child: buildFutureNewsletter(widget.gymId),
-        ),
+        child: buildFutureNewsletter(widget.gymId),
       ),
     );
   }
@@ -108,7 +106,7 @@ class _UpdateGymUI extends State<UpdateGymUI>{
       onSaved: (String val){
         _city = val;
       },
-      validator: validateField,
+      validator: _validZipCode,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
           hintText: Translations.of(context).text("field_city"),
@@ -273,4 +271,19 @@ String validateField(String value){
   }
   return null;
 }
+
+  String _validZipCode(String val){
+    if(_isNumeric(val)){
+      return null;
+    }
+    return Translations.of(context).text("invalid_zip_code");
+  }
+
+
+  bool _isNumeric(String result) {
+    if (result == null) {
+      return false;
+    }
+    return int.tryParse(result) != null;
+  }
 }

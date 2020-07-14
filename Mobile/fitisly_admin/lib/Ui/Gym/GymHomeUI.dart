@@ -41,7 +41,7 @@ class _GymHomeUI extends State<GymHomeUI> {
 
         ],
       ),
-      body: buildFutureGym(),
+      body: _buildFutureGym(),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
@@ -58,104 +58,100 @@ class _GymHomeUI extends State<GymHomeUI> {
   }
 
 
- 
-
-  FutureBuilder<List<Gym>> buildFutureGym() {
+  FutureBuilder<List<Gym>> _buildFutureGym() {
     return FutureBuilder<List<Gym>>(
       future: services.fetchGyms(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(child: Text("${snapshot.error}"));
         }
-        return snapshot.hasData ? buildList(snapshot.data) : Center(child: CircularProgressIndicator());
+        return snapshot.hasData ? _initListView(snapshot.data) : Center(child: CircularProgressIndicator());
       },
     );
   }
 
-  Widget buildList(List<Gym> gyms) {
-    return gyms.isEmpty ? Center(child: Text(Translations.of(context).text("no_news"))) : initListView(gyms);
-  }
+  Widget _initListView(List<Gym> gyms) {
 
-  Widget initListView(List<Gym> gyms) {
+    if(gyms.isEmpty){
+      return Center(child: Text(Translations.of(context).text("no_news")));
+    }
+
     return AnimationLimiter(
-      child: RefreshIndicator(
-        onRefresh: _updateUI,
-        child: ListView.builder(
-          itemCount: gyms.length,
-          itemBuilder: (BuildContext context, int index) {
-            return AnimationConfiguration.staggeredList(
-                position: index,
-                duration: const Duration(milliseconds: 375),
-                child: SlideAnimation(
-                  verticalOffset: 50.0,
-                  child: FadeInAnimation(
-                    child: Dismissible(
-                      key: Key(gyms[index].id.toString()),
-                      //confirmDismiss: ,
-                      background: Container(
-                        color: Colors.red,
-                        child: Icon(Icons.cancel),
-                      ),
-                      onDismissed: (direction) {
-                        delete(index, gyms);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 0.0, horizontal: 4.0),
-                        child: Card(
-                          elevation: 15,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: ListTile(
-                            leading: Icon(Icons.near_me),
-                            title: Text(gyms[index].name),
-                            onTap: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return UpdateGymUI(gymId: gyms[index].id.toString());
-                                    }
-                                  )).then((value) {
-                                if (value != null) {
-                                  setState(() {
-                                    gyms[index] = value;
-                                  });
-                                  _scaffoldKey.currentState.showSnackBar(
-                                      SnackBar(content: Text(Translations.of(context).text("update_gyp"))));
-                                }
-                              });
-                            },
-                            onLongPress: () {
-                              //Navigator.push(context, route);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => ItinaryUI(gymId: gyms[index].id.toString()),
-                                      settings: RouteSettings(
-                                        arguments: gyms[index]
-                                      )));
-                            },
-                          ),
+      child: ListView.builder(
+        itemCount: gyms.length,
+        itemBuilder: (BuildContext context, int index) {
+          return AnimationConfiguration.staggeredList(
+              position: index,
+              duration: const Duration(milliseconds: 375),
+              child: SlideAnimation(
+                verticalOffset: 50.0,
+                child: FadeInAnimation(
+                  child: Dismissible(
+                    key: Key(gyms[index].id.toString()),
+                    //confirmDismiss: ,
+                    background: Container(
+                      color: Colors.red,
+                      child: Icon(Icons.cancel),
+                    ),
+                    onDismissed: (direction) {
+                      _delete(index, gyms);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 0.0, horizontal: 4.0),
+                      child: Card(
+                        elevation: 15,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20.0),
+                        ),
+                        child: ListTile(
+                          leading: Icon(Icons.near_me),
+                          title: Text(gyms[index].name),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return UpdateGymUI(gymId: gyms[index].id.toString());
+                                  }
+                                )).then((value) {
+                              if (value != null) {
+                                setState(() {
+                                  gyms[index] = value;
+                                });
+                                _scaffoldKey.currentState.showSnackBar(
+                                    SnackBar(content: Text(Translations.of(context).text("update_gyp"))));
+                              }
+                            });
+                          },
+                          onLongPress: () {
+                            //Navigator.push(context, route);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ItinaryUI(gymId: gyms[index].id.toString()),
+                                    settings: RouteSettings(
+                                      arguments: gyms[index]
+                                    )));
+                          },
                         ),
                       ),
                     ),
                   ),
-                ));
-          },
-        ),
+                ),
+              ));
+        },
       ),
     );
   }
 
  void _updateUI() async {
     setState(() {
-      buildFutureGym();
+      _buildFutureGym();
     });
   }
 
-  void delete(var index, List<Gym> gyms) async {
+  void _delete(var index, List<Gym> gyms) async {
     var isDelete = await services.deleteGym(gyms[index].id);
 
     if (isDelete) {

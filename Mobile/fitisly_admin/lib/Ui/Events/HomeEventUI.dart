@@ -64,16 +64,18 @@ class _HomeEventScreen extends State<HomeEventScreen> {
             return Center(child: Text("${snapshot.error}"));
           }
           return snapshot.hasData
-              ? _buildList(snapshot.data)
+              ? _buildListView(snapshot.data)
               : Center(child: CircularProgressIndicator());
         });
   }
 
-  Widget _buildList(List<Event> events) {
-    return events.isEmpty ? Center(child: Text(Translations.of(context).text("no_event"))) : _buildListView(events);
-  }
+
 
   Widget _buildListView(List<Event> events) {
+    if(events.isEmpty){
+      return Center(child: Text(Translations.of(context).text("no_event")));
+    }
+
     return AnimationLimiter(
       child: ListView.builder(
         itemCount: events.length,
@@ -82,7 +84,7 @@ class _HomeEventScreen extends State<HomeEventScreen> {
               position: index,
               duration: const Duration(milliseconds: 375),
               child: SlideAnimation(
-                verticalOffset: 50.0,
+                verticalOffset: 50,
                 child: FadeInAnimation(
                   child: Dismissible(
                       key: Key(events[index].id),
@@ -118,7 +120,7 @@ class _HomeEventScreen extends State<HomeEventScreen> {
                             subtitle: Column(
                               children: <Widget>[
                                 Text(
-                                    "A ${events[index].zipCode} ${events[index].city}"),
+                                    "${events[index].zipCode} ${events[index].city}"),
                                 Text(DateFormat('dd MMM yyyy')
                                     .format(events[index].startDate))
                               ],
@@ -127,29 +129,17 @@ class _HomeEventScreen extends State<HomeEventScreen> {
                         ),
                       )),
                 ),
-              ));
+              )
+          );
         },
       ),
     );
   }
 
   void _updateUI(){
-    final Completer<void> completer = Completer<void>();
     setState(() {
       _buildFutureEvent();
     });
-  }
-
-
-  Future<void> _handleRefresh() {
-    final Completer<void> completer = Completer<void>();
-    Timer(const Duration(seconds: 1), () {
-      completer.complete();
-    });
-    setState(() {
-     // refreshNum = new Random().nextInt(100);
-    });
-    return completer.future;
   }
 
   void delete(List<Event> events, int index) async {

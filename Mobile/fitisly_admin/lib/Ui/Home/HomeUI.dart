@@ -8,7 +8,6 @@ import 'package:fitislyadmin/Ui/Home/LoginScreenUI.dart';
 import 'package:fitislyadmin/Ui/Newsletter/NewsLetterListUI.dart';
 import 'package:fitislyadmin/Ui/StatisticUI.dart';
 import 'package:fitislyadmin/Ui/TabBarApplicationUI.dart';
-import 'package:fitislyadmin/Ui/User/UserScreenSettingUI.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -42,19 +41,6 @@ class _HomeScreen extends State<HomeScreenPage> {
           title: Text(Translations.of(context).text("title_home"), style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
           centerTitle: true,
           actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.account_circle,
-                color: Colors.white,
-              ),
-              onPressed: () {
-                Navigator.push(context, PageRouteTransition(
-                  animationType: AnimationType.slide_down,
-                  builder: (context) => UserScreenSetting(),
-                )
-                );
-              },
-            ),
             IconButton(
               icon: Icon(
                 Icons.power_settings_new,

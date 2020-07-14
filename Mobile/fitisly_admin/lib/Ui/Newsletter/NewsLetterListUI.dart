@@ -66,19 +66,19 @@ class _NewsletterListState extends State<NewsletterList> {
         if (snapshot.hasError) {
           return Center(child: Text("${snapshot.error}"));
         }
-        return snapshot.hasData ? _buildList(snapshot.data) : Center(child: CircularProgressIndicator());
+        return snapshot.hasData ? _initListView(snapshot.data) : Center(child: CircularProgressIndicator());
       },
     );
   }
 
 
-  Widget _buildList(List<Newsletter> newsletters) {
-    return newsletters.isEmpty ? Center(
-        child: Text(Translations.of(context).text("no_news"))) : _initListView(newsletters);
-  }
-
-
   Widget _initListView(List<Newsletter> newsletters) {
+
+    if(newsletters.isEmpty){
+      Center(
+          child: Text(Translations.of(context).text("no_news")));
+    }
+
     return AnimationLimiter(
       child: ListView.builder(
         itemCount: newsletters.length,

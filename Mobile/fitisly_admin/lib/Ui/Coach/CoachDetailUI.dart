@@ -2,6 +2,7 @@
 import 'package:fitislyadmin/Model/Api_Fitisly/CoachFitisly.dart';
 import 'package:fitislyadmin/Services/ApiFitisly/CoachServiceApiFitisly.dart';
 import 'package:fitislyadmin/Services/CoachService.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 
 class CoachDetailUI extends StatefulWidget{
@@ -44,8 +45,7 @@ class _CoachListUI extends State<CoachDetailUI> {
         if (snapshot.hasError) {
           return Center(child: Text("${snapshot.error}"));
         }
-        return snapshot.hasData ? snapshot.data : Center(
-            child: CircularProgressIndicator());
+        return snapshot.hasData ? snapshot.data : Center(child: CircularProgressIndicator());
       },
     );
   }
@@ -53,7 +53,7 @@ class _CoachListUI extends State<CoachDetailUI> {
   Future<Widget> _buildField(CoachsFitisly coach) async {
     var _pseudo = TextField(
       enabled: false,
-      controller: TextEditingController(text: "Pseudo: " +coach.pseudonyme),
+      controller: TextEditingController(text: Translations.of(context).text('pseudonym') +coach.pseudonyme),
       decoration: InputDecoration(
           border:
           OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))),
@@ -61,7 +61,7 @@ class _CoachListUI extends State<CoachDetailUI> {
 
     var _firstNameField = TextField(
         enabled: false,
-        controller: TextEditingController(text: "Prénom: " + coach.firstName),
+        controller: TextEditingController(text: Translations.of(context).text('first_name') + coach.firstName),
         decoration: InputDecoration(
             border:
             OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))
@@ -71,7 +71,7 @@ class _CoachListUI extends State<CoachDetailUI> {
 
     var _lastName = TextField(
         enabled: false,
-        controller: TextEditingController(text:"Nom: " + coach.lastName),
+        controller: TextEditingController(text:Translations.of(context).text('last_name')  + coach.lastName),
         decoration: InputDecoration(
             border:
             OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))
@@ -82,7 +82,7 @@ class _CoachListUI extends State<CoachDetailUI> {
     var _nbFollowers = TextField(
       enabled: false,
       controller: TextEditingController(
-          text: "Nombre de followers: " +coach.followers.length.toString()), decoration: InputDecoration(
+          text: Translations.of(context).text("number_followers") + coach.followers.length.toString()), decoration: InputDecoration(
         border:
         OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))),);
     var photoField = Image
@@ -90,7 +90,7 @@ class _CoachListUI extends State<CoachDetailUI> {
         serviceApiFitisly.getUserPicture(coach.profilePicture.toString()))
         .image;
 
-    var _titleSwitch = Text("Highlight",style: TextStyle(fontSize: 20),);
+    var _titleSwitch = Text(Translations.of(context).text('highlight') ,style: TextStyle(fontSize: 20),);
 
     var _highlightSwitch = Switch(
       value: isSwitched,
@@ -110,41 +110,43 @@ class _CoachListUI extends State<CoachDetailUI> {
     );
 
 
-    return Container(
-      child: Center(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(width: 100,
-                  height: 100,
-                  child: CircleAvatar(backgroundImage: photoField)),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _pseudo,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _firstNameField,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _lastName,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _nbFollowers,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _titleSwitch,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _highlightSwitch,
-            )
-          ],
+    return SingleChildScrollView(
+      child: Container(
+        child: Center(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(width: 100,
+                    height: 100,
+                    child: CircleAvatar(backgroundImage: photoField)),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _pseudo,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _firstNameField,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _lastName,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _nbFollowers,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _titleSwitch,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: _highlightSwitch,
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -156,10 +158,8 @@ class _CoachListUI extends State<CoachDetailUI> {
       setState(() {
         isSwitched = value != null;
       });
-
     });
   }
-
 
   Future<void> highlight(String id) async {
     serviceCoach.creatCoach(widget.coach.id.toString());
