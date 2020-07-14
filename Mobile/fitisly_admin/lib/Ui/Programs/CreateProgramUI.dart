@@ -40,7 +40,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
         child: Form(
           key: _formKey,
           autovalidate: _autoValidate,
-          child: SingleChildScrollView(child: futureBuilderExercise()), //SingleChildScrollView(child: _buildField()),
+          child: futureBuilderExercise(), //SingleChildScrollView(child: _buildField()),
         ),
       ),
     );
@@ -119,24 +119,28 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
           margin: EdgeInsets.all(10),
         ));
 
-    RaisedButton createBtn = RaisedButton(
-      child: Text(Translations.of(context).text("btn_Create")),
-      color: Colors.green,
-      onPressed: _validateForm,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-      ),
+    final createBtn =  Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Color(0xFF45E15F),
+
+        child: MaterialButton(
+          onPressed: _validateForm,
+          child: Text(Translations.of(context).text("btn_Create")),
+        )
     );
 
-    RaisedButton cancelBtn = RaisedButton(
-      child: Text(Translations.of(context).text("btn_cancel")),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      color: Colors.red,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-      ),
+    final cancelBtn =  Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.redAccent,
+
+        child: MaterialButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text(Translations.of(context).text("btn_cancel"))
+        )
     );
 
     return Column(

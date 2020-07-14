@@ -3,8 +3,7 @@
 import 'package:flutter/material.dart';
 
 class ConstApiRoute {
-  //static const _baseUrl = "http://localhost:4000/api/";
-  //static const baseUrlImage = "http://localhost:4000/api/";
+
   static const _baseUrl = "http://ec2-3-14-244-98.us-east-2.compute.amazonaws.com/api/";
   static const baseUrlImage = "http://ec2-3-14-244-98.us-east-2.compute.amazonaws.com/";
 

@@ -31,16 +31,21 @@ class _UpdateGymUI extends State<UpdateGymUI>{
   String _city;
   File _image;
   final _picker = ImagePicker();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(centerTitle: true,
           title: Text(Translations.of(context).text("title_detail"))),
-      body: Form(
-        key: _formKey,
-        child: buildFutureNewsletter(widget.gymId),
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: buildFutureNewsletter(widget.gymId),
+        ),
       ),
     );
   }
@@ -172,15 +177,17 @@ class _UpdateGymUI extends State<UpdateGymUI>{
     );
 
 
-    RaisedButton cancelBtn = RaisedButton(
-      child: Text(Translations.of(context).text("btn_cancel")),
-      color: Colors.red,
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-      ),
+    final cancelBtn = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.red,
+
+        child: MaterialButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text(Translations.of(context).text("btn_update")),
+        )
     );
 
 
@@ -241,6 +248,11 @@ class _UpdateGymUI extends State<UpdateGymUI>{
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
 
+
+      if(_name == null || _address == null || _zipCode == null || _city == null || _country == null || _image == null){
+        _displayDialog(Translations.of(context).text('error_title'), Translations.of(context).text('error_field_null'));
+      }
+
       gym.name = _name;
       gym.address = _address;
       gym.zipCode = _zipCode;
@@ -286,4 +298,11 @@ String validateField(String value){
     }
     return int.tryParse(result) != null;
   }
+
+  void _displayDialog(String title, String text) => showDialog(
+    context: _scaffoldKey.currentState.context,
+    builder: (context) =>
+        AlertDialog(title: Text(title), content: Text(text)),
+  );
+
 }
