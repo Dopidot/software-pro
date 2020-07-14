@@ -56,10 +56,6 @@ export class HomeComponent implements OnInit {
         });
     }
 
-    ngOnDestroy(): void {
-        this.themeSubscription.unsubscribe();
-    }
-
     loadConnectionByGender(): void {
         let index = 0;
 
