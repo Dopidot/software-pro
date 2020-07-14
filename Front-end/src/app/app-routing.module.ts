@@ -33,7 +33,7 @@ import { ExerciseService } from './services/exercise.service';
 import { CommonService } from './services/common.service';
 
 export const routes: Routes = [
-  {
+  /*{
     path: 'pages',
     loadChildren: () => import('./pages/pages.module')
       .then(m => m.PagesModule),
@@ -67,7 +67,7 @@ export const routes: Routes = [
         component: NbResetPasswordComponent,
       },
     ],
-  },
+  },*/
   { path: 'home', component: HomeComponent },
   { path: 'events', component: EventsComponent },
   { path: 'exercises', component: ExercisesComponent },
@@ -79,7 +79,7 @@ export const routes: Routes = [
   { path: 'news', component: NewsComponent },
   { path: 'login', component: LoginComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  { path: '**', redirectTo: 'pages' },
+  { path: '**', redirectTo: 'home' },
 ];
 
 const config: ExtraOptions = {

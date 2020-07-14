@@ -63,6 +63,11 @@ export class CommonService {
         return this.http.delete<any>(this.baseUrlNews + '/' + id);
     }
 
+    /* Machine Learning */
+    getSuggestion(height: number, weight: number, age: number): any {
+        return this.apiConfig.machineLearningApiUrl + '/api/suggestionByProfile?height=' + height + '&weight=' + weight + '&age=' + age;
+    }
+
     /* COMMON */
     getPicture(name: string): string {
         return this.apiConfig.adminApiUrl + '/' + name;

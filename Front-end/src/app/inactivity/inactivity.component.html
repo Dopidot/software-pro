@@ -4,7 +4,42 @@
         <div class="container">
             <div class="row">
 
-                
+                <div class="col-4">
+                    <nb-card class="list-card" size="medium">
+                        <nb-card-header>Liste des utilisateurs inactifs</nb-card-header>
+                        <nb-list>
+                            <nb-list-item *ngFor="let user of users">
+                                <nb-user nbButton [picture]="user.picture" [name]="user.name"
+                                    size="large" class="select-user" (click)="loadSuggestion(user)">
+                                </nb-user>
+                                <button nbButton style="margin-left: 10px;" (click)="loadProgram(user)">
+                                    <nb-icon icon="edit-2-outline" pack="eva"></nb-icon>
+                                </button>
+                            </nb-list-item>
+                        </nb-list>
+                    </nb-card>
+                </div>
+
+                <div class="col-8">
+                    <nb-card>
+                        <nb-card-header>
+                            Programme recommandé
+                        </nb-card-header>
+
+                        <nb-card-body *ngIf="currentProgram">
+                            Un programme .....
+                        </nb-card-body>
+                        <nb-card-body *ngIf="!currentProgram">
+                            <div class="default-background">
+                                <strong>Info !</strong> <br />
+                                Vous devez sélectionner un utilisateur pour afficher sa suggestion de programme.
+                            </div>
+                        </nb-card-body>
+                        <nb-card-footer *ngIf="currentUser" style="text-align: center;">
+                            <button nbButton [status]="success" (click)="startSuggestion()">Suggérer</button>
+                        </nb-card-footer>
+                    </nb-card>
+                </div>
 
             </div>
         </div>

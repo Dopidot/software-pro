@@ -42,4 +42,8 @@ export class FitislyService {
     getUserAgeStats(): Observable<any> {
         return this.http.get<any>(this.baseUrl + 'get-age-statistics/');
     }
+
+    getProgramInfo(id: string): Observable<any> {
+        return this.http.get<any>(this.baseUrl + 'get-program-by-id/' + id);
+    }
 }
