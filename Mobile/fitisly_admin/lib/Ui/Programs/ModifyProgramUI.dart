@@ -207,7 +207,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text(Translations.of(context).text("btn_update")),
+          child: Text(Translations.of(context).text("btn_cancel")),
         )
     );
 
@@ -271,7 +271,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
 
   Future<void> _updateProgram(Program p) async {
 
-    if(_name == null || _image == null || _desc == null ){
+    if(_name == null || _desc == null || _selectExercise == null || _selectExercise.isEmpty ){
       displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_field_null'));
     }
 
@@ -281,19 +281,18 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
 
     var idExercise = List<String>();
 
-    if(_selectExercise.isNotEmpty){
+
       _selectExercise.forEach((element) {
         idExercise.add(element.split("-").first);
       });
       p.exercises = idExercise;
-    }
+
 
     var isValid = await services.updateProgram(p);
     if (isValid) {
       Navigator.pop(context, p);
     } else {
-      displayDialog("Erreur d'enregistrement",
-          "Le programme n'a pas pu être enregistrer dans la base, veuillez vérifier les champs svp ");
+      displayDialog(Translations.of(context).text('error_field_null'),Translations.of(context).text('error_field_null'));
     }
   }
 
