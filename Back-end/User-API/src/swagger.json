@@ -9,7 +9,7 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "ec2-3-14-244-98.us-east-2.compute.amazonaws.com",
+  "host": "localhost:4000",
   "basePath": "/",
   "tags": [
     {
@@ -39,6 +39,10 @@
     {
       "name": "Coachs",
       "description": "CRUD operation for Coachs"
+    },
+    {
+      "name": "Suggestions",
+      "description": "CRUD operation for Suggestions"
     }
   ],
   "schemes": [
@@ -55,6 +59,9 @@
     "user": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "number"
+        },
         "firstname": {
           "type": "string"
         },
@@ -73,6 +80,9 @@
     "exercise": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "number"
+        },
         "name": {
           "type": "string"
         },
@@ -117,6 +127,9 @@
     "newsletter": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "number"
+        },
         "name" : {
           "type": "string"
         },
@@ -141,6 +154,9 @@
     "event": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "number"
+        },
         "name": {
           "type": "string"
         },
@@ -175,6 +191,9 @@
     "gym": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "number"
+        },
         "name": {
           "type": "string"
         },
@@ -203,6 +222,21 @@
         },
         "isHighlighted": {
           "type": "boolean"
+        }
+      }
+    },
+    "suggestion": {
+      "type": "object",
+      "properties": {
+        "idProgram": {
+          "type": "string"
+        },
+        "idUser": {
+          "type": "string"
+        },
+        "dateCreation": {
+          "type": "string",
+          "format": "date"
         }
       }
     }
@@ -1503,6 +1537,135 @@
           },
           "404": {
             "description": "Coach not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/suggestions": {
+      "parameters": [
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": [
+          "Suggestions"
+        ],
+        "summary": "Get all of the suggestion of the database",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/suggestion"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Suggestions"],
+        "summary": "Create an suggestion in the database",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "id of the referenced suggestion",
+            "schema": {
+              "$ref": "#/definitions/suggestion"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/suggestion"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/suggestions/{id}": {
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "description": "ID of the suggestion that we want to retrieve",
+          "type": "integer"
+        },
+        {
+          "name": "Authorization",
+          "in": "header",
+          "description": "Authorization header",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "get": {
+        "tags": ["Suggestions"],
+        "summary": "Get the suggestion with the given ID",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/suggestion"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Suggestions"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "id of the referenced suggestion",
+            "schema": {
+              "$ref": "#/definitions/suggestion"
+            }
+          }
+        ],
+        "summary": "Update the suggestion with the given ID",
+        "responses": {
+          "200":{
+            "description": "suggestion updated successfully",
+            "schema": {
+              "$ref": "#/definitions/suggestion"
+            }
+          },
+          "404": {
+            "description": "Suggestion not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Suggestions"],
+        "summary": "Delete the suggestion with the given ID",
+        "responses": {
+          "200": {
+            "description": "Suggestion {id} was deleted successfully"
+          },
+          "404": {
+            "description": "Suggestion not found"
           },
           "500": {
             "description": "Internal Server Error"

@@ -14,7 +14,7 @@ export default class NewsletterController {
     constructor() { }
 
     /**
-     * Get all the newsletters
+     * Get all the newsletters from the database
      * @param req : Request from the client
      * @param res : Response to send to the client
      */

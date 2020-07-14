@@ -148,3 +148,26 @@ CREATE TABLE junction_program_exercise (
 	CONSTRAINT junction_program_exercise_fk_programs FOREIGN KEY (idprogram) REFERENCES programs(id) ON DELETE RESTRICT,
 	CONSTRAINT junction_program_exercise_fk_exercices FOREIGN KEY (idexercise) REFERENCES exercises(id) ON DELETE RESTRICT DEFERRABLE
 );
+
+-- public.suggestions definition
+
+-- Drop table
+
+-- DROP TABLE public.suggestions;
+
+CREATE TABLE suggestions (
+	id int8 NOT NULL,
+	iduser varchar(255) NOT NULL,
+	idprogram varchar(255) NOT NULL,
+	datecreation timestamp NOT NULL,
+	CONSTRAINT suggestions_pk PRIMARY KEY (id)
+);
+
+alter table suggestions
+    add iduser varchar(255) not null;
+
+alter table suggestions
+add idprogram varchar(255) not null;
+
+alter table suggestions
+    add datecreation timestamp not null;

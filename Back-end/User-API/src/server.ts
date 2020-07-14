@@ -5,6 +5,7 @@ import newsletterRouter from './routes/newsletter.route';
 import eventRouter from './routes/event.route';
 import gymRouter from './routes/gym.route';
 import coachRouter from './routes/coach.route';
+import suggestionRouter from './routes/suggestion.route';
 
 /**
  * Author : Guillaume Tako
@@ -40,12 +41,12 @@ export default class Server {
         app.use('/api/events', eventRouter);
         app.use('/api/gyms', gymRouter);
         app.use('/api/coachs', coachRouter);
+        app.use('/api/suggestions', suggestionRouter);
         app.use('/uploads', express.static('../uploads'));
 
         app.use('*', (req: Request, res: Response) => {
             res.send('Make sure the url is correct !!!');
         })
-
 
         app.listen(this.port, () => {
             console.log('The User-API is currently running at http://localhost:' ,this.port)

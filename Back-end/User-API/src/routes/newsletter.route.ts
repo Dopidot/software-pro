@@ -1,4 +1,4 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import NewsletterController from '../controllers/newsletter.controller';
 import { verifyToken } from '../core/JWT';
 import { upload } from '../core/Multer';
