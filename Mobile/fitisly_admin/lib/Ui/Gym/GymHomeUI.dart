@@ -8,6 +8,7 @@ import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
+
 class GymHomeUI extends StatefulWidget {
   @override
   State<GymHomeUI> createState() {
@@ -37,11 +38,15 @@ class _GymHomeUI extends State<GymHomeUI> {
                 .then((value) {
               if (value != null) {
                 updateUiAfterCreation();
+                _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("add_gym"))));
               }
             });
           }),
     );
   }
+
+
+ 
 
   FutureBuilder<List<Gym>> buildFutureGym() {
     return FutureBuilder<List<Gym>>(
@@ -50,17 +55,13 @@ class _GymHomeUI extends State<GymHomeUI> {
         if (snapshot.hasError) {
           return Center(child: Text("${snapshot.error}"));
         }
-        return snapshot.hasData
-            ? buildList(snapshot.data)
-            : Center(child: CircularProgressIndicator());
+        return snapshot.hasData ? buildList(snapshot.data) : Center(child: CircularProgressIndicator());
       },
     );
   }
 
   Widget buildList(List<Gym> gyms) {
-    return gyms.isEmpty
-        ? Center(child: Text(Translations.of(context).text("no_news")))
-        : initListView(gyms);
+    return gyms.isEmpty ? Center(child: Text(Translations.of(context).text("no_news"))) : initListView(gyms);
   }
 
   Widget initListView(List<Gym> gyms) {

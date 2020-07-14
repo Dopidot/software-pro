@@ -186,7 +186,7 @@ class _CreateEventSecondScreen extends State<CreateEventSecondScreen> {
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => HomeEventScreen()),
-              (Route<dynamic> route) => false,
+              (Route<dynamic> route) => true,
         );
       });
 

@@ -36,7 +36,7 @@ class _HomeEventScreen extends State<HomeEventScreen> {
                 return CreateEventScreen();
               })).then((value) {
                 if (value != null) {
-                  _buildFutureEvent();
+                  _updateUI();
                 }
               });
             }));
@@ -56,9 +56,7 @@ class _HomeEventScreen extends State<HomeEventScreen> {
   }
 
   Widget _buildList(List<Event> events) {
-    return events.isEmpty
-        ? Center(child: Text(Translations.of(context).text("no_event")))
-        : _buildListView(events);
+    return events.isEmpty ? Center(child: Text(Translations.of(context).text("no_event"))) : _buildListView(events);
   }
 
   Widget _buildListView(List<Event> events) {
@@ -93,12 +91,10 @@ class _HomeEventScreen extends State<HomeEventScreen> {
                             onTap: () {
                               Navigator.push(context,
                                   MaterialPageRoute(builder: (context) {
-                                return DetailEventScreen(event: events[index]);
+                                return DetailEventScreen(eventId: events[index].id);
                               })).then((value) {
                                 if (value != null) {
-                                  setState(() {
-                                    events[index] = value;
-                                  });
+                                  _updateUI();
                                 }
                               }).catchError((error) {
                                 print(error);
@@ -121,6 +117,12 @@ class _HomeEventScreen extends State<HomeEventScreen> {
         },
       ),
     );
+  }
+
+  void _updateUI(){
+    setState(() {
+      _buildFutureEvent();
+    });
   }
 
   void delete(List<Event> events, int index) async {

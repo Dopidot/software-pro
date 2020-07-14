@@ -53,7 +53,7 @@ class _UserScreenSetting extends State<UserScreenSetting> {
     final photoField = GestureDetector(
       child: CircleAvatar(
         //child: ,
-        backgroundImage: _image != null ? FileImage(_image) : null,
+        //backgroundImage: _image != null ? Image.file(_image.path) : null,
         minRadius: 40,
         maxRadius: 80,
       ),

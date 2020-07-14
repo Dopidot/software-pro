@@ -2,10 +2,13 @@
 
 import 'package:flutter/material.dart';
 
-class ConstApiRoute{
+class ConstApiRoute {
+  //static const _baseUrl = "http://localhost:4000/api/";
+  //static const baseUrlImage = "http://localhost:4000/api/";
+  static const _baseUrl = "http://ec2-3-14-244-98.us-east-2.compute.amazonaws.com/api/";
+  static const baseUrlImage = "http://ec2-3-14-244-98.us-east-2.compute.amazonaws.com/";
 
-   static const _baseUrl = "http://localhost:4000/api/";
-   static const _baseUrlFitisly = "http://51.178.16.171:8150/";
+  static const _baseUrlFitisly = "http://51.178.16.171:8150/";
 
   /* ------------- Users --------------- */
 
@@ -24,7 +27,6 @@ class ConstApiRoute{
   static const updateExercise = _baseUrl + "exercises/";
   static const deleteExerciseById = _baseUrl + "exercises/";
 
-
   /* ------------- Programs --------------- */
 
   static const createProgram = _baseUrl + "programs";
@@ -33,7 +35,6 @@ class ConstApiRoute{
   static const updateProgram = _baseUrl + "programs/";
   static const deleteProgramById = _baseUrl + "programs/";
 
-
   /*---------------- Pictures --------------- */
 
   static const createPicture = _baseUrl + "pictures";
@@ -41,7 +42,6 @@ class ConstApiRoute{
   static const getPictureById = _baseUrl + "pictures/";
   static const updatePicture = _baseUrl + "pictures/";
   static const deletePictureById = _baseUrl + "pictures";
-
 
   /*--------------- Videos --------------- */
 
@@ -75,33 +75,26 @@ class ConstApiRoute{
   static const updateGym = _baseUrl + "gyms/";
   static const deleteGymById = _baseUrl + "gyms/";
 
+  /*-----------Coach ----------------------------- */
 
-   /*-----------Coach ----------------------------- */
+  static const getAllCoachsApi = _baseUrl + "coachs";
+  static const creatCoach = _baseUrl + "coachs";
+  static const deleteCoachById = _baseUrl + "coachs/";
 
+  /*------------------ Statistiqques ----------*/
 
-   static const getAllCoachsApi = _baseUrl+"coachs";
-   static const creatCoach = _baseUrl+"coachs";
-   static const deleteCoachById = _baseUrl + "coachs/";
-
-   /*------------------ Statistiqques ----------*/
-
-   static const getAllUsersFitisly = _baseUrlFitisly + "get-users";
-   static const getStatisticsByAge = _baseUrlFitisly + "get-age-statistics";
-   static const getAllCoaches = _baseUrlFitisly + "get-all-coachs";
-   static const getUserPicture = _baseUrlFitisly + "get-user-profile-picture/";
-   static const getConnectionByGender = _baseUrlFitisly + "get-connections-by-gender/";
-   static const getUserProfile = _baseUrlFitisly + "get-user-profile/id/";
-
+  static const getAllUsersFitisly = _baseUrlFitisly + "get-users";
+  static const getStatisticsByAge = _baseUrlFitisly + "get-age-statistics";
+  static const getAllCoaches = _baseUrlFitisly + "get-all-coachs";
+  static const getUserPicture = _baseUrlFitisly + "get-user-profile-picture/";
+  static const getConnectionByGender =
+      _baseUrlFitisly + "get-connections-by-gender/";
+  static const getUserProfile = _baseUrlFitisly + "get-user-profile/id/";
 
   static void displayDialog(String title, String text, var keyScaffold) =>
       showDialog(
         context: keyScaffold.currentState.context,
         builder: (context) =>
-            AlertDialog(
-                title: Text(title),
-                content: Text(text)
-            ),
+            AlertDialog(title: Text(title), content: Text(text)),
       );
-
 }
-

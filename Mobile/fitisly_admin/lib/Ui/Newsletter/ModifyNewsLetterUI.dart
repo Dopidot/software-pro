@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Newsletter.dart';
 import 'package:fitislyadmin/Services/NewsletterService.dart';
+import 'package:fitislyadmin/Util/ConstApiRoute.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -56,10 +57,6 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
   }
 
   Widget _buildField(Newsletter newsletter) {
-    Text titleScreen = Text(Translations.of(context).text("title_screen_news"),
-      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-      textAlign: TextAlign.center,
-    );
 
     final nameField = TextFormField(
       initialValue: newsletter.name,
@@ -124,31 +121,37 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
       ),
     );
 
-    var urlImage = "http://localhost:4000/" + newsletter.newsletterImage;
+    var urlImage = ConstApiRoute.baseUrlImage + newsletter.newsletterImage;
     final photoField = Container(
         height: 200,
         width: 175,
-        child: Card(
-          semanticContainer: true,
-          clipBehavior: Clip.antiAliasWithSaveLayer,
-          child: Center(
-            child: Image.network(urlImage),
+        child: GestureDetector(
+          child: Card(
+            semanticContainer: true,
+            clipBehavior: Clip.antiAliasWithSaveLayer,
+            child: _image == null ? Center(
+              child: Image.network(urlImage),
+            ): Image.file(_image),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            elevation: 5,
+            margin: EdgeInsets.all(10),
           ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          elevation: 5,
-          margin: EdgeInsets.all(10),
-        ));
+          onTap: () async {
+            final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+            setState(() {
+              _image = File(pickedFile.path);
+            });
+          },
+        )
+    );
 
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: titleScreen,
-        ),
+
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: nameField,
@@ -185,13 +188,12 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
 
   void updateNewsletter(Newsletter nl) {
     if (_formKey.currentState.validate()) {
-      // If the form is valid, display a Snackbar.
       _formKey.currentState.save();
 
       nl.name = _name;
       nl.title = _title;
       nl.body = _desc;
-      nl.newsletterImage = _image != null ? _image.path : nl.newsletterImage;
+      nl.newsletterImage = _image != null ? _image.path : _image;
 
       services.updateNewsletter(nl)
           .then((value) {
