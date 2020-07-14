@@ -155,19 +155,10 @@ CREATE TABLE junction_program_exercise (
 
 -- DROP TABLE public.suggestions;
 
-CREATE TABLE suggestions (
-	id int8 NOT NULL,
+CREATE TABLE public.suggestions (
 	iduser varchar(255) NOT NULL,
 	idprogram varchar(255) NOT NULL,
 	datecreation timestamp NOT NULL,
+	id bigserial NOT NULL,
 	CONSTRAINT suggestions_pk PRIMARY KEY (id)
 );
-
-alter table suggestions
-    add iduser varchar(255) not null;
-
-alter table suggestions
-add idprogram varchar(255) not null;
-
-alter table suggestions
-    add datecreation timestamp not null;

@@ -9,7 +9,7 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   },
-  "host": "http://ec2-3-14-244-98.us-east-2.compute.amazonaws.com/",
+  "host": "http://ec2-3-14-244-98.us-east-2.compute.amazonaws.com",
   "basePath": "/",
   "tags": [
     {
@@ -228,6 +228,9 @@
     "suggestion": {
       "type": "object",
       "properties": {
+        "id": {
+          "type": "number"
+        },
         "idProgram": {
           "type": "string"
         },
@@ -1580,7 +1583,15 @@
             "name": "body",
             "description": "id of the referenced suggestion",
             "schema": {
-              "$ref": "#/definitions/suggestion"
+              "type": "object",
+              "properties": {
+                "idProgram": {
+                  "type": "string"
+                },
+                "idUser": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
@@ -1637,7 +1648,15 @@
             "name": "body",
             "description": "id of the referenced suggestion",
             "schema": {
-              "$ref": "#/definitions/suggestion"
+              "type": "object",
+              "properties": {
+                "idProgram": {
+                  "type": "string"
+                },
+                "idUser": {
+                  "type": "string"
+                }
+              }
             }
           }
         ],
