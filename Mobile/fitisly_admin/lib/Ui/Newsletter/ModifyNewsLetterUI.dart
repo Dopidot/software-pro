@@ -28,15 +28,20 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
   String _name;
   File _image;
   final _picker = ImagePicker();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(centerTitle: true, title: Text(Translations.of(context).text("title_news_detail"))),
-      body: Form(
-        key: _formKey,
-        child: _buildFutureNewsletter(),
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: _buildFutureNewsletter(),
+        ),
       ),
     );
   }
@@ -55,10 +60,9 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
 
   Widget _buildField(Newsletter newsletter) {
 
-    if(newsletter != null){
+    if(newsletter == null){
       return Center(child: Text(Translations.of(context).text('error_server')));
     }
-
 
     final nameField = TextFormField(
       initialValue: newsletter.name,
@@ -101,26 +105,30 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
               OutlineInputBorder(borderRadius: BorderRadius.circular(20.0))),
     );
 
-    RaisedButton updateBtn = RaisedButton(
-      child: Text('Modifier'),
-      color: Colors.green,
-      onPressed: () {
-        _updateNewsletter(newsletter);
-      },
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-      ),
+    final updateBtn = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: new Color(0xFF45E15F),
+
+        child: MaterialButton(
+          onPressed: () {
+            _updateNewsletter(newsletter);
+          },
+          child: Text(Translations.of(context).text("btn_update")),
+        )
     );
 
-    RaisedButton cancelBtn = RaisedButton(
-      child: Text(Translations.of(context).text("btn_cancel")),
-      color: Colors.red,
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-      ),
+    final cancelBtn = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.red,
+
+        child: MaterialButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text(Translations.of(context).text("btn_update")),
+        )
     );
 
     var urlImage = ConstApiRoute.baseUrlImage + newsletter.newsletterImage;
@@ -192,6 +200,10 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
 
+      if(_name == null || _title == null || _image == null || _desc == null ){
+        displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_field_null'));
+      }
+
       nl.name = _name;
       nl.title = _title;
       nl.body = _desc;
@@ -213,6 +225,18 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
     }
     return null;
   }
+
+  void displayDialog(String title, String text) =>
+      showDialog(
+        context: _scaffoldKey.currentState.context,
+        builder: (context) =>
+            AlertDialog(
+                title: Text(title),
+                content: Text(text)
+            ),
+      );
+
+
 }
 
 

@@ -27,13 +27,11 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   String _zipCode;
   String _country;
   String _city;
-
-
   File _image;
   final _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
   EventService services = EventService();
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
 
 
 
@@ -41,6 +39,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
         appBar: AppBar(title: Text(Translations.of(context).text("title_create_event")),
           centerTitle: true,),
         body: Container(
@@ -158,7 +157,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     final creationButton = Material(
         elevation: 5.0,
         borderRadius: BorderRadius.circular(30.0),
-        color: new Color(0xFF45E15F),
+        color: Color(0xFF45E15F),
 
         child: MaterialButton(
           onPressed: _validateInput,
@@ -277,7 +276,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       _formKey.currentState.save();
 
       if(_body == null || _name == null || _startDate == null || _image == null || _zipCode == null|| _city== null || _country == null){
-
+        _displayDialog(Translations.of(context).text('error_title'), Translations.of(context).text('error_field_null'));
       }
 
       Event event = Event(body: _body,creationDate: DateTime.now(),name: _name,
@@ -317,5 +316,12 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     }
     return int.tryParse(result) != null;
   }
+
+
+  void _displayDialog(String title, String text) => showDialog(
+    context: _scaffoldKey.currentState.context,
+    builder: (context) =>
+        AlertDialog(title: Text(title), content: Text(text)),
+  );
 }
 
