@@ -1,16 +1,22 @@
-/**
- * author : Guillaume Tako
- */
-
 import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
 import { query } from '../database';
+
+/**
+ * Author : Guillaume Tako
+ * Class : CoachController
+ */
 
 export default class CoachController {
 
     constructor() {}
 
-    getCoachs = async function(req: Request, res: Response): Promise<Response> {
+    /**
+     * Get all the coaches from the database
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
+    getCoaches = async function(req: Request, res: Response): Promise<Response> {
         try {
             const response: QueryResult = await query('SELECT * FROM coachs', undefined);
             return res.status(200).json(response.rows);
@@ -23,6 +29,11 @@ export default class CoachController {
         }
     }
 
+    /**
+     * Get the coach that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     getCoachById = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
@@ -41,6 +52,11 @@ export default class CoachController {
         }
     }
 
+    /**
+     * Create a new Coach with the parameters provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     createCoach = async function(req: Request, res: Response): Promise<Response> {
         try {
             const { coachId, isHighlighted } = req.body;
@@ -61,6 +77,11 @@ export default class CoachController {
         }
     }
 
+    /**
+     * Update the coach that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     updateCoach = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
@@ -91,6 +112,11 @@ export default class CoachController {
         }
     }
 
+    /**
+     * Delete the coach that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     deleteCoach = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);

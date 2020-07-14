@@ -1,17 +1,23 @@
-/**
- * author : Guillaume Tako
- */
-
 import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
 import { query } from '../database';
 import { unlink } from 'fs';
 import { removeLastDirectoryFromCWDPath } from '../core/StringUtils';
 
+/**
+ * Author : Guillaume Tako
+ * Class : NewsletterController
+ */
+
 export default class NewsletterController {
 
     constructor() { }
 
+    /**
+     * Get all the newsletters
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     getNewsletters = async function(req: Request, res: Response): Promise<Response> {
         try {
             const response: QueryResult = await query('SELECT * FROM newsletters', undefined);
@@ -25,6 +31,11 @@ export default class NewsletterController {
         }
     }
 
+    /**
+     * Get the newsletter that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     getNewslettersById = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
@@ -45,6 +56,11 @@ export default class NewsletterController {
         }
     }
 
+    /**
+     * Crreate a new newsletter with the parameters provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     createNewsletter = async function(req: Request, res: Response): Promise<Response> {
         try {
             const { name, title, body } = req.body;
@@ -80,6 +96,11 @@ export default class NewsletterController {
         }
     }
 
+    /**
+     * Update the newsletter that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     updateNewsletter = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
@@ -134,6 +155,11 @@ export default class NewsletterController {
         }
     }
 
+    /**
+     * Delete the newsletter that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     deleteNewsletter = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);

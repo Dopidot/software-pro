@@ -1,17 +1,22 @@
-/**
- * author : Guillaume Tako
- */
-
 import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
 import { query } from '../database';
 import { unlink } from 'fs';
 import { removeLastDirectoryFromCWDPath } from '../core/StringUtils';
 
+/**
+ * Author : Guillaume Tako
+ * Class : EventController
+ */
 export default class EventController {
 
     constructor() {}
 
+    /**
+     * Get all the events from the database
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     getEvents = async function(req: Request, res: Response): Promise<Response> {
         try {
             const response: QueryResult = await query('SELECT * FROM events', undefined);
@@ -25,6 +30,11 @@ export default class EventController {
         }
     }
 
+    /**
+     * Get the event that correspond the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     getEventById = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
@@ -45,6 +55,11 @@ export default class EventController {
         }
     }
 
+    /**
+     * Create a new event with the parameters provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     createEvent = async function(req: Request, res: Response): Promise<Response> {
         try {
             const { name, body, startDate, address, zipCode, city, country } = req.body;
@@ -73,6 +88,11 @@ export default class EventController {
         }
     }
 
+    /**
+     * Update the event that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     updateEvent = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
@@ -125,6 +145,11 @@ export default class EventController {
         }
     }
 
+    /**
+     * Delete the event that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     deleteEvent = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);

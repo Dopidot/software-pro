@@ -1,5 +1,6 @@
 /**
- * author : Guillaume Tako
+ * Author : Guillaume Tako
+ * Class : CoachModel
  */
 
 export default class CoachModel {

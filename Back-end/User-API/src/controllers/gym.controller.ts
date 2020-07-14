@@ -1,17 +1,22 @@
-/**
- * author : Guillaume Tako
- */
-
 import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
 import { query } from '../database';
 import { unlink } from 'fs';
 import { removeLastDirectoryFromCWDPath } from '../core/StringUtils';
 
+/**
+ * Author : Guillaume Tako
+ * Class : GymController
+ */
 export default class GymController {
 
     constructor() {}
 
+    /**
+     * Get all the gyms from the database
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     getGyms = async function(req: Request, res: Response): Promise<Response> {
         try {
             const response: QueryResult = await query('SELECT * FROM gyms', undefined);
@@ -25,6 +30,11 @@ export default class GymController {
         }
     }
 
+    /**
+     * Get the gym that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     getGymById = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
@@ -45,6 +55,11 @@ export default class GymController {
         }
     }
 
+    /**
+     * Create a gym with the parameters provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     createGym = async function(req: Request, res: Response): Promise<Response> {
         try {
             const { name, address, zipCode, city, country } = req.body;
@@ -73,6 +88,11 @@ export default class GymController {
         }
     }
 
+    /**
+     * Update the gym that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     updateGym = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
@@ -126,6 +146,11 @@ export default class GymController {
         }
     }
 
+    /**
+     * Delete the gym that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     deleteGym = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);

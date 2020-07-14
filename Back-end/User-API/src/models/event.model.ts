@@ -1,5 +1,6 @@
 /**
- * author : Guillaume Tako
+ * Author : Guillaume Tako
+ * Class : EventModel
  */
 
 export default class EventModel {

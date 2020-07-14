@@ -1,5 +1,6 @@
 /**
- * author : Guillaume Tako
+ * Author : Guillaume Tako
+ * Class : NewsletterModel
  */
 
 export default class NewsletterModel {

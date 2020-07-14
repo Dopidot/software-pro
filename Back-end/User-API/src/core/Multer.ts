@@ -1,10 +1,11 @@
-/**
- * author : Guillaume Tako
- */
-
 import multer from 'multer';
 import { Request } from 'express';
 import { extname } from 'path';
+
+/**
+ * Author : Guillaume Tako
+ * Multer
+ */
 
 const storage = multer.diskStorage({
     destination: function (req: Request, file, cb) {
@@ -15,6 +16,11 @@ const storage = multer.diskStorage({
     }
 });
 
+/**
+ * Function that checks if the file is a picture
+ * @param file
+ * @param callback
+ */
 function checkFileType(file: Express.Multer.File, callback: multer.FileFilterCallback) {
     const filetypes = /jpeg|jpg|png|gif/;
     const extensionname = filetypes.test(extname(file.originalname).toLowerCase());
