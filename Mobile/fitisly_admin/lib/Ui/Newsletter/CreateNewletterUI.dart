@@ -29,17 +29,18 @@ class _CreateNewsletter extends State<CreateNewsletter>{
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
         centerTitle: true,
-          title: Text(Translations.of(context).text("title_create_news"))),
-      body: Form(
-        key: _formKey,
-        autovalidate: _autoValidate,
-        child: SingleChildScrollView(
-          child: _buildField()
+          title: Text(Translations.of(context).text("title_create_news")
+          )
+      ),
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          autovalidate: _autoValidate,
+          child: _buildField(),
         ),
       ),
     );
@@ -123,7 +124,11 @@ class _CreateNewsletter extends State<CreateNewsletter>{
      onPressed: () {
         if (_formKey.currentState.validate()) {
           _formKey.currentState.save();
-          Newsletter nl = Newsletter(name:_name,title:_title,body: _body,newsletterImage: _image.path );
+
+          if(_name == null || _title == null || _image == null || _body == null ){
+            displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_field_null'));
+          }
+          Newsletter nl = Newsletter(name:_name,title:_title,body: _body, newsletterImage: _image.path);
           createNlInServer(nl);
         }else{
           setState (() {
@@ -203,8 +208,7 @@ class _CreateNewsletter extends State<CreateNewsletter>{
     if(isValid){
       Navigator.pop(context,nl);
     }else{
-
-      displayDialog("Erreur d'enregistrement","La newsletter n'a pas pu être enregistrer dans la base, veuillez vérifier les champs svp ");
+      displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_server'));
     }
 
   }

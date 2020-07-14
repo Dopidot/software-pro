@@ -35,14 +35,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
   final _picker = ImagePicker();
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       key: _scaffoldKey,
       appBar: AppBar(
@@ -51,15 +44,12 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
       body: Form(
         key: _formKey,
         autovalidate: _autoValidate,
-        child: SingleChildScrollView(
-            child: Column(
-          children: <Widget>[buildFutureProgram(), futureBuilderAllExercises()],
-        )),
+        child: _buildFutureProgram(),
       ),
     );
   }
 
-  FutureBuilder<List<Exercise>> futureBuilderAllExercises() {
+  FutureBuilder<List<Exercise>> _futureBuilderAllExercises() {
     return FutureBuilder<List<Exercise>>(
         future: serviceEx.fetchExercises(),
         builder: (context, snapshot) {
@@ -68,12 +58,12 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
                 child: Text(Translations.of(context).text("error_server")));
           }
           return snapshot.hasData
-              ? futureBuilderExercisesByProgram(snapshot.data)
+              ? _futureBuilderExercisesByProgram(snapshot.data)
               : Center(child: CircularProgressIndicator());
         });
   }
 
-  FutureBuilder<List<Exercise>> futureBuilderExercisesByProgram(List<Exercise> allExercises) {
+  FutureBuilder<List<Exercise>> _futureBuilderExercisesByProgram(List<Exercise> allExercises) {
     return FutureBuilder<List<Exercise>>(
         future: serviceEx.getExerciseByProgram(widget.programId),
         builder: (context, snapshot) {
@@ -87,9 +77,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
 
   Widget buildUI(
       List<Exercise> exercisesByProgram, List<Exercise> allExercises) {
-    return allExercises.isEmpty
-        ? Center(child: Text(Translations.of(context).text("no_exercise"))) : _listExercise(
-            exercisesByProgram, allExercises); //buildListView(exercises);
+    return allExercises.isEmpty ? Center(child: Text(Translations.of(context).text("no_exercise"))) : _listExercise(exercisesByProgram, allExercises); //buildListView(exercises);
   }
 
   Widget _listExercise(
@@ -135,7 +123,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
   Widget _buildField(Program prog) {
     final nameField = TextFormField(
       initialValue: prog.name,
-      validator: validateField,
+      validator: _validateField,
       onSaved: (String val) {
         _name = val;
       },
@@ -148,7 +136,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
 
     final descField = TextFormField(
       initialValue: prog.description,
-      validator: validateField,
+      validator: _validateField,
       onSaved: (String val) {
         _desc = val;
       },
@@ -231,6 +219,10 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
+          child: _futureBuilderAllExercises(),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
           child: photoField,
         ),
         Row(
@@ -251,7 +243,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
     );
   }
 
-  String validateField(String val) {
+  String _validateField(String val) {
     if (val.isEmpty) {
       return Translations.of(context).text("field_is_empty");
     }
@@ -259,7 +251,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
   }
 
 
-  FutureBuilder<Program> buildFutureProgram() {
+  FutureBuilder<Program> _buildFutureProgram() {
     return FutureBuilder<Program>(
       future: services.getProgramById(widget.programId),
       builder: (context, snapshot) {
