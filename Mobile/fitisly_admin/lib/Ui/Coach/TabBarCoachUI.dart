@@ -21,18 +21,18 @@ class TabBarCoachUI extends StatelessWidget {
               title: TabBar(
                 tabs: <Widget>[
                   Tab(
-                    text: "Detail",
+                    text: Translations.of(context).text("title_detail_coach"),
                   ),
                   Tab(
-                    text: "Followers",
+                    text: Translations.of(context).text("title_follower_coach"),
                   )
                 ],
               ),
             ),
             body: TabBarView(
                 children: [
-                  CoachDetailUI(coach: coach,),
-                  FollowersCoachUI(coach: coach,),
+                  CoachDetailUI(coach: coach),
+                  FollowersCoachUI(coach: coach),
                 ])
         )
     );

@@ -28,6 +28,33 @@ class _CreateGymUI extends State<CreateGymUI>{
   String _city;
   File _image;
   final _picker = ImagePicker();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+
+  @override
+  Widget build(BuildContext context) {
+    return  Scaffold(
+      key: _scaffoldKey,
+        appBar: AppBar(title: Text(Translations.of(context).text("title_screen_gym")),
+            centerTitle: true),
+        body: SingleChildScrollView(
+          child: Container(
+              padding: EdgeInsets.all(20.0),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    Text(Translations.of(context).text("subtitle_create_gym")),
+                    Form(
+                        autovalidate: _autoValidate,
+                        key: _formKey,
+                        child: _buildForm()),
+                  ],
+                ),
+              )
+          ),
+        )
+    );
+  }
 
 
   Widget _buildForm(){
@@ -36,7 +63,7 @@ class _CreateGymUI extends State<CreateGymUI>{
       onSaved: (String val){
         _name = val;
       },
-      validator: validateField,
+      validator: _validateField,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
           hintText: Translations.of(context).text("field_name"),
@@ -48,7 +75,7 @@ class _CreateGymUI extends State<CreateGymUI>{
       onSaved: (String val){
         _address = val;
       },
-      validator: validateField,
+      validator: _validateField,
       keyboardType: TextInputType.multiline,
       decoration: InputDecoration(
           hintText: Translations.of(context).text("field_address_gym"),
@@ -60,7 +87,7 @@ class _CreateGymUI extends State<CreateGymUI>{
       onSaved: (String val){
         _zipCode = val;
       },
-      validator: validateField,
+      validator: _validZipCode,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
           hintText: Translations.of(context).text("field_zipCode"),
@@ -71,7 +98,7 @@ class _CreateGymUI extends State<CreateGymUI>{
       onSaved: (String val){
         _city = val;
       },
-      validator: validateField,
+      validator: _validateField,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
           hintText: Translations.of(context).text("field_city"),
@@ -83,7 +110,7 @@ class _CreateGymUI extends State<CreateGymUI>{
       onSaved: (String val){
         _country = val;
       },
-      validator: validateField,
+      validator: _validateField,
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
           hintText: Translations.of(context).text("field_country"),
@@ -167,31 +194,14 @@ class _CreateGymUI extends State<CreateGymUI>{
 
     }
 
-  @override
-  Widget build(BuildContext context) {
-    return  Scaffold(
-        appBar: AppBar(title: Text(Translations.of(context).text("title_screen_gym")),
-          centerTitle: true),
-        body: Container(
-            padding: EdgeInsets.all(20.0),
-            child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                Text(Translations.of(context).text("subtitle_create_gym")),
-                    Form(
-                        autovalidate: _autoValidate,
-                        key: _formKey,
-                        child: _buildForm()),
-                  ],
-                ))
-        )
-    );
-  }
-
 
   Future<void> _validateInput() async {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
+
+      if(_name == null || _address == null || _zipCode == null || _city == null || _country == null || _image == null){
+        _displayDialog(Translations.of(context).text('error_title'), Translations.of(context).text('error_field_null'));
+      }
       Gym gym = Gym(name: _name,address: _address,zipCode: _zipCode,city: _city,country: _country,gymImage: _image.path);
       var isCreated = await services.createGym(gym);
 
@@ -206,10 +216,33 @@ class _CreateGymUI extends State<CreateGymUI>{
     }
   }
 
-  String validateField(String value){
+  String _validateField(String value){
     if(value.isEmpty){
       return Translations.of(context).text("field_is_empty");
     }
     return null;
   }
+
+  String _validZipCode(String val){
+    if(_isNumeric(val)){
+      return null;
+    }
+    return Translations.of(context).text("invalid_zip_code");
+
+  }
+
+
+  bool _isNumeric(String result) {
+    if (result == null) {
+      return false;
+    }
+    return int.tryParse(result) != null;
+  }
+
+
+  void _displayDialog(String title, String text) => showDialog(
+    context: _scaffoldKey.currentState.context,
+    builder: (context) =>
+        AlertDialog(title: Text(title), content: Text(text)),
+  );
 }

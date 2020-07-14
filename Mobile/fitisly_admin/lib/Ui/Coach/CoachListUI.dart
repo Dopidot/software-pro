@@ -33,11 +33,10 @@ class _CoachListUI extends State<CoachListUI> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Translations.of(context).text("title_application_home_coach")),
+        title: Text(Translations.of(context).text("title_application_home_coach") , style: TextStyle(fontFamily: 'OpenSans')),
         centerTitle: true,
       ),
        body: _buildFutureCoach()
-
     );
   }
 
@@ -50,18 +49,16 @@ class _CoachListUI extends State<CoachListUI> {
 
           return Center(child: Text("${snapshot.error}"));
         }
-        return snapshot.hasData ? _buildList(snapshot.data) : Center(child: CircularProgressIndicator());
+        return snapshot.hasData ? _initCoachList(snapshot.data) : Center(child: CircularProgressIndicator());
       },
     );
   }
 
-
-  Widget _buildList(List<CoachsFitisly> coachs ){
-    return coachs.isEmpty ? Center(child: Text("Aucune coach, veuillez vérifier votre connexion svp")) : _initCoachList(coachs);
-  }
-
-
   Widget _initCoachList(List<CoachsFitisly> coachs) {
+
+    if(coachs.isEmpty){
+      return Center(child: Text(Translations.of(context).text("no_coach")));
+    }
 
     return AnimationLimiter(
       child: ListView.builder(

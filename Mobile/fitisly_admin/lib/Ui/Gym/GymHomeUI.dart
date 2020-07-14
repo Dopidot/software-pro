@@ -28,8 +28,20 @@ class _GymHomeUI extends State<GymHomeUI> {
         title: Text(Translations.of(context).text("title_gym_list"),
             style: TextStyle(fontFamily: 'OpenSans', fontSize: 20.0)),
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.refresh,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              _updateUI();
+            },
+          ),
+
+        ],
       ),
-      body: buildFutureGym(),
+      body: _buildFutureGym(),
       floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
@@ -37,7 +49,7 @@ class _GymHomeUI extends State<GymHomeUI> {
                     MaterialPageRoute(builder: (context) => CreateGymUI()))
                 .then((value) {
               if (value != null) {
-                updateUiAfterCreation();
+                _updateUI();
                 _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text(Translations.of(context).text("add_gym"))));
               }
             });
@@ -46,25 +58,24 @@ class _GymHomeUI extends State<GymHomeUI> {
   }
 
 
- 
-
-  FutureBuilder<List<Gym>> buildFutureGym() {
+  FutureBuilder<List<Gym>> _buildFutureGym() {
     return FutureBuilder<List<Gym>>(
       future: services.fetchGyms(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(child: Text("${snapshot.error}"));
         }
-        return snapshot.hasData ? buildList(snapshot.data) : Center(child: CircularProgressIndicator());
+        return snapshot.hasData ? _initListView(snapshot.data) : Center(child: CircularProgressIndicator());
       },
     );
   }
 
-  Widget buildList(List<Gym> gyms) {
-    return gyms.isEmpty ? Center(child: Text(Translations.of(context).text("no_news"))) : initListView(gyms);
-  }
+  Widget _initListView(List<Gym> gyms) {
 
-  Widget initListView(List<Gym> gyms) {
+    if(gyms.isEmpty){
+      return Center(child: Text(Translations.of(context).text("no_news")));
+    }
+
     return AnimationLimiter(
       child: ListView.builder(
         itemCount: gyms.length,
@@ -83,7 +94,7 @@ class _GymHomeUI extends State<GymHomeUI> {
                       child: Icon(Icons.cancel),
                     ),
                     onDismissed: (direction) {
-                      delete(index, gyms);
+                      _delete(index, gyms);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
@@ -134,13 +145,13 @@ class _GymHomeUI extends State<GymHomeUI> {
     );
   }
 
-  void updateUiAfterCreation() async {
+ void _updateUI() async {
     setState(() {
-      buildFutureGym();
+      _buildFutureGym();
     });
   }
 
-  void delete(var index, List<Gym> gyms) async {
+  void _delete(var index, List<Gym> gyms) async {
     var isDelete = await services.deleteGym(gyms[index].id);
 
     if (isDelete) {
