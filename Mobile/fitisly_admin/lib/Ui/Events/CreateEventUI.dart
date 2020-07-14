@@ -2,7 +2,8 @@
 import 'dart:io';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Event.dart';
-import 'package:fitislyadmin/Ui/Events/CreateEventSecondUI.dart';
+import 'package:fitislyadmin/Services/EventService.dart';
+import 'package:fitislyadmin/Ui/Events/HomeEventUI.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,11 +23,17 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   String _body;
   DateTime _startDate;
   bool _autoValidate = false;
+  String _address;
+  String _zipCode;
+  String _country;
+  String _city;
 
 
   File _image;
   final _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
+  EventService services = EventService();
+
 
 
 
@@ -102,6 +109,80 @@ class _CreateEventScreen extends State<CreateEventScreen> {
 
     );
 
+    final address = TextFormField(
+      onSaved: (String val){
+        _address = val;
+      },
+      validator: validateField,
+      keyboardType: TextInputType.multiline,
+      decoration: InputDecoration(
+          hintText: Translations.of(context).text("field_address_event"),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+
+    );
+
+    final zipCode = TextFormField(
+      onSaved: (String val){
+        _zipCode = val;
+      },
+      validator: _validZipCode,
+      keyboardType: TextInputType.number,
+      decoration: InputDecoration(
+          hintText: Translations.of(context).text("field_zipCode"),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+    );
+
+    final city = TextFormField(
+      onSaved: (String val){
+        _city = val;
+      },
+      validator: validateField,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+          hintText: Translations.of(context).text("field_city"),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+
+    );
+
+    final country = TextFormField(
+      onSaved: (String val){
+        _country = val;
+      },
+      validator: validateField,
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+          hintText: Translations.of(context).text("field_country"),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
+    );
+
+    final creationButton = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: new Color(0xFF45E15F),
+
+        child: MaterialButton(
+          onPressed: _validateInput,
+          child: Text(Translations.of(context).text("btn_Create")),
+        )
+    );
+
+    final cancelBtn = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.redAccent,
+
+        child: MaterialButton(
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomeEventScreen()),
+                  (Route<dynamic> route) => false,
+            );
+          },
+          child: Text(Translations.of(context).text("btn_cancel")),
+        )
+    );
+
 
 
     final photoField = Container (
@@ -134,30 +215,6 @@ class _CreateEventScreen extends State<CreateEventScreen> {
         )
     );
 
-    final creationButton = Material(
-        elevation: 5.0,
-        borderRadius: BorderRadius.circular(30.0),
-        color: new Color(0xFF45E15F),
-
-        child: MaterialButton(
-          onPressed: _validateInput,
-          child: Text(Translations.of(context).text("btn_next")),
-        )
-    );
-
-    final cancelButton = Material(
-        elevation: 5.0,
-        borderRadius: BorderRadius.circular(30.0),
-        color: Colors.red,
-
-        child: MaterialButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text(Translations.of(context).text("btn_cancel")),
-        )
-    );
-
     return Column(
         children: <Widget>[
           Padding(
@@ -171,6 +228,22 @@ class _CreateEventScreen extends State<CreateEventScreen> {
           Padding(
             padding: const EdgeInsets.all(5.0),
             child: startDateField,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: address,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: zipCode,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: city,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: country,
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -188,7 +261,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
 
               Padding(
                 padding: const EdgeInsets.all(5.0),
-                child: cancelButton,
+                child: cancelBtn,
               ),
             ],
           ),
@@ -203,12 +276,18 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-      Event event = Event(body: _body,creationDate: DateTime.now(),name: _name,startDate: _startDate,eventImage: _image.path);
-      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-        return CreateEventSecondScreen(event: event);
-      })
-      );
+      if(_body == null || _name == null || _startDate == null || _image == null || _zipCode == null|| _city== null || _country == null){
 
+      }
+
+      Event event = Event(body: _body,creationDate: DateTime.now(),name: _name,
+          startDate: _startDate,eventImage: _image.path,address: _address,zipCode: _zipCode,city: _city,country: _country);
+
+      var futureCreateEvent = services.createEvent(event);
+
+      futureCreateEvent.then((value) {
+        Navigator.pop(context,event);
+      });
     } else {
       setState (() {
         _autoValidate = true ;
@@ -222,6 +301,21 @@ class _CreateEventScreen extends State<CreateEventScreen> {
       return Translations.of(context).text("field_is_empty");
     }
     return null;
+  }
+
+  String _validZipCode(String val){
+    if(_isNumeric(val)){
+      return null;
+    }
+    return Translations.of(context).text("invalid_zip_code");
+  }
+
+
+  bool _isNumeric(String result) {
+    if (result == null) {
+      return false;
+    }
+    return int.tryParse(result) != null;
   }
 }
 

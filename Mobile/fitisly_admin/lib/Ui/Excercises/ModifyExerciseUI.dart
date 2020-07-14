@@ -31,12 +31,6 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
   ExerciseService services = ExerciseService();
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final String id = ModalRoute.of(context).settings.arguments;
 
@@ -47,11 +41,10 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
         ),
         body: Container(
             padding: EdgeInsets.all(20.0),
-            child: SingleChildScrollView(
-                child:Form(
-                    autovalidate: _autoValidate,
-                    key: _formKey,
-                    child: futureBuilderExercise(id)))
+            child: Form(
+                autovalidate: _autoValidate,
+                key: _formKey,
+                child: futureBuilderExercise(id))
         )
     );
   }
@@ -135,7 +128,7 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
       onSaved: (String val){
         _reapeat_number = int.parse(val);
       },
-      validator: _validateField,
+      validator: isNumericValue,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
           hintText: Translations.of(context).text("field_nb_repeate"),
@@ -148,7 +141,7 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
       onSaved: (String val){
         _rest_time = int.parse(val);
       },
-      validator: _validateField,
+      validator: isNumericValue,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
           hintText: Translations.of(context).text("field_recup"),
@@ -251,6 +244,22 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
       return Translations.of(context).text("field_is_empty") ;
     }
     return null;
+  }
+
+
+  String isNumericValue(String val){
+    if(_isNumeric(val)){
+      return null;
+    }
+    return Translations.of(context).text("error_no_numeric_value");
+  }
+
+
+  bool _isNumeric(String result) {
+    if (result == null) {
+      return false;
+    }
+    return int.tryParse(result) != null;
   }
 }
 

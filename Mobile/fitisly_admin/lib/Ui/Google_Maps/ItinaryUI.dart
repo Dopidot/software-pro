@@ -1,7 +1,10 @@
 // Author : DEYEHE Jean
 import 'dart:async';
+import 'package:fitislyadmin/Model/Fitisly_Admin/Event.dart';
 import 'package:fitislyadmin/Model/Fitisly_Admin/Gym.dart';
+import 'package:fitislyadmin/Services/EventService.dart';
 import 'package:fitislyadmin/Services/GymService.dart';
+import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -12,6 +15,7 @@ import 'package:permission_handler/permission_handler.dart' as PermissionHandler
 class ItinaryUI extends StatefulWidget {
 
   String gymId;
+
   ItinaryUI({Key key, @required this.gymId}) : super(key: key);
 
   @override
@@ -21,9 +25,9 @@ class ItinaryUI extends StatefulWidget {
 class _ItinaryUI extends State<ItinaryUI> {
 
   GlobalKey<ScaffoldState> _globalKey = GlobalKey<ScaffoldState>();
-  GymService service = GymService();
+  GymService gymService = GymService();
+
   String googleAPiKey = "AIzaSyBVmFs4d8-gPsosPci2Zx5rRwQ5GyxdFrk";
-  CameraPosition _cameraPosition = CameraPosition(target: LatLng(0,0),zoom: 14);
   Completer<GoogleMapController> _controller = Completer();
 
   @override
@@ -32,6 +36,13 @@ class _ItinaryUI extends State<ItinaryUI> {
     super.initState();
   }
 
+  void _askForLocationPermission() async {
+
+    Map<PermissionHandler.Permission,PermissionHandler.PermissionStatus> permissions;
+    permissions = await [
+      PermissionHandler.Permission.location
+    ].request();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +50,11 @@ class _ItinaryUI extends State<ItinaryUI> {
     return Scaffold(
       key: _globalKey,
         appBar: AppBar(
-          title: Text("Map"),
+          title: Text(Translations.of(context).text('title_map') , style: TextStyle(fontFamily: 'OpenSans')),
           centerTitle: true
         ),
-         // body:buildFutureNewsletter()
       body: FutureBuilder(
-          future: setMapDisplay(),
+          future: _setMapDisplay(),
           builder: (context, AsyncSnapshot snapshot) {
             if(snapshot.hasError){
               throw snapshot.error;
@@ -67,6 +77,9 @@ class _ItinaryUI extends State<ItinaryUI> {
   }
 
 
+
+
+
   Future<Marker> gymToMarker(Gym gym) async {
     var addressComplete = "${gym.address} ${gym.zipCode} ${gym.city} ${gym.country}";
 
@@ -77,27 +90,24 @@ class _ItinaryUI extends State<ItinaryUI> {
         position: LatLng(values.first.coordinates.latitude,
             values.first.coordinates.longitude),
         infoWindow: InfoWindow(title: gym.name),
-        onTap: () => {
-         /* Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => DetailEventPage(
-                    event: event, token: token, volunteer: volunteer,)))*/
-
-        }));
+    ));
 
     return output;
   }
 
-  Future<Map<String, Object>> setMapDisplay() async {
+  Future<Map<String, Object>> _setMapDisplay() async {
 
-    Gym gym = await service.getGymById(widget.gymId);
+    if(widget.gymId == null){
+      return null;
+    }
+
+    Gym gym = await gymService.getGymById(widget.gymId);
     Set<Marker> markers = new Set<Marker>();
 
       Marker marker = await gymToMarker(gym);
       markers.add((marker));
 
-    CameraPosition cameraPosition = await getUsersCameraPosition();
+    CameraPosition cameraPosition = await _getUsersCameraPosition();
     Map<String, Object> output = Map<String, Object>();
     output.addEntries([
       MapEntry("cameraPosition", cameraPosition),
@@ -107,35 +117,35 @@ class _ItinaryUI extends State<ItinaryUI> {
   }
 
 
-  void _askForLocationPermission() async {
 
-    Map<PermissionHandler.Permission,PermissionHandler.PermissionStatus> permissions;
-    permissions = await [
-      PermissionHandler.Permission.location
-    ].request();
-  }
+  Future<CameraPosition> _getUsersCameraPosition() async {
+    Gym gym;
+    var addressComplete;
+    var address,zipCode,city,country;
+
+      gym = await gymService.getGymById(widget.gymId);
+
+      if(gym.address == null || gym.zipCode == null || gym.city == null){
+        return CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 15);
+      }
+
+      address = gym.address;
+      zipCode = gym.zipCode;
+      city = gym.city;
+      country = gym.country;
 
 
-  Future<CameraPosition> getUsersCameraPosition() async {
-    var location = new Location();
-    Gym gym = await service.getGymById(widget.gymId);
-    var addressComplete = "${gym.address} ${gym.zipCode} ${gym.city} ${gym.country}";
-
+    addressComplete = "$address $zipCode $city $country";
     var addressWithCoordinate = await Geocoder.local.findAddressesFromQuery(addressComplete);
 
-
     try {
-      var currentLocation = await location.getLocation();
-      return new CameraPosition(
+      return CameraPosition(
           target: LatLng(addressWithCoordinate.first.coordinates.latitude, addressWithCoordinate.first.coordinates.longitude),
           zoom: 15);
     } catch (e) {
-      return new CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 15);
+      return CameraPosition(target: LatLng(48.856613, 2.352222), zoom: 15);
     }
   }
-  
-
-  
 
 }
 
