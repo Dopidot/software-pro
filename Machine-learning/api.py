@@ -1,58 +1,41 @@
 import flask
 from flask import request, jsonify
+from fitisly_model import start
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
 
-# Create some test data for our catalog in the form of a list of dictionaries.
-books = [
-    {'id': 0,
-     'title': 'A Fire Upon the Deep',
-     'author': 'Vernor Vinge',
-     'first_sentence': 'The coldsleep itself was dreamless.',
-     'year_published': '1992'},
-    {'id': 1,
-     'title': 'The Ones Who Walk Away From Omelas',
-     'author': 'Ursula K. Le Guin',
-     'first_sentence': 'With a clamor of bells that set the swallows soaring, the Festival of Summer came to the city Omelas, bright-towered by the sea.',
-     'published': '1973'},
-    {'id': 2,
-     'title': 'Dhalgren',
-     'author': 'Samuel R. Delany',
-     'first_sentence': 'to wound the autumnal city.',
-     'published': '1975'}
-]
 
 @app.route('/', methods=['GET'])
 def home():
-    return "<h1>Distant Reading Archive</h1><p>This site is a prototype API for distant reading of science fiction novels.</p>"
+    return jsonify({'status': 'OK'})
 
-# A route to return all of the available entries in our catalog.
-@app.route('/api/v1/analyze', methods=['GET'])
-def api_all():
-    return jsonify(books)
-	
-@app.route('/api/v1/analyzeById', methods=['GET'])
-def api_id():
-    # Check if an ID was provided as part of the URL.
-    # If ID is provided, assign it to a variable.
-    # If no ID is provided, display an error in the browser.
-    if 'id' in request.args:
-        id = int(request.args['id'])
+
+@app.route('/api/suggestionByProfile', methods=['GET'])
+def api_get_suggestion():
+    if 'height' in request.args:
+        height = int(request.args['height'])
     else:
-        return "Error: No id field provided. Please specify an id."
+        return "Error: No height field provided. Please specify an height."
 
-    # Create an empty list for our results
-    results = []
+    if 'weight' in request.args:
+        weight = int(request.args['weight'])
+    else:
+        return "Error: No weight field provided. Please specify an weight."
 
-    # Loop through the data and match results that fit the requested ID.
-    # IDs are unique, but other fields might return many results
-    for book in books:
-        if book['id'] == id:
-            results.append(book)
+    if 'age' in request.args:
+        age = int(request.args['age'])
+    else:
+        return "Error: No age field provided. Please specify an age."
+
+    result = start(height, weight, age)
+    response = {
+        'value': result
+    }
 
     # Use the jsonify function from Flask to convert our list of
     # Python dictionaries to the JSON format.
-    return jsonify(results)
+    return jsonify(response)
+
 
 app.run()
