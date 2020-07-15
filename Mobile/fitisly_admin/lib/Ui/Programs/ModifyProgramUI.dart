@@ -41,10 +41,12 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
       appBar: AppBar(
           centerTitle: true,
           title: Text(Translations.of(context).text("title_program_detail"))),
-      body: Form(
-        key: _formKey,
-        autovalidate: _autoValidate,
-        child: _buildFutureProgram(),
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          autovalidate: _autoValidate,
+          child: _buildFutureProgram(),
+        ),
       ),
     );
   }
@@ -176,33 +178,37 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
         )
     );
 
-    var updateBtn = RaisedButton(
-      child: Text(Translations.of(context).text("btn_update")),
-      color: Colors.green,
-      onPressed: () {
-        if (_formKey.currentState.validate()) {
-          _formKey.currentState.save();
-          _updateProgram(prog);
-        } else {
-          setState(() {
-            _autoValidate = true;
-          });
-        }
-      },
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-      ),
+    final updateBtn = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: new Color(0xFF45E15F),
+
+        child: MaterialButton(
+          onPressed: () {
+            if (_formKey.currentState.validate()) {
+              _formKey.currentState.save();
+              _updateProgram(prog);
+            } else {
+              setState(() {
+                _autoValidate = true;
+              });
+            }
+            },
+          child: Text(Translations.of(context).text("btn_update")),
+        )
     );
 
-    RaisedButton cancelBtn = RaisedButton(
-      child: Text(Translations.of(context).text("btn_cancel")),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-      color: Colors.red,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18.0),
-      ),
+    final cancelBtn = Material(
+        elevation: 5.0,
+        borderRadius: BorderRadius.circular(30.0),
+        color: Colors.red,
+
+        child: MaterialButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text(Translations.of(context).text("btn_cancel")),
+        )
     );
 
     return Column(
@@ -264,25 +270,29 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
   }
 
   Future<void> _updateProgram(Program p) async {
+
+    if(_name == null || _desc == null || _selectExercise == null || _selectExercise.isEmpty ){
+      displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_field_null'));
+    }
+
     p.name = _name;
     p.description = _desc;
     p.programImage = _image != null ? _image.path : _image;
 
     var idExercise = List<String>();
 
-    if(_selectExercise.isNotEmpty){
+
       _selectExercise.forEach((element) {
         idExercise.add(element.split("-").first);
       });
       p.exercises = idExercise;
-    }
+
 
     var isValid = await services.updateProgram(p);
     if (isValid) {
       Navigator.pop(context, p);
     } else {
-      displayDialog("Erreur d'enregistrement",
-          "Le programme n'a pas pu être enregistrer dans la base, veuillez vérifier les champs svp ");
+      displayDialog(Translations.of(context).text('error_field_null'),Translations.of(context).text('error_field_null'));
     }
   }
 

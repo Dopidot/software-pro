@@ -27,12 +27,11 @@ class _DetailEventScreen extends State<DetailEventScreen> {
   String _body;
   DateTime _startDate;
   bool _autoValidate = false;
-
   String _address;
   String _zipCode;
   String _country;
   String _city;
-
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
   File _image;
   final _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
@@ -43,6 +42,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(title: Text(Translations.of(context).text("title_event_detail") , style: TextStyle(fontFamily: 'OpenSans')),
         centerTitle: true),
       body:  Container(
@@ -224,7 +224,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
         )
     );
 
-    final cancelButton = Material(
+    final cancelBtn = Material(
         elevation: 5.0,
         borderRadius: BorderRadius.circular(30.0),
         color: Colors.red,
@@ -233,7 +233,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text(Translations.of(context).text("btn_cancel")),
+          child: Text(Translations.of(context).text("btn_update")),
         )
     );
 
@@ -281,7 +281,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: cancelButton,
+                child: cancelBtn,
               ),
             ],
           ),
@@ -294,6 +294,10 @@ class _DetailEventScreen extends State<DetailEventScreen> {
   void _updateInput(Event e) {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
+
+      if(_body == null || _name == null || _startDate == null || _image == null || _zipCode == null|| _city== null || _country == null){
+        _displayDialog(Translations.of(context).text('error_title'), Translations.of(context).text('error_field_null'));
+      }
 
       e.body = _body;
       e.name = _name;
@@ -336,13 +340,18 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     return Translations.of(context).text("invalid_zip_code");
   }
 
-
   bool _isNumeric(String result) {
     if (result == null) {
       return false;
     }
     return int.tryParse(result) != null;
   }
+
+  void _displayDialog(String title, String text) => showDialog(
+    context: _scaffoldKey.currentState.context,
+    builder: (context) =>
+        AlertDialog(title: Text(title), content: Text(text)),
+  );
 
 }
 

@@ -18,7 +18,6 @@ class _CreateGymUI extends State<CreateGymUI>{
 
   GymService services = GymService();
 
-
   final _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
   String _address;
@@ -40,16 +39,14 @@ class _CreateGymUI extends State<CreateGymUI>{
         body: SingleChildScrollView(
           child: Container(
               padding: EdgeInsets.all(20.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Text(Translations.of(context).text("subtitle_create_gym")),
-                    Form(
-                        autovalidate: _autoValidate,
-                        key: _formKey,
-                        child: _buildForm()),
-                  ],
-                ),
+              child: Column(
+                children: <Widget>[
+                  Text(Translations.of(context).text("subtitle_create_gym")),
+                  Form(
+                      autovalidate: _autoValidate,
+                      key: _formKey,
+                      child: _buildForm()),
+                ],
               )
           ),
         )
@@ -68,7 +65,6 @@ class _CreateGymUI extends State<CreateGymUI>{
       decoration: InputDecoration(
           hintText: Translations.of(context).text("field_name"),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-
     );
 
     final address = TextFormField(
