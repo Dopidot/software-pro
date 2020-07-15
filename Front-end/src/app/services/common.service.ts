@@ -1,7 +1,7 @@
 /**
  * Service : CommonService
  * @author Mickael MOREIRA
- * @version 1.0.0 
+ * @version 1.0.0
  */
 
 import { Injectable } from '@angular/core';
@@ -76,7 +76,7 @@ export class CommonService {
 
     getSuggestionByProfile(height: number, weight: number, age: number): any {
         return this.http.get<any>(
-            this.apiConfig.machineLearningApiUrl + '/api/suggestionByProfile?height=' + height + '&weight=' + weight + '&age=' + age
+            this.apiConfig.machineLearningApiUrl + '/suggestionByProfile?height=' + height + '&weight=' + weight + '&age=' + age
         );
     }
 
@@ -90,7 +90,7 @@ export class CommonService {
     }
 
     createFormData(obj: any, imageAttribut: string, file: any): FormData {
-        let formData = new FormData(); 
+        let formData = new FormData();
         Object.keys(obj).forEach(key => formData.append(key, obj[key]));
 
         if (file)
