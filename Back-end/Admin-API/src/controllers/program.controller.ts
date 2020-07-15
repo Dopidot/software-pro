@@ -1,7 +1,3 @@
-/**
- * author : Guillaume Tako
- */
-
 import { Request, Response} from 'express';
 import { QueryResult } from 'pg';
 import { query } from '../database';
@@ -9,10 +5,20 @@ import { unlink } from 'fs';
 import ProgramModel from '../models/program.model';
 import { removeLastDirectoryFromCWDPath } from '../core/StringUtils';
 
+/**
+ * Author : Guillaume Tako
+ * Class : ProgramController
+ */
+
 export default class ProgramController {
 
     constructor() { }
 
+    /**
+     * Get all the program from the database
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     getPrograms = async function(req: Request, res: Response): Promise<Response> {
         try {
             const response: QueryResult = await query('SELECT * FROM programs', undefined);
@@ -39,6 +45,11 @@ export default class ProgramController {
         }
     }
 
+    /**
+     * Get the program that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     getProgramById = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
@@ -67,6 +78,11 @@ export default class ProgramController {
         }
     }
 
+    /**
+     * Create a new Program with the parameters provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     createProgram = async function(req: Request, res: Response): Promise<Response> {
         try {
             const name: string = req.body.name;
@@ -116,6 +132,11 @@ export default class ProgramController {
         }
     }
 
+    /**
+     * Update the program that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     updateProgram = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
@@ -189,6 +210,11 @@ export default class ProgramController {
         }
     }
 
+    /**
+     * Delete the program that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     deleteProgram = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);

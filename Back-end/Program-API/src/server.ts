@@ -1,7 +1,3 @@
-/**
- * author : Guillaume Tako
- */
-
 import express, { NextFunction, Request, Response, urlencoded, json } from 'express';
 import swaggerRouter from './routes/swagger.route';
 import programRouter from './routes/program.route';
@@ -13,6 +9,9 @@ export default class Server {
         this.port = port;
     }
 
+    /**
+     * Function that starts the server
+     */
     start() {
         const app = express();
 

@@ -1,7 +1,3 @@
-/**
- * author : Guillaume Tako
- */
-
 import express, { NextFunction, Request, Response, urlencoded, json } from 'express';
 import swaggerRouter from './routes/swagger.route';
 import userRouter from './routes/user.route';
@@ -13,6 +9,11 @@ import gymRouter from './routes/gym.route';
 import coachRouter from './routes/coach.route';
 import suggestionRouter from './routes/suggestion.route';
 
+/**
+ * Author : Guillaume Tako
+ * Class : Server
+ */
+
 export default class Server {
     readonly port: number;
 
@@ -20,6 +21,9 @@ export default class Server {
         this.port = port;
     }
 
+    /**
+     * Function that starts the server
+     */
     start(): void {
         const app = express();
 

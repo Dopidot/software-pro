@@ -1,5 +1,6 @@
 /**
- * author : Guillaume Tako
+ * Author : Guillaume Tako
+ * Class : ExerciseModel
  */
 
 export default class ExerciseModel {

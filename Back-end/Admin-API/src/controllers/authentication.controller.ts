@@ -1,7 +1,3 @@
-/**
- * author : Guillaume Tako
- */
-
 import { sign } from 'jsonwebtoken';
 import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
@@ -13,10 +9,19 @@ import { join } from 'path';
 
 config({ path: join(process.cwd(), '.env') });
 
+/**
+ * Author : Guillaume Tako
+ * Class : AuthenticationController
+ */
 export default class AuthenticationController {
 
     constructor() { }
 
+    /**
+     * Check the mail and password to grant the user a connection token
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     logUserIn = async function(req: Request, res: Response): Promise<Response> {
         try {
             const email = req.body.email;
@@ -37,7 +42,9 @@ export default class AuthenticationController {
                     user : user
                 });
             } else {
-                return res.status(400).json('Bad Credentials : your email or your password is not correct')
+                return res.status(400).json({
+                    message : 'Bad Credentials : your email or your password is not correct'
+                })
             }
         } catch (e) {
             console.error(e);

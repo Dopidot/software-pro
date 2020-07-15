@@ -1,17 +1,22 @@
-/**
- * author : Guillaume Tako
- */
-
 import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
 import { query } from '../database';
 import { unlink } from 'fs';
 import { removeLastDirectoryFromCWDPath } from '../core/StringUtils';
 
+/**
+ * Author : Guillaume Tako
+ * Class : EventController
+ */
 export default class ExerciseController {
 
     constructor() { }
 
+    /**
+     * Get all the exercise from the database
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     getExercises = async function(req: Request, res: Response): Promise<Response> {
         try {
             const response: QueryResult = await query('SELECT * FROM exercises', undefined);
@@ -25,6 +30,11 @@ export default class ExerciseController {
         }
     }
 
+    /**
+     * Get the exercise that correspond the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     getExerciseById = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
@@ -45,6 +55,11 @@ export default class ExerciseController {
         }
     }
 
+    /**
+     * Create a new exercise with the parameters provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     createExercise = async function(req: Request, res: Response): Promise<Response> {
         try {
             const { name, description, repeat_number, rest_time } = req.body;
@@ -72,6 +87,11 @@ export default class ExerciseController {
         }
     }
 
+    /**
+     * Update the exercise that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     updateExercise = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
@@ -122,6 +142,11 @@ export default class ExerciseController {
         }
     }
 
+    /**
+     * Delete the exercise that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     deleteExercise = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);

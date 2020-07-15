@@ -1,7 +1,3 @@
-/**
- * author : Guillaume Tako
- */
-
 import { Request, Response } from 'express';
 import { QueryResult } from 'pg';
 import { query } from '../database';
@@ -9,10 +5,20 @@ import { hash } from 'bcrypt';
 import { unlink } from 'fs';
 import { removeLastDirectoryFromCWDPath } from '../core/StringUtils';
 
+/**
+ * Author : Guillaume Tako
+ * Class : UserController
+ */
+
 export default class UserController {
 
     constructor() { }
 
+    /**
+     * Get all the users from the database
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     getUsers = async function(req: Request, res: Response): Promise<Response> {
         try {
             const response: QueryResult = await query('SELECT id, firstname, lastname, email, lastconnection, userimage FROM users', undefined);
@@ -26,6 +32,11 @@ export default class UserController {
         }
     }
 
+    /**
+     * Get the user that correspond to the id provided bu the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     getUserById = async function(req: Request, res: Response): Promise<Response>  {
         try {
             const id = parseInt(req.params.id);
@@ -46,6 +57,11 @@ export default class UserController {
         }
     }
 
+    /**
+     * Create a new user witht he parameters provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     createUser = async function(req: Request, res: Response): Promise<Response> {
         try {
             const { firstname, lastname, email } = req.body;
@@ -82,6 +98,11 @@ export default class UserController {
         }
     }
 
+    /**
+     * Update the user that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     updateUser = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);
@@ -133,6 +154,11 @@ export default class UserController {
         }
     }
 
+    /**
+     * Delete the user that correspond to the id provided by the client
+     * @param req : Request from the client
+     * @param res : Response to send to the client
+     */
     deleteUser = async function(req: Request, res: Response): Promise<Response> {
         try {
             const id = parseInt(req.params.id);

@@ -59,9 +59,6 @@
     "user": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "number"
-        },
         "firstname": {
           "type": "string"
         },
@@ -80,9 +77,6 @@
     "exercise": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "number"
-        },
         "name": {
           "type": "string"
         },
@@ -127,9 +121,6 @@
     "newsletter": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "number"
-        },
         "name" : {
           "type": "string"
         },
@@ -154,9 +145,6 @@
     "event": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "number"
-        },
         "name": {
           "type": "string"
         },
@@ -191,9 +179,6 @@
     "gym": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "number"
-        },
         "name": {
           "type": "string"
         },
@@ -228,18 +213,11 @@
     "suggestion": {
       "type": "object",
       "properties": {
-        "id": {
-          "type": "number"
-        },
         "idProgram": {
           "type": "string"
         },
         "idUser": {
           "type": "string"
-        },
-        "dateCreation": {
-          "type": "string",
-          "format": "date"
         }
       }
     }
@@ -619,6 +597,15 @@
             "name": "description",
             "type": "string",
             "description": "the description of the program"
+          },
+          {
+            "in": "formData",
+            "name": "exercises",
+            "type": "array",
+            "description": "The list of exercises ids of the program",
+            "items": {
+              "type": "integer"
+            }
           }
         ],
         "summary": "Update the program with the given ID",

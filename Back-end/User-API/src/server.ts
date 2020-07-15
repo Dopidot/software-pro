@@ -12,7 +12,6 @@ import suggestionRouter from './routes/suggestion.route';
  * Class : Server
  */
 
-
 export default class Server {
     readonly port: number;
 
