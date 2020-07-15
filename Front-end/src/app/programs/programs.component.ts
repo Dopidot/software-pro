@@ -66,9 +66,9 @@ export class ProgramsComponent implements OnInit {
         this.imageFile = null;
         this.currentProgram = program;
 
-        if (program['programImage'])
+        if (program['programimage'])
         {
-            this.imagePath = this.commonService.getPicture(program['programImage']);
+            this.imagePath = this.commonService.getPicture(program['programimage']);
         }
 
         this.loadAllExercises();
