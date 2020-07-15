@@ -1,4 +1,6 @@
 // Author : DEYEHE Jean
+
+
 class CoachsFitisly {
   int id;
   String coaachId;
@@ -9,11 +11,12 @@ class CoachsFitisly {
   String profilePicture;
   List<dynamic> followers;
 
+  //Constructeur avec des paramètres optionnels
   CoachsFitisly({this.id, this.pseudonyme, this.firstName, this.lastName, this.isCoach, this.profilePicture,this.followers});
 
+
+  //Mapping entre l'objet dart et le json
   factory CoachsFitisly.fromJson(Map<String, dynamic> json) {
-
-
     return CoachsFitisly(
       id:json['id'] as int,
       pseudonyme: json['pseudonyme'] as String,

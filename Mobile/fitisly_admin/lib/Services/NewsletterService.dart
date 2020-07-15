@@ -19,6 +19,7 @@ class NewsletterService {
     return token;
   }
 
+  //appel api pour la création d'une newsletter
   Future<bool> createNewsletter(Newsletter nl) async {
     String token = await getToken();
 
@@ -43,6 +44,7 @@ class NewsletterService {
     return response.statusCode == 201;
   }
 
+  //appel api pour récupérer la liste de toutes les newsletters
   Future<List<Newsletter>> fetchNewsletters() async {
 
     String token = await getToken();
@@ -61,6 +63,7 @@ class NewsletterService {
     throw Exception('Failed to load exercise');
   }
 
+  //Récupération de la liste de tous les newsletters
   List<Newsletter> getAllNewsletters(String responseBody) {
     final parsed = json.decode(responseBody);
     return parsed.map<Newsletter>((json) => Newsletter.fromJson(json)).toList();
@@ -91,6 +94,7 @@ class NewsletterService {
     return response.statusCode == 200;
   }
 
+  //Récupération d'une newsletters
   Future<Newsletter> getNewsletterById(String id) async {
 
     String token = await getToken();
@@ -114,6 +118,7 @@ class NewsletterService {
     return  Newsletter.fromJson(parsed);
   }
 
+  //Suppression newsletter
   Future<bool> deleteNewsletter(String id) async {
     String token = await getToken();
     Map<String, String> headers = {

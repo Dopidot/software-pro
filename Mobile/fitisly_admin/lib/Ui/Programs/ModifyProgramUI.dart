@@ -207,7 +207,7 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text(Translations.of(context).text("btn_update")),
+          child: Text(Translations.of(context).text("btn_cancel")),
         )
     );
 
@@ -270,10 +270,6 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
   }
 
   Future<void> _updateProgram(Program p) async {
-
-    if(_name == null || _image == null || _desc == null ){
-      displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_field_null'));
-    }
 
     p.name = _name;
     p.description = _desc;

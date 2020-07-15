@@ -13,20 +13,13 @@ class GymService {
   final storage = Storage.FlutterSecureStorage();
   final dio = Dio();
 
+  // Récupération du token stocké en base
   Future<String> getToken() async {
     var token = await storage.read(key: "token");
     return token;
   }
 
-  Future<void> logOut() async {
-    storage.delete(key: "token");
-  }
-
-  String getTokenFromJson(String val) {
-    var token = json.decode(val);
-    return token["accessToken"];
-  }
-
+//Appel api pour la création d'une salle
   Future<bool> createGym(Gym gym) async {
     String token = await getToken();
 
@@ -54,6 +47,7 @@ class GymService {
     return response.statusCode == 201;
   }
 
+  //Appel api pour la suppression d'une salle en fonction de son id
   Future<bool> deleteGym(int id) async {
     String token = await getToken();
 
@@ -68,6 +62,7 @@ class GymService {
     return response.statusCode == 200;
   }
 
+  //Appel api pour la modification d'une salle
   Future<bool> updateGym(Gym gym) async {
     String token = await getToken();
 
@@ -97,6 +92,7 @@ class GymService {
     return response.statusCode == 200;
   }
 
+  //Appel api pour la récupération d'une salle en fonction de son id
   Future<Gym> getGymById(String id) async {
     String token = await getToken();
     Map<String, String> headers = {
@@ -114,6 +110,7 @@ class GymService {
     throw Exception("Not find gym with id: $id");
   }
 
+  //Appel api pour récupérer la liste des salles
   Future<List<Gym>> fetchGyms() async {
     String token = await getToken();
 
@@ -131,12 +128,13 @@ class GymService {
     throw Exception("Not find gyms");
   }
 
+  //Mapping du json en liste d'objet gym
   List<Gym> getAllGyms(String responseBody) {
     final parsed = json.decode(responseBody);
-
     return parsed.map<Gym>((json) => Gym.fromJson(json)).toList();
   }
 
+  //Mapping du json en objet métier salle
   Gym getGym(String responseBody) {
     final parsed = json.decode(responseBody);
     return Gym.fromJson(parsed);

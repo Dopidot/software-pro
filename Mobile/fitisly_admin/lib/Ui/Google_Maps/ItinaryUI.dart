@@ -50,7 +50,7 @@ class _ItinaryUI extends State<ItinaryUI> {
     return Scaffold(
       key: _globalKey,
         appBar: AppBar(
-          title: Text(Translations.of(context).text('title_map') , style: TextStyle(fontFamily: 'OpenSans')),
+          title: Text(Translations.of(context).text('') , style: TextStyle(fontFamily: 'OpenSans')),
           centerTitle: true
         ),
       body: FutureBuilder(

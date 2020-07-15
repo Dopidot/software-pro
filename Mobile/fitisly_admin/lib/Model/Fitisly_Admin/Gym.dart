@@ -10,11 +10,11 @@ class Gym {
   String country;
   String gymImage;
 
-
+  //Constructeur avec des paramètres optionnels
   Gym({this.id, this.name, this.gymImage, this.address, this.zipCode, this.city,this.country});
 
+  //Mapping entre l'objet dart Gym et le json avec un constructeur factory qui fait appel au constructeur au dessus
   factory Gym.fromJson(Map<String, dynamic> json) {
-
     return Gym(
         id: int.parse(json['id']),
         name: json['name'],

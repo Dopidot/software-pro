@@ -25,11 +25,11 @@ class _CoachListUI extends State<CoachDetailUI> {
 
   @override
   void initState() {
-    // TODO: implement initState
     _initSwitch(widget.coach.id.toString());
     super.initState();
   }
 
+  //Cronstruction de l'écran
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,6 +50,7 @@ class _CoachListUI extends State<CoachDetailUI> {
     );
   }
 
+  //Contruction du widget avec les informations du coachs
   Future<Widget> _buildField(CoachsFitisly coach) async {
     var _pseudo = TextField(
       enabled: false,
@@ -161,10 +162,12 @@ class _CoachListUI extends State<CoachDetailUI> {
     });
   }
 
+  //Mettre en avant un coach
   Future<void> highlight(String id) async {
     serviceCoach.creatCoach(widget.coach.id.toString());
   }
 
+  //Ne plus mettre en avant un coach
   void notHighlight(String id)  {
     serviceCoach.deleteCoachById(id);
   }

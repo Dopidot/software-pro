@@ -8,9 +8,10 @@ class User {
   String userImage;
 
 
-
+  //Constructeur avec des paramètres optionnels
   User({this.id,this.firstName,this.lastName,this.email,this.userImage});
 
+  //Mapping entre l'objet dart User et le json avec un constructeur factory qui fait appel au constructeur au dessus
   factory User.fromJson(Map<String,dynamic> json){
     return User(
         id:json['id'],

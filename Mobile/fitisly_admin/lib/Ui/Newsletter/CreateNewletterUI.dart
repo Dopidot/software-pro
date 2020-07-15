@@ -26,6 +26,8 @@ class _CreateNewsletter extends State<CreateNewsletter>{
   String _name;
   File _image;
   final _picker = ImagePicker();
+  bool _isLoading = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -118,31 +120,14 @@ class _CreateNewsletter extends State<CreateNewsletter>{
     );
 
 
-   final createBtn =  Material(
+   final createBtn = _isLoading ? CircularProgressIndicator() : Material(
        elevation: 5.0,
        borderRadius: BorderRadius.circular(30.0),
        color: Color(0xFF45E15F),
 
        child: MaterialButton(
-         onPressed: () {
-
-           if (_formKey.currentState.validate()) {
-             _formKey.currentState.save();
-
-             if(_name == null || _title == null || _image == null || _body == null ){
-               displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_field_null'));
-             }
-             Newsletter nl = Newsletter(name:_name,title:_title,body: _body, newsletterImage: _image.path);
-             createNlInServer(nl);
-           }else{
-             setState (() {
-               _autoValidate = true;
-
-             });
-           }
-
-         },
-         child: Text(Translations.of(context).text("btn_cancel")),
+         onPressed: _validate,
+         child: Text(Translations.of(context).text("btn_Create")),
        )
    );
 
@@ -207,16 +192,39 @@ class _CreateNewsletter extends State<CreateNewsletter>{
     return null;
   }
 
-  Future<void> createNlInServer(Newsletter nl) async {
+  Future<void> _validate() async {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
 
-    var isValid = await services.createNewsletter(nl);
+      if(_name == null || _title == null || _image == null || _body == null ){
+        displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_field_null'));
+      }
 
-    if(isValid){
-      Navigator.pop(context,nl);
+
+
+      Newsletter nl = Newsletter(name:_name,title:_title,body: _body, newsletterImage: _image.path);
+
+      setState(() {
+        _isLoading = true;
+      });
+      var isValid = await services.createNewsletter(nl);
+
+      if(isValid){
+
+        setState(() {
+          isValid = false;
+        });
+        Navigator.pop(context,nl);
+      }else{
+        displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_server'));
+      }
+
     }else{
-      displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_server'));
-    }
+      setState (() {
+        _autoValidate = true;
 
+      });
+    }
   }
 
   void displayDialog(String title, String text) =>

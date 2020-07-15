@@ -32,6 +32,8 @@ class _FollowersCoachUI extends State<FollowersCoachUI> {
     );
   }
 
+
+  //Appel au service pour la construction de la liste
   FutureBuilder<List<UserFitisly>> futureBuilderUserFitisly(){
 
     List<String> l = serviceCoach.getFollowers(widget.coach.followers);
@@ -47,7 +49,7 @@ class _FollowersCoachUI extends State<FollowersCoachUI> {
     );
   }
 
-
+//Initialisation du widget graphique
   Widget _initFollowersList(List<UserFitisly> followers) {
 
     if(followers.isEmpty){

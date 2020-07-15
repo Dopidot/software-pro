@@ -28,7 +28,7 @@ class _CreateGymUI extends State<CreateGymUI>{
   File _image;
   final _picker = ImagePicker();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -144,7 +144,7 @@ class _CreateGymUI extends State<CreateGymUI>{
         )
     );
 
-    final creationButton = Material(
+    final creationButton = _isLoading ? CircularProgressIndicator() : Material(
         elevation: 5.0,
         borderRadius: BorderRadius.circular(30.0),
         color: new Color(0xFF45E15F),
@@ -198,10 +198,20 @@ class _CreateGymUI extends State<CreateGymUI>{
       if(_name == null || _address == null || _zipCode == null || _city == null || _country == null || _image == null){
         _displayDialog(Translations.of(context).text('error_title'), Translations.of(context).text('error_field_null'));
       }
+
+      setState(() {
+        _isLoading = true;
+      });
       Gym gym = Gym(name: _name,address: _address,zipCode: _zipCode,city: _city,country: _country,gymImage: _image.path);
       var isCreated = await services.createGym(gym);
 
       if(isCreated){
+
+        setState(() {
+          setState(() {
+            _isLoading = false;
+          });
+        });
         Navigator.pop(context,gym);
       }
 

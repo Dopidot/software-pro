@@ -12,6 +12,7 @@ class TabBarCoachUI extends StatelessWidget {
   CoachsFitisly coach;
   TabBarCoachUI({Key key, @required this.coach}) : super(key: key);
 
+  // Construction de la tab bar
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(

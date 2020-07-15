@@ -7,8 +7,10 @@ class Exercise {
   int restTime;
   String exerciseImage;
 
+  //Constructeur avec des paramètres optionnels
   Exercise({this.id,this.name,this.description, this.repetitionNumber, this.restTime, this.exerciseImage});
 
+  //Mapping entre l'objet dart Exercise et le json avec un constructeur factory qui fait appel au constructeur au dessus
   factory Exercise.fromJson(Map<String,dynamic> json){
     return Exercise(
         id:json['id'],

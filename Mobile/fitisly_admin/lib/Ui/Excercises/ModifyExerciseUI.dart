@@ -31,7 +31,7 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
   ExerciseService services = ExerciseService();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-
+//Construction de l'écran
   @override
   Widget build(BuildContext context) {
     final String id = ModalRoute.of(context).settings.arguments;
@@ -54,7 +54,7 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
     );
   }
 
-
+// Init avec widget avec les valeur de l'exercice
   FutureBuilder<Exercise> futureBuilderExercise(String id){
     return FutureBuilder<Exercise>(
         future: services.getExerciseById(id),
@@ -69,6 +69,7 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
   }
 
 
+  //Constrcution du widget
   Widget buildForm(Exercise e){
 
     var urlImage;
@@ -181,7 +182,7 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text(Translations.of(context).text("btn_update")),
+          child: Text(Translations.of(context).text("btn_cancel")),
         )
     );
 
@@ -231,10 +232,6 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-      if( _name == null || _description == null || _reapeat_number == null || _rest_time == null){
-        _displayDialog(Translations.of(context).text('error_title'), Translations.of(context).text('error_field_null'));
-      }
-
        e.name=_name;
        e.description= _description;
        e.repetitionNumber= _reapeat_number;
@@ -276,12 +273,6 @@ class _ModifyExerciseUI extends State<ModifyExerciseUI>{
     }
     return int.tryParse(result) != null;
   }
-
-  void _displayDialog(String title, String text) => showDialog(
-    context: _scaffoldKey.currentState.context,
-    builder: (context) =>
-        AlertDialog(title: Text(title), content: Text(text)),
-  );
 
 }
 

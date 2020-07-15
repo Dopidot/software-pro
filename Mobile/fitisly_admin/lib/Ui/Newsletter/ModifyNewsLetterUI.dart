@@ -127,7 +127,7 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text(Translations.of(context).text("btn_update")),
+          child: Text(Translations.of(context).text("btn_cancel")),
         )
     );
 
@@ -200,10 +200,6 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-      if(_name == null || _title == null || _image == null || _desc == null ){
-        displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_field_null'));
-      }
-
       nl.name = _name;
       nl.title = _title;
       nl.body = _desc;
@@ -225,17 +221,6 @@ class _ModifyNewsletter extends State<ModifyNewsletter> {
     }
     return null;
   }
-
-  void displayDialog(String title, String text) =>
-      showDialog(
-        context: _scaffoldKey.currentState.context,
-        builder: (context) =>
-            AlertDialog(
-                title: Text(title),
-                content: Text(text)
-            ),
-      );
-
 
 }
 
