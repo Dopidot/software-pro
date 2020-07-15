@@ -186,7 +186,7 @@ class _UpdateGymUI extends State<UpdateGymUI>{
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text(Translations.of(context).text("btn_update")),
+          child: Text(Translations.of(context).text("btn_cancel")),
         )
     );
 
@@ -248,11 +248,6 @@ class _UpdateGymUI extends State<UpdateGymUI>{
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-
-      if(_name == null || _address == null || _zipCode == null || _city == null || _country == null || _image == null){
-        _displayDialog(Translations.of(context).text('error_title'), Translations.of(context).text('error_field_null'));
-      }
-
       gym.name = _name;
       gym.address = _address;
       gym.zipCode = _zipCode;
@@ -298,11 +293,5 @@ String validateField(String value){
     }
     return int.tryParse(result) != null;
   }
-
-  void _displayDialog(String title, String text) => showDialog(
-    context: _scaffoldKey.currentState.context,
-    builder: (context) =>
-        AlertDialog(title: Text(title), content: Text(text)),
-  );
 
 }

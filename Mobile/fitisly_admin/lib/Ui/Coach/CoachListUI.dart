@@ -23,12 +23,8 @@ class _CoachListUI extends State<CoachListUI> {
   CoachServiceApiFitisly serviceApiFitisly = CoachServiceApiFitisly();
   CoachService service = CoachService();
 
-  @override
-  void initState() {
-    super.initState();
-  }
 
-
+  // Construction de l'écran
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,7 +36,7 @@ class _CoachListUI extends State<CoachListUI> {
     );
   }
 
-
+//Appel du service pour la construction de la liste
   FutureBuilder<List<CoachsFitisly>> _buildFutureCoach() {
     return FutureBuilder<List<CoachsFitisly>>(
       future: serviceApiFitisly.fetchCoaches(),
@@ -54,6 +50,8 @@ class _CoachListUI extends State<CoachListUI> {
     );
   }
 
+
+  // Initialisation du widget
   Widget _initCoachList(List<CoachsFitisly> coachs) {
 
     if(coachs.isEmpty){

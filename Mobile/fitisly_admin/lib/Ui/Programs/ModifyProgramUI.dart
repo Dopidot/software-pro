@@ -271,28 +271,25 @@ class _ModifyProgramUI extends State<ModifyProgramUI> {
 
   Future<void> _updateProgram(Program p) async {
 
-    if(_name == null || _desc == null || _selectExercise == null || _selectExercise.isEmpty ){
-      displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_field_null'));
-    }
-
     p.name = _name;
     p.description = _desc;
     p.programImage = _image != null ? _image.path : _image;
 
     var idExercise = List<String>();
 
-
+    if(_selectExercise.isNotEmpty){
       _selectExercise.forEach((element) {
         idExercise.add(element.split("-").first);
       });
       p.exercises = idExercise;
-
+    }
 
     var isValid = await services.updateProgram(p);
     if (isValid) {
       Navigator.pop(context, p);
     } else {
-      displayDialog(Translations.of(context).text('error_field_null'),Translations.of(context).text('error_field_null'));
+      displayDialog("Erreur d'enregistrement",
+          "Le programme n'a pas pu être enregistrer dans la base, veuillez vérifier les champs svp ");
     }
   }
 

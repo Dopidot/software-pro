@@ -2,14 +2,8 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:fitislyadmin/Util/ConstApiRoute.dart';
-import 'package:fitislyadmin/Model/Fitisly_Admin/Event.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart' as Storage;
-import 'package:intl/intl.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:mime/mime.dart';
 
 
 class HttpServices {
@@ -17,8 +11,7 @@ class HttpServices {
   final storage = Storage.FlutterSecureStorage();
   final dio = Dio();
 
-  /* ------------------------ Début Login -----------------------------*/
-
+  // Appel api pour se connecter
   Future<int> login(String email, String password) async {
     try {
       final http.Response response = await http.post(ConstApiRoute.login,
@@ -37,11 +30,13 @@ class HttpServices {
       }
       return response.statusCode;
     } catch (e) {
-      throw Exception("Failed to login'");
+      print(e);
+      throw Exception("Failed to login");
     }
 
   }
 
+  //Sauvegarde du token de connexion en local
   void writeTokenInSecureStorage(String jwt) {
     storage
         .write(key: "token", value: jwt)
@@ -50,33 +45,16 @@ class HttpServices {
     });
   }
 
-  void writeCurrentUserInSecureStorage(String u) {
-    storage
-        .write(key: "currentUser", value: u)
-        .catchError((onError) {
-      throw Exception('Failed to save user');
-    });
-  }
-
-
-  Future<String> getToken() async {
-    var token = await storage.read(key: "token");
-    return token;
-  }
-
+// Se déconnecter
   Future<void> logOut() async {
     storage.delete(key: "token");
   }
 
+  //Récupération du token dans le json de réponse
   String getTokenFromJson(String val) {
     var token = jsonDecode(val);
     return token["accessToken"];
   }
-
-
-
-/*----------------------- Event ------------------------------*/
-
 
 
 }

@@ -17,6 +17,7 @@ class EventService {
   final storage = Storage.FlutterSecureStorage();
   final dio = Dio();
 
+  //Appel api création d'un évènement
   Future<bool> createEvent(Event event) async {
     String token = await getToken();
 
@@ -49,7 +50,7 @@ class EventService {
     return response.statusCode == 201;
   }
 
-
+//Appel api pour la suppression d'un évènement
   Future<bool> deleteEvent(String id) async {
     String token = await getToken();
 
@@ -64,6 +65,7 @@ class EventService {
     return response.statusCode == 200;
   }
 
+  // Appel de l'api pour la modification d'un évènement
   Future<bool> updateEvent(Event event) async {
     String token = await getToken();
 
@@ -99,6 +101,7 @@ class EventService {
     return response.statusCode == 200;
   }
 
+  // Appel api pour récupérer un évènement en fonction de son id
   Future<Event> getEventById(String id) async {
     String token = await getToken();
     Map<String, String> headers = {
@@ -117,6 +120,7 @@ class EventService {
     throw Exception("Not find event with id: $id");
   }
 
+  // Appel à l'api pour récupérer tous les évènements
   Future<List<Event>> fetchEvents() async {
     String token = await getToken();
 
@@ -135,18 +139,21 @@ class EventService {
     throw Exception("Not find events");
   }
 
+  // Mapping du json en liste d'objet métier d'évènement
   List<Event> getAllEvents(String responseBody) {
     final parsed = jsonDecode(responseBody);
 
     return parsed.map<Event>((json) => Event.fromJson(json)).toList();
   }
 
-
+  // Mapping du json en objet métier d'évènement
   Event getEvent(String responseBody) {
     final parsed = jsonDecode(responseBody);
     return Event.fromJson(parsed);
   }
 
+
+  //Récupération du token stocké en local
   Future<String> getToken() async {
     var token = await storage.read(key: "token");
     return token;

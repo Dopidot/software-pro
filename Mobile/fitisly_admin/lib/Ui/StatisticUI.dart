@@ -1,6 +1,4 @@
 // Author : DEYEHE Jean
-import 'package:fitislyadmin/Model/Api_Fitisly/ConnectionGenderFitisly.dart';
-import 'package:fitislyadmin/Services/ApiFitisly/ConnectionByGenderService.dart';
 import 'package:fitislyadmin/Services/ApiFitisly/StatisticService.dart';
 import 'package:fitislyadmin/Util/Translations.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +17,6 @@ class StatisticUI extends StatefulWidget{
 
 class _StatisticUI extends State<StatisticUI> {
   StatisticService _serviceStatisticYear = StatisticService();
-  ConnectionByGenderService _serviceConnectionGender = ConnectionByGenderService();
   List<charts.Series> seriesList = List<charts.Series>();
 
   @override

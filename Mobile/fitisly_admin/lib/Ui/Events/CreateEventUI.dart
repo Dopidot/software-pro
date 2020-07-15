@@ -32,7 +32,13 @@ class _CreateEventScreen extends State<CreateEventScreen> {
   final _formKey = GlobalKey<FormState>();
   EventService services = EventService();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _isLoading;
 
+  @override
+  void initState() {
+    _isLoading = false;
+    super.initState();
+  }
 
 
   // Constructionde l'écran dans sa généralité
@@ -247,7 +253,6 @@ class _CreateEventScreen extends State<CreateEventScreen> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: photoField
-
           ),
 
           Row(
@@ -255,7 +260,7 @@ class _CreateEventScreen extends State<CreateEventScreen> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.all(5.0),
-                child: creationButton,
+                child: _isLoading ? CircularProgressIndicator() : creationButton,
               ),
 
               Padding(
@@ -266,25 +271,22 @@ class _CreateEventScreen extends State<CreateEventScreen> {
           ),
         ]
     );
-
   }
-
 
 // Fonction appelée au clic du bouton créer
   void _validateInput() {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-      if(_body == null || _name == null || _startDate == null || _image == null || _zipCode == null|| _city== null || _country == null){
-        _displayDialog(Translations.of(context).text('error_title'), Translations.of(context).text('error_field_null'));
-      }
-
       Event event = Event(body: _body,creationDate: DateTime.now(),name: _name,
           startDate: _startDate,eventImage: _image.path,address: _address,zipCode: _zipCode,city: _city,country: _country);
 
+      setState(() => _isLoading = true);
       var futureCreateEvent = services.createEvent(event);
 
       futureCreateEvent.then((value) {
+        setState(() => _isLoading = false);
+
         Navigator.pop(context,event);
       });
     } else {
@@ -309,7 +311,6 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     return Translations.of(context).text("invalid_zip_code");
   }
 
-
   bool _isNumeric(String result) {
     if (result == null) {
       return false;
@@ -317,11 +318,5 @@ class _CreateEventScreen extends State<CreateEventScreen> {
     return int.tryParse(result) != null;
   }
 
-
-  void _displayDialog(String title, String text) => showDialog(
-    context: _scaffoldKey.currentState.context,
-    builder: (context) =>
-        AlertDialog(title: Text(title), content: Text(text)),
-  );
 }
 

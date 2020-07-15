@@ -1,5 +1,4 @@
 // Author : DEYEHE Jean
-import 'dart:convert' as JSON;
 
 class Program {
   String id;
@@ -8,10 +7,15 @@ class Program {
   String programImage;
   List<String> exercises;
 
+  //Constructeur avec des paramètres optionnels
   Program({this.id, this.name, this.description,this.programImage,this.exercises});
 
-  factory Program.fromJson(Map<String,dynamic> json){
+  /*
+    Mapping entre l'objet dart Program et le json avec un constructeur factory qui fait appel au constructeur au dessus
+    Le champ exercise est un tableau de json, je l'ai donc convertie pour pourvoir initialiser la valeur de l'attribut
 
+   */
+  factory Program.fromJson(Map<String,dynamic> json){
     List<String> exercisesId = List<String>();
     List<dynamic> jsonList = json['exercises'];
 

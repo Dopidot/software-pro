@@ -20,7 +20,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
   List<String> _selectExercise;
   ProgramService servicesProg = ProgramService();
   ExerciseService serviceEx = ExerciseService();
-
+bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _autoValidate = false;
@@ -28,6 +28,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
   String _name;
   File _image;
   final _picker = ImagePicker();
+
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +120,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
           margin: EdgeInsets.all(10),
         ));
 
-    final createBtn =  Material(
+    final createBtn = _isLoading ? CircularProgressIndicator() : Material(
         elevation: 5.0,
         borderRadius: BorderRadius.circular(30.0),
         color: Color(0xFF45E15F),
@@ -189,13 +190,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
   }
 
   Future<void> createProgramInServer(Program p) async {
-    var isValid = await servicesProg.createProgram(p);
 
-    if (isValid) {
-      Navigator.pop(context, p);
-    } else {
-      displayDialog("Erreur d'enregistrement", "Le programme n'a pas pu être enregistrer dans la base, veuillez vérifier les champs svp ");
-    }
   }
 
 
@@ -232,7 +227,7 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
     );
   }
 
-  void _validateForm(){
+  Future<void> _validateForm() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       var idExercise = List<String>();
@@ -242,14 +237,21 @@ class _CreateProgramScreen extends State<CreateProgramScreen> {
         });
       }
 
-      if(_name == null || _image == null || _desc == null ){
-        displayDialog(Translations.of(context).text("error_title"), Translations.of(context).text('error_field_null'));
-      }
+      setState(() {
+        _isLoading = true;
+      });
       Program p = Program(name: _name, description: _desc, programImage: _image.path,exercises: idExercise);
 
+      var isValid = await servicesProg.createProgram(p);
 
-      createProgramInServer(p);
-    } else {
+      if (isValid) {
+        setState(() {
+          _isLoading = false;
+        });
+        Navigator.pop(context, p);
+      } else {
+        displayDialog("Erreur d'enregistrement", "Le programme n'a pas pu être enregistrer dans la base, veuillez vérifier les champs svp ");
+      }    } else {
       setState(() {
         _autoValidate = true;
       });

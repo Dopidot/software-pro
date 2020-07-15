@@ -36,9 +36,11 @@ class _DetailEventScreen extends State<DetailEventScreen> {
   final _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
 
+
   EventService services = EventService();
 
 
+//Construction de l'écran
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,6 +64,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     );
   }
 
+  // Appel au service pour construire l'écran avec les données d'un event
   FutureBuilder<Event> _buildFutureNewsletter(String id) {
     return FutureBuilder<Event>(
       future: services.getEventById(id),
@@ -75,6 +78,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
 
   }
 
+  //Initialisation du widget avec les données d'un event
   Widget _buildForm(Event event){
     final format = DateFormat("yyyy-MM-dd");
 
@@ -233,7 +237,7 @@ class _DetailEventScreen extends State<DetailEventScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: Text(Translations.of(context).text("btn_update")),
+          child: Text(Translations.of(context).text("btn_cancel")),
         )
     );
 
@@ -290,14 +294,10 @@ class _DetailEventScreen extends State<DetailEventScreen> {
 
   }
 
-
+// Appel au service de modification
   void _updateInput(Event e) {
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
-
-      if(_body == null || _name == null || _startDate == null || _image == null || _zipCode == null|| _city== null || _country == null){
-        _displayDialog(Translations.of(context).text('error_title'), Translations.of(context).text('error_field_null'));
-      }
 
       e.body = _body;
       e.name = _name;
@@ -321,11 +321,8 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     }
   }
 
-  Future<Event> initEventFromDB(String id) async {
-    var events = await services.getEventById(id);
-    return events;
-  }
 
+//Vérification de la validité des champs
   String validateField(String value){
     if(value.isEmpty){
       return Translations.of(context).text("field_is_empty");
@@ -347,11 +344,6 @@ class _DetailEventScreen extends State<DetailEventScreen> {
     return int.tryParse(result) != null;
   }
 
-  void _displayDialog(String title, String text) => showDialog(
-    context: _scaffoldKey.currentState.context,
-    builder: (context) =>
-        AlertDialog(title: Text(title), content: Text(text)),
-  );
 
 }
 

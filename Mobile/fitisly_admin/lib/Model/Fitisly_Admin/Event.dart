@@ -14,20 +14,11 @@ class Event {
   String city;
   String country;
 
-  Event({this.id,
-      this.name,
-      this.body,
-      this.startDate,
-      this.creationDate,
-      this.address,
-      this.zipCode,
-      this.city,
-      this.country,
-      this.eventImage
-      });
+  //Constructeur avec des paramètres optionnels
+  Event({this.id, this.name, this.body, this.startDate, this.creationDate, this.address, this.zipCode, this.city, this.country, this.eventImage});
 
+  //Mapping entre l'objet dart Event et le json avec un constructeur factory qui fait appel au constructeur au dessus
   factory Event.fromJson(Map<String, dynamic> json) {
-
     return Event(
         id: json['id'],
         name: json['name'],

@@ -29,6 +29,7 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
   File _image;
   final picker = ImagePicker();
   ExerciseService services = ExerciseService();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +146,7 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
         borderRadius: BorderRadius.circular(30.0),
         color: Color(0xFF45E15F),
 
-        child: MaterialButton(
+        child: _isLoading ? CircularProgressIndicator() : MaterialButton(
           onPressed: _validateInput,
           child: Text(Translations.of(context).text("btn_Create")),
         )
@@ -197,16 +198,22 @@ class _CreateExerciseUI extends State<CreateExerciseUI>{
     if ( _formKey.currentState.validate()) {
       _formKey.currentState.save();
 
-      if( _name == null || _description == null || _reapeat_number == null || _rest_time == null){
-        _displayDialog(Translations.of(context).text('error_title'), Translations.of(context).text('error_field_null'));
-      }
-
       Exercise e = Exercise(name:_name,description: _description,repetitionNumber: _reapeat_number,restTime: _rest_time,exerciseImage: _image.path);
 
 
+      setState(() {
+        _isLoading = true;
+      });
+
        try{
+
+
+
          var isCreated = await services.create(e);
          if(isCreated){
+           setState(() {
+             _isLoading = false;
+           });
            Navigator.pop(context,e);
          }
        }catch(e){

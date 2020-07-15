@@ -26,6 +26,8 @@ class _LoginScreen extends State<LoginScreen> {
   Future<int> _futureLogin;
   HttpServices services = HttpServices();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool _isLoading = false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -95,41 +97,7 @@ class _LoginScreen extends State<LoginScreen> {
 
         child: MaterialButton(
 
-            onPressed: () async {
-              if ( _formKey.currentState.validate()) {
-                _formKey.currentState.save();
-                _futureLogin = services.login(_email, _pw);
-
-                _futureLogin
-                    .then((value) {
-
-                  if(value == 200){
-
-                  Navigator.pushAndRemoveUntil(context,
-                      PageRouteTransition(
-                    animationType: AnimationType.fade,
-                    builder: (context) => HomeScreenPage(),
-                  ), (route) => false);
-
-
-
-                  }else{
-                    ConstApiRoute.displayDialog(Translations.of(context).text('title_no_access'),Translations.of(context).text('login_descption_no_access'),_scaffoldKey);
-                  }
-                }).catchError((onError){
-
-                  print(onError);
-
-                  ConstApiRoute.displayDialog(Translations.of(context).text('title_no_access'),Translations.of(context).text('login_descption_no_access'),_scaffoldKey);
-
-                });
-              }
-              else {
-                setState (() {
-                  _autoValidate = true ;
-                });
-              }
-            },
+            onPressed: _asyncAction,
             child:
             Text(Translations.of(context).text("login_btn"),
                 textAlign: TextAlign.center)
@@ -155,7 +123,7 @@ class _LoginScreen extends State<LoginScreen> {
                 padding: EdgeInsets.only(top:10, bottom: 5),
                 child: passwordField,
               ),
-              Padding(child: loginButton,
+              Padding(child: _isLoading ? CircularProgressIndicator() : loginButton,
                       padding: EdgeInsets.only(top:5,bottom: 10)),
             ],
           ),
@@ -163,6 +131,52 @@ class _LoginScreen extends State<LoginScreen> {
       ),
     );
   }
+
+
+
+  void _asyncAction() async {
+
+    if ( _formKey.currentState.validate()) {
+      _formKey.currentState.save();
+
+      setState(() => _isLoading = true);
+
+      _futureLogin = services.login(_email, _pw);
+
+                _futureLogin
+                    .then((value) {
+
+                  if(value == 200){
+                    setState(() => _isLoading = false);
+
+                    Navigator.pushAndRemoveUntil(context,
+                      PageRouteTransition(
+                    animationType: AnimationType.fade,
+                    builder: (context) => HomeScreenPage(),
+                  ), (route) => false);
+
+                  }else{
+                    ConstApiRoute.displayDialog(Translations.of(context).text('title_no_access'),Translations.of(context).text('login_descption_no_access'),_scaffoldKey);
+                  }
+                }).catchError((onError){
+
+                  print(onError);
+
+                  ConstApiRoute.displayDialog(Translations.of(context).text('title_no_access'),Translations.of(context).text('login_descption_no_access'),_scaffoldKey);
+
+                });
+    }
+    else {
+      setState (() {
+        _autoValidate = true ;
+      });
+    }
+
+  }
+
+
+
+
 }
 
 

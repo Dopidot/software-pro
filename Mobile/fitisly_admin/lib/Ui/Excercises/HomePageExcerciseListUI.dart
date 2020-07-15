@@ -20,6 +20,7 @@ class _ExerciseListUI extends State<ExerciseListUI>{
   ExerciseService services = ExerciseService();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  //Construction de l'écran
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +43,7 @@ class _ExerciseListUI extends State<ExerciseListUI>{
   }
 
 
+// Appel au service pour init le widget
   FutureBuilder<List<Exercise>> futureBuilderExercise(){
     return FutureBuilder<List<Exercise>>(
         future: services.fetchExercises(),
@@ -56,6 +58,8 @@ class _ExerciseListUI extends State<ExerciseListUI>{
 
   }
 
+
+  //Init widgete
 
   Widget buildListView(List<Exercise> exercises){
 
@@ -121,6 +125,7 @@ class _ExerciseListUI extends State<ExerciseListUI>{
     );
   }
 
+  //mis à jour
   void updateUi() async {
     setState(() {
       futureBuilderExercise();

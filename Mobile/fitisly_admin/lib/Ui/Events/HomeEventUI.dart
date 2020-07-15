@@ -20,7 +20,7 @@ class HomeEventScreen extends StatefulWidget {
 class _HomeEventScreen extends State<HomeEventScreen> {
   EventService services = EventService();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-
+//construction de l'écran
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,6 +58,7 @@ class _HomeEventScreen extends State<HomeEventScreen> {
             }));
   }
 
+  //Appel au service pour la construction de la liste
   FutureBuilder<List<Event>> _buildFutureEvent() {
     return FutureBuilder<List<Event>>(
         future: services.fetchEvents(),
@@ -70,7 +71,7 @@ class _HomeEventScreen extends State<HomeEventScreen> {
   }
 
 
-
+//Initialisation du widget avec les données de la liste
   Widget _buildListView(List<Event> events) {
     if(events.isEmpty){
       return Center(child: Text(Translations.of(context).text("no_event")));
@@ -137,12 +138,14 @@ class _HomeEventScreen extends State<HomeEventScreen> {
     );
   }
 
+  //Mis à jour de l'écran après une modification
   void _updateUI(){
     setState(() {
       _buildFutureEvent();
     });
   }
 
+  //Suppression d'un élément de la liste
   void delete(List<Event> events, int index) async {
     var isDelete = await services.deleteEvent(events[index].id);
     if (isDelete) {
