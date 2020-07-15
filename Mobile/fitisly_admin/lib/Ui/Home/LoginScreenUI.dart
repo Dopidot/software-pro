@@ -156,11 +156,11 @@ class _LoginScreen extends State<LoginScreen> {
                   ), (route) => false);
 
                   }else{
+                    setState(() => _isLoading = false);
+
                     ConstApiRoute.displayDialog(Translations.of(context).text('title_no_access'),Translations.of(context).text('login_descption_no_access'),_scaffoldKey);
                   }
                 }).catchError((onError){
-
-                  print(onError);
 
                   ConstApiRoute.displayDialog(Translations.of(context).text('title_no_access'),Translations.of(context).text('login_descption_no_access'),_scaffoldKey);
 
